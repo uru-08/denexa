@@ -6,204 +6,489 @@
 
   <title>Proyecto X | Super Panel</title>
 
-  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/admin.css?v=4">
 </head>
 
 <body>
 
-<aside class="sidebar">
+  <aside class="sidebar">
 
-  <div class="logo">
-    <h2>PROYECTO X</h2>
-    <span>Super Panel</span>
-  </div>
+    <div class="brand">
 
-  <nav>
-    <button class="nav-item active" data-section="dashboard">
-      📊 Dashboard
-    </button>
+      <div class="brand-mark">
+        X
+      </div>
 
-    <button class="nav-item" data-section="businesses">
-      🏪 Comercios
-    </button>
-
-    <button class="nav-item" data-section="orders">
-      📦 Pedidos
-    </button>
-
-    <button class="nav-item" data-section="categories">
-      📂 Categorías
-    </button>
-
-    <button class="nav-item" data-section="products">
-      🍔 Productos
-    </button>
-
-    <button class="nav-item" data-section="users">
-      👥 Usuarios
-    </button>
-
-    <button class="nav-item" data-section="plans">
-      💳 Planes
-    </button>
-
-    <button class="nav-item" data-section="settings">
-      ⚙️ Configuración
-    </button>
-  </nav>
-
-</aside>
-
-<main class="main">
-
-  <section id="dashboard" class="page-section active">
-
-    <header class="page-header">
       <div>
-        <h1>Dashboard</h1>
-        <p>Resumen general de Proyecto X.</p>
-      </div>
-    </header>
-
-    <div class="cards">
-
-      <div class="card">
-        <h3>Comercios</h3>
-        <p id="businessesCount">0</p>
-      </div>
-
-      <div class="card">
-        <h3>Categorías</h3>
-        <p id="categoriesCount">0</p>
-      </div>
-
-      <div class="card">
-        <h3>Productos</h3>
-        <p id="productsCount">0</p>
-      </div>
-
-      <div class="card">
-        <h3>Usuarios</h3>
-        <p id="usersCount">0</p>
+        <strong>PROYECTO X</strong>
+        <span>Super Panel</span>
       </div>
 
     </div>
 
-  </section>
+    <nav class="nav" aria-label="Navegación principal">
 
-  <section id="businesses" class="page-section">
-
-    <header class="page-header">
-      <div>
-        <h1>Comercios</h1>
-        <p>Administrá todos los comercios de la plataforma.</p>
-      </div>
-
-      <button class="primary-button" type="button">
-        + Nuevo comercio
+      <button
+        class="nav-item active"
+        data-section="dashboard"
+        type="button"
+      >
+        📊
+        <span>Dashboard</span>
       </button>
-    </header>
 
-    <div id="businessesList" class="content-box">
-      Cargando comercios...
-    </div>
+      <button
+        class="nav-item"
+        data-section="businesses"
+        type="button"
+      >
+        🏪
+        <span>Comercios</span>
+      </button>
 
-  </section>
+      <button
+        class="nav-item"
+        data-section="orders"
+        type="button"
+      >
+        📦
+        <span>Pedidos</span>
+      </button>
 
-  <section id="orders" class="page-section">
+      <button
+        class="nav-item"
+        data-section="categories"
+        type="button"
+      >
+        📂
+        <span>Categorías</span>
+      </button>
 
-    <header class="page-header">
-      <div>
-        <h1>Pedidos</h1>
-        <p>Los pedidos se habilitarán cuando creemos sus tablas.</p>
+      <button
+        class="nav-item"
+        data-section="products"
+        type="button"
+      >
+        🍔
+        <span>Productos</span>
+      </button>
+
+      <button
+        class="nav-item"
+        data-section="users"
+        type="button"
+      >
+        👥
+        <span>Usuarios</span>
+      </button>
+
+      <button
+        class="nav-item"
+        data-section="plans"
+        type="button"
+      >
+        💳
+        <span>Planes</span>
+      </button>
+
+      <button
+        class="nav-item"
+        data-section="settings"
+        type="button"
+      >
+        ⚙️
+        <span>Configuración</span>
+      </button>
+
+    </nav>
+
+  </aside>
+
+  <main class="main">
+
+    <section
+      id="dashboard"
+      class="page-section active"
+    >
+
+      <header class="page-header">
+
+        <div>
+
+          <p class="eyebrow">
+            PANEL MAESTRO
+          </p>
+
+          <h1>
+            Dashboard
+          </h1>
+
+          <p class="subtitle">
+            Resumen general de la plataforma.
+          </p>
+
+        </div>
+
+        <span class="status-badge">
+          Sistema activo
+        </span>
+
+      </header>
+
+      <div class="cards">
+
+        <article class="metric-card">
+
+          <span class="metric-icon">
+            🏪
+          </span>
+
+          <div>
+
+            <small>
+              Comercios
+            </small>
+
+            <strong id="businessesCount">
+              0
+            </strong>
+
+          </div>
+
+        </article>
+
+        <article class="metric-card">
+
+          <span class="metric-icon">
+            📂
+          </span>
+
+          <div>
+
+            <small>
+              Categorías
+            </small>
+
+            <strong id="categoriesCount">
+              0
+            </strong>
+
+          </div>
+
+        </article>
+
+        <article class="metric-card">
+
+          <span class="metric-icon">
+            🍔
+          </span>
+
+          <div>
+
+            <small>
+              Productos
+            </small>
+
+            <strong id="productsCount">
+              0
+            </strong>
+
+          </div>
+
+        </article>
+
+        <article class="metric-card">
+
+          <span class="metric-icon">
+            👥
+          </span>
+
+          <div>
+
+            <small>
+              Usuarios
+            </small>
+
+            <strong id="usersCount">
+              0
+            </strong>
+
+          </div>
+
+        </article>
+
       </div>
-    </header>
 
-    <div class="content-box">
-      Módulo de pedidos pendiente.
-    </div>
+      <div class="panel welcome-panel">
 
-  </section>
+        <div>
 
-  <section id="categories" class="page-section">
+          <p class="eyebrow">
+            PRÓXIMO PASO
+          </p>
 
-    <header class="page-header">
-      <div>
-        <h1>Categorías</h1>
-        <p>Categorías registradas en la plataforma.</p>
+          <h2>
+            Creá el primer comercio
+          </h2>
+
+          <p>
+            Desde esta sección vas a poder crear y administrar todos tus clientes.
+          </p>
+
+        </div>
+
+        <button
+          class="primary-button go-businesses"
+          type="button"
+        >
+          Ir a Comercios
+        </button>
+
       </div>
-    </header>
 
-    <div id="categoriesList" class="content-box">
-      Cargando categorías...
-    </div>
+    </section>
 
-  </section>
+    <section
+      id="businesses"
+      class="page-section"
+    >
 
-  <section id="products" class="page-section">
+      <header class="page-header">
 
-    <header class="page-header">
-      <div>
-        <h1>Productos</h1>
-        <p>Productos de todos los comercios.</p>
+        <div>
+
+          <p class="eyebrow">
+            GESTIÓN
+          </p>
+
+          <h1>
+            Comercios
+          </h1>
+
+          <p class="subtitle">
+            Administrá todos los comercios de la plataforma.
+          </p>
+
+        </div>
+
+        <button
+          class="primary-button"
+          id="newBusinessButton"
+          type="button"
+        >
+          + Nuevo comercio
+        </button>
+
+      </header>
+
+      <div
+        id="businessesList"
+        class="panel loading"
+      >
+        Cargando comercios...
       </div>
-    </header>
 
-    <div id="productsList" class="content-box">
-      Cargando productos...
-    </div>
+    </section>
 
-  </section>
+    <section
+      id="orders"
+      class="page-section"
+    >
 
-  <section id="users" class="page-section">
+      <header class="page-header">
 
-    <header class="page-header">
-      <div>
-        <h1>Usuarios</h1>
-        <p>Usuarios registrados en Proyecto X.</p>
+        <div>
+
+          <p class="eyebrow">
+            OPERACIÓN
+          </p>
+
+          <h1>
+            Pedidos
+          </h1>
+
+          <p class="subtitle">
+            Este módulo se activará cuando creemos las tablas de pedidos.
+          </p>
+
+        </div>
+
+      </header>
+
+      <div class="panel empty-state">
+        Módulo de pedidos pendiente.
       </div>
-    </header>
 
-    <div id="usersList" class="content-box">
-      Cargando usuarios...
-    </div>
+    </section>
 
-  </section>
+    <section
+      id="categories"
+      class="page-section"
+    >
 
-  <section id="plans" class="page-section">
+      <header class="page-header">
 
-    <header class="page-header">
-      <div>
-        <h1>Planes</h1>
-        <p>Planes y suscripciones de los comercios.</p>
+        <div>
+
+          <p class="eyebrow">
+            CATÁLOGO
+          </p>
+
+          <h1>
+            Categorías
+          </h1>
+
+          <p class="subtitle">
+            Categorías registradas en todos los comercios.
+          </p>
+
+        </div>
+
+      </header>
+
+      <div
+        id="categoriesList"
+        class="panel loading"
+      >
+        Cargando categorías...
       </div>
-    </header>
 
-    <div class="content-box">
-      Módulo de planes pendiente.
-    </div>
+    </section>
 
-  </section>
+    <section
+      id="products"
+      class="page-section"
+    >
 
-  <section id="settings" class="page-section">
+      <header class="page-header">
 
-    <header class="page-header">
-      <div>
-        <h1>Configuración</h1>
-        <p>Configuración general de la plataforma.</p>
+        <div>
+
+          <p class="eyebrow">
+            CATÁLOGO
+          </p>
+
+          <h1>
+            Productos
+          </h1>
+
+          <p class="subtitle">
+            Productos registrados en la plataforma.
+          </p>
+
+        </div>
+
+      </header>
+
+      <div
+        id="productsList"
+        class="panel loading"
+      >
+        Cargando productos...
       </div>
-    </header>
 
-    <div class="content-box">
-      Configuración pendiente.
-    </div>
+    </section>
 
-  </section>
+    <section
+      id="users"
+      class="page-section"
+    >
 
-</main>
+      <header class="page-header">
 
-<script src="js/config.js"></script>
-<script src="js/admin.js"></script>
+        <div>
+
+          <p class="eyebrow">
+            ACCESOS
+          </p>
+
+          <h1>
+            Usuarios
+          </h1>
+
+          <p class="subtitle">
+            Usuarios y responsables de cada comercio.
+          </p>
+
+        </div>
+
+      </header>
+
+      <div
+        id="usersList"
+        class="panel loading"
+      >
+        Cargando usuarios...
+      </div>
+
+    </section>
+
+    <section
+      id="plans"
+      class="page-section"
+    >
+
+      <header class="page-header">
+
+        <div>
+
+          <p class="eyebrow">
+            NEGOCIO
+          </p>
+
+          <h1>
+            Planes
+          </h1>
+
+          <p class="subtitle">
+            Planes y suscripciones de los comercios.
+          </p>
+
+        </div>
+
+      </header>
+
+      <div class="panel empty-state">
+        Módulo de planes pendiente.
+      </div>
+
+    </section>
+
+    <section
+      id="settings"
+      class="page-section"
+    >
+
+      <header class="page-header">
+
+        <div>
+
+          <p class="eyebrow">
+            SISTEMA
+          </p>
+
+          <h1>
+            Configuración
+          </h1>
+
+          <p class="subtitle">
+            Configuración general de Proyecto X.
+          </p>
+
+        </div>
+
+      </header>
+
+      <div class="panel empty-state">
+        Configuración pendiente.
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="js/config.js?v=4"></script>
+  <script src="js/admin.js?v=4"></script>
 
 </body>
 </html>
