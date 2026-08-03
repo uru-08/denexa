@@ -5,10 +5,11 @@ const SUPABASE_KEY =
 
 const SUPABASE_REST = `${SUPABASE_URL}/rest/v1`;
 
-function supabaseHeaders() {
+function supabaseHeaders(extraHeaders = {}) {
   return {
     apikey: SUPABASE_KEY,
     Authorization: `Bearer ${SUPABASE_KEY}`,
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    ...extraHeaders
   };
 }
