@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -22,19 +24,12 @@
     <ul>
 
         <li class="active">📊 Dashboard</li>
-
         <li>🏪 Comercios</li>
-
         <li>📦 Pedidos</li>
-
         <li>📂 Categorías</li>
-
         <li>🍔 Productos</li>
-
         <li>👥 Usuarios</li>
-
         <li>💳 Planes</li>
-
         <li>⚙ Configuración</li>
 
     </ul>
@@ -44,9 +39,7 @@
 <div class="main">
 
     <header>
-
         <h1>Dashboard</h1>
-
     </header>
 
     <div class="cards">
@@ -58,17 +51,17 @@
 
         <div class="card">
             <h3>Pedidos Hoy</h3>
-            <p>0</p>
+            <p id="ordersToday">0</p>
         </div>
 
         <div class="card">
             <h3>Usuarios</h3>
-            <p>0</p>
+            <p id="users">0</p>
         </div>
 
         <div class="card">
             <h3>Ventas</h3>
-            <p>$0</p>
+            <p id="sales">$0</p>
         </div>
 
     </div>
@@ -78,3 +71,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script src="js/admin.js"></script>
+
+</body>
+
+</html>
