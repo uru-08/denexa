@@ -3,14 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Proyecto X | Super Panel</title>
-  <link rel="stylesheet" href="css/admin.css?v=5">
+
+  <link rel="stylesheet" href="css/admin.css?v=6">
 </head>
+
 <body>
 
   <aside class="sidebar">
+
     <div class="brand">
       <div class="brand-mark">X</div>
+
       <div>
         <strong>PROYECTO X</strong>
         <span>Super Panel</span>
@@ -18,162 +23,418 @@
     </div>
 
     <nav class="nav" aria-label="NavegaciÃ³n principal">
-      <button class="nav-item active" data-section="dashboard" type="button">ðŸ“Š <span>Dashboard</span></button>
-      <button class="nav-item" data-section="businesses" type="button">ðŸª <span>Comercios</span></button>
-      <button class="nav-item" data-section="orders" type="button">ðŸ“¦ <span>Pedidos</span></button>
-      <button class="nav-item" data-section="categories" type="button">ðŸ“‚ <span>CategorÃ­as</span></button>
-      <button class="nav-item" data-section="products" type="button">ðŸ” <span>Productos</span></button>
-      <button class="nav-item" data-section="users" type="button">ðŸ‘¥ <span>Usuarios</span></button>
-      <button class="nav-item" data-section="plans" type="button">ðŸ’³ <span>Planes</span></button>
-      <button class="nav-item" data-section="settings" type="button">âš™ï¸ <span>ConfiguraciÃ³n</span></button>
+
+      <button class="nav-item active" data-section="dashboard" type="button">
+        <span class="nav-icon">ðŸ“Š</span>
+        <span>Dashboard</span>
+      </button>
+
+      <button class="nav-item" data-section="businesses" type="button">
+        <span class="nav-icon">ðŸª</span>
+        <span>Comercios</span>
+      </button>
+
+      <button class="nav-item" data-section="orders" type="button">
+        <span class="nav-icon">ðŸ“¦</span>
+        <span>Pedidos</span>
+      </button>
+
+      <button class="nav-item" data-section="categories" type="button">
+        <span class="nav-icon">ðŸ“‚</span>
+        <span>CategorÃ­as</span>
+      </button>
+
+      <button class="nav-item" data-section="products" type="button">
+        <span class="nav-icon">ðŸ”</span>
+        <span>Productos</span>
+      </button>
+
+      <button class="nav-item" data-section="users" type="button">
+        <span class="nav-icon">ðŸ‘¥</span>
+        <span>Usuarios</span>
+      </button>
+
+      <button class="nav-item" data-section="plans" type="button">
+        <span class="nav-icon">ðŸ’³</span>
+        <span>Planes</span>
+      </button>
+
+      <button class="nav-item" data-section="settings" type="button">
+        <span class="nav-icon">âš™ï¸</span>
+        <span>ConfiguraciÃ³n</span>
+      </button>
+
     </nav>
+
   </aside>
 
   <main class="main">
 
     <section id="dashboard" class="page-section active">
+
       <header class="page-header">
         <div>
           <p class="eyebrow">PANEL MAESTRO</p>
           <h1>Dashboard</h1>
           <p class="subtitle">Resumen general de la plataforma.</p>
         </div>
+
         <span class="status-badge">Sistema activo</span>
       </header>
 
       <div class="cards">
-        <article class="metric-card"><span class="metric-icon">ðŸª</span><div><small>Comercios</small><strong id="businessesCount">0</strong></div></article>
-        <article class="metric-card"><span class="metric-icon">ðŸ“‚</span><div><small>CategorÃ­as</small><strong id="categoriesCount">0</strong></div></article>
-        <article class="metric-card"><span class="metric-icon">ðŸ”</span><div><small>Productos</small><strong id="productsCount">0</strong></div></article>
-        <article class="metric-card"><span class="metric-icon">ðŸ‘¥</span><div><small>Usuarios</small><strong id="usersCount">0</strong></div></article>
+
+        <article class="metric-card">
+          <span class="metric-icon">ðŸª</span>
+
+          <div>
+            <small>Comercios</small>
+            <strong id="businessesCount">0</strong>
+          </div>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-icon">ðŸ“‚</span>
+
+          <div>
+            <small>CategorÃ­as</small>
+            <strong id="categoriesCount">0</strong>
+          </div>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-icon">ðŸ”</span>
+
+          <div>
+            <small>Productos</small>
+            <strong id="productsCount">0</strong>
+          </div>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-icon">ðŸ‘¥</span>
+
+          <div>
+            <small>Usuarios</small>
+            <strong id="usersCount">0</strong>
+          </div>
+        </article>
+
       </div>
 
       <div class="panel welcome-panel">
+
         <div>
           <p class="eyebrow">PRÃ“XIMO PASO</p>
           <h2>CreÃ¡ el primer comercio</h2>
-          <p>Desde esta secciÃ³n vas a poder crear y administrar todos tus clientes.</p>
+
+          <p>
+            Desde esta secciÃ³n vas a poder crear y administrar todos tus clientes.
+          </p>
         </div>
-        <button class="primary-button go-businesses" type="button">Ir a Comercios</button>
+
+        <button class="primary-button go-businesses" type="button">
+          Ir a Comercios
+        </button>
+
       </div>
+
     </section>
 
     <section id="businesses" class="page-section">
+
       <header class="page-header">
+
         <div>
           <p class="eyebrow">GESTIÃ“N</p>
           <h1>Comercios</h1>
-          <p class="subtitle">AdministrÃ¡ todos los comercios de la plataforma.</p>
+
+          <p class="subtitle">
+            AdministrÃ¡ todos los comercios de la plataforma.
+          </p>
         </div>
-        <button class="primary-button" id="newBusinessButton" type="button">+ Nuevo comercio</button>
+
+        <button class="primary-button" id="newBusinessButton" type="button">
+          + Nuevo comercio
+        </button>
+
       </header>
 
-      <div id="businessesList" class="panel loading">Cargando comercios...</div>
+      <div id="businessesList" class="panel loading">
+        Cargando comercios...
+      </div>
+
     </section>
 
     <section id="orders" class="page-section">
-      <header class="page-header"><div><p class="eyebrow">OPERACIÃ“N</p><h1>Pedidos</h1><p class="subtitle">Este mÃ³dulo se activarÃ¡ cuando creemos las tablas de pedidos.</p></div></header>
-      <div class="panel empty-state">MÃ³dulo de pedidos pendiente.</div>
+
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">OPERACIÃ“N</p>
+          <h1>Pedidos</h1>
+
+          <p class="subtitle">
+            Este mÃ³dulo se activarÃ¡ cuando creemos las tablas de pedidos.
+          </p>
+        </div>
+      </header>
+
+      <div class="panel empty-state">
+        MÃ³dulo de pedidos pendiente.
+      </div>
+
     </section>
 
     <section id="categories" class="page-section">
-      <header class="page-header"><div><p class="eyebrow">CATÃLOGO</p><h1>CategorÃ­as</h1><p class="subtitle">CategorÃ­as registradas en todos los comercios.</p></div></header>
-      <div id="categoriesList" class="panel loading">Cargando categorÃ­as...</div>
+
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">CATÃLOGO</p>
+          <h1>CategorÃ­as</h1>
+
+          <p class="subtitle">
+            CategorÃ­as registradas en todos los comercios.
+          </p>
+        </div>
+      </header>
+
+      <div id="categoriesList" class="panel loading">
+        Cargando categorÃ­as...
+      </div>
+
     </section>
 
     <section id="products" class="page-section">
-      <header class="page-header"><div><p class="eyebrow">CATÃLOGO</p><h1>Productos</h1><p class="subtitle">Productos registrados en la plataforma.</p></div></header>
-      <div id="productsList" class="panel loading">Cargando productos...</div>
+
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">CATÃLOGO</p>
+          <h1>Productos</h1>
+
+          <p class="subtitle">
+            Productos registrados en la plataforma.
+          </p>
+        </div>
+      </header>
+
+      <div id="productsList" class="panel loading">
+        Cargando productos...
+      </div>
+
     </section>
 
     <section id="users" class="page-section">
-      <header class="page-header"><div><p class="eyebrow">ACCESOS</p><h1>Usuarios</h1><p class="subtitle">Usuarios y responsables de cada comercio.</p></div></header>
-      <div id="usersList" class="panel loading">Cargando usuarios...</div>
+
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">ACCESOS</p>
+          <h1>Usuarios</h1>
+
+          <p class="subtitle">
+            Usuarios y responsables de cada comercio.
+          </p>
+        </div>
+      </header>
+
+      <div id="usersList" class="panel loading">
+        Cargando usuarios...
+      </div>
+
     </section>
 
     <section id="plans" class="page-section">
-      <header class="page-header"><div><p class="eyebrow">NEGOCIO</p><h1>Planes</h1><p class="subtitle">Planes y suscripciones de los comercios.</p></div></header>
-      <div class="panel empty-state">MÃ³dulo de planes pendiente.</div>
+
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">NEGOCIO</p>
+          <h1>Planes</h1>
+
+          <p class="subtitle">
+            Planes y suscripciones de los comercios.
+          </p>
+        </div>
+      </header>
+
+      <div class="panel empty-state">
+        MÃ³dulo de planes pendiente.
+      </div>
+
     </section>
 
     <section id="settings" class="page-section">
-      <header class="page-header"><div><p class="eyebrow">SISTEMA</p><h1>ConfiguraciÃ³n</h1><p class="subtitle">ConfiguraciÃ³n general de Proyecto X.</p></div></header>
-      <div class="panel empty-state">ConfiguraciÃ³n pendiente.</div>
+
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">SISTEMA</p>
+          <h1>ConfiguraciÃ³n</h1>
+
+          <p class="subtitle">
+            ConfiguraciÃ³n general de Proyecto X.
+          </p>
+        </div>
+      </header>
+
+      <div class="panel empty-state">
+        ConfiguraciÃ³n pendiente.
+      </div>
+
     </section>
 
   </main>
 
-  <div class="modal" id="businessModal" aria-hidden="true">
+  <div id="businessModal" class="modal" aria-hidden="true">
+
     <div class="modal-backdrop" data-close-modal></div>
 
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="businessModalTitle">
+
       <div class="modal-header">
+
         <div>
           <p class="eyebrow">NUEVO CLIENTE</p>
           <h2 id="businessModalTitle">Crear comercio</h2>
         </div>
-        <button class="icon-button" type="button" data-close-modal aria-label="Cerrar">Ã—</button>
+
+        <button
+          id="closeBusinessModal"
+          class="close-button"
+          type="button"
+          aria-label="Cerrar formulario"
+        >
+          Ã—
+        </button>
+
       </div>
 
       <form id="businessForm">
+
         <div class="form-grid">
 
-          <div class="field">
-            <label for="businessName">Nombre del comercio</label>
-            <input id="businessName" name="name" type="text" placeholder="Ej.: PizzerÃ­a Central" required>
-          </div>
+          <label>
+            Nombre del comercio
 
-          <div class="field">
-            <label for="businessSlug">Enlace corto</label>
-            <input id="businessSlug" name="slug" type="text" placeholder="pizzeria-central" required>
-          </div>
+            <input
+              id="businessName"
+              name="name"
+              type="text"
+              autocomplete="organization"
+              required
+            >
+          </label>
 
-          <div class="field">
-            <label for="businessPhone">WhatsApp</label>
-            <input id="businessPhone" name="phone" type="text" placeholder="59899123456">
-          </div>
+          <label>
+            Enlace del comercio
 
-          <div class="field">
-            <label for="businessAddress">DirecciÃ³n</label>
-            <input id="businessAddress" name="address" type="text" placeholder="Calle y nÃºmero">
-          </div>
+            <input
+              id="businessSlug"
+              name="slug"
+              type="text"
+              placeholder="ejemplo-pizzeria"
+              required
+            >
+          </label>
 
-          <div class="field full">
-            <label for="businessLogoUrl">URL del logo</label>
-            <input id="businessLogoUrl" name="logo_url" type="url" placeholder="https://...">
-          </div>
+          <label>
+            WhatsApp
 
-          <div class="field">
-            <label for="businessPrimaryColor">Color principal</label>
-            <input id="businessPrimaryColor" name="primary_color" type="color" value="#7c3aed">
-          </div>
+            <input
+              id="businessPhone"
+              name="phone"
+              type="text"
+              placeholder="598..."
+              inputmode="tel"
+            >
+          </label>
 
-          <div class="field">
-            <label for="businessSecondaryColor">Color secundario</label>
-            <input id="businessSecondaryColor" name="secondary_color" type="color" value="#f5c518">
-          </div>
+          <label>
+            DirecciÃ³n
 
-          <label class="check-row full">
-            <input id="businessActive" name="active" type="checkbox" checked>
-            <span>Comercio activo</span>
+            <input
+              id="businessAddress"
+              name="address"
+              type="text"
+              autocomplete="street-address"
+            >
+          </label>
+
+          <label class="full-width">
+            URL del logo
+
+            <input
+              id="businessLogoUrl"
+              name="logo_url"
+              type="url"
+              placeholder="https://..."
+            >
+          </label>
+
+          <label>
+            Color principal
+
+            <input
+              id="businessPrimaryColor"
+              name="primary_color"
+              type="color"
+              value="#7c3aed"
+            >
+          </label>
+
+          <label>
+            Color secundario
+
+            <input
+              id="businessSecondaryColor"
+              name="secondary_color"
+              type="color"
+              value="#f5c518"
+            >
+          </label>
+
+          <label class="checkbox-label full-width">
+            <input
+              id="businessActive"
+              name="active"
+              type="checkbox"
+              checked
+            >
+
+            Comercio activo
           </label>
 
         </div>
 
-        <div class="form-actions">
-          <button class="secondary-button" type="button" data-close-modal>Cancelar</button>
-          <button class="primary-button" id="saveBusinessButton" type="submit">Guardar comercio</button>
+        <p id="businessFormMessage" class="form-message" aria-live="polite"></p>
+
+        <div class="modal-actions">
+
+          <button
+            id="cancelBusinessButton"
+            class="secondary-button"
+            type="button"
+          >
+            Cancelar
+          </button>
+
+          <button
+            id="saveBusinessButton"
+            class="primary-button"
+            type="submit"
+          >
+            Guardar comercio
+          </button>
+
         </div>
 
-        <p class="form-message" id="businessFormMessage" aria-live="polite"></p>
       </form>
+
     </div>
+
   </div>
 
-  <div class="toast" id="toast" aria-live="polite"></div>
+  <div id="toast" class="toast" aria-live="polite"></div>
 
-  <script src="js/config.js?v=5"></script>
-  <script src="js/admin.js?v=5"></script>
+  <script src="js/config.js?v=6"></script>
+  <script src="js/admin.js?v=6"></script>
 
 </body>
 </html>
