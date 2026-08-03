@@ -1,77 +1,209 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto X | Super Panel</title>
 
-<title>Proyecto X | Super Panel</title>
-
-<link rel="stylesheet" href="css/admin.css">
-
+  <link rel="stylesheet" href="css/admin.css">
 </head>
 
 <body>
 
-<div class="sidebar">
+<aside class="sidebar">
 
-    <div class="logo">
-        <h2>PROYECTO X</h2>
-        <span>Super Panel</span>
-    </div>
+  <div class="logo">
+    <h2>PROYECTO X</h2>
+    <span>Super Panel</span>
+  </div>
 
-    <ul>
+  <nav>
+    <button class="nav-item active" data-section="dashboard">
+      📊 Dashboard
+    </button>
 
-        <li class="active">📊 Dashboard</li>
-        <li>🏪 Comercios</li>
-        <li>📦 Pedidos</li>
-        <li>📂 Categorías</li>
-        <li>🍔 Productos</li>
-        <li>👥 Usuarios</li>
-        <li>💳 Planes</li>
-        <li>⚙ Configuración</li>
+    <button class="nav-item" data-section="businesses">
+      🏪 Comercios
+    </button>
 
-    </ul>
+    <button class="nav-item" data-section="orders">
+      📦 Pedidos
+    </button>
 
-</div>
+    <button class="nav-item" data-section="categories">
+      📂 Categorías
+    </button>
 
-<div class="main">
+    <button class="nav-item" data-section="products">
+      🍔 Productos
+    </button>
 
-    <header>
+    <button class="nav-item" data-section="users">
+      👥 Usuarios
+    </button>
+
+    <button class="nav-item" data-section="plans">
+      💳 Planes
+    </button>
+
+    <button class="nav-item" data-section="settings">
+      ⚙️ Configuración
+    </button>
+  </nav>
+
+</aside>
+
+<main class="main">
+
+  <section id="dashboard" class="page-section active">
+
+    <header class="page-header">
+      <div>
         <h1>Dashboard</h1>
+        <p>Resumen general de Proyecto X.</p>
+      </div>
     </header>
 
     <div class="cards">
 
-        <div class="card">
-            <h3>Comercios</h3>
-            <p id="businesses">0</p>
-        </div>
+      <div class="card">
+        <h3>Comercios</h3>
+        <p id="businessesCount">0</p>
+      </div>
 
-        <div class="card">
-            <h3>Pedidos Hoy</h3>
-            <p id="ordersToday">0</p>
-        </div>
+      <div class="card">
+        <h3>Categorías</h3>
+        <p id="categoriesCount">0</p>
+      </div>
 
-        <div class="card">
-            <h3>Usuarios</h3>
-            <p id="users">0</p>
-        </div>
+      <div class="card">
+        <h3>Productos</h3>
+        <p id="productsCount">0</p>
+      </div>
 
-        <div class="card">
-            <h3>Ventas</h3>
-            <p id="sales">$0</p>
-        </div>
+      <div class="card">
+        <h3>Usuarios</h3>
+        <p id="usersCount">0</p>
+      </div>
 
     </div>
 
-</div>
+  </section>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <section id="businesses" class="page-section">
+
+    <header class="page-header">
+      <div>
+        <h1>Comercios</h1>
+        <p>Administrá todos los comercios de la plataforma.</p>
+      </div>
+
+      <button class="primary-button" type="button">
+        + Nuevo comercio
+      </button>
+    </header>
+
+    <div id="businessesList" class="content-box">
+      Cargando comercios...
+    </div>
+
+  </section>
+
+  <section id="orders" class="page-section">
+
+    <header class="page-header">
+      <div>
+        <h1>Pedidos</h1>
+        <p>Los pedidos se habilitarán cuando creemos sus tablas.</p>
+      </div>
+    </header>
+
+    <div class="content-box">
+      Módulo de pedidos pendiente.
+    </div>
+
+  </section>
+
+  <section id="categories" class="page-section">
+
+    <header class="page-header">
+      <div>
+        <h1>Categorías</h1>
+        <p>Categorías registradas en la plataforma.</p>
+      </div>
+    </header>
+
+    <div id="categoriesList" class="content-box">
+      Cargando categorías...
+    </div>
+
+  </section>
+
+  <section id="products" class="page-section">
+
+    <header class="page-header">
+      <div>
+        <h1>Productos</h1>
+        <p>Productos de todos los comercios.</p>
+      </div>
+    </header>
+
+    <div id="productsList" class="content-box">
+      Cargando productos...
+    </div>
+
+  </section>
+
+  <section id="users" class="page-section">
+
+    <header class="page-header">
+      <div>
+        <h1>Usuarios</h1>
+        <p>Usuarios registrados en Proyecto X.</p>
+      </div>
+    </header>
+
+    <div id="usersList" class="content-box">
+      Cargando usuarios...
+    </div>
+
+  </section>
+
+  <section id="plans" class="page-section">
+
+    <header class="page-header">
+      <div>
+        <h1>Planes</h1>
+        <p>Planes y suscripciones de los comercios.</p>
+      </div>
+    </header>
+
+    <div class="content-box">
+      Módulo de planes pendiente.
+    </div>
+
+  </section>
+
+  <section id="settings" class="page-section">
+
+    <header class="page-header">
+      <div>
+        <h1>Configuración</h1>
+        <p>Configuración general de la plataforma.</p>
+      </div>
+    </header>
+
+    <div class="content-box">
+      Configuración pendiente.
+    </div>
+
+  </section>
+
+</main>
+
 <script src="js/config.js"></script>
 <script src="js/admin.js"></script>
 
 </body>
-
 </html>
