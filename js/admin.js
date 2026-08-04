@@ -62,6 +62,41 @@ const imageZoomRange = document.getElementById("imageZoomRange");
 const cancelImageCropButton = document.getElementById("cancelImageCropButton");
 const confirmImageCropButton = document.getElementById("confirmImageCropButton");
 
+
+const modifiersModal = document.getElementById("modifiersModal");
+const modifiersModalTitle = document.getElementById("modifiersModalTitle");
+const modifiersModalSubtitle = document.getElementById("modifiersModalSubtitle");
+const closeModifiersModalButton = document.getElementById("closeModifiersModalButton");
+const newModifierGroupButton = document.getElementById("newModifierGroupButton");
+const modifierGroupsList = document.getElementById("modifierGroupsList");
+
+const modifierGroupModal = document.getElementById("modifierGroupModal");
+const modifierGroupForm = document.getElementById("modifierGroupForm");
+const modifierGroupModalTitle = document.getElementById("modifierGroupModalTitle");
+const modifierGroupName = document.getElementById("modifierGroupName");
+const modifierGroupType = document.getElementById("modifierGroupType");
+const modifierGroupMax = document.getElementById("modifierGroupMax");
+const modifierGroupSortOrder = document.getElementById("modifierGroupSortOrder");
+const modifierGroupRequired = document.getElementById("modifierGroupRequired");
+const modifierGroupActive = document.getElementById("modifierGroupActive");
+const modifierGroupFormMessage = document.getElementById("modifierGroupFormMessage");
+const saveModifierGroupButton = document.getElementById("saveModifierGroupButton");
+const closeModifierGroupModalButton = document.getElementById("closeModifierGroupModalButton");
+const cancelModifierGroupButton = document.getElementById("cancelModifierGroupButton");
+
+const modifierOptionModal = document.getElementById("modifierOptionModal");
+const modifierOptionForm = document.getElementById("modifierOptionForm");
+const modifierOptionModalTitle = document.getElementById("modifierOptionModalTitle");
+const modifierOptionGroupName = document.getElementById("modifierOptionGroupName");
+const modifierOptionName = document.getElementById("modifierOptionName");
+const modifierOptionPrice = document.getElementById("modifierOptionPrice");
+const modifierOptionSortOrder = document.getElementById("modifierOptionSortOrder");
+const modifierOptionActive = document.getElementById("modifierOptionActive");
+const modifierOptionFormMessage = document.getElementById("modifierOptionFormMessage");
+const saveModifierOptionButton = document.getElementById("saveModifierOptionButton");
+const closeModifierOptionModalButton = document.getElementById("closeModifierOptionModalButton");
+const cancelModifierOptionButton = document.getElementById("cancelModifierOptionButton");
+
 const toast = document.getElementById("toast");
 
 let businessesCache = [];
@@ -77,6 +112,11 @@ let cropOffsetY = 0;
 let cropDragging = false;
 let cropPointerX = 0;
 let cropPointerY = 0;
+let selectedProduct = null;
+let selectedModifierGroup = null;
+let editingModifierGroupId = null;
+let editingModifierOptionId = null;
+
 
 function openSection(sectionId) {
   navItems.forEach((item) => {
@@ -210,6 +250,21 @@ async function updateTableRow(tableName, id, payload) {
 
   return true;
 }
+
+async function deleteTableRow(tableName, id) {
+  await requestText(
+    `${SUPABASE_REST}/${tableName}?id=eq.${encodeURIComponent(id)}`,
+    {
+      method: "DELETE",
+      headers: supabaseHeaders({
+        Prefer: "return=minimal"
+      })
+    }
+  );
+
+  return true;
+}
+
 
 
 async function uploadProductImage(blob) {
@@ -863,6 +918,575 @@ document
     closeProductModal
   );
 
+
+function closeModifiersModal() {
+  modifiersModal.classList.remove("open");
+  modifiersModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  selectedProduct = null;
+}
+
+async function openModifiersModal(product) {
+  selectedProduct = product;
+  modifiersModalTitle.textContent =
+    product.name || "Producto";
+  modifiersModalSubtitle.textContent =
+    "Configur\u00e1 sabores, tama\u00f1os, extras y otras opciones.";
+
+  modifiersModal.classList.add("open");
+  modifiersModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+
+  await loadModifierGroups();
+}
+
+function closeModifierGroupModal() {
+  modifierGroupModal.classList.remove("open");
+  modifierGroupModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  editingModifierGroupId = null;
+}
+
+function openModifierGroupModal(group = null) {
+  modifierGroupForm.reset();
+  editingModifierGroupId = group?.id ?? null;
+
+  modifierGroupModalTitle.textContent =
+    group ? "Editar grupo" : "Crear grupo";
+
+  saveModifierGroupButton.textContent =
+    group ? "Guardar cambios" : "Guardar grupo";
+
+  modifierGroupName.value = group?.name || "";
+  modifierGroupType.value =
+    group?.selection_type || "multiple";
+  modifierGroupMax.value =
+    group?.max_select ?? "";
+  modifierGroupSortOrder.value =
+    group?.sort_order ?? 0;
+  modifierGroupRequired.checked =
+    Boolean(group?.required);
+  modifierGroupActive.checked =
+    group ? Boolean(group.active) : true;
+  modifierGroupFormMessage.textContent = "";
+
+  modifierGroupModal.classList.add("open");
+  modifierGroupModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+
+  setTimeout(() => modifierGroupName.focus(), 50);
+}
+
+function closeModifierOptionModal() {
+  modifierOptionModal.classList.remove("open");
+  modifierOptionModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  editingModifierOptionId = null;
+}
+
+function openModifierOptionModal(group, option = null) {
+  selectedModifierGroup = group;
+  modifierOptionForm.reset();
+  editingModifierOptionId = option?.id ?? null;
+
+  modifierOptionModalTitle.textContent =
+    option ? "Editar opci\u00f3n" : "Crear opci\u00f3n";
+
+  modifierOptionGroupName.textContent =
+    group.name || "";
+
+  saveModifierOptionButton.textContent =
+    option ? "Guardar cambios" : "Guardar opci\u00f3n";
+
+  modifierOptionName.value = option?.name || "";
+  modifierOptionPrice.value =
+    option?.price_delta ?? 0;
+  modifierOptionSortOrder.value =
+    option?.sort_order ?? 0;
+  modifierOptionActive.checked =
+    option ? Boolean(option.active) : true;
+  modifierOptionFormMessage.textContent = "";
+
+  modifierOptionModal.classList.add("open");
+  modifierOptionModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+
+  setTimeout(() => modifierOptionName.focus(), 50);
+}
+
+async function loadModifierGroups() {
+  if (!selectedProduct) {
+    return;
+  }
+
+  modifierGroupsList.innerHTML =
+    '<div class="loading">Cargando opciones...</div>';
+
+  try {
+    const [groups, options] = await Promise.all([
+      getTableData(
+        "product_option_groups",
+        "id,product_id,name,selection_type,required,max_select,sort_order,active"
+      ),
+      getTableData(
+        "product_options",
+        "id,group_id,name,price_delta,sort_order,active"
+      )
+    ]);
+
+    const productGroups = groups
+      .filter(
+        (group) =>
+          String(group.product_id) ===
+          String(selectedProduct.id)
+      )
+      .sort(
+        (a, b) =>
+          Number(a.sort_order || 0) -
+          Number(b.sort_order || 0)
+      );
+
+    if (!productGroups.length) {
+      modifierGroupsList.innerHTML = `
+        <div class="modifier-empty">
+          Este producto todav\u00eda no tiene grupos de opciones.
+        </div>
+      `;
+      return;
+    }
+
+    modifierGroupsList.innerHTML =
+      productGroups.map((group) => {
+        const groupOptions = options
+          .filter(
+            (option) =>
+              String(option.group_id) ===
+              String(group.id)
+          )
+          .sort(
+            (a, b) =>
+              Number(a.sort_order || 0) -
+              Number(b.sort_order || 0)
+          );
+
+        const typeText =
+          group.selection_type === "single"
+            ? "Una sola opci\u00f3n"
+            : "Varias opciones";
+
+        const maxText =
+          group.max_select
+            ? ` \u00b7 M\u00e1ximo ${group.max_select}`
+            : "";
+
+        return `
+          <article
+            class="modifier-group-card"
+            data-group-id="${escapeHTML(group.id)}"
+          >
+            <div class="modifier-group-header">
+
+              <div>
+                <h3>${escapeHTML(group.name)}</h3>
+
+                <div class="modifier-group-meta">
+                  ${typeText}
+                  ${group.required ? " \u00b7 Obligatorio" : ""}
+                  ${maxText}
+                  ${group.active ? "" : " \u00b7 Inactivo"}
+                </div>
+              </div>
+
+              <div class="modifier-actions">
+                <button
+                  type="button"
+                  class="secondary-button compact-button add-option-button"
+                  data-group-id="${escapeHTML(group.id)}"
+                >
+                  + Agregar opci\u00f3n
+                </button>
+
+                <button
+                  type="button"
+                  class="secondary-button compact-button edit-group-button"
+                  data-group-id="${escapeHTML(group.id)}"
+                >
+                  Editar
+                </button>
+
+                <button
+                  type="button"
+                  class="secondary-button compact-button danger-button delete-group-button"
+                  data-group-id="${escapeHTML(group.id)}"
+                >
+                  Eliminar
+                </button>
+              </div>
+
+            </div>
+
+            <div class="modifier-options-list">
+              ${
+                groupOptions.length
+                  ? groupOptions.map((option) => `
+                      <div class="modifier-option-row">
+
+                        <div class="modifier-option-info">
+                          <strong>${escapeHTML(option.name)}</strong>
+                          <small>
+                            +$${Number(option.price_delta || 0)}
+                            ${option.active ? "" : " \u00b7 Inactiva"}
+                          </small>
+                        </div>
+
+                        <div class="modifier-actions">
+                          <button
+                            type="button"
+                            class="secondary-button compact-button edit-option-button"
+                            data-group-id="${escapeHTML(group.id)}"
+                            data-option-id="${escapeHTML(option.id)}"
+                          >
+                            Editar
+                          </button>
+
+                          <button
+                            type="button"
+                            class="secondary-button compact-button danger-button delete-option-button"
+                            data-option-id="${escapeHTML(option.id)}"
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+
+                      </div>
+                    `).join("")
+                  : `
+                    <div class="modifier-empty">
+                      No hay opciones en este grupo.
+                    </div>
+                  `
+              }
+            </div>
+          </article>
+        `;
+      }).join("");
+
+    modifierGroupsList
+      .querySelectorAll(".add-option-button")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const group = productGroups.find(
+            (item) =>
+              String(item.id) ===
+              String(button.dataset.groupId)
+          );
+
+          if (group) {
+            openModifierOptionModal(group);
+          }
+        });
+      });
+
+    modifierGroupsList
+      .querySelectorAll(".edit-group-button")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const group = productGroups.find(
+            (item) =>
+              String(item.id) ===
+              String(button.dataset.groupId)
+          );
+
+          if (group) {
+            openModifierGroupModal(group);
+          }
+        });
+      });
+
+    modifierGroupsList
+      .querySelectorAll(".edit-option-button")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const group = productGroups.find(
+            (item) =>
+              String(item.id) ===
+              String(button.dataset.groupId)
+          );
+
+          const option = options.find(
+            (item) =>
+              String(item.id) ===
+              String(button.dataset.optionId)
+          );
+
+          if (group && option) {
+            openModifierOptionModal(group, option);
+          }
+        });
+      });
+
+    modifierGroupsList
+      .querySelectorAll(".delete-group-button")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          const confirmed = window.confirm(
+            "Se eliminar\u00e1 el grupo y todas sus opciones. \u00bfContinuar?"
+          );
+
+          if (!confirmed) {
+            return;
+          }
+
+          try {
+            await deleteTableRow(
+              "product_option_groups",
+              button.dataset.groupId
+            );
+
+            showToast(
+              "Grupo eliminado correctamente.",
+              "success"
+            );
+
+            await loadModifierGroups();
+          } catch (error) {
+            console.error("Error eliminando grupo:", error);
+            showToast(
+              "No se pudo eliminar el grupo.",
+              "error"
+            );
+          }
+        });
+      });
+
+    modifierGroupsList
+      .querySelectorAll(".delete-option-button")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          const confirmed = window.confirm(
+            "\u00bfEliminar esta opci\u00f3n?"
+          );
+
+          if (!confirmed) {
+            return;
+          }
+
+          try {
+            await deleteTableRow(
+              "product_options",
+              button.dataset.optionId
+            );
+
+            showToast(
+              "Opci\u00f3n eliminada correctamente.",
+              "success"
+            );
+
+            await loadModifierGroups();
+          } catch (error) {
+            console.error("Error eliminando opcion:", error);
+            showToast(
+              "No se pudo eliminar la opci\u00f3n.",
+              "error"
+            );
+          }
+        });
+      });
+
+  } catch (error) {
+    console.error("Error cargando modificadores:", error);
+
+    modifierGroupsList.innerHTML = `
+      <div class="error">
+        No se pudieron cargar las opciones y extras.
+        Verific\u00e1 que las tablas del archivo SQL est\u00e9n creadas.
+      </div>
+    `;
+  }
+}
+
+closeModifiersModalButton.addEventListener(
+  "click",
+  closeModifiersModal
+);
+
+document
+  .querySelector("[data-close-modifiers-modal]")
+  ?.addEventListener("click", closeModifiersModal);
+
+newModifierGroupButton.addEventListener(
+  "click",
+  () => openModifierGroupModal()
+);
+
+closeModifierGroupModalButton.addEventListener(
+  "click",
+  closeModifierGroupModal
+);
+
+cancelModifierGroupButton.addEventListener(
+  "click",
+  closeModifierGroupModal
+);
+
+document
+  .querySelector("[data-close-modifier-group-modal]")
+  ?.addEventListener("click", closeModifierGroupModal);
+
+closeModifierOptionModalButton.addEventListener(
+  "click",
+  closeModifierOptionModal
+);
+
+cancelModifierOptionButton.addEventListener(
+  "click",
+  closeModifierOptionModal
+);
+
+document
+  .querySelector("[data-close-modifier-option-modal]")
+  ?.addEventListener("click", closeModifierOptionModal);
+
+modifierGroupForm.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+
+    const name = modifierGroupName.value.trim();
+
+    if (!name) {
+      modifierGroupFormMessage.textContent =
+        "Escrib\u00ed el nombre del grupo.";
+      return;
+    }
+
+    const maxValue =
+      modifierGroupMax.value
+        ? Number(modifierGroupMax.value)
+        : null;
+
+    const payload = {
+      product_id: selectedProduct.id,
+      name,
+      selection_type: modifierGroupType.value,
+      required: modifierGroupRequired.checked,
+      max_select: maxValue,
+      sort_order:
+        Number(modifierGroupSortOrder.value || 0),
+      active: modifierGroupActive.checked
+    };
+
+    saveModifierGroupButton.disabled = true;
+    saveModifierGroupButton.textContent = "Guardando...";
+    modifierGroupFormMessage.textContent = "";
+
+    try {
+      if (editingModifierGroupId) {
+        await updateTableRow(
+          "product_option_groups",
+          editingModifierGroupId,
+          payload
+        );
+      } else {
+        await insertTableRow(
+          "product_option_groups",
+          payload
+        );
+      }
+
+      showToast(
+        editingModifierGroupId
+          ? "Grupo actualizado correctamente."
+          : "Grupo creado correctamente.",
+        "success"
+      );
+
+      closeModifierGroupModal();
+      await loadModifierGroups();
+    } catch (error) {
+      console.error("Error guardando grupo:", error);
+      modifierGroupFormMessage.textContent =
+        "No se pudo guardar el grupo.";
+    } finally {
+      saveModifierGroupButton.disabled = false;
+      saveModifierGroupButton.textContent =
+        editingModifierGroupId
+          ? "Guardar cambios"
+          : "Guardar grupo";
+    }
+  }
+);
+
+modifierOptionForm.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+
+    const name = modifierOptionName.value.trim();
+    const price = Number(modifierOptionPrice.value || 0);
+
+    if (!name) {
+      modifierOptionFormMessage.textContent =
+        "Escrib\u00ed el nombre de la opci\u00f3n.";
+      return;
+    }
+
+    if (!Number.isFinite(price) || price < 0) {
+      modifierOptionFormMessage.textContent =
+        "Escrib\u00ed un precio v\u00e1lido.";
+      return;
+    }
+
+    const payload = {
+      group_id: selectedModifierGroup.id,
+      name,
+      price_delta: price,
+      sort_order:
+        Number(modifierOptionSortOrder.value || 0),
+      active: modifierOptionActive.checked
+    };
+
+    saveModifierOptionButton.disabled = true;
+    saveModifierOptionButton.textContent = "Guardando...";
+    modifierOptionFormMessage.textContent = "";
+
+    try {
+      if (editingModifierOptionId) {
+        await updateTableRow(
+          "product_options",
+          editingModifierOptionId,
+          payload
+        );
+      } else {
+        await insertTableRow(
+          "product_options",
+          payload
+        );
+      }
+
+      showToast(
+        editingModifierOptionId
+          ? "Opci\u00f3n actualizada correctamente."
+          : "Opci\u00f3n creada correctamente.",
+        "success"
+      );
+
+      closeModifierOptionModal();
+      await loadModifierGroups();
+    } catch (error) {
+      console.error("Error guardando opcion:", error);
+      modifierOptionFormMessage.textContent =
+        "No se pudo guardar la opci\u00f3n.";
+    } finally {
+      saveModifierOptionButton.disabled = false;
+      saveModifierOptionButton.textContent =
+        editingModifierOptionId
+          ? "Guardar cambios"
+          : "Guardar opci\u00f3n";
+    }
+  }
+);
+
 async function loadDashboard() {
   try {
     const [
@@ -1228,9 +1852,19 @@ async function loadProducts() {
               }
             </div>
 
-            <span class="status-pill ${product.active ? "" : "inactive"}">
-              ${product.active ? "Activo" : "Inactivo"}
-            </span>
+            <div class="product-management-actions">
+              <span class="status-pill ${product.active ? "" : "inactive"}">
+                ${product.active ? "Activo" : "Inactivo"}
+              </span>
+
+              <button
+                type="button"
+                class="secondary-button compact-button modifiers-button"
+                data-product-id="${escapeHTML(product.id)}"
+              >
+                Opciones y extras
+              </button>
+            </div>
 
           </div>
         `).join("");
@@ -1242,6 +1876,22 @@ async function loadProducts() {
         "click",
         openProductModal
       );
+
+    container
+      .querySelectorAll(".modifiers-button")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const product = filtered.find(
+            (item) =>
+              String(item.id) ===
+              String(button.dataset.productId)
+          );
+
+          if (product) {
+            openModifiersModal(product);
+          }
+        });
+      });
   } catch (error) {
     console.error(
       "Error cargando productos:",
@@ -1553,6 +2203,21 @@ categoryForm.addEventListener(
 
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") {
+    return;
+  }
+
+  if (modifierOptionModal.classList.contains("open")) {
+    closeModifierOptionModal();
+    return;
+  }
+
+  if (modifierGroupModal.classList.contains("open")) {
+    closeModifierGroupModal();
+    return;
+  }
+
+  if (modifiersModal.classList.contains("open")) {
+    closeModifiersModal();
     return;
   }
 
