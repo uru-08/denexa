@@ -58,8 +58,13 @@ function openSection(sectionId) {
 
 
 navItems.forEach((button) => {
-  button.addEventListener("click", () => {
-    openSection(button.dataset.section);
+  button.addEventListener("click", async () => {
+    const sectionId = button.dataset.section;
+    openSection(sectionId);
+
+    if (sectionId === "categories") {
+      await loadCategories();
+    }
   });
 });
 
@@ -480,6 +485,14 @@ async function loadBusinesses() {
 
     businessesCache = businesses;
 
+    const savedBusinessId = sessionStorage.getItem("selectedBusinessId");
+
+    if (savedBusinessId) {
+      selectedBusiness = businesses.find(
+        (item) => String(item.id) === String(savedBusinessId)
+      ) || selectedBusiness;
+    }
+
     if (!businesses.length) {
       container.className = "panel empty-state";
       container.textContent =
@@ -697,6 +710,7 @@ function openBusinessDetailModal(business) {
     "businessCategoriesButton"
   ).onclick = async () => {
     selectedBusiness = business;
+    sessionStorage.setItem("selectedBusinessId", String(business.id));
 
     closeBusinessDetailModal();
     openSection("categories");
@@ -1430,9 +1444,10 @@ async function initAdmin() {
   createBusinessDetailModal();
   createCategoryModal();
 
+  await loadBusinesses();
+
   await Promise.all([
     loadDashboard(),
-    loadBusinesses(),
     loadCategories(),
     loadProducts(),
     loadUsers()
