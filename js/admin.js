@@ -36,11 +36,47 @@ const saveCategoryButton = document.getElementById("saveCategoryButton");
 const closeCategoryModalButton = document.getElementById("closeCategoryModalButton");
 const cancelCategoryButton = document.getElementById("cancelCategoryButton");
 
+
+const productModal = document.getElementById("productModal");
+const productForm = document.getElementById("productForm");
+const productName = document.getElementById("productName");
+const productCategory = document.getElementById("productCategory");
+const productPrice = document.getElementById("productPrice");
+const productOldPrice = document.getElementById("productOldPrice");
+const productSortOrder = document.getElementById("productSortOrder");
+const productFeatured = document.getElementById("productFeatured");
+const productDescription = document.getElementById("productDescription");
+const productActive = document.getElementById("productActive");
+const productFormMessage = document.getElementById("productFormMessage");
+const saveProductButton = document.getElementById("saveProductButton");
+const closeProductModalButton = document.getElementById("closeProductModalButton");
+const cancelProductButton = document.getElementById("cancelProductButton");
+const productImageInput = document.getElementById("productImageInput");
+const selectProductImageButton = document.getElementById("selectProductImageButton");
+const productImagePreview = document.getElementById("productImagePreview");
+
+const imageCropModal = document.getElementById("imageCropModal");
+const imageCropCanvas = document.getElementById("imageCropCanvas");
+const imageCropContext = imageCropCanvas.getContext("2d");
+const imageZoomRange = document.getElementById("imageZoomRange");
+const cancelImageCropButton = document.getElementById("cancelImageCropButton");
+const confirmImageCropButton = document.getElementById("confirmImageCropButton");
+
 const toast = document.getElementById("toast");
 
 let businessesCache = [];
 let selectedBusiness = null;
 let editingBusinessId = null;
+let croppedProductImageBlob = null;
+let croppedProductImageUrl = "";
+let cropImage = null;
+let cropBaseScale = 1;
+let cropZoom = 1;
+let cropOffsetX = 0;
+let cropOffsetY = 0;
+let cropDragging = false;
+let cropPointerX = 0;
+let cropPointerY = 0;
 
 function openSection(sectionId) {
   navItems.forEach((item) => {
@@ -173,6 +209,229 @@ async function updateTableRow(tableName, id, payload) {
   );
 
   return true;
+}
+
+
+async function uploadProductImage(blob) {
+  const safeBusinessId = String(selectedBusiness.id);
+  const fileName =
+    `${Date.now()}-${Math.random().toString(36).slice(2,10)}.jpg`;
+  const objectPath =
+    `${safeBusinessId}/${fileName}`;
+
+  const response = await fetch(
+    `${SUPABASE_URL}/storage/v1/object/product-images/${objectPath}`,
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "image/jpeg",
+        "x-upsert": "false"
+      },
+      body: blob
+    }
+  );
+
+  const responseText = await response.text();
+
+  if (!response.ok) {
+    throw new Error(
+      `Storage ${response.status}: ${responseText}`
+    );
+  }
+
+  return `${SUPABASE_URL}/storage/v1/object/public/product-images/${objectPath}`;
+}
+
+async function getSelectedBusinessCategories() {
+  const categories = await getTableData(
+    "categories",
+    "id,name,business_id,active"
+  );
+
+  return categories.filter(
+    (category) =>
+      String(category.business_id) ===
+      String(selectedBusiness.id) &&
+      category.active !== false
+  );
+}
+
+async function openProductModal() {
+  if (!selectedBusiness) {
+    showToast(
+      "Primero seleccion\u00e1 un comercio.",
+      "error"
+    );
+    return;
+  }
+
+  productForm.reset();
+  productSortOrder.value = "0";
+  productActive.checked = true;
+  productFeatured.checked = false;
+  productFormMessage.textContent = "";
+  croppedProductImageBlob = null;
+
+  if (croppedProductImageUrl) {
+    URL.revokeObjectURL(croppedProductImageUrl);
+  }
+
+  croppedProductImageUrl = "";
+  productImagePreview.innerHTML =
+    "<span>Sin imagen</span>";
+
+  try {
+    const categories =
+      await getSelectedBusinessCategories();
+
+    if (!categories.length) {
+      showToast(
+        "Primero cre\u00e1 una categor\u00eda para este comercio.",
+        "error"
+      );
+      return;
+    }
+
+    productCategory.innerHTML = categories
+      .map(
+        (category) => `
+          <option value="${escapeHTML(category.id)}">
+            ${escapeHTML(category.name)}
+          </option>
+        `
+      )
+      .join("");
+
+    productModal.classList.add("open");
+    productModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+
+    setTimeout(() => productName.focus(), 50);
+  } catch (error) {
+    console.error(
+      "Error cargando categorias para producto:",
+      error
+    );
+
+    showToast(
+      "No se pudieron cargar las categor\u00edas.",
+      "error"
+    );
+  }
+}
+
+function closeProductModal() {
+  productModal.classList.remove("open");
+  productModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+}
+
+function renderCropCanvas() {
+  if (!cropImage) {
+    return;
+  }
+
+  const canvasSize = imageCropCanvas.width;
+  const scale = cropBaseScale * cropZoom;
+  const drawWidth = cropImage.naturalWidth * scale;
+  const drawHeight = cropImage.naturalHeight * scale;
+
+  const minX = canvasSize - drawWidth;
+  const minY = canvasSize - drawHeight;
+
+  cropOffsetX = Math.min(0, Math.max(minX, cropOffsetX));
+  cropOffsetY = Math.min(0, Math.max(minY, cropOffsetY));
+
+  imageCropContext.clearRect(
+    0,
+    0,
+    canvasSize,
+    canvasSize
+  );
+
+  imageCropContext.drawImage(
+    cropImage,
+    cropOffsetX,
+    cropOffsetY,
+    drawWidth,
+    drawHeight
+  );
+}
+
+function openImageCropEditor(file) {
+  const image = new Image();
+  const objectUrl = URL.createObjectURL(file);
+
+  image.onload = () => {
+    URL.revokeObjectURL(objectUrl);
+
+    cropImage = image;
+    cropZoom = 1;
+    imageZoomRange.value = "1";
+
+    const canvasSize = imageCropCanvas.width;
+    cropBaseScale = Math.max(
+      canvasSize / image.naturalWidth,
+      canvasSize / image.naturalHeight
+    );
+
+    const drawWidth =
+      image.naturalWidth * cropBaseScale;
+    const drawHeight =
+      image.naturalHeight * cropBaseScale;
+
+    cropOffsetX =
+      (canvasSize - drawWidth) / 2;
+    cropOffsetY =
+      (canvasSize - drawHeight) / 2;
+
+    renderCropCanvas();
+
+    imageCropModal.classList.add("open");
+    imageCropModal.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+    document.body.classList.add("modal-open");
+  };
+
+  image.onerror = () => {
+    URL.revokeObjectURL(objectUrl);
+
+    showToast(
+      "No se pudo abrir esa imagen.",
+      "error"
+    );
+  };
+
+  image.src = objectUrl;
+}
+
+function closeImageCropEditor() {
+  imageCropModal.classList.remove("open");
+  imageCropModal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+  document.body.classList.remove("modal-open");
+  cropDragging = false;
+  imageCropCanvas.classList.remove("dragging");
+}
+
+function canvasPointFromEvent(event) {
+  const rect =
+    imageCropCanvas.getBoundingClientRect();
+
+  return {
+    x:
+      (event.clientX - rect.left) *
+      (imageCropCanvas.width / rect.width),
+    y:
+      (event.clientY - rect.top) *
+      (imageCropCanvas.height / rect.height)
+  };
 }
 
 function openBusinessModal(business = null) {
@@ -404,6 +663,205 @@ cancelCategoryButton.addEventListener(
 document
   .querySelector("[data-close-category-modal]")
   ?.addEventListener("click", closeCategoryModal);
+
+
+selectProductImageButton.addEventListener(
+  "click",
+  () => {
+    productImageInput.click();
+  }
+);
+
+productImageInput.addEventListener(
+  "change",
+  () => {
+    const file =
+      productImageInput.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      showToast(
+        "Seleccion\u00e1 un archivo de imagen.",
+        "error"
+      );
+      return;
+    }
+
+    openImageCropEditor(file);
+    productImageInput.value = "";
+  }
+);
+
+imageZoomRange.addEventListener(
+  "input",
+  () => {
+    if (!cropImage) {
+      return;
+    }
+
+    const oldScale =
+      cropBaseScale * cropZoom;
+    const centerX =
+      imageCropCanvas.width / 2;
+    const centerY =
+      imageCropCanvas.height / 2;
+
+    const imagePointX =
+      (centerX - cropOffsetX) / oldScale;
+    const imagePointY =
+      (centerY - cropOffsetY) / oldScale;
+
+    cropZoom =
+      Number(imageZoomRange.value);
+
+    const newScale =
+      cropBaseScale * cropZoom;
+
+    cropOffsetX =
+      centerX - imagePointX * newScale;
+    cropOffsetY =
+      centerY - imagePointY * newScale;
+
+    renderCropCanvas();
+  }
+);
+
+imageCropCanvas.addEventListener(
+  "pointerdown",
+  (event) => {
+    if (!cropImage) {
+      return;
+    }
+
+    const point =
+      canvasPointFromEvent(event);
+
+    cropDragging = true;
+    cropPointerX = point.x;
+    cropPointerY = point.y;
+
+    imageCropCanvas.setPointerCapture(
+      event.pointerId
+    );
+    imageCropCanvas.classList.add(
+      "dragging"
+    );
+  }
+);
+
+imageCropCanvas.addEventListener(
+  "pointermove",
+  (event) => {
+    if (!cropDragging) {
+      return;
+    }
+
+    const point =
+      canvasPointFromEvent(event);
+
+    cropOffsetX +=
+      point.x - cropPointerX;
+    cropOffsetY +=
+      point.y - cropPointerY;
+
+    cropPointerX = point.x;
+    cropPointerY = point.y;
+
+    renderCropCanvas();
+  }
+);
+
+function stopCropDragging(event) {
+  cropDragging = false;
+  imageCropCanvas.classList.remove(
+    "dragging"
+  );
+
+  if (
+    event?.pointerId !== undefined &&
+    imageCropCanvas.hasPointerCapture(
+      event.pointerId
+    )
+  ) {
+    imageCropCanvas.releasePointerCapture(
+      event.pointerId
+    );
+  }
+}
+
+imageCropCanvas.addEventListener(
+  "pointerup",
+  stopCropDragging
+);
+
+imageCropCanvas.addEventListener(
+  "pointercancel",
+  stopCropDragging
+);
+
+cancelImageCropButton.addEventListener(
+  "click",
+  closeImageCropEditor
+);
+
+confirmImageCropButton.addEventListener(
+  "click",
+  () => {
+    imageCropCanvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          showToast(
+            "No se pudo preparar la imagen.",
+            "error"
+          );
+          return;
+        }
+
+        croppedProductImageBlob = blob;
+
+        if (croppedProductImageUrl) {
+          URL.revokeObjectURL(
+            croppedProductImageUrl
+          );
+        }
+
+        croppedProductImageUrl =
+          URL.createObjectURL(blob);
+
+        productImagePreview.innerHTML = `
+          <img
+            src="${croppedProductImageUrl}"
+            alt="Vista previa del producto"
+          >
+        `;
+
+        closeImageCropEditor();
+      },
+      "image/jpeg",
+      0.88
+    );
+  }
+);
+
+closeProductModalButton.addEventListener(
+  "click",
+  closeProductModal
+);
+
+cancelProductButton.addEventListener(
+  "click",
+  closeProductModal
+);
+
+document
+  .querySelector("[data-close-product-modal]")
+  ?.addEventListener(
+    "click",
+    closeProductModal
+  );
 
 async function loadDashboard() {
   try {
@@ -642,46 +1100,153 @@ async function loadProducts() {
     `Productos de ${selectedBusiness.name}.`;
 
   try {
-    const products = await getTableData(
-      "products",
-      "id,name,price,business_id,active"
+    const [products, categories] =
+      await Promise.all([
+        getTableData(
+          "products",
+          "id,business_id,category_id,name,description,price,image_url,featured,active,sort_order,old_price"
+        ),
+        getTableData(
+          "categories",
+          "id,name,business_id"
+        )
+      ]);
+
+    const categoryMap = new Map(
+      categories.map(
+        (category) => [
+          String(category.id),
+          category.name
+        ]
+      )
     );
 
-    const filtered = products.filter(
-      (product) =>
-        String(product.business_id) ===
-        String(selectedBusiness.id)
-    );
+    const filtered = products
+      .filter(
+        (product) =>
+          String(product.business_id) ===
+          String(selectedBusiness.id)
+      )
+      .sort(
+        (a, b) =>
+          Number(a.sort_order || 0) -
+          Number(b.sort_order || 0)
+      );
+
+    const header = `
+      <div class="section-toolbar">
+
+        <div>
+          <strong>
+            ${escapeHTML(selectedBusiness.name)}
+          </strong>
+
+          <small>
+            Productos de este comercio
+          </small>
+        </div>
+
+        <button
+          type="button"
+          class="primary-button"
+          id="newProductButton"
+        >
+          + Nuevo producto
+        </button>
+
+      </div>
+    `;
 
     container.className = "panel";
 
     if (!filtered.length) {
-      container.textContent =
-        "Todav\u00eda no hay productos para este comercio.";
-      return;
+      container.innerHTML =
+        header +
+        `<div class="empty-state">
+          Todav\u00eda no hay productos para este comercio.
+        </div>`;
+    } else {
+      container.innerHTML =
+        header +
+        filtered.map((product) => `
+          <div class="list-item product-row">
+
+            <div class="product-thumb">
+              ${
+                product.image_url
+                  ? `
+                    <img
+                      src="${escapeHTML(product.image_url)}"
+                      alt="${escapeHTML(product.name || "Producto")}"
+                    >
+                  `
+                  : `
+                    <div class="product-thumb-placeholder">
+                      Sin imagen
+                    </div>
+                  `
+              }
+            </div>
+
+            <div>
+              <strong>
+                ${escapeHTML(product.name || "Sin nombre")}
+              </strong>
+
+              <small>
+                ${escapeHTML(
+                  categoryMap.get(
+                    String(product.category_id)
+                  ) || "Sin categor\u00eda"
+                )}
+              </small>
+
+              <small>
+                <span class="product-price">
+                  $${Number(product.price || 0)}
+                </span>
+
+                ${
+                  product.old_price
+                    ? `
+                      <span class="product-old-price">
+                        $${Number(product.old_price)}
+                      </span>
+                    `
+                    : ""
+                }
+              </small>
+
+              ${
+                product.featured
+                  ? `
+                    <span class="product-badge">
+                      Destacado
+                    </span>
+                  `
+                  : ""
+              }
+            </div>
+
+            <span class="status-pill ${product.active ? "" : "inactive"}">
+              ${product.active ? "Activo" : "Inactivo"}
+            </span>
+
+          </div>
+        `).join("");
     }
 
-    container.innerHTML = filtered.map((product) => `
-      <div class="list-item">
-
-        <div>
-          <strong>
-            ${escapeHTML(product.name || "Sin nombre")}
-          </strong>
-
-          <small>
-            $${Number(product.price || 0)}
-          </small>
-        </div>
-
-        <span class="status-pill ${product.active ? "" : "inactive"}">
-          ${product.active ? "Activo" : "Inactivo"}
-        </span>
-
-      </div>
-    `).join("");
+    document
+      .getElementById("newProductButton")
+      ?.addEventListener(
+        "click",
+        openProductModal
+      );
   } catch (error) {
-    console.error("Error cargando productos:", error);
+    console.error(
+      "Error cargando productos:",
+      error
+    );
 
     container.className = "panel error";
     container.textContent =
@@ -821,6 +1386,120 @@ businessForm.addEventListener(
   }
 );
 
+
+productForm.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+
+    const name = productName.value.trim();
+    const categoryId = productCategory.value;
+    const price = Number(productPrice.value);
+
+    if (!name) {
+      productFormMessage.textContent =
+        "Escrib\u00ed el nombre del producto.";
+      return;
+    }
+
+    if (!categoryId) {
+      productFormMessage.textContent =
+        "Eleg\u00ed una categor\u00eda.";
+      return;
+    }
+
+    if (
+      !Number.isFinite(price) ||
+      price < 0
+    ) {
+      productFormMessage.textContent =
+        "Escrib\u00ed un precio v\u00e1lido.";
+      return;
+    }
+
+    saveProductButton.disabled = true;
+    saveProductButton.textContent =
+      "Guardando...";
+    productFormMessage.textContent = "";
+
+    try {
+      let imageUrl = null;
+
+      if (croppedProductImageBlob) {
+        saveProductButton.textContent =
+          "Subiendo imagen...";
+
+        imageUrl =
+          await uploadProductImage(
+            croppedProductImageBlob
+          );
+
+        saveProductButton.textContent =
+          "Guardando producto...";
+      }
+
+      await insertTableRow(
+        "products",
+        {
+          business_id: selectedBusiness.id,
+          category_id: Number(categoryId),
+          name,
+          description:
+            productDescription.value.trim() ||
+            null,
+          price,
+          image_url: imageUrl,
+          featured:
+            productFeatured.checked,
+          active:
+            productActive.checked,
+          sort_order:
+            Number(productSortOrder.value || 0),
+          old_price:
+            productOldPrice.value
+              ? Number(productOldPrice.value)
+              : null
+        }
+      );
+
+      showToast(
+        "Producto creado correctamente.",
+        "success"
+      );
+
+      closeProductModal();
+
+      await Promise.all([
+        loadDashboard(),
+        loadProducts()
+      ]);
+    } catch (error) {
+      console.error(
+        "Error creando producto:",
+        error
+      );
+
+      const message =
+        String(error.message);
+
+      if (
+        message.includes("Storage") ||
+        message.includes("storage")
+      ) {
+        productFormMessage.textContent =
+          "No se pudo subir la imagen. Revis\u00e1 las pol\u00edticas del bucket product-images.";
+      } else {
+        productFormMessage.textContent =
+          "No se pudo crear el producto.";
+      }
+    } finally {
+      saveProductButton.disabled = false;
+      saveProductButton.textContent =
+        "Guardar producto";
+    }
+  }
+);
+
 categoryForm.addEventListener(
   "submit",
   async (event) => {
@@ -874,6 +1553,16 @@ categoryForm.addEventListener(
 
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") {
+    return;
+  }
+
+  if (imageCropModal.classList.contains("open")) {
+    closeImageCropEditor();
+    return;
+  }
+
+  if (productModal.classList.contains("open")) {
+    closeProductModal();
     return;
   }
 
