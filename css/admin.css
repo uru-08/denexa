@@ -937,3 +937,143 @@ select{
     justify-self:start;
   }
 }
+
+
+/* ==================================================
+   OPCIONES Y EXTRAS
+================================================== */
+
+.modifiers-modal-card{
+  width:min(900px,100%);
+}
+
+.modifier-groups-list{
+  display:grid;
+  gap:16px;
+}
+
+.modifier-group-card{
+  padding:18px;
+  border:1px solid var(--line-soft);
+  border-radius:16px;
+  background:#f8fafc;
+}
+
+.modifier-group-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  flex-wrap:wrap;
+}
+
+.modifier-group-header h3{
+  margin:0;
+  color:var(--text);
+  font-size:1.05rem;
+}
+
+.modifier-group-meta{
+  margin-top:6px;
+  color:var(--muted);
+  font-size:.85rem;
+  font-weight:650;
+}
+
+.modifier-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.compact-button{
+  padding:8px 11px;
+  border-radius:9px;
+  font-size:.82rem;
+}
+
+.danger-button{
+  border:1px solid #fda29b;
+  background:#fef3f2;
+  color:#b42318;
+}
+
+.danger-button:hover{
+  background:#fee4e2;
+  color:#912018;
+}
+
+.modifier-options-list{
+  display:grid;
+  gap:9px;
+  margin-top:16px;
+}
+
+.modifier-option-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  padding:12px 13px;
+  border:1px solid var(--line-soft);
+  border-radius:11px;
+  background:#ffffff;
+}
+
+.modifier-option-info strong{
+  display:block;
+  color:var(--text);
+}
+
+.modifier-option-info small{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-weight:650;
+}
+
+.modifier-empty{
+  padding:14px;
+  border:1px dashed #b8c0cc;
+  border-radius:11px;
+  color:var(--muted);
+  font-weight:650;
+  text-align:center;
+}
+
+.product-management-actions{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  flex-wrap:wrap;
+}
+
+.modifiers-button{
+  border-color:#c4b5fd;
+  background:#f5f3ff;
+  color:#5b21b6;
+}
+
+.modifiers-button:hover{
+  background:#ede9fe;
+  border-color:#a78bfa;
+  color:#4c1d95;
+}
+
+@media(max-width:650px){
+  .modifier-group-header,
+  .modifier-option-row{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .modifier-actions,
+  .product-management-actions{
+    width:100%;
+  }
+
+  .modifier-actions button,
+  .product-management-actions button{
+    width:100%;
+  }
+}
