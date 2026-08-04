@@ -32,6 +32,8 @@ const cancelBusinessButton = document.getElementById(
 );
 const toast = document.getElementById("toast");
 
+let businessesCache = [];
+
 
 /* ==================================================
    NAVEGACIÓN
@@ -463,59 +465,274 @@ async function renderList(
 ================================================== */
 
 async function loadBusinesses() {
-  await renderList(
-    "businesses",
+  const container = document.getElementById("businessesList");
 
-    "businessesList",
+  if (!container) {
+    return;
+  }
 
-    "id,name,slug,phone,address,active",
+  try {
+    const businesses = await getTableData(
+      "businesses",
+      "id,name,slug,phone,address,logo_url,primary_color,secondary_color,active"
+    );
 
-    (business) => `
+    businessesCache = businesses;
+
+    if (!businesses.length) {
+      container.className = "panel empty-state";
+      container.textContent =
+        "Todavía no hay comercios registrados.";
+      return;
+    }
+
+    container.className = "panel";
+
+    container.innerHTML = businesses.map((business) => `
       <div class="list-item">
 
         <div>
-
           <strong>
-            ${escapeHTML(
-              business.name ||
-              "Sin nombre"
-            )}
+            ${escapeHTML(business.name || "Sin nombre")}
           </strong>
 
           <small>
-
-            ${escapeHTML(
-              business.slug ||
-              "Sin enlace"
-            )}
-
+            ${escapeHTML(business.slug || "Sin enlace")}
             ${
               business.phone
-                ? ` · ${escapeHTML(
-                    business.phone
-                  )}`
+                ? ` · ${escapeHTML(business.phone)}`
                 : ""
             }
-
           </small>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+
+          <span>
+            ${business.active ? "Activo" : "Inactivo"}
+          </span>
+
+          <button
+            type="button"
+            class="secondary-button business-manage-button"
+            data-business-id="${escapeHTML(business.id)}"
+          >
+            Administrar
+          </button>
 
         </div>
 
-        <span>
-          ${
-            business.active
-              ? "Activo"
-              : "Inactivo"
-          }
-        </span>
-
       </div>
-    `,
+    `).join("");
 
-    "Todavía no hay comercios registrados."
-  );
+  } catch (error) {
+    console.error("Error cargando businesses:", error);
+
+    container.className = "panel error";
+    container.textContent =
+      "No se pudieron cargar los comercios.";
+  }
 }
 
+document
+  .getElementById("businessesList")
+  ?.addEventListener("click", (event) => {
+    const button = event.target.closest(
+      ".business-manage-button"
+    );
+
+    if (!button) {
+      return;
+    }
+
+    const business = businessesCache.find(
+      (item) =>
+        String(item.id) === String(button.dataset.businessId)
+    );
+
+    if (business) {
+      openBusinessDetailModal(business);
+    }
+  });
+
+function createBusinessDetailModal() {
+  if (document.getElementById("businessDetailModal")) {
+    return;
+  }
+
+  const modal = document.createElement("div");
+
+  modal.id = "businessDetailModal";
+  modal.className = "modal";
+  modal.setAttribute("aria-hidden", "true");
+
+  modal.innerHTML = `
+    <div
+      class="modal-backdrop"
+      data-close-business-detail
+    ></div>
+
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="businessDetailTitle"
+    >
+
+      <div class="modal-header">
+
+        <div>
+          <p class="eyebrow">COMERCIO</p>
+          <h2 id="businessDetailTitle">
+            Detalle del comercio
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          class="close-button"
+          id="closeBusinessDetailButton"
+          aria-label="Cerrar"
+        >
+          &times;
+        </button>
+
+      </div>
+
+      <div
+        id="businessDetailContent"
+        style="display:grid;gap:14px;"
+      ></div>
+
+      <div
+        class="modal-actions"
+        style="flex-wrap:wrap;"
+      >
+
+        <button
+          type="button"
+          class="secondary-button"
+          id="businessCategoriesButton"
+        >
+          Categorías
+        </button>
+
+        <button
+          type="button"
+          class="secondary-button"
+          id="businessProductsButton"
+        >
+          Productos
+        </button>
+
+        <button
+          type="button"
+          class="primary-button"
+          id="businessStoreButton"
+        >
+          Ver catálogo
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  modal
+    .querySelector("[data-close-business-detail]")
+    ?.addEventListener(
+      "click",
+      closeBusinessDetailModal
+    );
+
+  modal
+    .querySelector("#closeBusinessDetailButton")
+    ?.addEventListener(
+      "click",
+      closeBusinessDetailModal
+    );
+}
+
+function openBusinessDetailModal(business) {
+  createBusinessDetailModal();
+
+  const modal =
+    document.getElementById("businessDetailModal");
+
+  const title =
+    document.getElementById("businessDetailTitle");
+
+  const content =
+    document.getElementById("businessDetailContent");
+
+  title.textContent = business.name || "Comercio";
+
+  content.innerHTML = `
+    <div>
+      <strong>Enlace</strong>
+      <div>${escapeHTML(business.slug || "-")}</div>
+    </div>
+
+    <div>
+      <strong>WhatsApp</strong>
+      <div>${escapeHTML(business.phone || "-")}</div>
+    </div>
+
+    <div>
+      <strong>Dirección</strong>
+      <div>${escapeHTML(business.address || "-")}</div>
+    </div>
+
+    <div>
+      <strong>Estado</strong>
+      <div>${business.active ? "Activo" : "Inactivo"}</div>
+    </div>
+  `;
+
+  document.getElementById(
+    "businessCategoriesButton"
+  ).onclick = () => {
+    closeBusinessDetailModal();
+    openSection("categories");
+  };
+
+  document.getElementById(
+    "businessProductsButton"
+  ).onclick = () => {
+    closeBusinessDetailModal();
+    openSection("products");
+  };
+
+  document.getElementById(
+    "businessStoreButton"
+  ).onclick = () => {
+    const url =
+      `index.html?business=${encodeURIComponent(
+        business.slug || ""
+      )}`;
+
+    window.open(url, "_blank");
+  };
+
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+}
+
+function closeBusinessDetailModal() {
+  const modal =
+    document.getElementById("businessDetailModal");
+
+  if (!modal) {
+    return;
+  }
+
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+}
 
 /* ==================================================
    CATEGORÍAS
@@ -861,6 +1078,8 @@ businessForm?.addEventListener(
 ================================================== */
 
 async function initAdmin() {
+  createBusinessDetailModal();
+
   await Promise.all([
     loadDashboard(),
     loadBusinesses(),
