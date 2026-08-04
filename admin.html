@@ -6,7 +6,7 @@
 
   <title>Proyecto X | Super Panel</title>
 
-  <link rel="stylesheet" href="css/admin.css?v=22">
+  <link rel="stylesheet" href="css/admin.css?v=23">
 </head>
 
 <body>
@@ -602,10 +602,229 @@
     </div>
   </div>
 
+
+  <div id="modifiersModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modifiers-modal></div>
+
+    <div class="modal-card modifiers-modal-card" role="dialog" aria-modal="true" aria-labelledby="modifiersModalTitle">
+
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">OPCIONES Y EXTRAS</p>
+          <h2 id="modifiersModalTitle">Producto</h2>
+          <p class="subtitle" id="modifiersModalSubtitle"></p>
+        </div>
+
+        <button
+          id="closeModifiersModalButton"
+          class="close-button"
+          type="button"
+          aria-label="Cerrar"
+        >
+          &times;
+        </button>
+      </div>
+
+      <div class="section-toolbar">
+        <div>
+          <strong>Grupos de opciones</strong>
+          <small>
+            Ejemplos: Tama&ntilde;o, Sabores, Extras o Tipo de masa.
+          </small>
+        </div>
+
+        <button
+          id="newModifierGroupButton"
+          class="primary-button"
+          type="button"
+        >
+          + Nuevo grupo
+        </button>
+      </div>
+
+      <div id="modifierGroupsList" class="modifier-groups-list"></div>
+
+    </div>
+  </div>
+
+  <div id="modifierGroupModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modifier-group-modal></div>
+
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modifierGroupModalTitle">
+
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">GRUPO DE OPCIONES</p>
+          <h2 id="modifierGroupModalTitle">Crear grupo</h2>
+        </div>
+
+        <button
+          id="closeModifierGroupModalButton"
+          class="close-button"
+          type="button"
+          aria-label="Cerrar"
+        >
+          &times;
+        </button>
+      </div>
+
+      <form id="modifierGroupForm">
+
+        <div class="form-grid">
+
+          <label class="full-width">
+            Nombre del grupo
+            <input
+              id="modifierGroupName"
+              type="text"
+              placeholder="Ejemplo: Extras"
+              required
+            >
+          </label>
+
+          <label>
+            Tipo de selecci&oacute;n
+            <select id="modifierGroupType">
+              <option value="multiple">Varias opciones</option>
+              <option value="single">Una sola opci&oacute;n</option>
+            </select>
+          </label>
+
+          <label>
+            M&aacute;ximo permitido
+            <input
+              id="modifierGroupMax"
+              type="number"
+              min="1"
+              placeholder="Sin l&iacute;mite"
+            >
+          </label>
+
+          <label>
+            Orden
+            <input
+              id="modifierGroupSortOrder"
+              type="number"
+              min="0"
+              value="0"
+            >
+          </label>
+
+          <label class="checkbox-label">
+            <input id="modifierGroupRequired" type="checkbox">
+            Selecci&oacute;n obligatoria
+          </label>
+
+          <label class="checkbox-label full-width">
+            <input id="modifierGroupActive" type="checkbox" checked>
+            Grupo activo
+          </label>
+
+        </div>
+
+        <p id="modifierGroupFormMessage" class="form-message" aria-live="polite"></p>
+
+        <div class="modal-actions">
+          <button id="cancelModifierGroupButton" class="secondary-button" type="button">
+            Cancelar
+          </button>
+
+          <button id="saveModifierGroupButton" class="primary-button" type="submit">
+            Guardar grupo
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <div id="modifierOptionModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modifier-option-modal></div>
+
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modifierOptionModalTitle">
+
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">OPCI&Oacute;N</p>
+          <h2 id="modifierOptionModalTitle">Crear opci&oacute;n</h2>
+          <p class="subtitle" id="modifierOptionGroupName"></p>
+        </div>
+
+        <button
+          id="closeModifierOptionModalButton"
+          class="close-button"
+          type="button"
+          aria-label="Cerrar"
+        >
+          &times;
+        </button>
+      </div>
+
+      <form id="modifierOptionForm">
+
+        <div class="form-grid">
+
+          <label class="full-width">
+            Nombre
+            <input
+              id="modifierOptionName"
+              type="text"
+              placeholder="Ejemplo: Panceta"
+              required
+            >
+          </label>
+
+          <label>
+            Precio adicional
+            <input
+              id="modifierOptionPrice"
+              type="number"
+              min="0"
+              step="0.01"
+              value="0"
+              required
+            >
+          </label>
+
+          <label>
+            Orden
+            <input
+              id="modifierOptionSortOrder"
+              type="number"
+              min="0"
+              value="0"
+            >
+          </label>
+
+          <label class="checkbox-label full-width">
+            <input id="modifierOptionActive" type="checkbox" checked>
+            Opci&oacute;n activa
+          </label>
+
+        </div>
+
+        <p id="modifierOptionFormMessage" class="form-message" aria-live="polite"></p>
+
+        <div class="modal-actions">
+          <button id="cancelModifierOptionButton" class="secondary-button" type="button">
+            Cancelar
+          </button>
+
+          <button id="saveModifierOptionButton" class="primary-button" type="submit">
+            Guardar opci&oacute;n
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
   <div id="toast" class="toast" aria-live="polite"></div>
 
-  <script src="js/config.js?v=22"></script>
-  <script src="js/admin.js?v=22"></script>
+  <script src="js/config.js?v=23"></script>
+  <script src="js/admin.js?v=23"></script>
 
 </body>
 </html>
