@@ -6,7 +6,7 @@
 
   <title>Proyecto X | Super Panel</title>
 
-  <link rel="stylesheet" href="css/admin.css?v=12">
+  <link rel="stylesheet" href="css/admin.css?v=20">
 </head>
 
 <body>
@@ -126,10 +126,11 @@
 
         <div>
           <p class="eyebrow">PRÃ“XIMO PASO</p>
-          <h2>CreÃ¡ el primer comercio</h2>
+          <h2>AdministrÃ¡ tus comercios</h2>
 
           <p>
-            Desde esta secciÃ³n vas a poder crear y administrar todos tus clientes.
+            Desde el Super Panel podÃ©s crear comercios y administrar
+            sus categorÃ­as, productos y datos generales.
           </p>
         </div>
 
@@ -192,14 +193,14 @@
           <p class="eyebrow">CATÃLOGO</p>
           <h1>CategorÃ­as</h1>
 
-          <p class="subtitle">
-            CategorÃ­as registradas en todos los comercios.
+          <p class="subtitle" id="categoriesSubtitle">
+            SeleccionÃ¡ un comercio para administrar sus categorÃ­as.
           </p>
         </div>
       </header>
 
       <div id="categoriesList" class="panel loading">
-        Cargando categorÃ­as...
+        SeleccionÃ¡ un comercio desde la secciÃ³n Comercios.
       </div>
 
     </section>
@@ -211,14 +212,14 @@
           <p class="eyebrow">CATÃLOGO</p>
           <h1>Productos</h1>
 
-          <p class="subtitle">
-            Productos registrados en la plataforma.
+          <p class="subtitle" id="productsSubtitle">
+            SeleccionÃ¡ un comercio para administrar sus productos.
           </p>
         </div>
       </header>
 
       <div id="productsList" class="panel loading">
-        Cargando productos...
+        SeleccionÃ¡ un comercio desde la secciÃ³n Comercios.
       </div>
 
     </section>
@@ -284,14 +285,14 @@
 
   <div id="businessModal" class="modal" aria-hidden="true">
 
-    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-backdrop" data-close-business-modal></div>
 
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="businessModalTitle">
 
       <div class="modal-header">
 
         <div>
-          <p class="eyebrow">NUEVO CLIENTE</p>
+          <p class="eyebrow">COMERCIO</p>
           <h2 id="businessModalTitle">Crear comercio</h2>
         </div>
 
@@ -301,7 +302,7 @@
           type="button"
           aria-label="Cerrar formulario"
         >
-          Ã—
+          &times;
         </button>
 
       </div>
@@ -312,92 +313,41 @@
 
           <label>
             Nombre del comercio
-
-            <input
-              id="businessName"
-              name="name"
-              type="text"
-              autocomplete="organization"
-              required
-            >
+            <input id="businessName" type="text" required>
           </label>
 
           <label>
             Enlace del comercio
-
-            <input
-              id="businessSlug"
-              name="slug"
-              type="text"
-              placeholder="ejemplo-pizzeria"
-              required
-            >
+            <input id="businessSlug" type="text" placeholder="ejemplo-pizzeria" required>
           </label>
 
           <label>
             WhatsApp
-
-            <input
-              id="businessPhone"
-              name="phone"
-              type="text"
-              placeholder="598..."
-              inputmode="tel"
-            >
+            <input id="businessPhone" type="text" placeholder="598...">
           </label>
 
           <label>
             DirecciÃ³n
-
-            <input
-              id="businessAddress"
-              name="address"
-              type="text"
-              autocomplete="street-address"
-            >
+            <input id="businessAddress" type="text">
           </label>
 
           <label class="full-width">
             URL del logo
-
-            <input
-              id="businessLogoUrl"
-              name="logo_url"
-              type="url"
-              placeholder="https://..."
-            >
+            <input id="businessLogoUrl" type="url" placeholder="https://...">
           </label>
 
           <label>
             Color principal
-
-            <input
-              id="businessPrimaryColor"
-              name="primary_color"
-              type="color"
-              value="#7c3aed"
-            >
+            <input id="businessPrimaryColor" type="color" value="#6d28d9">
           </label>
 
           <label>
             Color secundario
-
-            <input
-              id="businessSecondaryColor"
-              name="secondary_color"
-              type="color"
-              value="#f5c518"
-            >
+            <input id="businessSecondaryColor" type="color" value="#f5c518">
           </label>
 
           <label class="checkbox-label full-width">
-            <input
-              id="businessActive"
-              name="active"
-              type="checkbox"
-              checked
-            >
-
+            <input id="businessActive" type="checkbox" checked>
             Comercio activo
           </label>
 
@@ -431,10 +381,149 @@
 
   </div>
 
+  <div id="businessDetailModal" class="modal" aria-hidden="true">
+
+    <div class="modal-backdrop" data-close-business-detail></div>
+
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="businessDetailTitle">
+
+      <div class="modal-header">
+
+        <div>
+          <p class="eyebrow">COMERCIO</p>
+          <h2 id="businessDetailTitle">Detalle del comercio</h2>
+        </div>
+
+        <button
+          id="closeBusinessDetailButton"
+          class="close-button"
+          type="button"
+          aria-label="Cerrar"
+        >
+          &times;
+        </button>
+
+      </div>
+
+      <div id="businessDetailContent" class="detail-grid"></div>
+
+      <div class="modal-actions wrap-actions">
+
+        <button
+          type="button"
+          class="secondary-button"
+          id="businessCategoriesButton"
+        >
+          CategorÃ­as
+        </button>
+
+        <button
+          type="button"
+          class="secondary-button"
+          id="businessProductsButton"
+        >
+          Productos
+        </button>
+
+        <button
+          type="button"
+          class="secondary-button"
+          id="editBusinessButton"
+        >
+          Editar comercio
+        </button>
+
+        <button
+          type="button"
+          class="primary-button"
+          id="businessStoreButton"
+        >
+          Ver catÃ¡logo
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div id="categoryModal" class="modal" aria-hidden="true">
+
+    <div class="modal-backdrop" data-close-category-modal></div>
+
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="categoryModalTitle">
+
+      <div class="modal-header">
+
+        <div>
+          <p class="eyebrow">CATEGORÃA</p>
+          <h2 id="categoryModalTitle">Crear categorÃ­a</h2>
+        </div>
+
+        <button
+          id="closeCategoryModalButton"
+          class="close-button"
+          type="button"
+          aria-label="Cerrar"
+        >
+          &times;
+        </button>
+
+      </div>
+
+      <form id="categoryForm">
+
+        <div class="form-grid">
+
+          <label class="full-width">
+            Nombre de la categorÃ­a
+            <input id="categoryName" type="text" required>
+          </label>
+
+          <label>
+            Orden
+            <input id="categorySortOrder" type="number" min="0" value="0">
+          </label>
+
+          <label class="checkbox-label">
+            <input id="categoryActive" type="checkbox" checked>
+            CategorÃ­a activa
+          </label>
+
+        </div>
+
+        <p id="categoryFormMessage" class="form-message" aria-live="polite"></p>
+
+        <div class="modal-actions">
+
+          <button
+            id="cancelCategoryButton"
+            class="secondary-button"
+            type="button"
+          >
+            Cancelar
+          </button>
+
+          <button
+            id="saveCategoryButton"
+            class="primary-button"
+            type="submit"
+          >
+            Guardar categorÃ­a
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
   <div id="toast" class="toast" aria-live="polite"></div>
 
-  <script src="js/config.js?v=12"></script>
-  <script src="js/admin.js?v=12"></script>
+  <script src="js/config.js?v=20"></script>
+  <script src="js/admin.js?v=20"></script>
 
 </body>
 </html>
