@@ -6,7 +6,7 @@
 
   <title>Proyecto X | Super Panel</title>
 
-  <link rel="stylesheet" href="css/admin.css?v=21">
+  <link rel="stylesheet" href="css/admin.css?v=22">
 </head>
 
 <body>
@@ -451,10 +451,161 @@
     </div>
   </div>
 
+
+  <div id="productModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-product-modal></div>
+
+    <div class="modal-card product-modal-card" role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
+
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">PRODUCTO</p>
+          <h2 id="productModalTitle">Crear producto</h2>
+        </div>
+
+        <button
+          id="closeProductModalButton"
+          class="close-button"
+          type="button"
+          aria-label="Cerrar"
+        >
+          &times;
+        </button>
+      </div>
+
+      <form id="productForm">
+
+        <div class="image-upload-section">
+          <div class="product-image-preview" id="productImagePreview">
+            <span>Sin imagen</span>
+          </div>
+
+          <div>
+            <input
+              id="productImageInput"
+              type="file"
+              accept="image/*"
+              hidden
+            >
+
+            <button
+              id="selectProductImageButton"
+              class="secondary-button"
+              type="button"
+            >
+              Seleccionar imagen
+            </button>
+
+            <p class="helper-text">
+              Eleg&iacute; una foto desde la galer&iacute;a o la c&aacute;mara.
+              Antes de subirla podr&aacute;s moverla, acercarla y recortarla.
+            </p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+
+          <label>
+            Nombre del producto
+            <input id="productName" type="text" required>
+          </label>
+
+          <label>
+            Categor&iacute;a
+            <select id="productCategory" required></select>
+          </label>
+
+          <label>
+            Precio
+            <input id="productPrice" type="number" min="0" step="0.01" required>
+          </label>
+
+          <label>
+            Precio anterior
+            <input id="productOldPrice" type="number" min="0" step="0.01">
+          </label>
+
+          <label>
+            Orden
+            <input id="productSortOrder" type="number" min="0" value="0">
+          </label>
+
+          <label class="checkbox-label">
+            <input id="productFeatured" type="checkbox">
+            Producto destacado
+          </label>
+
+          <label class="full-width">
+            Descripci&oacute;n
+            <textarea id="productDescription" rows="4"></textarea>
+          </label>
+
+          <label class="checkbox-label full-width">
+            <input id="productActive" type="checkbox" checked>
+            Producto activo
+          </label>
+
+        </div>
+
+        <p id="productFormMessage" class="form-message" aria-live="polite"></p>
+
+        <div class="modal-actions">
+          <button id="cancelProductButton" class="secondary-button" type="button">
+            Cancelar
+          </button>
+
+          <button id="saveProductButton" class="primary-button" type="submit">
+            Guardar producto
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <div id="imageCropModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+
+    <div class="modal-card crop-modal-card" role="dialog" aria-modal="true" aria-labelledby="imageCropTitle">
+
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">EDITAR IMAGEN</p>
+          <h2 id="imageCropTitle">Ajustar foto</h2>
+        </div>
+      </div>
+
+      <div class="crop-stage">
+        <canvas id="imageCropCanvas" width="600" height="600"></canvas>
+      </div>
+
+      <label class="zoom-control">
+        Acercar o alejar
+        <input id="imageZoomRange" type="range" min="1" max="3" step="0.01" value="1">
+      </label>
+
+      <p class="helper-text">
+        Arrastr&aacute; la imagen para elegir el mejor encuadre.
+      </p>
+
+      <div class="modal-actions">
+        <button id="cancelImageCropButton" class="secondary-button" type="button">
+          Cancelar
+        </button>
+
+        <button id="confirmImageCropButton" class="primary-button" type="button">
+          Usar esta imagen
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <div id="toast" class="toast" aria-live="polite"></div>
 
-  <script src="js/config.js?v=21"></script>
-  <script src="js/admin.js?v=21"></script>
+  <script src="js/config.js?v=22"></script>
+  <script src="js/admin.js?v=22"></script>
 
 </body>
 </html>
