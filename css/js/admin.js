@@ -3,42 +3,45 @@ const sections = document.querySelectorAll(".page-section");
 
 const businessModal = document.getElementById("businessModal");
 const businessForm = document.getElementById("businessForm");
+const businessModalTitle = document.getElementById("businessModalTitle");
 const businessName = document.getElementById("businessName");
 const businessSlug = document.getElementById("businessSlug");
 const businessPhone = document.getElementById("businessPhone");
 const businessAddress = document.getElementById("businessAddress");
 const businessLogoUrl = document.getElementById("businessLogoUrl");
-const businessPrimaryColor = document.getElementById(
-  "businessPrimaryColor"
-);
-const businessSecondaryColor = document.getElementById(
-  "businessSecondaryColor"
-);
+const businessPrimaryColor = document.getElementById("businessPrimaryColor");
+const businessSecondaryColor = document.getElementById("businessSecondaryColor");
 const businessActive = document.getElementById("businessActive");
-const businessFormMessage = document.getElementById(
-  "businessFormMessage"
-);
-const saveBusinessButton = document.getElementById(
-  "saveBusinessButton"
-);
-const newBusinessButton = document.getElementById(
-  "newBusinessButton"
-);
-const closeBusinessModalButton = document.getElementById(
-  "closeBusinessModal"
-);
-const cancelBusinessButton = document.getElementById(
-  "cancelBusinessButton"
-);
+const businessFormMessage = document.getElementById("businessFormMessage");
+const saveBusinessButton = document.getElementById("saveBusinessButton");
+const newBusinessButton = document.getElementById("newBusinessButton");
+const closeBusinessModalButton = document.getElementById("closeBusinessModal");
+const cancelBusinessButton = document.getElementById("cancelBusinessButton");
+
+const businessDetailModal = document.getElementById("businessDetailModal");
+const businessDetailTitle = document.getElementById("businessDetailTitle");
+const businessDetailContent = document.getElementById("businessDetailContent");
+const closeBusinessDetailButton = document.getElementById("closeBusinessDetailButton");
+const businessCategoriesButton = document.getElementById("businessCategoriesButton");
+const businessProductsButton = document.getElementById("businessProductsButton");
+const editBusinessButton = document.getElementById("editBusinessButton");
+const businessStoreButton = document.getElementById("businessStoreButton");
+
+const categoryModal = document.getElementById("categoryModal");
+const categoryForm = document.getElementById("categoryForm");
+const categoryName = document.getElementById("categoryName");
+const categorySortOrder = document.getElementById("categorySortOrder");
+const categoryActive = document.getElementById("categoryActive");
+const categoryFormMessage = document.getElementById("categoryFormMessage");
+const saveCategoryButton = document.getElementById("saveCategoryButton");
+const closeCategoryModalButton = document.getElementById("closeCategoryModalButton");
+const cancelCategoryButton = document.getElementById("cancelCategoryButton");
+
 const toast = document.getElementById("toast");
 
 let businessesCache = [];
 let selectedBusiness = null;
-
-
-/* ==================================================
-   NAVEGACIÓN
-================================================== */
+let editingBusinessId = null;
 
 function openSection(sectionId) {
   navItems.forEach((item) => {
@@ -56,29 +59,27 @@ function openSection(sectionId) {
   });
 }
 
-
 navItems.forEach((button) => {
   button.addEventListener("click", async () => {
     const sectionId = button.dataset.section;
+
     openSection(sectionId);
 
     if (sectionId === "categories") {
       await loadCategories();
     }
+
+    if (sectionId === "products") {
+      await loadProducts();
+    }
   });
 });
-
 
 document
   .querySelector(".go-businesses")
   ?.addEventListener("click", () => {
     openSection("businesses");
   });
-
-
-/* ==================================================
-   SLUG
-================================================== */
 
 function normalizeSlug(value) {
   return String(value || "")
@@ -90,203 +91,6 @@ function normalizeSlug(value) {
     .replace(/^-+|-+$/g, "");
 }
 
-
-/* ==================================================
-   MODAL COMERCIO
-================================================== */
-
-function openBusinessModal() {
-  if (!businessForm || !businessModal) {
-    return;
-  }
-
-  businessForm.reset();
-
-  if (businessPrimaryColor) {
-    businessPrimaryColor.value = "#7c3aed";
-  }
-
-  if (businessSecondaryColor) {
-    businessSecondaryColor.value = "#f5c518";
-  }
-
-  if (businessActive) {
-    businessActive.checked = true;
-  }
-
-  if (businessSlug) {
-    businessSlug.dataset.manual = "";
-  }
-
-  if (businessFormMessage) {
-    businessFormMessage.textContent = "";
-    businessFormMessage.classList.remove("success");
-  }
-
-  businessModal.classList.add("open");
-  businessModal.setAttribute("aria-hidden", "false");
-
-  document.body.classList.add("modal-open");
-
-  setTimeout(() => {
-    businessName?.focus();
-  }, 50);
-}
-
-
-function closeBusinessModal() {
-  if (!businessModal) {
-    return;
-  }
-
-  businessModal.classList.remove("open");
-  businessModal.setAttribute("aria-hidden", "true");
-
-  document.body.classList.remove("modal-open");
-
-  if (businessFormMessage) {
-    businessFormMessage.textContent = "";
-    businessFormMessage.classList.remove("success");
-  }
-}
-
-
-newBusinessButton?.addEventListener(
-  "click",
-  openBusinessModal
-);
-
-
-closeBusinessModalButton?.addEventListener(
-  "click",
-  closeBusinessModal
-);
-
-
-cancelBusinessButton?.addEventListener(
-  "click",
-  closeBusinessModal
-);
-
-
-document
-  .querySelector("[data-close-modal]")
-  ?.addEventListener(
-    "click",
-    closeBusinessModal
-  );
-
-
-document.addEventListener("keydown", (event) => {
-  if (
-    event.key === "Escape" &&
-    businessModal?.classList.contains("open")
-  ) {
-    closeBusinessModal();
-  }
-});
-
-
-businessName?.addEventListener("input", () => {
-  if (!businessSlug?.dataset.manual) {
-    businessSlug.value = normalizeSlug(
-      businessName.value
-    );
-  }
-});
-
-
-businessSlug?.addEventListener("input", () => {
-  businessSlug.dataset.manual =
-    businessSlug.value.trim()
-      ? "true"
-      : "";
-
-  businessSlug.value = normalizeSlug(
-    businessSlug.value
-  );
-});
-
-
-/* ==================================================
-   PETICIONES A SUPABASE
-================================================== */
-
-async function getTableData(
-  tableName,
-  select = "*"
-) {
-  const response = await fetch(
-    `${SUPABASE_REST}/${tableName}?select=${encodeURIComponent(select)}`,
-    {
-      method: "GET",
-      headers: supabaseHeaders()
-    }
-  );
-
-  const responseText =
-    await response.text();
-
-  if (!response.ok) {
-    throw new Error(
-      `${tableName}: ${response.status} ${responseText}`
-    );
-  }
-
-  if (!responseText.trim()) {
-    return [];
-  }
-
-  try {
-    const data =
-      JSON.parse(responseText);
-
-    return Array.isArray(data)
-      ? data
-      : [];
-
-  } catch (error) {
-    throw new Error(
-      `${tableName}: Supabase devolvió una respuesta inválida.`
-    );
-  }
-}
-
-
-async function insertTableRow(
-  tableName,
-  payload
-) {
-  const response = await fetch(
-    `${SUPABASE_REST}/${tableName}`,
-    {
-      method: "POST",
-
-      headers: supabaseHeaders({
-        Prefer: "return=minimal"
-      }),
-
-      body: JSON.stringify(payload)
-    }
-  );
-
-  const responseText =
-    await response.text();
-
-  if (!response.ok) {
-    throw new Error(
-      `${tableName}: ${response.status} ${responseText}`
-    );
-  }
-
-  return true;
-}
-
-
-/* ==================================================
-   SEGURIDAD HTML
-================================================== */
-
 function escapeHTML(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -296,37 +100,297 @@ function escapeHTML(value) {
     .replace(/'/g, "&#039;");
 }
 
-
-/* ==================================================
-   MENSAJES
-================================================== */
-
-function showToast(
-  message,
-  type = "success"
-) {
+function showToast(message, type = "success") {
   if (!toast) {
     return;
   }
 
   toast.textContent = message;
-  toast.className =
-    `toast show ${type}`;
+  toast.className = `toast show ${type}`;
 
-  clearTimeout(
-    showToast.timer
-  );
+  clearTimeout(showToast.timer);
 
-  showToast.timer =
-    setTimeout(() => {
-      toast.className = "toast";
-    }, 3200);
+  showToast.timer = setTimeout(() => {
+    toast.className = "toast";
+  }, 3200);
 }
 
+async function requestText(url, options = {}) {
+  const response = await fetch(url, options);
+  const responseText = await response.text();
 
-/* ==================================================
-   DASHBOARD
-================================================== */
+  if (!response.ok) {
+    throw new Error(
+      `Error ${response.status}: ${responseText || response.statusText}`
+    );
+  }
+
+  return responseText;
+}
+
+async function getTableData(tableName, select = "*") {
+  const responseText = await requestText(
+    `${SUPABASE_REST}/${tableName}?select=${encodeURIComponent(select)}`,
+    {
+      method: "GET",
+      headers: supabaseHeaders()
+    }
+  );
+
+  if (!responseText.trim()) {
+    return [];
+  }
+
+  const data = JSON.parse(responseText);
+
+  return Array.isArray(data) ? data : [];
+}
+
+async function insertTableRow(tableName, payload) {
+  await requestText(
+    `${SUPABASE_REST}/${tableName}`,
+    {
+      method: "POST",
+      headers: supabaseHeaders({
+        Prefer: "return=minimal"
+      }),
+      body: JSON.stringify(payload)
+    }
+  );
+
+  return true;
+}
+
+async function updateTableRow(tableName, id, payload) {
+  await requestText(
+    `${SUPABASE_REST}/${tableName}?id=eq.${encodeURIComponent(id)}`,
+    {
+      method: "PATCH",
+      headers: supabaseHeaders({
+        Prefer: "return=minimal"
+      }),
+      body: JSON.stringify(payload)
+    }
+  );
+
+  return true;
+}
+
+function openBusinessModal(business = null) {
+  businessForm.reset();
+
+  editingBusinessId = business?.id ?? null;
+
+  businessModalTitle.textContent = business
+    ? "Editar comercio"
+    : "Crear comercio";
+
+  saveBusinessButton.textContent = business
+    ? "Guardar cambios"
+    : "Guardar comercio";
+
+  businessName.value = business?.name || "";
+  businessSlug.value = business?.slug || "";
+  businessPhone.value = business?.phone || "";
+  businessAddress.value = business?.address || "";
+  businessLogoUrl.value = business?.logo_url || "";
+  businessPrimaryColor.value =
+    business?.primary_color || "#6d28d9";
+  businessSecondaryColor.value =
+    business?.secondary_color || "#f5c518";
+  businessActive.checked =
+    business ? Boolean(business.active) : true;
+
+  businessSlug.dataset.manual =
+    business?.slug ? "true" : "";
+
+  businessFormMessage.textContent = "";
+  businessFormMessage.classList.remove("success");
+
+  businessModal.classList.add("open");
+  businessModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+
+  setTimeout(() => businessName.focus(), 50);
+}
+
+function closeBusinessModal() {
+  businessModal.classList.remove("open");
+  businessModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  editingBusinessId = null;
+}
+
+newBusinessButton.addEventListener("click", () => {
+  openBusinessModal();
+});
+
+closeBusinessModalButton.addEventListener(
+  "click",
+  closeBusinessModal
+);
+
+cancelBusinessButton.addEventListener(
+  "click",
+  closeBusinessModal
+);
+
+document
+  .querySelector("[data-close-business-modal]")
+  ?.addEventListener("click", closeBusinessModal);
+
+businessName.addEventListener("input", () => {
+  if (!businessSlug.dataset.manual) {
+    businessSlug.value = normalizeSlug(
+      businessName.value
+    );
+  }
+});
+
+businessSlug.addEventListener("input", () => {
+  businessSlug.dataset.manual =
+    businessSlug.value.trim() ? "true" : "";
+
+  businessSlug.value = normalizeSlug(
+    businessSlug.value
+  );
+});
+
+function openBusinessDetailModal(business) {
+  selectedBusiness = business;
+
+  businessDetailTitle.textContent =
+    business.name || "Comercio";
+
+  businessDetailContent.innerHTML = `
+    <div class="detail-item">
+      <strong>Enlace</strong>
+      <span>${escapeHTML(business.slug || "-")}</span>
+    </div>
+
+    <div class="detail-item">
+      <strong>WhatsApp</strong>
+      <span>${escapeHTML(business.phone || "-")}</span>
+    </div>
+
+    <div class="detail-item">
+      <strong>Dirección</strong>
+      <span>${escapeHTML(business.address || "-")}</span>
+    </div>
+
+    <div class="detail-item">
+      <strong>Estado</strong>
+      <span>${business.active ? "Activo" : "Inactivo"}</span>
+    </div>
+  `;
+
+  businessDetailModal.classList.add("open");
+  businessDetailModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+}
+
+function closeBusinessDetailModal() {
+  businessDetailModal.classList.remove("open");
+  businessDetailModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+}
+
+closeBusinessDetailButton.addEventListener(
+  "click",
+  closeBusinessDetailModal
+);
+
+document
+  .querySelector("[data-close-business-detail]")
+  ?.addEventListener("click", closeBusinessDetailModal);
+
+businessCategoriesButton.addEventListener(
+  "click",
+  async () => {
+    closeBusinessDetailModal();
+    openSection("categories");
+    await loadCategories();
+  }
+);
+
+businessProductsButton.addEventListener(
+  "click",
+  async () => {
+    closeBusinessDetailModal();
+    openSection("products");
+    await loadProducts();
+  }
+);
+
+editBusinessButton.addEventListener(
+  "click",
+  () => {
+    const business = selectedBusiness;
+
+    closeBusinessDetailModal();
+
+    if (business) {
+      openBusinessModal(business);
+    }
+  }
+);
+
+businessStoreButton.addEventListener(
+  "click",
+  () => {
+    if (!selectedBusiness) {
+      return;
+    }
+
+    const url =
+      `index.html?business=${encodeURIComponent(
+        selectedBusiness.slug || ""
+      )}`;
+
+    window.open(url, "_blank");
+  }
+);
+
+function openCategoryModal() {
+  if (!selectedBusiness) {
+    showToast(
+      "Primero seleccioná un comercio.",
+      "error"
+    );
+    return;
+  }
+
+  categoryForm.reset();
+  categorySortOrder.value = "0";
+  categoryActive.checked = true;
+  categoryFormMessage.textContent = "";
+
+  categoryModal.classList.add("open");
+  categoryModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+
+  setTimeout(() => categoryName.focus(), 50);
+}
+
+function closeCategoryModal() {
+  categoryModal.classList.remove("open");
+  categoryModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+}
+
+closeCategoryModalButton.addEventListener(
+  "click",
+  closeCategoryModal
+);
+
+cancelCategoryButton.addEventListener(
+  "click",
+  closeCategoryModal
+);
+
+document
+  .querySelector("[data-close-category-modal]")
+  ?.addEventListener("click", closeCategoryModal);
 
 async function loadDashboard() {
   try {
@@ -336,146 +400,31 @@ async function loadDashboard() {
       products,
       users
     ] = await Promise.all([
-      getTableData(
-        "businesses",
-        "id"
-      ),
-
-      getTableData(
-        "categories",
-        "id"
-      ),
-
-      getTableData(
-        "products",
-        "id"
-      ),
-
-      getTableData(
-        "users",
-        "id"
-      )
+      getTableData("businesses", "id"),
+      getTableData("categories", "id"),
+      getTableData("products", "id"),
+      getTableData("users", "id")
     ]);
 
-    const businessesCount =
-      document.getElementById(
-        "businessesCount"
-      );
+    document.getElementById("businessesCount").textContent =
+      businesses.length;
 
-    const categoriesCount =
-      document.getElementById(
-        "categoriesCount"
-      );
+    document.getElementById("categoriesCount").textContent =
+      categories.length;
 
-    const productsCount =
-      document.getElementById(
-        "productsCount"
-      );
+    document.getElementById("productsCount").textContent =
+      products.length;
 
-    const usersCount =
-      document.getElementById(
-        "usersCount"
-      );
-
-    if (businessesCount) {
-      businessesCount.textContent =
-        businesses.length;
-    }
-
-    if (categoriesCount) {
-      categoriesCount.textContent =
-        categories.length;
-    }
-
-    if (productsCount) {
-      productsCount.textContent =
-        products.length;
-    }
-
-    if (usersCount) {
-      usersCount.textContent =
-        users.length;
-    }
-
+    document.getElementById("usersCount").textContent =
+      users.length;
   } catch (error) {
-    console.error(
-      "Error cargando dashboard:",
-      error
-    );
+    console.error("Error cargando dashboard:", error);
   }
 }
-
-
-/* ==================================================
-   LISTAS GENERALES
-================================================== */
-
-async function renderList(
-  tableName,
-  containerId,
-  select,
-  renderItem,
-  emptyText
-) {
-  const container =
-    document.getElementById(
-      containerId
-    );
-
-  if (!container) {
-    return;
-  }
-
-  try {
-    const rows =
-      await getTableData(
-        tableName,
-        select
-      );
-
-    if (!rows.length) {
-      container.className =
-        "panel empty-state";
-
-      container.textContent =
-        emptyText;
-
-      return;
-    }
-
-    container.className =
-      "panel";
-
-    container.innerHTML =
-      rows
-        .map(renderItem)
-        .join("");
-
-  } catch (error) {
-    console.error(
-      `Error cargando ${tableName}:`,
-      error
-    );
-
-    container.className =
-      "panel error";
-
-    container.textContent =
-      "No se pudieron cargar los datos.";
-  }
-}
-
-
-/* ==================================================
-   COMERCIOS
-================================================== */
 
 async function loadBusinesses() {
-  const container = document.getElementById("businessesList");
-
-  if (!container) {
-    return;
-  }
+  const container =
+    document.getElementById("businessesList");
 
   try {
     const businesses = await getTableData(
@@ -484,14 +433,6 @@ async function loadBusinesses() {
     );
 
     businessesCache = businesses;
-
-    const savedBusinessId = sessionStorage.getItem("selectedBusinessId");
-
-    if (savedBusinessId) {
-      selectedBusiness = businesses.find(
-        (item) => String(item.id) === String(savedBusinessId)
-      ) || selectedBusiness;
-    }
 
     if (!businesses.length) {
       container.className = "panel empty-state";
@@ -520,9 +461,9 @@ async function loadBusinesses() {
           </small>
         </div>
 
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div class="business-actions" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
 
-          <span>
+          <span class="status-pill ${business.active ? "" : "inactive"}">
             ${business.active ? "Activo" : "Inactivo"}
           </span>
 
@@ -538,9 +479,8 @@ async function loadBusinesses() {
 
       </div>
     `).join("");
-
   } catch (error) {
-    console.error("Error cargando businesses:", error);
+    console.error("Error cargando comercios:", error);
 
     container.className = "panel error";
     container.textContent =
@@ -561,7 +501,8 @@ document
 
     const business = businessesCache.find(
       (item) =>
-        String(item.id) === String(button.dataset.businessId)
+        String(item.id) ===
+        String(button.dataset.businessId)
     );
 
     if (business) {
@@ -569,478 +510,26 @@ document
     }
   });
 
-function createBusinessDetailModal() {
-  if (document.getElementById("businessDetailModal")) {
-    return;
-  }
-
-  const modal = document.createElement("div");
-
-  modal.id = "businessDetailModal";
-  modal.className = "modal";
-  modal.setAttribute("aria-hidden", "true");
-
-  modal.innerHTML = `
-    <div
-      class="modal-backdrop"
-      data-close-business-detail
-    ></div>
-
-    <div
-      class="modal-card"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="businessDetailTitle"
-    >
-
-      <div class="modal-header">
-
-        <div>
-          <p class="eyebrow">COMERCIO</p>
-          <h2 id="businessDetailTitle">
-            Detalle del comercio
-          </h2>
-        </div>
-
-        <button
-          type="button"
-          class="close-button"
-          id="closeBusinessDetailButton"
-          aria-label="Cerrar"
-        >
-          &times;
-        </button>
-
-      </div>
-
-      <div
-        id="businessDetailContent"
-        style="display:grid;gap:14px;"
-      ></div>
-
-      <div
-        class="modal-actions"
-        style="flex-wrap:wrap;"
-      >
-
-        <button
-          type="button"
-          class="secondary-button"
-          id="businessCategoriesButton"
-        >
-          Categorías
-        </button>
-
-        <button
-          type="button"
-          class="secondary-button"
-          id="businessProductsButton"
-        >
-          Productos
-        </button>
-
-        <button
-          type="button"
-          class="primary-button"
-          id="businessStoreButton"
-        >
-          Ver catálogo
-        </button>
-
-      </div>
-
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-
-  modal
-    .querySelector("[data-close-business-detail]")
-    ?.addEventListener(
-      "click",
-      closeBusinessDetailModal
-    );
-
-  modal
-    .querySelector("#closeBusinessDetailButton")
-    ?.addEventListener(
-      "click",
-      closeBusinessDetailModal
-    );
-}
-
-function openBusinessDetailModal(business) {
-  createBusinessDetailModal();
-  createCategoryModal();
-
-  const modal =
-    document.getElementById("businessDetailModal");
-
-  const title =
-    document.getElementById("businessDetailTitle");
-
-  const content =
-    document.getElementById("businessDetailContent");
-
-  title.textContent = business.name || "Comercio";
-
-  content.innerHTML = `
-    <div>
-      <strong>Enlace</strong>
-      <div>${escapeHTML(business.slug || "-")}</div>
-    </div>
-
-    <div>
-      <strong>WhatsApp</strong>
-      <div>${escapeHTML(business.phone || "-")}</div>
-    </div>
-
-    <div>
-      <strong>Dirección</strong>
-      <div>${escapeHTML(business.address || "-")}</div>
-    </div>
-
-    <div>
-      <strong>Estado</strong>
-      <div>${business.active ? "Activo" : "Inactivo"}</div>
-    </div>
-  `;
-
-  document.getElementById(
-    "businessCategoriesButton"
-  ).onclick = async () => {
-    selectedBusiness = business;
-    sessionStorage.setItem("selectedBusinessId", String(business.id));
-
-    closeBusinessDetailModal();
-    openSection("categories");
-
-    await loadCategories();
-  };
-
-  document.getElementById(
-    "businessProductsButton"
-  ).onclick = () => {
-    closeBusinessDetailModal();
-    openSection("products");
-  };
-
-  document.getElementById(
-    "businessStoreButton"
-  ).onclick = () => {
-    const url =
-      `index.html?business=${encodeURIComponent(
-        business.slug || ""
-      )}`;
-
-    window.open(url, "_blank");
-  };
-
-  modal.classList.add("open");
-  modal.setAttribute("aria-hidden", "false");
-  document.body.classList.add("modal-open");
-}
-
-function closeBusinessDetailModal() {
-  const modal =
-    document.getElementById("businessDetailModal");
-
-  if (!modal) {
-    return;
-  }
-
-  modal.classList.remove("open");
-  modal.setAttribute("aria-hidden", "true");
-  document.body.classList.remove("modal-open");
-}
-
-/* ==================================================
-   CATEGORÍAS
-================================================== */
-
-function createCategoryModal() {
-  if (document.getElementById("categoryModal")) {
-    return;
-  }
-
-  const modal = document.createElement("div");
-
-  modal.id = "categoryModal";
-  modal.className = "modal";
-  modal.setAttribute("aria-hidden", "true");
-
-  modal.innerHTML = `
-    <div
-      class="modal-backdrop"
-      data-close-category-modal
-    ></div>
-
-    <div
-      class="modal-card"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="categoryModalTitle"
-    >
-
-      <div class="modal-header">
-
-        <div>
-          <p class="eyebrow">NUEVA CATEGORÍA</p>
-          <h2 id="categoryModalTitle">
-            Crear categoría
-          </h2>
-        </div>
-
-        <button
-          type="button"
-          class="close-button"
-          id="closeCategoryModalButton"
-          aria-label="Cerrar"
-        >
-          &times;
-        </button>
-
-      </div>
-
-      <form id="categoryForm">
-
-        <div class="form-grid">
-
-          <label class="full-width">
-            Nombre de la categoría
-
-            <input
-              id="categoryName"
-              type="text"
-              required
-            >
-          </label>
-
-          <label>
-            Orden
-
-            <input
-              id="categorySortOrder"
-              type="number"
-              min="0"
-              value="0"
-            >
-          </label>
-
-          <label class="checkbox-label">
-            <input
-              id="categoryActive"
-              type="checkbox"
-              checked
-            >
-
-            Categoría activa
-          </label>
-
-        </div>
-
-        <p
-          id="categoryFormMessage"
-          class="form-message"
-        ></p>
-
-        <div class="modal-actions">
-
-          <button
-            type="button"
-            class="secondary-button"
-            id="cancelCategoryButton"
-          >
-            Cancelar
-          </button>
-
-          <button
-            type="submit"
-            class="primary-button"
-            id="saveCategoryButton"
-          >
-            Guardar categoría
-          </button>
-
-        </div>
-
-      </form>
-
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-
-  modal
-    .querySelector("[data-close-category-modal]")
-    ?.addEventListener("click", closeCategoryModal);
-
-  modal
-    .querySelector("#closeCategoryModalButton")
-    ?.addEventListener("click", closeCategoryModal);
-
-  modal
-    .querySelector("#cancelCategoryButton")
-    ?.addEventListener("click", closeCategoryModal);
-
-  modal
-    .querySelector("#categoryForm")
-    ?.addEventListener("submit", saveCategory);
-}
-
-function openCategoryModal() {
-  if (!selectedBusiness) {
-    showToast(
-      "Primero seleccioná un comercio.",
-      "error"
-    );
-    return;
-  }
-
-  createCategoryModal();
-
-  const modal =
-    document.getElementById("categoryModal");
-
-  const form =
-    document.getElementById("categoryForm");
-
-  const message =
-    document.getElementById("categoryFormMessage");
-
-  form.reset();
-
-  document.getElementById(
-    "categorySortOrder"
-  ).value = "0";
-
-  document.getElementById(
-    "categoryActive"
-  ).checked = true;
-
-  message.textContent = "";
-
-  modal.classList.add("open");
-  modal.setAttribute("aria-hidden", "false");
-  document.body.classList.add("modal-open");
-
-  setTimeout(() => {
-    document.getElementById(
-      "categoryName"
-    )?.focus();
-  }, 50);
-}
-
-function closeCategoryModal() {
-  const modal =
-    document.getElementById("categoryModal");
-
-  if (!modal) {
-    return;
-  }
-
-  modal.classList.remove("open");
-  modal.setAttribute("aria-hidden", "true");
-  document.body.classList.remove("modal-open");
-}
-
-async function saveCategory(event) {
-  event.preventDefault();
-
-  const name =
-    document.getElementById(
-      "categoryName"
-    ).value.trim();
-
-  const sortOrder =
-    Number(
-      document.getElementById(
-        "categorySortOrder"
-      ).value || 0
-    );
-
-  const active =
-    document.getElementById(
-      "categoryActive"
-    ).checked;
-
-  const message =
-    document.getElementById(
-      "categoryFormMessage"
-    );
-
-  const saveButton =
-    document.getElementById(
-      "saveCategoryButton"
-    );
-
-  if (!name) {
-    message.textContent =
-      "Escribí el nombre de la categoría.";
-    return;
-  }
-
-  saveButton.disabled = true;
-  saveButton.textContent = "Guardando...";
-  message.textContent = "";
-
-  try {
-    await insertTableRow(
-      "categories",
-      {
-        business_id: selectedBusiness.id,
-        name,
-        sort_order: sortOrder,
-        active
-      }
-    );
-
-    showToast(
-      "Categoría creada correctamente.",
-      "success"
-    );
-
-    closeCategoryModal();
-
-    await Promise.all([
-      loadDashboard(),
-      loadCategories()
-    ]);
-
-  } catch (error) {
-    console.error(
-      "Error creando categoría:",
-      error
-    );
-
-    message.textContent =
-      "No se pudo crear la categoría.";
-  } finally {
-    saveButton.disabled = false;
-    saveButton.textContent =
-      "Guardar categoría";
-  }
-}
-
 async function loadCategories() {
   const container =
     document.getElementById("categoriesList");
 
-  if (!container) {
-    return;
-  }
+  const subtitle =
+    document.getElementById("categoriesSubtitle");
 
   if (!selectedBusiness) {
-    container.className =
-      "panel empty-state";
+    subtitle.textContent =
+      "Seleccioná un comercio para administrar sus categorías.";
 
-    container.innerHTML = `
-      Seleccioná un comercio desde la sección
-      <strong>Comercios</strong> para administrar sus categorías.
-    `;
+    container.className = "panel empty-state";
+    container.textContent =
+      "Entrá en Comercios, tocá Administrar y luego Categorías.";
 
     return;
   }
+
+  subtitle.textContent =
+    `Categorías de ${selectedBusiness.name}.`;
 
   try {
     const categories = await getTableData(
@@ -1061,22 +550,14 @@ async function loadCategories() {
       );
 
     const header = `
-      <div
-        style="
-          display:flex;
-          align-items:center;
-          justify-content:space-between;
-          gap:16px;
-          flex-wrap:wrap;
-          margin-bottom:18px;
-        "
-      >
+      <div class="section-toolbar">
+
         <div>
           <strong>
             ${escapeHTML(selectedBusiness.name)}
           </strong>
 
-          <small style="display:block;margin-top:4px;">
+          <small>
             Categorías de este comercio
           </small>
         </div>
@@ -1088,19 +569,19 @@ async function loadCategories() {
         >
           + Nueva categoría
         </button>
+
       </div>
     `;
 
+    container.className = "panel";
+
     if (!filtered.length) {
-      container.className = "panel";
       container.innerHTML =
         header +
         `<div class="empty-state">
           Todavía no hay categorías para este comercio.
         </div>`;
     } else {
-      container.className = "panel";
-
       container.innerHTML =
         header +
         filtered.map((category) => `
@@ -1108,23 +589,16 @@ async function loadCategories() {
 
             <div>
               <strong>
-                ${escapeHTML(
-                  category.name || "Sin nombre"
-                )}
+                ${escapeHTML(category.name || "Sin nombre")}
               </strong>
 
               <small>
-                Orden:
-                ${Number(category.sort_order || 0)}
+                Orden: ${Number(category.sort_order || 0)}
               </small>
             </div>
 
-            <span>
-              ${
-                category.active
-                  ? "Activa"
-                  : "Inactiva"
-              }
+            <span class="status-pill ${category.active ? "" : "inactive"}">
+              ${category.active ? "Activa" : "Inactiva"}
             </span>
 
           </div>
@@ -1133,16 +607,9 @@ async function loadCategories() {
 
     document
       .getElementById("newCategoryButton")
-      ?.addEventListener(
-        "click",
-        openCategoryModal
-      );
-
+      ?.addEventListener("click", openCategoryModal);
   } catch (error) {
-    console.error(
-      "Error cargando categorías:",
-      error
-    );
+    console.error("Error cargando categorías:", error);
 
     container.className = "panel error";
     container.textContent =
@@ -1150,82 +617,98 @@ async function loadCategories() {
   }
 }
 
-/* ==================================================
-   PRODUCTOS
-================================================== */
-
 async function loadProducts() {
-  await renderList(
-    "products",
+  const container =
+    document.getElementById("productsList");
 
-    "productsList",
+  const subtitle =
+    document.getElementById("productsSubtitle");
 
-    "id,name,price,business_id,active",
+  if (!selectedBusiness) {
+    subtitle.textContent =
+      "Seleccioná un comercio para administrar sus productos.";
 
-    (product) => `
+    container.className = "panel empty-state";
+    container.textContent =
+      "Entrá en Comercios, tocá Administrar y luego Productos.";
+
+    return;
+  }
+
+  subtitle.textContent =
+    `Productos de ${selectedBusiness.name}.`;
+
+  try {
+    const products = await getTableData(
+      "products",
+      "id,name,price,business_id,active"
+    );
+
+    const filtered = products.filter(
+      (product) =>
+        String(product.business_id) ===
+        String(selectedBusiness.id)
+    );
+
+    container.className = "panel";
+
+    if (!filtered.length) {
+      container.textContent =
+        "Todavía no hay productos para este comercio.";
+      return;
+    }
+
+    container.innerHTML = filtered.map((product) => `
       <div class="list-item">
 
         <div>
-
           <strong>
-            ${escapeHTML(
-              product.name ||
-              "Sin nombre"
-            )}
+            ${escapeHTML(product.name || "Sin nombre")}
           </strong>
 
           <small>
-
-            Comercio ID:
-
-            ${escapeHTML(
-              product.business_id ||
-              "-"
-            )}
-
-            ·
-
-            $${Number(
-              product.price || 0
-            )}
-
+            $${Number(product.price || 0)}
           </small>
-
         </div>
 
-        <span>
-          ${
-            product.active
-              ? "Activo"
-              : "Inactivo"
-          }
+        <span class="status-pill ${product.active ? "" : "inactive"}">
+          ${product.active ? "Activo" : "Inactivo"}
         </span>
 
       </div>
-    `,
+    `).join("");
+  } catch (error) {
+    console.error("Error cargando productos:", error);
 
-    "Todavía no hay productos registrados."
-  );
+    container.className = "panel error";
+    container.textContent =
+      "No se pudieron cargar los productos.";
+  }
 }
 
-
-/* ==================================================
-   USUARIOS
-================================================== */
-
 async function loadUsers() {
-  await renderList(
-    "users",
+  const container =
+    document.getElementById("usersList");
 
-    "usersList",
+  try {
+    const users = await getTableData(
+      "users",
+      "id,email,full_name,role,active"
+    );
 
-    "id,email,full_name,role,active",
+    if (!users.length) {
+      container.className = "panel empty-state";
+      container.textContent =
+        "Todavía no hay usuarios registrados.";
+      return;
+    }
 
-    (user) => `
+    container.className = "panel";
+
+    container.innerHTML = users.map((user) => `
       <div class="list-item">
 
         <div>
-
           <strong>
             ${escapeHTML(
               user.full_name ||
@@ -1235,224 +718,187 @@ async function loadUsers() {
           </strong>
 
           <small>
-            ${escapeHTML(
-              user.role ||
-              "Sin rol"
-            )}
+            ${escapeHTML(user.role || "Sin rol")}
           </small>
-
         </div>
 
-        <span>
-          ${
-            user.active
-              ? "Activo"
-              : "Inactivo"
-          }
+        <span class="status-pill ${user.active ? "" : "inactive"}">
+          ${user.active ? "Activo" : "Inactivo"}
         </span>
 
       </div>
-    `,
+    `).join("");
+  } catch (error) {
+    console.error("Error cargando usuarios:", error);
 
-    "Todavía no hay usuarios registrados."
-  );
+    container.className = "panel error";
+    container.textContent =
+      "No se pudieron cargar los usuarios.";
+  }
 }
 
-
-/* ==================================================
-   GUARDAR COMERCIO
-================================================== */
-
-businessForm?.addEventListener(
+businessForm.addEventListener(
   "submit",
-
   async (event) => {
     event.preventDefault();
 
-    const name =
-      businessName?.value.trim() ||
-      "";
-
-    const slug =
-      normalizeSlug(
-        businessSlug?.value ||
-        name
-      );
+    const name = businessName.value.trim();
+    const slug = normalizeSlug(
+      businessSlug.value || name
+    );
 
     if (!name) {
       businessFormMessage.textContent =
         "Escribí el nombre del comercio.";
-
-      businessName?.focus();
-
       return;
     }
 
     if (!slug) {
       businessFormMessage.textContent =
         "Escribí un enlace válido.";
-
-      businessSlug?.focus();
-
       return;
     }
 
-    businessSlug.value = slug;
-
-    saveBusinessButton.disabled =
-      true;
-
-    saveBusinessButton.textContent =
-      "Guardando...";
-
-    businessFormMessage.textContent =
-      "";
-
-    businessFormMessage.classList.remove(
-      "success"
-    );
+    saveBusinessButton.disabled = true;
+    saveBusinessButton.textContent = "Guardando...";
+    businessFormMessage.textContent = "";
 
     const payload = {
       name,
-
       slug,
-
-      phone:
-        businessPhone?.value.trim() ||
-        null,
-
-      address:
-        businessAddress?.value.trim() ||
-        null,
-
-      logo_url:
-        businessLogoUrl?.value.trim() ||
-        null,
-
-      primary_color:
-        businessPrimaryColor?.value ||
-        "#7c3aed",
-
-      secondary_color:
-        businessSecondaryColor?.value ||
-        "#f5c518",
-
-      active:
-        Boolean(
-          businessActive?.checked
-        )
+      phone: businessPhone.value.trim() || null,
+      address: businessAddress.value.trim() || null,
+      logo_url: businessLogoUrl.value.trim() || null,
+      primary_color: businessPrimaryColor.value,
+      secondary_color: businessSecondaryColor.value,
+      active: businessActive.checked
     };
 
     try {
-      await insertTableRow(
-        "businesses",
-        payload
-      );
-
-      businessFormMessage.textContent =
-        "Comercio creado correctamente.";
-
-      businessFormMessage.classList.add(
-        "success"
-      );
+      if (editingBusinessId) {
+        await updateTableRow(
+          "businesses",
+          editingBusinessId,
+          payload
+        );
+      } else {
+        await insertTableRow(
+          "businesses",
+          payload
+        );
+      }
 
       showToast(
-        "Comercio creado correctamente.",
+        editingBusinessId
+          ? "Comercio actualizado correctamente."
+          : "Comercio creado correctamente.",
         "success"
       );
+
+      closeBusinessModal();
 
       await Promise.all([
         loadDashboard(),
         loadBusinesses()
       ]);
 
-      setTimeout(() => {
-        closeBusinessModal();
-        openSection("businesses");
-      }, 500);
-
+      openSection("businesses");
     } catch (error) {
-      console.error(
-        "Error creando comercio:",
-        error
-      );
-
-      const errorText =
-        String(error.message);
-
-      let message =
-        "No se pudo crear el comercio.";
-
-      if (
-        errorText.includes(
-          "duplicate"
-        ) ||
-        errorText.includes(
-          "23505"
-        )
-      ) {
-        message =
-          "Ese enlace ya está siendo utilizado.";
-
-      } else if (
-        errorText.includes(
-          "row-level security"
-        ) ||
-        errorText.includes(
-          "42501"
-        )
-      ) {
-        message =
-          "Supabase bloqueó el guardado por una política RLS.";
-
-      } else if (
-        errorText.includes(
-          "column"
-        ) ||
-        errorText.includes(
-          "schema cache"
-        )
-      ) {
-        message =
-          "Hay una columna faltante o con otro nombre en la tabla businesses.";
-      }
+      console.error("Error guardando comercio:", error);
 
       businessFormMessage.textContent =
-        message;
-
-      showToast(
-        message,
-        "error"
-      );
-
+        "No se pudo guardar el comercio.";
     } finally {
-      saveBusinessButton.disabled =
-        false;
-
+      saveBusinessButton.disabled = false;
       saveBusinessButton.textContent =
-        "Guardar comercio";
+        editingBusinessId
+          ? "Guardar cambios"
+          : "Guardar comercio";
     }
   }
 );
 
+categoryForm.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
 
-/* ==================================================
-   INICIO
-================================================== */
+    const name = categoryName.value.trim();
+
+    if (!name) {
+      categoryFormMessage.textContent =
+        "Escribí el nombre de la categoría.";
+      return;
+    }
+
+    saveCategoryButton.disabled = true;
+    saveCategoryButton.textContent = "Guardando...";
+    categoryFormMessage.textContent = "";
+
+    try {
+      await insertTableRow(
+        "categories",
+        {
+          business_id: selectedBusiness.id,
+          name,
+          sort_order: Number(categorySortOrder.value || 0),
+          active: categoryActive.checked
+        }
+      );
+
+      showToast(
+        "Categoría creada correctamente.",
+        "success"
+      );
+
+      closeCategoryModal();
+
+      await Promise.all([
+        loadDashboard(),
+        loadCategories()
+      ]);
+    } catch (error) {
+      console.error("Error creando categoría:", error);
+
+      categoryFormMessage.textContent =
+        "No se pudo crear la categoría.";
+    } finally {
+      saveCategoryButton.disabled = false;
+      saveCategoryButton.textContent =
+        "Guardar categoría";
+    }
+  }
+);
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") {
+    return;
+  }
+
+  if (categoryModal.classList.contains("open")) {
+    closeCategoryModal();
+    return;
+  }
+
+  if (businessModal.classList.contains("open")) {
+    closeBusinessModal();
+    return;
+  }
+
+  if (businessDetailModal.classList.contains("open")) {
+    closeBusinessDetailModal();
+  }
+});
 
 async function initAdmin() {
-  createBusinessDetailModal();
-  createCategoryModal();
-
-  await loadBusinesses();
-
   await Promise.all([
     loadDashboard(),
-    loadCategories(),
-    loadProducts(),
+    loadBusinesses(),
     loadUsers()
   ]);
-}
 
+  await loadCategories();
+  await loadProducts();
+}
 
 initAdmin();
