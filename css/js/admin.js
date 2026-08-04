@@ -695,9 +695,13 @@ function openBusinessDetailModal(business) {
 
   document.getElementById(
     "businessCategoriesButton"
-  ).onclick = () => {
+  ).onclick = async () => {
+    selectedBusiness = business;
+
     closeBusinessDetailModal();
     openSection("categories");
+
+    await loadCategories();
   };
 
   document.getElementById(
