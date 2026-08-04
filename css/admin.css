@@ -3,38 +3,21 @@
 }
 
 :root{
-  --bg:#e9eef5;
+  --bg:#edf2f7;
   --surface:#ffffff;
-  --surface-soft:#f8fafc;
-
   --sidebar:#0b1220;
   --sidebar-2:#111c31;
-
-  --text:#101828;
-  --text-2:#344054;
-  --muted:#475467;
-
-  --line:#d0d5dd;
-  --line-soft:#e4e7ec;
-
+  --text:#0f172a;
+  --text-2:#1e293b;
+  --muted:#334155;
+  --line:#d7dee8;
+  --line-soft:#e7ecf2;
   --accent:#6d28d9;
   --accent-2:#4f46e5;
-  --accent-soft:#f4ebff;
-
   --success:#079455;
   --success-2:#027a48;
-  --success-soft:#ecfdf3;
-
-  --info:#1570ef;
-  --info-2:#175cd3;
-
-  --warning:#dc6803;
-  --warning-soft:#fffaeb;
-
   --danger:#d92d20;
   --danger-2:#b42318;
-  --danger-soft:#fef3f2;
-
   --shadow:0 10px 30px rgba(16,24,40,.10);
   --shadow-hover:0 16px 38px rgba(16,24,40,.15);
 }
@@ -48,20 +31,10 @@ body{
   min-height:100vh;
   display:flex;
   background:
-    radial-gradient(
-      circle at top right,
-      rgba(109,40,217,.07),
-      transparent 30%
-    ),
+    radial-gradient(circle at top right,rgba(109,40,217,.07),transparent 30%),
     var(--bg);
   color:var(--text);
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
 body.modal-open{
@@ -77,10 +50,6 @@ button{
   -webkit-tap-highlight-color:transparent;
 }
 
-/* ==================================================
-   SIDEBAR
-================================================== */
-
 .sidebar{
   position:sticky;
   top:0;
@@ -88,15 +57,9 @@ button{
   height:100vh;
   flex:0 0 270px;
   padding:24px 18px;
-  background:
-    linear-gradient(
-      180deg,
-      var(--sidebar),
-      var(--sidebar-2)
-    );
+  background:linear-gradient(180deg,var(--sidebar),var(--sidebar-2));
   color:#ffffff;
-  box-shadow:
-    8px 0 28px rgba(15,23,42,.16);
+  box-shadow:8px 0 28px rgba(15,23,42,.16);
 }
 
 .brand{
@@ -104,8 +67,7 @@ button{
   align-items:center;
   gap:12px;
   padding:4px 8px 24px;
-  border-bottom:
-    1px solid rgba(255,255,255,.12);
+  border-bottom:1px solid rgba(255,255,255,.12);
 }
 
 .brand-mark{
@@ -114,17 +76,11 @@ button{
   display:grid;
   place-items:center;
   border-radius:13px;
-  background:
-    linear-gradient(
-      135deg,
-      #8b5cf6,
-      var(--accent-2)
-    );
+  background:linear-gradient(135deg,#8b5cf6,var(--accent-2));
   color:#ffffff;
   font-size:1.15rem;
   font-weight:900;
-  box-shadow:
-    0 8px 20px rgba(99,102,241,.38);
+  box-shadow:0 8px 20px rgba(99,102,241,.38);
 }
 
 .brand strong,
@@ -140,7 +96,7 @@ button{
 
 .brand span{
   margin-top:3px;
-  color:#cbd5e1;
+  color:#e2e8f0;
   font-size:.8rem;
 }
 
@@ -159,15 +115,11 @@ button{
   border:1px solid transparent;
   border-radius:11px;
   background:transparent;
-  color:#d7dfeb;
+  color:#e2e8f0;
   text-align:left;
   font-weight:650;
   cursor:pointer;
-  transition:
-    background .2s ease,
-    color .2s ease,
-    transform .2s ease,
-    box-shadow .2s ease;
+  transition:.2s ease;
 }
 
 .nav-item:hover{
@@ -177,15 +129,9 @@ button{
 }
 
 .nav-item.active{
-  background:
-    linear-gradient(
-      135deg,
-      var(--accent),
-      var(--accent-2)
-    );
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
   color:#ffffff;
-  box-shadow:
-    0 8px 22px rgba(79,70,229,.34);
+  box-shadow:0 8px 22px rgba(79,70,229,.34);
 }
 
 .nav-icon{
@@ -199,16 +145,11 @@ button{
   color:#ffffff;
   font-size:.72rem;
   font-weight:850;
-  letter-spacing:.02em;
 }
 
 .nav-item.active .nav-icon{
   background:rgba(255,255,255,.20);
 }
-
-/* ==================================================
-   CONTENIDO PRINCIPAL
-================================================== */
 
 .main{
   flex:1;
@@ -271,27 +212,22 @@ h2{
   margin:7px 0 0;
   color:var(--muted);
   line-height:1.58;
-  font-weight:500;
+  font-weight:650;
 }
 
 .status-badge{
   padding:8px 13px;
   border:1px solid #abefc6;
   border-radius:999px;
-  background:var(--success-soft);
-  color:var(--success-2);
+  background:#ecfdf3;
+  color:#065f46;
   font-size:.8rem;
-  font-weight:800;
+  font-weight:900;
 }
-
-/* ==================================================
-   TARJETAS DEL DASHBOARD
-================================================== */
 
 .cards{
   display:grid;
-  grid-template-columns:
-    repeat(4,minmax(0,1fr));
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:18px;
 }
 
@@ -306,10 +242,7 @@ h2{
   border:1px solid var(--line-soft);
   border-radius:18px;
   box-shadow:var(--shadow);
-  transition:
-    transform .2s ease,
-    box-shadow .2s ease,
-    border-color .2s ease;
+  transition:.2s ease;
 }
 
 .metric-card::before{
@@ -319,17 +252,11 @@ h2{
   left:0;
   width:100%;
   height:4px;
-  background:
-    linear-gradient(
-      90deg,
-      var(--accent),
-      var(--accent-2)
-    );
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
 }
 
 .metric-card:hover{
   transform:translateY(-4px);
-  border-color:#c7d2fe;
   box-shadow:var(--shadow-hover);
 }
 
@@ -341,12 +268,7 @@ h2{
   flex:0 0 50px;
   border:1px solid #ddd6fe;
   border-radius:15px;
-  background:
-    linear-gradient(
-      135deg,
-      #f5f3ff,
-      #ede9fe
-    );
+  background:linear-gradient(135deg,#f5f3ff,#ede9fe);
   color:var(--accent);
   font-size:.82rem;
   font-weight:900;
@@ -359,7 +281,7 @@ h2{
 
 .metric-card small{
   color:var(--text-2);
-  font-weight:700;
+  font-weight:750;
 }
 
 .metric-card strong{
@@ -367,10 +289,6 @@ h2{
   color:var(--text);
   font-size:1.8rem;
 }
-
-/* ==================================================
-   PANELES
-================================================== */
 
 .panel{
   margin-top:22px;
@@ -389,40 +307,21 @@ h2{
   border-left:5px solid var(--accent);
 }
 
-/* ==================================================
-   BOTONES
-================================================== */
-
 .primary-button{
   border:0;
   border-radius:11px;
   padding:12px 18px;
-  background:
-    linear-gradient(
-      135deg,
-      var(--accent),
-      var(--accent-2)
-    );
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
   color:#ffffff;
   font-weight:800;
   cursor:pointer;
-  box-shadow:
-    0 8px 20px rgba(79,70,229,.25);
-  transition:
-    transform .2s ease,
-    box-shadow .2s ease,
-    filter .2s ease;
+  box-shadow:0 8px 20px rgba(79,70,229,.25);
+  transition:.2s ease;
 }
 
 .primary-button:hover{
   transform:translateY(-2px);
-  box-shadow:
-    0 12px 25px rgba(79,70,229,.32);
-  filter:brightness(1.04);
-}
-
-.primary-button:active{
-  transform:translateY(0);
+  box-shadow:0 12px 25px rgba(79,70,229,.32);
 }
 
 .primary-button:disabled{
@@ -439,12 +338,7 @@ h2{
   color:var(--text-2);
   font-weight:800;
   cursor:pointer;
-  transition:
-    background .2s ease,
-    border-color .2s ease,
-    color .2s ease,
-    transform .2s ease,
-    box-shadow .2s ease;
+  transition:.2s ease;
 }
 
 .secondary-button:hover{
@@ -454,46 +348,23 @@ h2{
   transform:translateY(-1px);
 }
 
-/* Botón Administrar */
-
 .business-manage-button{
   border:1px solid #039855;
-  background:
-    linear-gradient(
-      135deg,
-      var(--success),
-      var(--success-2)
-    );
+  background:linear-gradient(135deg,var(--success),var(--success-2));
   color:#ffffff;
-  box-shadow:
-    0 7px 16px rgba(2,122,72,.22);
+  box-shadow:0 7px 16px rgba(2,122,72,.22);
 }
 
 .business-manage-button:hover{
-  border-color:#027a48;
-  background:
-    linear-gradient(
-      135deg,
-      #12a866,
-      #027a48
-    );
   color:#ffffff;
-  box-shadow:
-    0 10px 22px rgba(2,122,72,.30);
+  background:linear-gradient(135deg,#12a866,#027a48);
+  box-shadow:0 10px 22px rgba(2,122,72,.30);
 }
-
-/* Botones de la ficha del comercio */
 
 #businessCategoriesButton{
   border-color:#84adff;
   background:#eff4ff;
   color:#175cd3;
-}
-
-#businessCategoriesButton:hover{
-  background:#dbe8ff;
-  border-color:#528bff;
-  color:#1849a9;
 }
 
 #businessProductsButton{
@@ -502,24 +373,11 @@ h2{
   color:#b93815;
 }
 
-#businessProductsButton:hover{
-  background:#ffead5;
-  border-color:#f38744;
-  color:#932f19;
+#editBusinessButton{
+  border-color:#c7d7fe;
+  background:#eef4ff;
+  color:#3538cd;
 }
-
-#businessStoreButton{
-  background:
-    linear-gradient(
-      135deg,
-      var(--accent),
-      var(--accent-2)
-    );
-}
-
-/* ==================================================
-   LISTADOS
-================================================== */
 
 .list-item{
   display:flex;
@@ -527,19 +385,13 @@ h2{
   justify-content:space-between;
   gap:18px;
   padding:18px 16px;
-  margin:-1px 0 0;
-  border:1px solid transparent;
   border-bottom:1px solid var(--line-soft);
   border-radius:12px;
-  transition:
-    background .2s ease,
-    border-color .2s ease,
-    transform .2s ease;
+  transition:.2s ease;
 }
 
 .list-item:hover{
   background:#f8fafc;
-  border-color:#dbe3ef;
   transform:translateX(2px);
 }
 
@@ -561,35 +413,35 @@ h2{
 .list-item small{
   margin-top:6px;
   color:var(--muted);
-  font-weight:550;
+  font-weight:650;
 }
 
-/* Etiqueta Activo */
-
-.list-item span{
+.status-pill{
   padding:7px 11px;
   border:1px solid #abefc6;
   border-radius:999px;
-  background:var(--success-soft);
+  background:#ecfdf3;
   color:var(--success-2);
   font-size:.78rem;
   font-weight:850;
 }
 
+.status-pill.inactive{
+  border-color:#fecaca;
+  background:#fef2f2;
+  color:#b91c1c;
+}
+
 .loading,
 .empty-state{
   color:var(--muted);
-  font-weight:600;
+  font-weight:650;
 }
 
 .error{
   color:var(--danger-2);
   font-weight:700;
 }
-
-/* ==================================================
-   MODALES
-================================================== */
 
 .modal{
   position:fixed;
@@ -619,10 +471,9 @@ h2{
   overflow:auto;
   padding:28px;
   background:#ffffff;
-  border:1px solid #d0d5dd;
+  border:1px solid var(--line);
   border-radius:22px;
-  box-shadow:
-    0 30px 80px rgba(15,23,42,.35);
+  box-shadow:0 30px 80px rgba(15,23,42,.35);
 }
 
 .modal-header{
@@ -638,34 +489,24 @@ h2{
 .close-button{
   width:40px;
   height:40px;
-  border:1px solid #d0d5dd;
+  border:1px solid var(--line);
   border-radius:11px;
   background:#f8fafc;
   color:var(--text-2);
   font-size:25px;
   line-height:1;
   cursor:pointer;
-  transition:
-    background .2s ease,
-    color .2s ease,
-    transform .2s ease;
 }
 
 .close-button:hover{
-  background:var(--danger-soft);
+  background:#fef2f2;
   border-color:#fda29b;
   color:var(--danger-2);
-  transform:rotate(4deg);
 }
-
-/* ==================================================
-   FORMULARIOS
-================================================== */
 
 .form-grid{
   display:grid;
-  grid-template-columns:
-    repeat(2,minmax(0,1fr));
+  grid-template-columns:repeat(2,minmax(0,1fr));
   gap:18px;
 }
 
@@ -689,19 +530,10 @@ h2{
   border-radius:10px;
   background:#ffffff;
   color:var(--text);
-  transition:
-    border-color .2s ease,
-    box-shadow .2s ease,
-    background .2s ease;
 }
 
 .form-grid input::placeholder{
-  color:#667085;
-  opacity:.9;
-}
-
-.form-grid input:hover{
-  border-color:#98a2b3;
+  color:#475569;
 }
 
 .form-grid input[type="color"]{
@@ -712,9 +544,7 @@ h2{
 .form-grid input:focus{
   outline:none;
   border-color:var(--accent);
-  background:#ffffff;
-  box-shadow:
-    0 0 0 4px rgba(109,40,217,.13);
+  box-shadow:0 0 0 4px rgba(109,40,217,.13);
 }
 
 .checkbox-label{
@@ -750,9 +580,49 @@ h2{
   margin-top:26px;
 }
 
-/* ==================================================
-   AVISOS
-================================================== */
+.wrap-actions{
+  flex-wrap:wrap;
+}
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+}
+
+.detail-item{
+  padding:14px;
+  border:1px solid var(--line-soft);
+  border-radius:12px;
+  background:#f8fafc;
+}
+
+.detail-item strong{
+  display:block;
+  margin-bottom:5px;
+  color:var(--text);
+}
+
+.detail-item span{
+  color:var(--muted);
+  font-weight:650;
+}
+
+.section-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
+.section-toolbar small{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-weight:650;
+}
 
 .toast{
   position:fixed;
@@ -760,16 +630,13 @@ h2{
   bottom:22px;
   z-index:1100;
   display:none;
-  max-width:
-    min(380px,calc(100vw - 44px));
+  max-width:min(380px,calc(100vw - 44px));
   padding:15px 19px;
-  border:1px solid rgba(255,255,255,.15);
   border-radius:13px;
   background:#101828;
   color:#ffffff;
   font-weight:700;
-  box-shadow:
-    0 15px 35px rgba(0,0,0,.28);
+  box-shadow:0 15px 35px rgba(0,0,0,.28);
 }
 
 .toast.show{
@@ -797,14 +664,9 @@ h2{
   }
 }
 
-/* ==================================================
-   RESPONSIVE
-================================================== */
-
 @media(max-width:1050px){
   .cards{
-    grid-template-columns:
-      repeat(2,minmax(0,1fr));
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
 }
 
@@ -820,18 +682,8 @@ h2{
     padding:16px;
   }
 
-  .brand{
-    padding-bottom:16px;
-  }
-
   .nav{
-    grid-template-columns:
-      repeat(2,minmax(0,1fr));
-    margin-top:16px;
-  }
-
-  .nav-item{
-    justify-content:center;
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
 
   .main{
@@ -851,14 +703,11 @@ h2{
   .primary-button{
     width:100%;
   }
-
-  .list-item{
-    align-items:flex-start;
-  }
 }
 
 @media(max-width:650px){
-  .form-grid{
+  .form-grid,
+  .detail-grid{
     grid-template-columns:1fr;
   }
 
@@ -876,9 +725,10 @@ h2{
 
   .list-item{
     flex-direction:column;
+    align-items:stretch;
   }
 
-  .list-item > div:last-child{
+  .business-actions{
     width:100%;
   }
 
