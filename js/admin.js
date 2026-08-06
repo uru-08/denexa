@@ -90,6 +90,7 @@ const modifierOptionModalTitle = document.getElementById("modifierOptionModalTit
 const modifierOptionGroupName = document.getElementById("modifierOptionGroupName");
 const modifierOptionName = document.getElementById("modifierOptionName");
 const modifierOptionPrice = document.getElementById("modifierOptionPrice");
+const modifierOptionParent = document.getElementById("modifierOptionParent");
 const modifierOptionSortOrder = document.getElementById("modifierOptionSortOrder");
 const modifierOptionActive = document.getElementById("modifierOptionActive");
 const modifierOptionFormMessage = document.getElementById("modifierOptionFormMessage");
@@ -116,6 +117,8 @@ let selectedProduct = null;
 let selectedModifierGroup = null;
 let editingModifierGroupId = null;
 let editingModifierOptionId = null;
+let currentModifierGroups = [];
+let currentModifierOptions = [];
 
 
 function openSection(sectionId) {
@@ -250,6 +253,21 @@ async function updateTableRow(tableName, id, payload) {
 
   return true;
 }
+
+async function deleteTableRow(tableName, id) {
+  await requestText(
+    `${SUPABASE_REST}/${tableName}?id=eq.${encodeURIComponent(id)}`,
+    {
+      method: "DELETE",
+      headers: supabaseHeaders({
+        Prefer: "return=minimal"
+      })
+    }
+  );
+
+  return true;
+}
+
 
 async function deleteTableRow(tableName, id) {
   await requestText(
@@ -984,7 +1002,7 @@ function closeModifierOptionModal() {
   editingModifierOptionId = null;
 }
 
-function openModifierOptionModal(group, option = null) {
+async function openModifierOptionModal(group, option = null) {
   selectedModifierGroup = group;
   modifierOptionForm.reset();
   editingModifierOptionId = option?.id ?? null;
@@ -1003,6 +1021,35 @@ function openModifierOptionModal(group, option = null) {
     option?.price_delta ?? 0;
   modifierOptionSortOrder.value =
     option?.sort_order ?? 0;
+
+  const possibleParents = currentModifierOptions.filter(
+    (item) =>
+      String(item.group_id) !== String(group.id) &&
+      String(item.id) !== String(option?.id ?? "")
+  );
+
+  modifierOptionParent.innerHTML =
+    '<option value="">Siempre visible</option>' +
+    possibleParents.map((item) => {
+      const parentGroup = currentModifierGroups.find(
+        (groupItem) =>
+          String(groupItem.id) === String(item.group_id)
+      );
+
+      const label =
+        `${parentGroup?.name || "Grupo"}: ${item.name}`;
+
+      return `
+        <option value="${escapeHTML(item.id)}">
+          ${escapeHTML(label)}
+        </option>
+      `;
+    }).join("");
+
+  modifierOptionParent.value =
+    option?.depends_on_option_id
+      ? String(option.depends_on_option_id)
+      : "";
   modifierOptionActive.checked =
     option ? Boolean(option.active) : true;
   modifierOptionFormMessage.textContent = "";
@@ -1030,16 +1077,26 @@ async function loadModifierGroups() {
       ),
       getTableData(
         "product_options",
-        "id,group_id,name,price_delta,sort_order,active"
+        "id,group_id,name,price_delta,sort_order,active,depends_on_option_id"
       )
     ]);
 
-    const productGroups = groups
-      .filter(
-        (group) =>
-          String(group.product_id) ===
-          String(selectedProduct.id)
-      )
+    currentModifierGroups = groups.filter(
+      (group) =>
+        String(group.product_id) ===
+        String(selectedProduct.id)
+    );
+
+    const currentGroupIds = new Set(
+      currentModifierGroups.map((group) => String(group.id))
+    );
+
+    currentModifierOptions = options.filter(
+      (option) =>
+        currentGroupIds.has(String(option.group_id))
+    );
+
+    const productGroups = currentModifierGroups
       .sort(
         (a, b) =>
           Number(a.sort_order || 0) -
@@ -1137,6 +1194,16 @@ async function loadModifierGroups() {
                             +$${Number(option.price_delta || 0)}
                             ${option.active ? "" : " \u00b7 Inactiva"}
                           </small>
+
+                          ${
+                            option.depends_on_option_id
+                              ? `
+                                <span class="dependency-label">
+                                  Visible seg\u00fan otra opci\u00f3n
+                                </span>
+                              `
+                              : ""
+                          }
                         </div>
 
                         <div class="modifier-actions">
@@ -1174,7 +1241,7 @@ async function loadModifierGroups() {
     modifierGroupsList
       .querySelectorAll(".add-option-button")
       .forEach((button) => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", async () => {
           const group = productGroups.find(
             (item) =>
               String(item.id) ===
@@ -1182,7 +1249,7 @@ async function loadModifierGroups() {
           );
 
           if (group) {
-            openModifierOptionModal(group);
+            await openModifierOptionModal(group);
           }
         });
       });
@@ -1206,7 +1273,7 @@ async function loadModifierGroups() {
     modifierGroupsList
       .querySelectorAll(".edit-option-button")
       .forEach((button) => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", async () => {
           const group = productGroups.find(
             (item) =>
               String(item.id) ===
@@ -1220,7 +1287,7 @@ async function loadModifierGroups() {
           );
 
           if (group && option) {
-            openModifierOptionModal(group, option);
+            await openModifierOptionModal(group, option);
           }
         });
       });
@@ -1441,6 +1508,10 @@ modifierOptionForm.addEventListener(
       group_id: selectedModifierGroup.id,
       name,
       price_delta: price,
+      depends_on_option_id:
+        modifierOptionParent.value
+          ? Number(modifierOptionParent.value)
+          : null,
       sort_order:
         Number(modifierOptionSortOrder.value || 0),
       active: modifierOptionActive.checked
