@@ -344,45 +344,60 @@ async function uploadProductImage(blob) {
   return publicUrl;
 }
 
+async function getProductById(productId) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/products?id=eq.${encodeURIComponent(productId)}&select=id,image_url,name`,
+      {
+        method: "GET",
+        headers: supabaseHeaders()
+      }
+    );
+
+  if (!responseText.trim()) {
+    return null;
+  }
+
+  const rows = JSON.parse(responseText);
+
+  return Array.isArray(rows)
+    ? rows[0] || null
+    : rows;
+}
+
 async function updateProductAndVerify(
   productId,
   payload
 ) {
-  const responseText =
-    await requestText(
-      `${SUPABASE_REST}/products?id=eq.${encodeURIComponent(productId)}&select=id,image_url`,
-      {
-        method: "PATCH",
-        headers: supabaseHeaders({
-          Prefer: "return=representation"
-        }),
-        body: JSON.stringify(payload)
-      }
-    );
-
-  let rows = [];
-
-  if (responseText.trim()) {
-    rows = JSON.parse(responseText);
-  }
+  await requestText(
+    `${SUPABASE_REST}/products?id=eq.${encodeURIComponent(productId)}`,
+    {
+      method: "PATCH",
+      headers: supabaseHeaders({
+        Prefer: "return=minimal"
+      }),
+      body: JSON.stringify(payload)
+    }
+  );
 
   const updated =
-    Array.isArray(rows)
-      ? rows[0]
-      : rows;
+    await getProductById(productId);
 
   if (!updated?.id) {
     throw new Error(
-      "Producto: Supabase no devolvio el producto actualizado."
+      "Producto: no se pudo volver a leer el producto despues de guardarlo."
     );
   }
 
-  if (
-    payload.image_url &&
-    updated.image_url !== payload.image_url
-  ) {
+  const expectedImage =
+    payload.image_url || null;
+
+  const savedImage =
+    updated.image_url || null;
+
+  if (expectedImage !== savedImage) {
     throw new Error(
-      "Producto: la URL de la imagen no quedo guardada."
+      "Producto: Supabase no guardo la URL de la imagen en image_url."
     );
   }
 
@@ -392,7 +407,7 @@ async function updateProductAndVerify(
 async function insertProductAndVerify(payload) {
   const responseText =
     await requestText(
-      `${SUPABASE_REST}/products?select=id,image_url`,
+      `${SUPABASE_REST}/products?select=id`,
       {
         method: "POST",
         headers: supabaseHeaders({
@@ -402,33 +417,38 @@ async function insertProductAndVerify(payload) {
       }
     );
 
-  let rows = [];
+  let inserted = null;
 
   if (responseText.trim()) {
-    rows = JSON.parse(responseText);
+    const rows = JSON.parse(responseText);
+    inserted =
+      Array.isArray(rows)
+        ? rows[0] || null
+        : rows;
   }
-
-  const inserted =
-    Array.isArray(rows)
-      ? rows[0]
-      : rows;
 
   if (!inserted?.id) {
     throw new Error(
-      "Producto: Supabase no devolvio el producto creado."
+      "Producto: no se pudo obtener el ID del producto creado."
     );
   }
 
-  if (
-    payload.image_url &&
-    inserted.image_url !== payload.image_url
-  ) {
+  const saved =
+    await getProductById(inserted.id);
+
+  const expectedImage =
+    payload.image_url || null;
+
+  const savedImage =
+    saved?.image_url || null;
+
+  if (expectedImage !== savedImage) {
     throw new Error(
-      "Producto: la URL de la imagen no quedo guardada."
+      "Producto: Supabase no guardo la URL de la imagen en image_url."
     );
   }
 
-  return inserted;
+  return saved;
 }
 
 async function getSelectedBusinessCategories() {
