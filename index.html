@@ -2,57 +2,112 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#b42318">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#073B94">
   <title>Mamma Mia | Pedidos</title>
   <meta
     name="description"
     content="Hac&eacute; tu pedido online en Mamma Mia."
   >
-  <link rel="stylesheet" href="css/app.css?v=26">
+  <link rel="stylesheet" href="css/app.css?v=27">
 </head>
 
 <body>
 
+  <section id="welcomeScreen" class="welcome-screen" aria-label="Bienvenida a Mamma Mia">
+    <div class="welcome-glow welcome-glow-one"></div>
+    <div class="welcome-glow welcome-glow-two"></div>
+    <div class="welcome-grid"></div>
+
+    <div class="welcome-content">
+      <div class="welcome-status">
+        <span class="status-dot"></span>
+        <span id="welcomeStatusText">Tomando pedidos</span>
+      </div>
+
+      <div class="welcome-logo-wrap">
+        <div class="welcome-logo-ring"></div>
+        <img
+          class="welcome-logo"
+          src="assets/mamma-mia-logo.png"
+          alt="Mamma Mia Pizzas y Empanadas"
+        >
+      </div>
+
+      <div class="welcome-copy">
+        <p class="welcome-kicker">BIENVENIDOS A</p>
+        <h1>Mamma Mia</h1>
+        <p>
+          Pizzas y empanadas preparadas para disfrutar.
+          Eleg&iacute; lo que m&aacute;s te guste y arm&aacute; tu pedido.
+        </p>
+      </div>
+
+      <button id="enterStoreButton" class="welcome-button" type="button">
+        <span>Hacer mi pedido</span>
+        <span class="welcome-arrow" aria-hidden="true">&rarr;</span>
+      </button>
+
+      <p class="welcome-note">Delivery y retiro en el local</p>
+    </div>
+  </section>
+
   <div id="appShell" class="app-shell">
 
     <header class="store-header">
-      <div class="store-header-overlay"></div>
+      <div class="store-header-inner">
+        <div class="store-brand">
+          <div id="storeLogo" class="store-logo">
+            <img
+              src="assets/mamma-mia-logo.png"
+              alt="Mamma Mia"
+            >
+          </div>
 
-      <div class="store-header-content">
-        <div id="storeLogo" class="store-logo" aria-hidden="true">MM</div>
-
-        <div class="store-heading">
-          <p class="store-kicker">PEDIDOS ONLINE</p>
-          <h1 id="storeName">Mamma Mia</h1>
-          <p id="storeSubtitle" class="store-subtitle">
-            Eleg&iacute; tus favoritos y arm&aacute; tu pedido.
-          </p>
+          <div class="store-heading">
+            <p class="store-kicker">PEDIDOS ONLINE</p>
+            <h1 id="storeName">Mamma Mia</h1>
+            <p id="storeSubtitle" class="store-subtitle">
+              Eleg&iacute; tus favoritos y arm&aacute; tu pedido.
+            </p>
+          </div>
         </div>
 
-        <div id="storeStatus" class="store-status">Cargando...</div>
+        <div id="storeStatus" class="store-status">
+          <span class="status-dot"></span>
+          <span>Cargando...</span>
+        </div>
       </div>
     </header>
 
     <main class="main-content">
 
       <section class="store-info-card">
-        <div>
-          <span class="info-label">Comercio</span>
-          <strong id="storeNameSmall">Mamma Mia</strong>
+        <div class="info-item">
+          <span class="info-icon" aria-hidden="true">&#9679;</span>
+          <div>
+            <span class="info-label">Comercio</span>
+            <strong id="storeNameSmall">Mamma Mia</strong>
+          </div>
         </div>
 
-        <div>
-          <span class="info-label">Pedido</span>
-          <strong>Delivery o retiro</strong>
+        <div class="info-item">
+          <span class="info-icon" aria-hidden="true">&#8594;</span>
+          <div>
+            <span class="info-label">Pedido</span>
+            <strong>Delivery o retiro</strong>
+          </div>
         </div>
       </section>
 
       <section class="catalog-section">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">MEN&Uacute;</p>
+            <p class="eyebrow">NUESTRO MEN&Uacute;</p>
             <h2>Eleg&iacute; qu&eacute; quer&eacute;s pedir</h2>
+            <p class="section-subtitle">
+              Toc&aacute; un producto para elegir tama&ntilde;o y adicionales.
+            </p>
           </div>
         </div>
 
@@ -68,12 +123,14 @@
     </main>
 
     <button id="cartButton" class="floating-cart" type="button" aria-label="Abrir carrito">
-      <span>
+      <span class="cart-icon" aria-hidden="true">&#128722;</span>
+
+      <span class="cart-copy">
         <strong>Ver pedido</strong>
         <small id="cartCount">0 productos</small>
       </span>
 
-      <strong id="cartTotal">$0</strong>
+      <strong id="cartTotal" class="cart-price">$0</strong>
     </button>
 
   </div>
@@ -118,12 +175,11 @@
         </button>
 
         <p class="cart-note">
-          En el pr&oacute;ximo paso conectaremos entrega, pago y confirmaci&oacute;n del pedido.
+          Revis&aacute; tu pedido y complet&aacute; los datos de entrega.
         </p>
       </div>
     </div>
   </div>
-
 
   <div id="checkoutModal" class="modal" aria-hidden="true">
     <div class="modal-backdrop" data-close-checkout></div>
@@ -151,12 +207,12 @@
 
           <label class="field full-width">
             <span>Nombre</span>
-            <input id="customerName" type="text" required>
+            <input id="customerName" type="text" autocomplete="name" required>
           </label>
 
           <label class="field">
             <span>Tel&eacute;fono</span>
-            <input id="customerPhone" type="tel" inputmode="tel" required>
+            <input id="customerPhone" type="tel" inputmode="tel" autocomplete="tel" required>
           </label>
 
           <label class="field">
@@ -169,7 +225,7 @@
 
           <label id="addressField" class="field full-width">
             <span>Direcci&oacute;n</span>
-            <input id="customerAddress" type="text">
+            <input id="customerAddress" type="text" autocomplete="street-address">
           </label>
 
           <label id="referenceField" class="field full-width">
@@ -187,7 +243,7 @@
 
           <label id="cashAmountField" class="field">
             <span>&iquest;Con cu&aacute;nto paga?</span>
-            <input id="cashAmount" type="number" min="0" step="1">
+            <input id="cashAmount" type="number" min="0" step="1" inputmode="numeric">
           </label>
 
           <label class="field full-width">
@@ -231,24 +287,19 @@
     <div class="modal-backdrop"></div>
 
     <div class="modal-card success-modal-card" role="dialog" aria-modal="true">
-      <div class="success-icon">OK</div>
+      <div class="success-icon" aria-hidden="true">&#10003;</div>
 
       <p class="eyebrow">PEDIDO RECIBIDO</p>
-      <h2>Tu pedido fue enviado</h2>
+      <h2>&iexcl;Gracias por tu pedido!</h2>
 
       <p class="success-copy">
-        Mamma Mia ya recibi&oacute; tu pedido. En la siguiente etapa
-        conectaremos el seguimiento de estado en tiempo real.
+        Mamma Mia recibi&oacute; tu pedido correctamente.
+        Ya pod&eacute;s volver al men&uacute;.
       </p>
-
-      <div class="order-number-card">
-        <span>N&uacute;mero de pedido</span>
-        <strong id="successOrderNumber">-</strong>
-      </div>
 
       <button
         id="closeSuccessButton"
-        class="primary-action"
+        class="primary-action success-button"
         type="button"
       >
         Volver al men&uacute;
@@ -258,7 +309,7 @@
 
   <div id="toast" class="toast" aria-live="polite"></div>
 
-  <script src="js/config.js?v=26"></script>
-  <script src="js/app.js?v=26"></script>
+  <script src="js/config.js?v=27"></script>
+  <script src="js/app.js?v=27"></script>
 </body>
 </html>
