@@ -1089,3 +1089,54 @@ select{
   font-size:.72rem;
   font-weight:850;
 }
+
+
+/* ==================================================
+   EDITAR PRODUCTOS V28
+================================================== */
+
+.product-image-buttons{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  flex-wrap:wrap;
+}
+
+.danger-outline-button{
+  min-height:42px;
+  padding:10px 14px;
+  border:1px solid #fecaca;
+  border-radius:11px;
+  background:#fff7f7;
+  color:#b42318;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.danger-outline-button:hover{
+  border-color:#fca5a5;
+  background:#fef2f2;
+}
+
+.edit-product-button{
+  border-color:#bfdbfe;
+  background:#eff6ff;
+  color:#1d4ed8;
+}
+
+.edit-product-button:hover{
+  border-color:#93c5fd;
+  background:#dbeafe;
+  color:#1e40af;
+}
+
+@media(max-width:650px){
+  .product-image-buttons{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+
+  .product-image-buttons button{
+    width:100%;
+  }
+}
