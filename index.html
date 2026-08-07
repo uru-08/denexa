@@ -1,112 +1,132 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Proyecto X</title>
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-
-    font-family:Arial, Helvetica, sans-serif;
-
-    background:#f5f5f5;
-
-    color:#222;
-
-}
-
-header{
-
-    height:100vh;
-
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:center;
-
-    align-items:center;
-
-    background:linear-gradient(135deg,#1b4332,#2d6a4f);
-
-    color:white;
-
-    text-align:center;
-
-}
-
-h1{
-
-    font-size:60px;
-
-    margin-bottom:20px;
-
-}
-
-p{
-
-    font-size:22px;
-
-    opacity:.9;
-
-}
-
-button{
-
-    margin-top:40px;
-
-    padding:18px 40px;
-
-    border:none;
-
-    border-radius:50px;
-
-    background:white;
-
-    color:#1b4332;
-
-    font-size:18px;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-button:hover{
-
-    transform:scale(1.05);
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#b42318">
+  <title>Mamma Mia | Pedidos</title>
+  <meta
+    name="description"
+    content="Hac&eacute; tu pedido online en Mamma Mia."
+  >
+  <link rel="stylesheet" href="css/app.css?v=25">
 </head>
 
 <body>
 
-<header>
+  <div id="appShell" class="app-shell">
 
-<h1>PROYECTO X</h1>
+    <header class="store-header">
+      <div class="store-header-overlay"></div>
 
-<p>La nueva generación de plataformas de pedidos.</p>
+      <div class="store-header-content">
+        <div id="storeLogo" class="store-logo" aria-hidden="true">MM</div>
 
-<button>Comenzar</button>
+        <div class="store-heading">
+          <p class="store-kicker">PEDIDOS ONLINE</p>
+          <h1 id="storeName">Mamma Mia</h1>
+          <p id="storeSubtitle" class="store-subtitle">
+            Eleg&iacute; tus favoritos y arm&aacute; tu pedido.
+          </p>
+        </div>
 
-</header>
+        <div id="storeStatus" class="store-status">Cargando...</div>
+      </div>
+    </header>
 
+    <main class="main-content">
+
+      <section class="store-info-card">
+        <div>
+          <span class="info-label">Comercio</span>
+          <strong id="storeNameSmall">Mamma Mia</strong>
+        </div>
+
+        <div>
+          <span class="info-label">Pedido</span>
+          <strong>Delivery o retiro</strong>
+        </div>
+      </section>
+
+      <section class="catalog-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">MEN&Uacute;</p>
+            <h2>Eleg&iacute; qu&eacute; quer&eacute;s pedir</h2>
+          </div>
+        </div>
+
+        <div id="categoryTabs" class="category-tabs" aria-label="Categor&iacute;as"></div>
+
+        <div id="catalogContent" class="catalog-content">
+          <div class="loading-card">
+            Cargando el men&uacute;...
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <button id="cartButton" class="floating-cart" type="button" aria-label="Abrir carrito">
+      <span>
+        <strong>Ver pedido</strong>
+        <small id="cartCount">0 productos</small>
+      </span>
+
+      <strong id="cartTotal">$0</strong>
+    </button>
+
+  </div>
+
+  <div id="productModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-product></div>
+
+    <div class="modal-card product-modal-card" role="dialog" aria-modal="true">
+      <button id="closeProductButton" class="modal-close" type="button" aria-label="Cerrar">
+        &times;
+      </button>
+
+      <div id="productModalContent"></div>
+    </div>
+  </div>
+
+  <div id="cartModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-cart></div>
+
+    <div class="modal-card cart-modal-card" role="dialog" aria-modal="true">
+      <div class="modal-title-row">
+        <div>
+          <p class="eyebrow">TU PEDIDO</p>
+          <h2>Carrito</h2>
+        </div>
+
+        <button id="closeCartButton" class="modal-close inline-close" type="button" aria-label="Cerrar">
+          &times;
+        </button>
+      </div>
+
+      <div id="cartItems" class="cart-items"></div>
+
+      <div class="cart-summary">
+        <div>
+          <span>Total</span>
+          <strong id="cartModalTotal">$0</strong>
+        </div>
+
+        <button id="continueOrderButton" class="primary-action" type="button">
+          Continuar pedido
+        </button>
+
+        <p class="cart-note">
+          En el pr&oacute;ximo paso conectaremos entrega, pago y confirmaci&oacute;n del pedido.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <script src="js/config.js?v=25"></script>
+  <script src="js/app.js?v=25"></script>
 </body>
-
 </html>
