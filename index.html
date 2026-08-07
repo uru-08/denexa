@@ -9,7 +9,7 @@
     name="description"
     content="Hac&eacute; tu pedido online en Mamma Mia."
   >
-  <link rel="stylesheet" href="css/app.css?v=25">
+  <link rel="stylesheet" href="css/app.css?v=26">
 </head>
 
 <body>
@@ -124,9 +124,141 @@
     </div>
   </div>
 
+
+  <div id="checkoutModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-checkout></div>
+
+    <div class="modal-card checkout-modal-card" role="dialog" aria-modal="true">
+      <div class="modal-title-row">
+        <div>
+          <p class="eyebrow">FINALIZAR PEDIDO</p>
+          <h2>Datos de entrega</h2>
+        </div>
+
+        <button
+          id="closeCheckoutButton"
+          class="modal-close inline-close"
+          type="button"
+          aria-label="Cerrar"
+        >
+          &times;
+        </button>
+      </div>
+
+      <form id="checkoutForm">
+
+        <div class="checkout-grid">
+
+          <label class="field full-width">
+            <span>Nombre</span>
+            <input id="customerName" type="text" required>
+          </label>
+
+          <label class="field">
+            <span>Tel&eacute;fono</span>
+            <input id="customerPhone" type="tel" inputmode="tel" required>
+          </label>
+
+          <label class="field">
+            <span>Tipo de entrega</span>
+            <select id="deliveryType" required>
+              <option value="delivery">Delivery</option>
+              <option value="pickup">Retiro en el local</option>
+            </select>
+          </label>
+
+          <label id="addressField" class="field full-width">
+            <span>Direcci&oacute;n</span>
+            <input id="customerAddress" type="text">
+          </label>
+
+          <label id="referenceField" class="field full-width">
+            <span>Referencia / apartamento</span>
+            <input id="customerReference" type="text">
+          </label>
+
+          <label class="field">
+            <span>Forma de pago</span>
+            <select id="paymentMethod" required>
+              <option value="cash">Efectivo</option>
+              <option value="transfer">Transferencia</option>
+            </select>
+          </label>
+
+          <label id="cashAmountField" class="field">
+            <span>&iquest;Con cu&aacute;nto paga?</span>
+            <input id="cashAmount" type="number" min="0" step="1">
+          </label>
+
+          <label class="field full-width">
+            <span>Observaciones</span>
+            <textarea
+              id="customerNotes"
+              rows="3"
+              placeholder="Ejemplo: timbre no funciona, sin cebolla, etc."
+            ></textarea>
+          </label>
+
+        </div>
+
+        <div class="checkout-summary-card">
+          <div class="checkout-summary-line">
+            <span>Productos</span>
+            <strong id="checkoutItemsCount">0</strong>
+          </div>
+
+          <div class="checkout-summary-line total-line">
+            <span>Total</span>
+            <strong id="checkoutTotal">$0</strong>
+          </div>
+        </div>
+
+        <p id="checkoutFormError" class="form-error"></p>
+
+        <button
+          id="confirmOrderButton"
+          class="primary-action checkout-submit"
+          type="submit"
+        >
+          Confirmar pedido
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <div id="orderSuccessModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+
+    <div class="modal-card success-modal-card" role="dialog" aria-modal="true">
+      <div class="success-icon">OK</div>
+
+      <p class="eyebrow">PEDIDO RECIBIDO</p>
+      <h2>Tu pedido fue enviado</h2>
+
+      <p class="success-copy">
+        Mamma Mia ya recibi&oacute; tu pedido. En la siguiente etapa
+        conectaremos el seguimiento de estado en tiempo real.
+      </p>
+
+      <div class="order-number-card">
+        <span>N&uacute;mero de pedido</span>
+        <strong id="successOrderNumber">-</strong>
+      </div>
+
+      <button
+        id="closeSuccessButton"
+        class="primary-action"
+        type="button"
+      >
+        Volver al men&uacute;
+      </button>
+    </div>
+  </div>
+
   <div id="toast" class="toast" aria-live="polite"></div>
 
-  <script src="js/config.js?v=25"></script>
-  <script src="js/app.js?v=25"></script>
+  <script src="js/config.js?v=26"></script>
+  <script src="js/app.js?v=26"></script>
 </body>
 </html>
