@@ -24,6 +24,30 @@ const cartItems = document.getElementById("cartItems");
 const cartModalTotal = document.getElementById("cartModalTotal");
 const continueOrderButton = document.getElementById("continueOrderButton");
 
+
+const checkoutModal = document.getElementById("checkoutModal");
+const checkoutForm = document.getElementById("checkoutForm");
+const closeCheckoutButton = document.getElementById("closeCheckoutButton");
+const customerName = document.getElementById("customerName");
+const customerPhone = document.getElementById("customerPhone");
+const deliveryType = document.getElementById("deliveryType");
+const customerAddress = document.getElementById("customerAddress");
+const customerReference = document.getElementById("customerReference");
+const addressField = document.getElementById("addressField");
+const referenceField = document.getElementById("referenceField");
+const paymentMethod = document.getElementById("paymentMethod");
+const cashAmount = document.getElementById("cashAmount");
+const cashAmountField = document.getElementById("cashAmountField");
+const customerNotes = document.getElementById("customerNotes");
+const checkoutItemsCount = document.getElementById("checkoutItemsCount");
+const checkoutTotal = document.getElementById("checkoutTotal");
+const checkoutFormError = document.getElementById("checkoutFormError");
+const confirmOrderButton = document.getElementById("confirmOrderButton");
+
+const orderSuccessModal = document.getElementById("orderSuccessModal");
+const successOrderNumber = document.getElementById("successOrderNumber");
+const closeSuccessButton = document.getElementById("closeSuccessButton");
+
 const toast = document.getElementById("toast");
 
 let business = null;
@@ -93,6 +117,40 @@ async function requestJSON(path) {
   }
 
   return JSON.parse(text);
+}
+
+
+async function insertRow(tableName, payload, returnRepresentation = true) {
+  const response = await fetch(
+    `${SUPABASE_REST}/${tableName}`,
+    {
+      method:"POST",
+      headers:supabaseHeaders({
+        Prefer:returnRepresentation
+          ? "return=representation"
+          : "return=minimal"
+      }),
+      body:JSON.stringify(payload)
+    }
+  );
+
+  const text = await response.text();
+
+  if (!response.ok) {
+    throw new Error(
+      `Supabase ${response.status}: ${text || response.statusText}`
+    );
+  }
+
+  if (!returnRepresentation || !text.trim()) {
+    return null;
+  }
+
+  const data = JSON.parse(text);
+
+  return Array.isArray(data)
+    ? data[0]
+    : data;
 }
 
 async function loadStore() {
@@ -1103,6 +1161,275 @@ function restoreCart() {
   updateCartBar();
 }
 
+
+function openCheckoutModal() {
+  checkoutFormError.classList.remove("show");
+  checkoutFormError.textContent = "";
+
+  checkoutItemsCount.textContent =
+    cart.reduce(
+      (sum,item) =>
+        sum + Number(item.quantity || 0),
+      0
+    );
+
+  checkoutTotal.textContent =
+    money(cartGrandTotal());
+
+  syncDeliveryFields();
+  syncPaymentFields();
+
+  checkoutModal.classList.add("open");
+  checkoutModal.setAttribute("aria-hidden","false");
+  document.body.classList.add("modal-open");
+
+  setTimeout(() => customerName.focus(),50);
+}
+
+function closeCheckoutModal() {
+  checkoutModal.classList.remove("open");
+  checkoutModal.setAttribute("aria-hidden","true");
+  document.body.classList.remove("modal-open");
+}
+
+function syncDeliveryFields() {
+  const isDelivery =
+    deliveryType.value === "delivery";
+
+  addressField.style.display =
+    isDelivery ? "grid" : "none";
+
+  referenceField.style.display =
+    isDelivery ? "grid" : "none";
+
+  customerAddress.required = isDelivery;
+
+  if (!isDelivery) {
+    customerAddress.value = "";
+    customerReference.value = "";
+  }
+}
+
+function syncPaymentFields() {
+  const isCash =
+    paymentMethod.value === "cash";
+
+  cashAmountField.style.display =
+    isCash ? "grid" : "none";
+
+  if (!isCash) {
+    cashAmount.value = "";
+  }
+}
+
+function showCheckoutError(message) {
+  checkoutFormError.textContent = message;
+  checkoutFormError.classList.add("show");
+}
+
+function hideCheckoutError() {
+  checkoutFormError.classList.remove("show");
+}
+
+async function saveOrderToSupabase() {
+  const total = cartGrandTotal();
+
+  const order = await insertRow(
+    "orders",
+    {
+      business_id:business.id,
+      customer_name:customerName.value.trim(),
+      customer_phone:customerPhone.value.trim(),
+      delivery_type:deliveryType.value,
+      delivery_address:
+        deliveryType.value === "delivery"
+          ? customerAddress.value.trim()
+          : null,
+      delivery_reference:
+        deliveryType.value === "delivery"
+          ? customerReference.value.trim() || null
+          : null,
+      payment_method:paymentMethod.value,
+      cash_amount:
+        paymentMethod.value === "cash" &&
+        cashAmount.value
+          ? Number(cashAmount.value)
+          : null,
+      notes:customerNotes.value.trim() || null,
+      status:"received",
+      total,
+      source:"web"
+    }
+  );
+
+  if (!order?.id) {
+    throw new Error(
+      "Supabase no devolvio el ID del pedido."
+    );
+  }
+
+  for (const item of cart) {
+    const orderItem = await insertRow(
+      "order_items",
+      {
+        order_id:order.id,
+        product_id:item.productId,
+        product_name:item.productName,
+        quantity:item.quantity,
+        unit_price:item.unitPrice,
+        total:item.total
+      }
+    );
+
+    if (!orderItem?.id) {
+      continue;
+    }
+
+    for (const option of item.options) {
+      await insertRow(
+        "order_item_options",
+        {
+          order_item_id:orderItem.id,
+          group_name:option.groupName,
+          option_name:option.optionName,
+          price_delta:option.price
+        },
+        false
+      );
+    }
+  }
+
+  return order;
+}
+
+checkoutForm.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    hideCheckoutError();
+
+    if (!cart.length) {
+      showCheckoutError(
+        "El carrito est\u00e1 vac\u00edo."
+      );
+      return;
+    }
+
+    if (!customerName.value.trim()) {
+      showCheckoutError(
+        "Escrib\u00ed tu nombre."
+      );
+      return;
+    }
+
+    if (!customerPhone.value.trim()) {
+      showCheckoutError(
+        "Escrib\u00ed tu tel\u00e9fono."
+      );
+      return;
+    }
+
+    if (
+      deliveryType.value === "delivery" &&
+      !customerAddress.value.trim()
+    ) {
+      showCheckoutError(
+        "Escrib\u00ed la direcci\u00f3n de entrega."
+      );
+      return;
+    }
+
+    if (
+      paymentMethod.value === "cash" &&
+      cashAmount.value &&
+      Number(cashAmount.value) < cartGrandTotal()
+    ) {
+      showCheckoutError(
+        "El monto en efectivo no puede ser menor al total."
+      );
+      return;
+    }
+
+    confirmOrderButton.disabled = true;
+    confirmOrderButton.textContent =
+      "Enviando pedido...";
+
+    try {
+      const order =
+        await saveOrderToSupabase();
+
+      closeCheckoutModal();
+
+      successOrderNumber.textContent =
+        `#${order.id}`;
+
+      cart = [];
+      saveCart();
+      updateCartBar();
+
+      checkoutForm.reset();
+      deliveryType.value = "delivery";
+      paymentMethod.value = "cash";
+
+      orderSuccessModal.classList.add("open");
+      orderSuccessModal.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+      document.body.classList.add("modal-open");
+
+    } catch (error) {
+      console.error(
+        "Error confirmando pedido:",
+        error
+      );
+
+      showCheckoutError(
+        "No se pudo enviar el pedido. Revis\u00e1 la configuraci\u00f3n de Supabase."
+      );
+    } finally {
+      confirmOrderButton.disabled = false;
+      confirmOrderButton.textContent =
+        "Confirmar pedido";
+    }
+  }
+);
+
+deliveryType.addEventListener(
+  "change",
+  syncDeliveryFields
+);
+
+paymentMethod.addEventListener(
+  "change",
+  syncPaymentFields
+);
+
+closeCheckoutButton.addEventListener(
+  "click",
+  closeCheckoutModal
+);
+
+document
+  .querySelector("[data-close-checkout]")
+  ?.addEventListener(
+    "click",
+    closeCheckoutModal
+  );
+
+closeSuccessButton.addEventListener(
+  "click",
+  () => {
+    orderSuccessModal.classList.remove("open");
+    orderSuccessModal.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+    document.body.classList.remove("modal-open");
+  }
+);
+
 closeProductButton.addEventListener(
   "click",
   closeProductModal
@@ -1135,9 +1462,15 @@ document
 continueOrderButton.addEventListener(
   "click",
   () => {
-    showToast(
-      "El siguiente paso ser\u00e1 configurar entrega, pago y confirmaci\u00f3n."
-    );
+    if (!cart.length) {
+      showToast(
+        "Agreg\u00e1 al menos un producto antes de continuar."
+      );
+      return;
+    }
+
+    closeCartModal();
+    openCheckoutModal();
   }
 );
 
@@ -1145,6 +1478,15 @@ document.addEventListener(
   "keydown",
   (event) => {
     if (event.key !== "Escape") {
+      return;
+    }
+
+    if (orderSuccessModal.classList.contains("open")) {
+      return;
+    }
+
+    if (checkoutModal.classList.contains("open")) {
+      closeCheckoutModal();
       return;
     }
 
