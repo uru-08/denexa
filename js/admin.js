@@ -290,19 +290,32 @@ async function deleteTableRow(tableName, id) {
 
 
 async function uploadProductImage(blob) {
-  const safeBusinessId = String(selectedBusiness.id);
+  if (!blob) {
+    throw new Error(
+      "Storage: no hay una imagen preparada para subir."
+    );
+  }
+
+  const safeBusinessId =
+    String(selectedBusiness.id);
+
   const fileName =
     `${Date.now()}-${Math.random().toString(36).slice(2,10)}.jpg`;
+
   const objectPath =
     `${safeBusinessId}/${fileName}`;
 
+  const uploadUrl =
+    `${SUPABASE_URL}/storage/v1/object/product-images/${objectPath}`;
+
   const response = await fetch(
-    `${SUPABASE_URL}/storage/v1/object/product-images/${objectPath}`,
+    uploadUrl,
     {
       method: "POST",
       headers: {
         apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
+        Authorization:
+          `Bearer ${SUPABASE_KEY}`,
         "Content-Type": "image/jpeg",
         "x-upsert": "false"
       },
@@ -310,15 +323,112 @@ async function uploadProductImage(blob) {
     }
   );
 
-  const responseText = await response.text();
+  const responseText =
+    await response.text();
 
   if (!response.ok) {
     throw new Error(
-      `Storage ${response.status}: ${responseText}`
+      `Storage ${response.status}: ${responseText || response.statusText}`
     );
   }
 
-  return `${SUPABASE_URL}/storage/v1/object/public/product-images/${objectPath}`;
+  const publicUrl =
+    `${SUPABASE_URL}/storage/v1/object/public/product-images/${objectPath}`;
+
+  if (!publicUrl.startsWith("http")) {
+    throw new Error(
+      "Storage: no se pudo generar la URL publica."
+    );
+  }
+
+  return publicUrl;
+}
+
+async function updateProductAndVerify(
+  productId,
+  payload
+) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/products?id=eq.${encodeURIComponent(productId)}&select=id,image_url`,
+      {
+        method: "PATCH",
+        headers: supabaseHeaders({
+          Prefer: "return=representation"
+        }),
+        body: JSON.stringify(payload)
+      }
+    );
+
+  let rows = [];
+
+  if (responseText.trim()) {
+    rows = JSON.parse(responseText);
+  }
+
+  const updated =
+    Array.isArray(rows)
+      ? rows[0]
+      : rows;
+
+  if (!updated?.id) {
+    throw new Error(
+      "Producto: Supabase no devolvio el producto actualizado."
+    );
+  }
+
+  if (
+    payload.image_url &&
+    updated.image_url !== payload.image_url
+  ) {
+    throw new Error(
+      "Producto: la URL de la imagen no quedo guardada."
+    );
+  }
+
+  return updated;
+}
+
+async function insertProductAndVerify(payload) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/products?select=id,image_url`,
+      {
+        method: "POST",
+        headers: supabaseHeaders({
+          Prefer: "return=representation"
+        }),
+        body: JSON.stringify(payload)
+      }
+    );
+
+  let rows = [];
+
+  if (responseText.trim()) {
+    rows = JSON.parse(responseText);
+  }
+
+  const inserted =
+    Array.isArray(rows)
+      ? rows[0]
+      : rows;
+
+  if (!inserted?.id) {
+    throw new Error(
+      "Producto: Supabase no devolvio el producto creado."
+    );
+  }
+
+  if (
+    payload.image_url &&
+    inserted.image_url !== payload.image_url
+  ) {
+    throw new Error(
+      "Producto: la URL de la imagen no quedo guardada."
+    );
+  }
+
+  return inserted;
 }
 
 async function getSelectedBusinessCategories() {
@@ -2317,15 +2427,22 @@ productForm.addEventListener(
             : null
       };
 
+      if (
+        croppedProductImageBlob &&
+        !imageUrl
+      ) {
+        throw new Error(
+          "Imagen: no se genero una URL para guardar."
+        );
+      }
+
       if (editingProductId) {
-        await updateTableRow(
-          "products",
+        await updateProductAndVerify(
           editingProductId,
           payload
         );
       } else {
-        await insertTableRow(
-          "products",
+        await insertProductAndVerify(
           payload
         );
       }
@@ -2357,7 +2474,14 @@ productForm.addEventListener(
         message.includes("storage")
       ) {
         productFormMessage.textContent =
-          "No se pudo subir la imagen. Revis\u00e1 las policies del bucket product-images.";
+          "La foto no pudo subirse a Supabase Storage. Ejecuta el archivo SQL de la v29 una sola vez y volve a probar.";
+      } else if (
+        message.includes("imagen") ||
+        message.includes("Imagen") ||
+        message.includes("Producto:")
+      ) {
+        productFormMessage.textContent =
+          message;
       } else {
         productFormMessage.textContent =
           editingProductId
