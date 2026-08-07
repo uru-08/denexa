@@ -1,5 +1,10 @@
 const TARGET_BUSINESS_SLUG = "mamma-mia";
 const TARGET_BUSINESS_NAME = "mamma mia";
+const LOCAL_LOGO_URL = "assets/mamma-mia-logo.png";
+
+const welcomeScreen = document.getElementById("welcomeScreen");
+const enterStoreButton = document.getElementById("enterStoreButton");
+const welcomeStatusText = document.getElementById("welcomeStatusText");
 
 const storeName = document.getElementById("storeName");
 const storeNameSmall = document.getElementById("storeNameSmall");
@@ -45,7 +50,6 @@ const checkoutFormError = document.getElementById("checkoutFormError");
 const confirmOrderButton = document.getElementById("confirmOrderButton");
 
 const orderSuccessModal = document.getElementById("orderSuccessModal");
-const successOrderNumber = document.getElementById("successOrderNumber");
 const closeSuccessButton = document.getElementById("closeSuccessButton");
 
 const toast = document.getElementById("toast");
@@ -278,48 +282,44 @@ function applyBusinessBranding() {
   storeNameSmall.textContent = name;
   document.title = `${name} | Pedidos`;
 
-  if (business.primary_color) {
-    document.documentElement.style.setProperty(
-      "--primary",
-      business.primary_color
-    );
-  }
+  document.documentElement.style.setProperty(
+    "--primary",
+    "#0B43A0"
+  );
 
-  if (business.secondary_color) {
-    document.documentElement.style.setProperty(
-      "--secondary",
-      business.secondary_color
-    );
-  }
+  document.documentElement.style.setProperty(
+    "--primary-2",
+    "#0E5BD8"
+  );
 
-  storeStatus.textContent =
-    business.active === false
-      ? "Cerrado"
-      : "Tomando pedidos";
+  document.documentElement.style.setProperty(
+    "--primary-dark",
+    "#052B6C"
+  );
+
+  const isClosed = business.active === false;
+
+  storeStatus.innerHTML = `
+    <span class="status-dot"></span>
+    <span>${isClosed ? "Cerrado" : "Tomando pedidos"}</span>
+  `;
 
   storeStatus.classList.toggle(
     "closed",
-    business.active === false
+    isClosed
   );
 
-  if (business.logo_url) {
-    storeLogo.innerHTML = `
-      <img
-        src="${escapeHTML(business.logo_url)}"
-        alt="${escapeHTML(name)}"
-      >
-    `;
-  } else {
-    const initials = name
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0,2)
-      .map((word) => word[0])
-      .join("")
-      .toUpperCase();
+  welcomeStatusText.textContent =
+    isClosed
+      ? "Cerrado en este momento"
+      : "Tomando pedidos";
 
-    storeLogo.textContent = initials || "MM";
-  }
+  storeLogo.innerHTML = `
+    <img
+      src="${LOCAL_LOGO_URL}"
+      alt="${escapeHTML(name)}"
+    >
+  `;
 
   if (business.address) {
     storeSubtitle.textContent =
@@ -328,14 +328,23 @@ function applyBusinessBranding() {
 }
 
 function renderCatalog() {
-  if (!categories.length) {
+  const visibleCategories = categories.filter(
+    (category) =>
+      products.some(
+        (product) =>
+          String(product.category_id) ===
+          String(category.id)
+      )
+  );
+
+  if (!visibleCategories.length) {
     categoryTabs.innerHTML = "";
     catalogContent.innerHTML =
-      '<div class="empty-card">Todav\u00eda no hay categor\u00edas disponibles.</div>';
+      '<div class="empty-card">Todav\u00eda no hay productos disponibles.</div>';
     return;
   }
 
-  categoryTabs.innerHTML = categories.map((category, index) => `
+  categoryTabs.innerHTML = visibleCategories.map((category, index) => `
     <button
       type="button"
       class="category-tab ${index === 0 ? "active" : ""}"
@@ -367,7 +376,7 @@ function renderCatalog() {
       });
     });
 
-  catalogContent.innerHTML = categories.map((category) => {
+  catalogContent.innerHTML = visibleCategories.map((category) => {
     const categoryProducts = products.filter(
       (product) =>
         String(product.category_id) === String(category.id)
@@ -386,19 +395,9 @@ function renderCatalog() {
           </span>
         </div>
 
-        ${
-          categoryProducts.length
-            ? `
-              <div class="products-grid">
-                ${categoryProducts.map(renderProductCard).join("")}
-              </div>
-            `
-            : `
-              <div class="empty-card">
-                Todav\u00eda no hay productos en esta categor\u00eda.
-              </div>
-            `
-        }
+        <div class="products-grid">
+          ${categoryProducts.map(renderProductCard).join("")}
+        </div>
       </section>
     `;
   }).join("");
@@ -449,7 +448,17 @@ function renderProductCard(product) {
             `
             : `
               <div class="product-image-placeholder">
-                ${escapeHTML(product.name)}
+                <span class="product-placeholder-mark">
+                  ${escapeHTML(
+                    String(product.name || "MM")
+                      .trim()
+                      .split(/\s+/)
+                      .slice(0,2)
+                      .map((word) => word[0])
+                      .join("")
+                      .toUpperCase()
+                  )}
+                </span>
               </div>
             `
         }
@@ -1360,9 +1369,6 @@ checkoutForm.addEventListener(
 
       closeCheckoutModal();
 
-      successOrderNumber.textContent =
-        `#${order.id}`;
-
       cart = [];
       saveCart();
       updateCartBar();
@@ -1428,6 +1434,28 @@ closeSuccessButton.addEventListener(
     );
     document.body.classList.remove("modal-open");
   }
+);
+
+
+function enterStore() {
+  if (!welcomeScreen) {
+    return;
+  }
+
+  welcomeScreen.classList.add("is-leaving");
+
+  document.body.classList.remove("welcome-open");
+
+  window.setTimeout(() => {
+    welcomeScreen.style.display = "none";
+  }, 560);
+}
+
+document.body.classList.add("welcome-open");
+
+enterStoreButton?.addEventListener(
+  "click",
+  enterStore
 );
 
 closeProductButton.addEventListener(
