@@ -53,6 +53,7 @@ const closeProductModalButton = document.getElementById("closeProductModalButton
 const cancelProductButton = document.getElementById("cancelProductButton");
 const productImageInput = document.getElementById("productImageInput");
 const selectProductImageButton = document.getElementById("selectProductImageButton");
+const removeProductImageButton = document.getElementById("removeProductImageButton");
 const productImagePreview = document.getElementById("productImagePreview");
 
 const imageCropModal = document.getElementById("imageCropModal");
@@ -103,6 +104,9 @@ const toast = document.getElementById("toast");
 let businessesCache = [];
 let selectedBusiness = null;
 let editingBusinessId = null;
+let editingProductId = null;
+let existingProductImageUrl = "";
+let removeExistingProductImage = false;
 let croppedProductImageBlob = null;
 let croppedProductImageUrl = "";
 let cropImage = null;
@@ -331,7 +335,7 @@ async function getSelectedBusinessCategories() {
   );
 }
 
-async function openProductModal() {
+async function openProductModal(product = null) {
   if (!selectedBusiness) {
     showToast(
       "Primero seleccion\u00e1 un comercio.",
@@ -340,10 +344,15 @@ async function openProductModal() {
     return;
   }
 
+  editingProductId =
+    product?.id ?? null;
+
+  existingProductImageUrl =
+    product?.image_url || "";
+
+  removeExistingProductImage = false;
+
   productForm.reset();
-  productSortOrder.value = "0";
-  productActive.checked = true;
-  productFeatured.checked = false;
   productFormMessage.textContent = "";
   croppedProductImageBlob = null;
 
@@ -352,8 +361,36 @@ async function openProductModal() {
   }
 
   croppedProductImageUrl = "";
-  productImagePreview.innerHTML =
-    "<span>Sin imagen</span>";
+
+  productModalTitle.textContent =
+    editingProductId
+      ? "Editar producto"
+      : "Crear producto";
+
+  saveProductButton.textContent =
+    editingProductId
+      ? "Guardar cambios"
+      : "Guardar producto";
+
+  selectProductImageButton.textContent =
+    existingProductImageUrl
+      ? "Cambiar imagen"
+      : "Seleccionar imagen";
+
+  removeProductImageButton.hidden =
+    !existingProductImageUrl;
+
+  if (existingProductImageUrl) {
+    productImagePreview.innerHTML = `
+      <img
+        src="${escapeHTML(existingProductImageUrl)}"
+        alt="Imagen actual del producto"
+      >
+    `;
+  } else {
+    productImagePreview.innerHTML =
+      "<span>Sin imagen</span>";
+  }
 
   try {
     const categories =
@@ -377,6 +414,36 @@ async function openProductModal() {
       )
       .join("");
 
+    if (product) {
+      productName.value =
+        product.name || "";
+
+      productCategory.value =
+        String(product.category_id || "");
+
+      productPrice.value =
+        Number(product.price || 0);
+
+      productOldPrice.value =
+        product.old_price ?? "";
+
+      productSortOrder.value =
+        Number(product.sort_order || 0);
+
+      productFeatured.checked =
+        product.featured === true;
+
+      productDescription.value =
+        product.description || "";
+
+      productActive.checked =
+        product.active !== false;
+    } else {
+      productSortOrder.value = "0";
+      productActive.checked = true;
+      productFeatured.checked = false;
+    }
+
     productModal.classList.add("open");
     productModal.setAttribute("aria-hidden", "false");
     document.body.classList.add("modal-open");
@@ -399,6 +466,17 @@ function closeProductModal() {
   productModal.classList.remove("open");
   productModal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("modal-open");
+
+  editingProductId = null;
+  existingProductImageUrl = "";
+  removeExistingProductImage = false;
+  croppedProductImageBlob = null;
+
+  if (croppedProductImageUrl) {
+    URL.revokeObjectURL(croppedProductImageUrl);
+  }
+
+  croppedProductImageUrl = "";
 }
 
 function renderCropCanvas() {
@@ -745,6 +823,31 @@ selectProductImageButton.addEventListener(
   }
 );
 
+removeProductImageButton.addEventListener(
+  "click",
+  () => {
+    croppedProductImageBlob = null;
+
+    if (croppedProductImageUrl) {
+      URL.revokeObjectURL(
+        croppedProductImageUrl
+      );
+    }
+
+    croppedProductImageUrl = "";
+    existingProductImageUrl = "";
+    removeExistingProductImage = true;
+
+    productImagePreview.innerHTML =
+      "<span>Sin imagen</span>";
+
+    selectProductImageButton.textContent =
+      "Seleccionar imagen";
+
+    removeProductImageButton.hidden = true;
+  }
+);
+
 productImageInput.addEventListener(
   "change",
   () => {
@@ -910,6 +1013,11 @@ confirmImageCropButton.addEventListener(
             alt="Vista previa del producto"
           >
         `;
+
+        removeExistingProductImage = false;
+        removeProductImageButton.hidden = false;
+        selectProductImageButton.textContent =
+          "Cambiar imagen";
 
         closeImageCropEditor();
       },
@@ -1930,6 +2038,14 @@ async function loadProducts() {
 
               <button
                 type="button"
+                class="secondary-button compact-button edit-product-button"
+                data-product-id="${escapeHTML(product.id)}"
+              >
+                Editar producto
+              </button>
+
+              <button
+                type="button"
                 class="secondary-button compact-button modifiers-button"
                 data-product-id="${escapeHTML(product.id)}"
               >
@@ -1945,8 +2061,24 @@ async function loadProducts() {
       .getElementById("newProductButton")
       ?.addEventListener(
         "click",
-        openProductModal
+        () => openProductModal()
       );
+
+    container
+      .querySelectorAll(".edit-product-button")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const product = filtered.find(
+            (item) =>
+              String(item.id) ===
+              String(button.dataset.productId)
+          );
+
+          if (product) {
+            openProductModal(product);
+          }
+        });
+      });
 
     container
       .querySelectorAll(".modifiers-button")
@@ -2144,7 +2276,10 @@ productForm.addEventListener(
     productFormMessage.textContent = "";
 
     try {
-      let imageUrl = null;
+      let imageUrl =
+        removeExistingProductImage
+          ? null
+          : existingProductImageUrl || null;
 
       if (croppedProductImageBlob) {
         saveProductButton.textContent =
@@ -2156,35 +2291,49 @@ productForm.addEventListener(
           );
 
         saveProductButton.textContent =
-          "Guardando producto...";
+          editingProductId
+            ? "Guardando cambios..."
+            : "Guardando producto...";
       }
 
-      await insertTableRow(
-        "products",
-        {
-          business_id: selectedBusiness.id,
-          category_id: Number(categoryId),
-          name,
-          description:
-            productDescription.value.trim() ||
-            null,
-          price,
-          image_url: imageUrl,
-          featured:
-            productFeatured.checked,
-          active:
-            productActive.checked,
-          sort_order:
-            Number(productSortOrder.value || 0),
-          old_price:
-            productOldPrice.value
-              ? Number(productOldPrice.value)
-              : null
-        }
-      );
+      const payload = {
+        business_id: selectedBusiness.id,
+        category_id: Number(categoryId),
+        name,
+        description:
+          productDescription.value.trim() ||
+          null,
+        price,
+        image_url: imageUrl,
+        featured:
+          productFeatured.checked,
+        active:
+          productActive.checked,
+        sort_order:
+          Number(productSortOrder.value || 0),
+        old_price:
+          productOldPrice.value
+            ? Number(productOldPrice.value)
+            : null
+      };
+
+      if (editingProductId) {
+        await updateTableRow(
+          "products",
+          editingProductId,
+          payload
+        );
+      } else {
+        await insertTableRow(
+          "products",
+          payload
+        );
+      }
 
       showToast(
-        "Producto creado correctamente.",
+        editingProductId
+          ? "Producto actualizado correctamente."
+          : "Producto creado correctamente.",
         "success"
       );
 
@@ -2196,7 +2345,7 @@ productForm.addEventListener(
       ]);
     } catch (error) {
       console.error(
-        "Error creando producto:",
+        "Error guardando producto:",
         error
       );
 
@@ -2208,15 +2357,20 @@ productForm.addEventListener(
         message.includes("storage")
       ) {
         productFormMessage.textContent =
-          "No se pudo subir la imagen. Revis\u00e1 las pol\u00edticas del bucket product-images.";
+          "No se pudo subir la imagen. Revis\u00e1 las policies del bucket product-images.";
       } else {
         productFormMessage.textContent =
-          "No se pudo crear el producto.";
+          editingProductId
+            ? "No se pudo actualizar el producto."
+            : "No se pudo crear el producto.";
       }
     } finally {
       saveProductButton.disabled = false;
+
       saveProductButton.textContent =
-        "Guardar producto";
+        editingProductId
+          ? "Guardar cambios"
+          : "Guardar producto";
     }
   }
 );
