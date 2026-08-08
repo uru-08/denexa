@@ -1996,3 +1996,345 @@ body{
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
 }
+
+
+/* =========================================================
+   MAMMA MIA V38 - REDISENO VISUAL FUERTE
+   Cambios intencionalmente notorios en mobile.
+========================================================= */
+
+.menu-brand-strip{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:14px 0 12px;
+  padding:12px 14px;
+  border:1px solid #D9E5F5;
+  border-radius:18px;
+  background:linear-gradient(135deg,#FFFFFF 0%,#F0F6FF 100%);
+  box-shadow:0 10px 26px rgba(5,38,95,.08);
+}
+
+.menu-brand-icon{
+  width:48px;
+  height:48px;
+  flex:0 0 48px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(5,38,95,.10);
+  overflow:hidden;
+}
+
+.menu-brand-icon img{
+  width:92%;
+  height:92%;
+  object-fit:contain;
+}
+
+.menu-brand-copy{
+  min-width:0;
+  display:grid;
+  gap:2px;
+}
+
+.menu-brand-copy strong{
+  color:#0B2F70;
+  font-size:.88rem;
+  font-weight:950;
+}
+
+.menu-brand-copy span{
+  color:#6B7890;
+  font-size:.72rem;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.menu-brand-pill{
+  margin-left:auto;
+  padding:6px 9px;
+  border-radius:999px;
+  background:#0A43A8;
+  color:#fff;
+  font-size:.62rem;
+  font-weight:950;
+  white-space:nowrap;
+}
+
+/* Make the duplicated info card calmer */
+.store-info-card{
+  box-shadow:none;
+  background:transparent;
+  border:0;
+  padding:0;
+  gap:8px;
+}
+
+.info-item{
+  background:#fff;
+  box-shadow:0 7px 18px rgba(5,38,95,.06);
+}
+
+/* Stronger editorial section heading */
+.section-heading{
+  margin-top:18px;
+  padding:0 2px 4px;
+}
+
+.section-heading h2{
+  max-width:760px;
+  font-size:clamp(1.7rem,7vw,2.55rem);
+  line-height:1.04;
+}
+
+.section-subtitle{
+  margin-top:10px;
+  color:#718098;
+}
+
+/* Category navigation becomes a clear segmented control */
+.category-tabs{
+  gap:10px;
+  padding-top:14px;
+  padding-bottom:16px;
+}
+
+.category-tab{
+  padding:11px 18px;
+  border-radius:999px;
+  font-size:.8rem;
+}
+
+.category-tab.active{
+  transform:translateY(-1px);
+}
+
+/* PRODUCT CARD OVERHAUL */
+.product-card{
+  position:relative;
+}
+
+.product-info{
+  position:relative;
+}
+
+.product-info::after{
+  content:"Ver opciones";
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:34px;
+  margin-top:12px;
+  padding:7px 11px;
+  border-radius:11px;
+  background:linear-gradient(135deg,#0A43A8,#1266E6);
+  color:#fff;
+  font-size:.72rem;
+  font-weight:950;
+  box-shadow:0 8px 18px rgba(10,67,168,.18);
+}
+
+/* Hide old text CTA if present inside card */
+.product-price{
+  margin-top:10px;
+}
+
+/* Mobile: full image card, like a modern delivery app */
+@media(max-width:720px){
+
+  .store-header{
+    padding-bottom:18px;
+  }
+
+  .store-header-inner{
+    align-items:center;
+  }
+
+  .store-logo{
+    width:52px;
+    height:52px;
+    flex-basis:52px;
+  }
+
+  .store-heading h1{
+    font-size:1.35rem;
+    max-width:44vw;
+  }
+
+  .store-subtitle{
+    display:none;
+  }
+
+  .store-kicker{
+    font-size:.58rem;
+  }
+
+  .store-status{
+    padding:7px 9px;
+    max-width:118px;
+  }
+
+  .main-content{
+    margin-top:0;
+    padding-top:0;
+  }
+
+  .menu-brand-strip{
+    margin-top:14px;
+  }
+
+  .store-info-card{
+    grid-template-columns:1fr 1fr;
+    margin-top:8px;
+  }
+
+  .info-item{
+    min-height:76px;
+    padding:12px;
+    border-radius:16px;
+  }
+
+  .catalog-section{
+    padding-top:20px;
+  }
+
+  .section-heading{
+    margin-top:4px;
+  }
+
+  .section-heading h2{
+    font-size:2rem;
+    max-width:92%;
+  }
+
+  .section-subtitle{
+    max-width:90%;
+    font-size:.82rem;
+  }
+
+  .category-section{
+    gap:13px;
+  }
+
+  .category-section-title{
+    margin-top:2px;
+  }
+
+  .products-grid{
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+
+  .product-card{
+    display:block;
+    min-height:0;
+    border-radius:24px;
+    overflow:hidden;
+    background:#fff;
+    box-shadow:0 14px 34px rgba(5,38,95,.11);
+  }
+
+  .product-image{
+    position:relative;
+    width:100%;
+    height:auto;
+    aspect-ratio:16/9;
+    min-height:0;
+  }
+
+  .product-image img{
+    width:100%;
+    height:100%;
+    min-height:0;
+    object-fit:cover;
+  }
+
+  .product-image-placeholder{
+    width:100%;
+    height:100%;
+    aspect-ratio:16/9;
+    min-height:0;
+  }
+
+  .featured-badge{
+    top:12px;
+    left:12px;
+    padding:7px 10px;
+    font-size:.58rem;
+  }
+
+  .product-info{
+    display:block;
+    padding:16px 16px 17px;
+  }
+
+  .product-info h4{
+    margin:0;
+    padding-right:4px;
+    font-size:1.22rem;
+    line-height:1.12;
+  }
+
+  .product-description{
+    display:block;
+    min-height:0;
+    margin:7px 0 0;
+    color:#6B7890;
+    font-size:.82rem;
+    line-height:1.42;
+    -webkit-line-clamp:unset;
+  }
+
+  .product-price{
+    display:inline-flex;
+    margin-top:12px;
+    padding:7px 10px;
+    background:#EEF5FF;
+    font-size:.84rem;
+  }
+
+  .product-info::after{
+    width:100%;
+    min-height:44px;
+    margin-top:13px;
+    border-radius:13px;
+    font-size:.82rem;
+  }
+
+  .floating-cart{
+    width:calc(100% - 20px);
+    min-height:68px;
+    border-radius:22px;
+    padding:10px 13px;
+  }
+
+  .cart-copy strong{
+    font-size:.92rem;
+  }
+
+  .cart-price{
+    font-size:1.1rem;
+  }
+}
+
+@media(max-width:430px){
+  .menu-brand-pill{
+    display:none;
+  }
+
+  .menu-brand-copy span{
+    max-width:210px;
+  }
+
+  .store-heading h1{
+    max-width:42vw;
+  }
+
+  .section-heading h2{
+    font-size:1.85rem;
+  }
+}
+
