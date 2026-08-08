@@ -1324,6 +1324,144 @@ async function saveOrderToSupabase() {
   return order;
 }
 
+
+const WHATSAPP_ORDER_PHONE = "59892569559";
+
+function whatsappOrderMessage() {
+  const lines = [
+    "\ud83c\udf55 *MAMMA MIA - NUEVO PEDIDO*",
+    "",
+    "\ud83e\uddfe *PEDIDO*",
+    ""
+  ];
+
+  cart.forEach((item) => {
+    const quantity = Number(item.quantity || 1);
+    const productName =
+      String(item.productName || "Producto")
+        .trim()
+        .toUpperCase();
+
+    const sizeOption = item.options.find((option) => {
+      const group =
+        String(option.groupName || "")
+          .trim()
+          .toUpperCase();
+
+      return (
+        group.includes("TAMANO") ||
+        group.includes("TAMA\u00d1O")
+      );
+    });
+
+    const sizeName =
+      sizeOption
+        ? String(sizeOption.optionName || "")
+            .trim()
+            .toUpperCase()
+        : "";
+
+    let title =
+      `${quantity} ${productName}`;
+
+    if (sizeName) {
+      title += ` - ${sizeName}`;
+    }
+
+    lines.push(`*${title}*`);
+
+    item.options.forEach((option) => {
+      if (option === sizeOption) {
+        return;
+      }
+
+      const optionName =
+        String(option.optionName || "").trim();
+
+      if (!optionName) {
+        return;
+      }
+
+      const extra =
+        Number(option.price || 0);
+
+      lines.push(
+        extra > 0
+          ? `+ ${optionName} - ${money(extra)}`
+          : `+ ${optionName}`
+      );
+    });
+
+    lines.push(
+      `Subtotal: *${money(item.total)}*`
+    );
+    lines.push("");
+  });
+
+  const notes =
+    customerNotes.value.trim();
+
+  if (notes) {
+    lines.push("\ud83d\udcdd *OBSERVACIONES*");
+    lines.push(`*${notes.toUpperCase()}*`);
+    lines.push("");
+  }
+
+  lines.push(
+    `\ud83d\udcb5 *TOTAL: ${money(cartGrandTotal())}*`
+  );
+  lines.push("");
+
+  lines.push("\ud83d\udc64 *CLIENTE*");
+  lines.push(customerName.value.trim());
+  lines.push(customerPhone.value.trim());
+  lines.push("");
+
+  if (deliveryType.value === "pickup") {
+    lines.push("\ud83c\udfea *RETIRO EN EL LOCAL*");
+  } else {
+    lines.push("\ud83d\udef5 *DELIVERY*");
+    lines.push(
+      `Direccion: ${customerAddress.value.trim()}`
+    );
+
+    const reference =
+      customerReference.value.trim();
+
+    if (reference) {
+      lines.push(`Referencia: ${reference}`);
+    }
+
+    lines.push("");
+    lines.push("\ud83d\udcb3 *PAGO*");
+
+    if (paymentMethod.value === "cash") {
+      lines.push("Efectivo");
+
+      if (cashAmount.value) {
+        lines.push(
+          `Paga con: ${money(Number(cashAmount.value))}`
+        );
+      }
+    } else {
+      lines.push("Transferencia");
+    }
+  }
+
+  lines.push("");
+  lines.push("--------------------");
+  lines.push("*Pedido realizado desde Mamma Mia*");
+
+  return lines.join("\n");
+}
+
+function whatsappOrderUrl() {
+  return (
+    `https://wa.me/${WHATSAPP_ORDER_PHONE}` +
+    `?text=${encodeURIComponent(whatsappOrderMessage())}`
+  );
+}
+
 checkoutForm.addEventListener(
   "submit",
   async (event) => {
@@ -1381,6 +1519,9 @@ checkoutForm.addEventListener(
       const order =
         await saveOrderToSupabase();
 
+      const whatsappUrl =
+        whatsappOrderUrl();
+
       closeCheckoutModal();
 
       cart = [];
@@ -1392,13 +1533,8 @@ checkoutForm.addEventListener(
       paymentMethod.value = "cash";
       syncDeliveryFields();
 
-      orderSuccessModal.classList.add("open");
-      orderSuccessModal.setAttribute(
-        "aria-hidden",
-        "false"
-      );
-
-      document.body.classList.add("modal-open");
+      window.location.href =
+        whatsappUrl;
 
     } catch (error) {
       console.error(
