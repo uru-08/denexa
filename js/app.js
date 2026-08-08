@@ -1216,7 +1216,6 @@ function syncDeliveryFields() {
     customerAddress.value = "";
     customerReference.value = "";
     cashAmount.value = "";
-    customerNotes.value = "";
     paymentMethod.required = false;
   }
 
@@ -1278,9 +1277,7 @@ async function saveOrderToSupabase() {
           ? Number(cashAmount.value)
           : null,
       notes:
-        deliveryType.value === "delivery"
-          ? customerNotes.value.trim() || null
-          : null,
+        customerNotes.value.trim() || null,
       status:"received",
       total,
       source:"web"
