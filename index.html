@@ -9,7 +9,7 @@
     name="description"
     content="Hac&eacute; tu pedido online en Mamma Mia."
   >
-  <link rel="stylesheet" href="css/app.css?v=27">
+  <link rel="stylesheet" href="css/app.css?v=32">
 </head>
 
 <body>
@@ -205,55 +205,59 @@
 
         <div class="checkout-grid">
 
-          <label class="field full-width">
-            <span>Nombre</span>
-            <input id="customerName" type="text" autocomplete="name" required>
-          </label>
-
-          <label class="field">
-            <span>Tel&eacute;fono</span>
-            <input id="customerPhone" type="tel" inputmode="tel" autocomplete="tel" required>
-          </label>
-
-          <label class="field">
-            <span>Tipo de entrega</span>
+          <label class="field full-width delivery-choice-field">
+            <span>&iquest;C&oacute;mo quer&eacute;s recibir tu pedido?</span>
             <select id="deliveryType" required>
               <option value="delivery">Delivery</option>
               <option value="pickup">Retiro en el local</option>
             </select>
           </label>
 
-          <label id="addressField" class="field full-width">
-            <span>Direcci&oacute;n</span>
-            <input id="customerAddress" type="text" autocomplete="street-address">
-          </label>
-
-          <label id="referenceField" class="field full-width">
-            <span>Referencia / apartamento</span>
-            <input id="customerReference" type="text">
+          <label class="field">
+            <span>Nombre</span>
+            <input id="customerName" type="text" autocomplete="name" required>
           </label>
 
           <label class="field">
-            <span>Forma de pago</span>
-            <select id="paymentMethod" required>
-              <option value="cash">Efectivo</option>
-              <option value="transfer">Transferencia</option>
-            </select>
+            <span>Celular</span>
+            <input id="customerPhone" type="tel" inputmode="tel" autocomplete="tel" required>
           </label>
 
-          <label id="cashAmountField" class="field">
-            <span>&iquest;Con cu&aacute;nto paga?</span>
-            <input id="cashAmount" type="number" min="0" step="1" inputmode="numeric">
-          </label>
+          <div id="deliveryExtraFields" class="checkout-extra-fields full-width">
 
-          <label class="field full-width">
-            <span>Observaciones</span>
-            <textarea
-              id="customerNotes"
-              rows="3"
-              placeholder="Ejemplo: timbre no funciona, sin cebolla, etc."
-            ></textarea>
-          </label>
+            <label id="addressField" class="field full-width">
+              <span>Direcci&oacute;n</span>
+              <input id="customerAddress" type="text" autocomplete="street-address">
+            </label>
+
+            <label id="referenceField" class="field full-width">
+              <span>Referencia / apartamento</span>
+              <input id="customerReference" type="text">
+            </label>
+
+            <label class="field">
+              <span>Forma de pago</span>
+              <select id="paymentMethod">
+                <option value="cash">Efectivo</option>
+                <option value="transfer">Transferencia</option>
+              </select>
+            </label>
+
+            <label id="cashAmountField" class="field">
+              <span>&iquest;Con cu&aacute;nto paga?</span>
+              <input id="cashAmount" type="number" min="0" step="1" inputmode="numeric">
+            </label>
+
+            <label class="field full-width">
+              <span>Observaciones</span>
+              <textarea
+                id="customerNotes"
+                rows="3"
+                placeholder="Ejemplo: timbre no funciona, sin cebolla, etc."
+              ></textarea>
+            </label>
+
+          </div>
 
         </div>
 
@@ -309,7 +313,7 @@
 
   <div id="toast" class="toast" aria-live="polite"></div>
 
-  <script src="js/config.js?v=27"></script>
-  <script src="js/app.js?v=27"></script>
+  <script src="js/config.js?v=32"></script>
+  <script src="js/app.js?v=32"></script>
 </body>
 </html>
