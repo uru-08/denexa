@@ -1415,3 +1415,40 @@ button,
     transition:none !important;
   }
 }
+
+
+/* ==================================================
+   ENTREGA / RETIRO V32
+================================================== */
+
+.delivery-choice-field{
+  padding:13px;
+  border:1px solid #c9dcf8;
+  border-radius:14px;
+  background:var(--surface-soft);
+}
+
+.delivery-choice-field > span{
+  color:var(--primary-dark);
+  font-size:.9rem;
+}
+
+.checkout-extra-fields{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px;
+}
+
+.checkout-extra-fields.full-width{
+  grid-column:1 / -1;
+}
+
+@media(max-width:650px){
+  .checkout-extra-fields{
+    grid-template-columns:1fr;
+  }
+
+  .checkout-extra-fields .full-width{
+    grid-column:auto;
+  }
+}
