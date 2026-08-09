@@ -1888,7 +1888,7 @@ function getOrderItemOptions(itemId) {
 function orderNextActions(order) {
   if (order.status === "received") {
     return [
-      ["approved", "Aceptar pedido", "primary"],
+      ["approved", "Aceptar y avisar", "primary"],
       ["cancelled", "Cancelar", "danger"]
     ];
   }
@@ -1901,7 +1901,13 @@ function orderNextActions(order) {
 
   if (order.status === "preparing") {
     return [
-      ["ready", "Marcar como listo", "primary"]
+      [
+        "ready",
+        order.delivery_type === "pickup"
+          ? "Listo y avisar"
+          : "Marcar como listo",
+        "primary"
+      ]
     ];
   }
 
@@ -1913,7 +1919,7 @@ function orderNextActions(order) {
           : "on_the_way",
         order.delivery_type === "pickup"
           ? "Pedido retirado"
-          : "Enviar delivery",
+          : "Enviar delivery y avisar",
         "primary"
       ]
     ];
@@ -2360,7 +2366,180 @@ async function loadOrders() {
   }
 }
 
+
+function normalizeCustomerWhatsAppPhone(phone) {
+  let digits =
+    String(phone || "")
+      .replace(/\D/g, "");
+
+  if (!digits) {
+    return "";
+  }
+
+  if (
+    digits.length === 9 &&
+    digits.startsWith("09")
+  ) {
+    digits =
+      `598${digits.slice(1)}`;
+  }
+
+  if (
+    digits.length === 8 &&
+    digits.startsWith("9")
+  ) {
+    digits =
+      `598${digits}`;
+  }
+
+  return digits;
+}
+
+function customerWhatsAppNotification(order, nextStatus) {
+  const businessName =
+    getBusinessNameById(order.business_id);
+
+  if (nextStatus === "approved") {
+    return [
+      `\u2705 *${businessName.toUpperCase()}*`,
+      "",
+      "*TU PEDIDO FUE CONFIRMADO*",
+      "",
+      `Hola ${order.customer_name || ""}, recibimos tu pedido y ya fue aceptado.`,
+      "",
+      `Total: *${orderMoney(order.total)}*`,
+      "",
+      "Te avisaremos cuando haya una novedad importante."
+    ].join("\n");
+  }
+
+  if (
+    nextStatus === "ready" &&
+    order.delivery_type === "pickup"
+  ) {
+    return [
+      `\ud83c\udf55 *${businessName.toUpperCase()}*`,
+      "",
+      "*TU PEDIDO ESTA LISTO*",
+      "",
+      `Hola ${order.customer_name || ""}, tu pedido ya esta listo para retirar.`,
+      "",
+      "\ud83c\udfea *RETIRO EN EL LOCAL*",
+      "",
+      "Te esperamos. Gracias por elegirnos."
+    ].join("\n");
+  }
+
+  if (
+    nextStatus === "on_the_way" &&
+    order.delivery_type !== "pickup"
+  ) {
+    return [
+      `\ud83d\udef5 *${businessName.toUpperCase()}*`,
+      "",
+      "*TU PEDIDO ESTA EN CAMINO*",
+      "",
+      `Hola ${order.customer_name || ""}, tu pedido salio para delivery.`,
+      "",
+      `Direccion: ${order.delivery_address || ""}`,
+      "",
+      "En breve lo vas a recibir. Gracias por elegirnos."
+    ].join("\n");
+  }
+
+  return "";
+}
+
+function getCustomerWhatsAppUrl(order, nextStatus) {
+  const phone =
+    normalizeCustomerWhatsAppPhone(
+      order.customer_phone
+    );
+
+  const message =
+    customerWhatsAppNotification(
+      order,
+      nextStatus
+    );
+
+  if (!phone || !message) {
+    return "";
+  }
+
+  return (
+    `https://wa.me/${phone}` +
+    `?text=${encodeURIComponent(message)}`
+  );
+}
+
+function openCustomerWhatsApp(url, reservedWindow = null) {
+  if (!url) {
+    if (reservedWindow && !reservedWindow.closed) {
+      reservedWindow.close();
+    }
+    return;
+  }
+
+  try {
+    if (reservedWindow && !reservedWindow.closed) {
+      reservedWindow.location.href = url;
+      return;
+    }
+  } catch (error) {
+    console.warn(
+      "No se pudo reutilizar la ventana de WhatsApp:",
+      error
+    );
+  }
+
+  const opened =
+    window.open(
+      url,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+  if (!opened) {
+    window.location.href = url;
+  }
+}
+
 async function updateOrderStatus(orderId, status) {
+  const order =
+    ordersCache.find(
+      (item) =>
+        String(item.id) ===
+        String(orderId)
+    );
+
+  if (!order) {
+    showToast(
+      "No se encontro el pedido.",
+      "error"
+    );
+    return;
+  }
+
+  const whatsappUrl =
+    getCustomerWhatsAppUrl(
+      order,
+      status
+    );
+
+  let reservedWhatsAppWindow = null;
+
+  if (whatsappUrl) {
+    try {
+      reservedWhatsAppWindow =
+        window.open(
+          "about:blank",
+          "_blank"
+        );
+    } catch (error) {
+      reservedWhatsAppWindow = null;
+    }
+  }
+
   try {
     await updateTableRow(
       "orders",
@@ -2373,9 +2552,26 @@ async function updateOrderStatus(orderId, status) {
       "success"
     );
 
+    if (whatsappUrl) {
+      openCustomerWhatsApp(
+        whatsappUrl,
+        reservedWhatsAppWindow
+      );
+    }
+
     await loadOrders();
   } catch (error) {
-    console.error("Error actualizando pedido:", error);
+    console.error(
+      "Error actualizando pedido:",
+      error
+    );
+
+    if (
+      reservedWhatsAppWindow &&
+      !reservedWhatsAppWindow.closed
+    ) {
+      reservedWhatsAppWindow.close();
+    }
 
     showToast(
       "No se pudo cambiar el estado del pedido.",
