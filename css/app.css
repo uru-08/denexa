@@ -3050,48 +3050,67 @@ body{
 
 
 /* =========================================================
-   V42 - FIX BOTONES TACTILES
-   Corrige Agregar al pedido y Continuar pedido.
+   V44 - FIX DEFINITIVO DE BOTONES EN MOVIL
 ========================================================= */
 
-/* Solo el carrito flotante necesita translateX(-50%) porque esta centrado
-   con left:50%. Los botones normales NO deben moverse al presionarlos. */
-.primary-action:active{
-  transform:scale(.985) !important;
+.product-actions,
+.cart-summary{
+  position:relative !important;
+  bottom:auto !important;
+  z-index:auto !important;
+  isolation:auto !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
 }
 
-/* El carrito conserva su centrado al presionarlo. */
-.floating-cart:active{
-  transform:translateX(-50%) scale(.985) !important;
-}
-
-/* Toda el area visible del boton recibe el toque. */
-.primary-action{
-  position:relative;
-  z-index:2;
-  width:100%;
-  touch-action:manipulation;
-  user-select:none;
-  -webkit-user-select:none;
-}
-
-/* Los detalles decorativos nunca bloquean el click. */
-.primary-action::after,
-.welcome-button::after{
-  pointer-events:none;
-}
-
-/* Asegurar que las zonas inferiores no queden tapadas por capas vecinas. */
 .product-actions{
-  z-index:20;
+  margin:20px -20px -24px !important;
+  padding:14px 20px max(20px,env(safe-area-inset-bottom)) !important;
+  background:#fff !important;
+  border-top:1px solid var(--line) !important;
 }
 
 .cart-summary{
-  z-index:20;
+  margin:18px -18px -24px !important;
+  padding:16px 18px max(24px,env(safe-area-inset-bottom)) !important;
+  background:#fff !important;
+  border-top:1px solid var(--line) !important;
 }
 
 #addToCartButton,
 #continueOrderButton{
-  pointer-events:auto;
-  cursor:pointer;
+  position:relative !important;
+  z-index:1 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  min-height:52px !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  -webkit-tap-highlight-color:transparent !important;
+  transform:none !important;
+  user-select:none !important;
+  -webkit-user-select:none !important;
+}
+
+#addToCartButton::before,
+#addToCartButton::after,
+#continueOrderButton::before,
+#continueOrderButton::after,
+.primary-action::before,
+.primary-action::after{
+  pointer-events:none !important;
+}
+
+.modal-card{
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-y;
+}
+
+#addToCartButton:active,
+#continueOrderButton:active{
+  transform:none !important;
+  filter:brightness(.96);
 }
