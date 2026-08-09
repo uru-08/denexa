@@ -6,7 +6,7 @@
 
   <title>Proyecto X | Super Panel</title>
 
-  <link rel="stylesheet" href="css/admin.css?v=30">
+  <link rel="stylesheet" href="css/admin.css?v=45">
 </head>
 
 <body>
@@ -116,6 +116,22 @@
           </div>
         </article>
 
+        <article class="metric-card order-metric">
+          <span class="metric-icon">P</span>
+          <div>
+            <small>Pedidos hoy</small>
+            <strong id="ordersTodayCount">0</strong>
+          </div>
+        </article>
+
+        <article class="metric-card order-metric pending">
+          <span class="metric-icon">!</span>
+          <div>
+            <small>Pendientes</small>
+            <strong id="pendingOrdersCount">0</strong>
+          </div>
+        </article>
+
       </div>
 
       <div class="panel welcome-panel">
@@ -134,6 +150,19 @@
           Ir a Comercios
         </button>
 
+      </div>
+
+      <div class="panel dashboard-orders-panel">
+        <div class="orders-panel-title">
+          <div>
+            <p class="eyebrow">ACTIVIDAD</p>
+            <h2>Ultimos pedidos</h2>
+          </div>
+          <button id="dashboardGoOrdersButton" class="secondary-button" type="button">
+            Ver pedidos
+          </button>
+        </div>
+        <div id="dashboardOrdersList">Cargando pedidos...</div>
       </div>
 
     </section>
@@ -166,16 +195,68 @@
     <section id="orders" class="page-section">
       <header class="page-header">
         <div>
-          <p class="eyebrow">OPERACI&Oacute;N</p>
+          <p class="eyebrow">CENTRAL DE PEDIDOS</p>
           <h1>Pedidos</h1>
-          <p class="subtitle">
-            Este m&oacute;dulo se activar&aacute; cuando creemos las tablas de pedidos.
-          </p>
+          <p class="subtitle">Recib&iacute;, acept&aacute; y segu&iacute; cada pedido desde un solo lugar.</p>
         </div>
+        <span class="orders-live-badge">
+          <span class="orders-live-dot"></span>
+          Actualizaci&oacute;n autom&aacute;tica
+        </span>
       </header>
 
-      <div class="panel empty-state">
-        M&oacute;dulo de pedidos pendiente.
+      <div class="orders-summary-grid">
+        <article class="order-summary-card new">
+          <span>Nuevos</span>
+          <strong id="ordersNewCount">0</strong>
+        </article>
+        <article class="order-summary-card preparing">
+          <span>Preparando</span>
+          <strong id="ordersPreparingCount">0</strong>
+        </article>
+        <article class="order-summary-card ready">
+          <span>Listos</span>
+          <strong id="ordersReadyCount">0</strong>
+        </article>
+        <article class="order-summary-card delivered">
+          <span>Entregados hoy</span>
+          <strong id="ordersDeliveredCount">0</strong>
+        </article>
+      </div>
+
+      <div class="panel orders-toolbar-panel">
+        <div class="orders-toolbar">
+          <label>
+            <span>Comercio</span>
+            <select id="ordersBusinessFilter">
+              <option value="all">Todos los comercios</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Estado</span>
+            <select id="ordersStatusFilter">
+              <option value="active">Pedidos activos</option>
+              <option value="all">Todos</option>
+              <option value="received">Nuevos</option>
+              <option value="approved">Aceptados</option>
+              <option value="preparing">En preparaci&oacute;n</option>
+              <option value="ready">Listos</option>
+              <option value="on_the_way">En camino</option>
+              <option value="delivered">Entregados</option>
+              <option value="cancelled">Cancelados</option>
+            </select>
+          </label>
+
+          <button id="refreshOrdersButton" class="secondary-button" type="button">
+            Actualizar
+          </button>
+        </div>
+        <div id="ordersLastUpdate" class="orders-last-update">Esperando datos...</div>
+      </div>
+
+      <div id="ordersList" class="orders-board">
+        <div class="panel loading">Cargando pedidos...</div>
       </div>
     </section>
 
@@ -842,7 +923,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/admin.js?v=30"></script>
+  <script src="js/admin.js?v=45"></script>
 
 </body>
 </html>
