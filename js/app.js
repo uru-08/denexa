@@ -767,7 +767,14 @@ function bindProductFormEvents() {
 
   document
     .getElementById("addToCartButton")
-    ?.addEventListener("click", addCurrentProductToCart);
+    ?.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        addCurrentProductToCart();
+      }
+    );
 }
 
 function getSelectedOptionIds() {
@@ -1660,7 +1667,10 @@ document
 
 continueOrderButton.addEventListener(
   "click",
-  () => {
+  (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     if (!cart.length) {
       showToast(
         "Agreg\u00e1 al menos un producto antes de continuar."
