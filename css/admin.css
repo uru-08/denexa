@@ -1579,3 +1579,38 @@ select{
     justify-items:end;
   }
 }
+
+
+/* =========================================================
+   WHATSAPP ESTADOS V46
+========================================================= */
+
+.orders-whatsapp-note{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:14px;
+  padding:11px 13px;
+  border:1px solid #bfe8cf;
+  border-radius:12px;
+  background:#f2fbf5;
+}
+
+.orders-whatsapp-note strong{
+  flex:0 0 auto;
+  color:#147347;
+  font-size:.74rem;
+}
+
+.orders-whatsapp-note span{
+  color:#49645a;
+  font-size:.72rem;
+  line-height:1.45;
+}
+
+@media(max-width:680px){
+  .orders-whatsapp-note{
+    display:grid;
+    gap:4px;
+  }
+}
