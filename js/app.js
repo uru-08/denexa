@@ -405,18 +405,36 @@ function renderCatalog() {
 
   catalogContent
     .querySelectorAll(".product-card")
-    .forEach((button) => {
-      button.addEventListener("click", () => {
+    .forEach((card) => {
+      const openCardProduct = () => {
         const product = products.find(
           (item) =>
             String(item.id) ===
-            String(button.dataset.productId)
+            String(card.dataset.productId)
         );
 
         if (product) {
           openProduct(product);
         }
-      });
+      };
+
+      card.addEventListener(
+        "click",
+        openCardProduct
+      );
+
+      card.addEventListener(
+        "keydown",
+        (event) => {
+          if (
+            event.key === "Enter" ||
+            event.key === " "
+          ) {
+            event.preventDefault();
+            openCardProduct();
+          }
+        }
+      );
     });
 }
 
@@ -432,10 +450,12 @@ function renderProductCard(product) {
         : money(0);
 
   return `
-    <button
-      type="button"
+    <div
       class="product-card"
+      role="button"
+      tabindex="0"
       data-product-id="${escapeHTML(product.id)}"
+      aria-label="Abrir ${escapeHTML(product.name)}"
     >
       <div class="product-image">
         ${
@@ -493,7 +513,7 @@ function renderProductCard(product) {
           }
         </div>
       </div>
-    </button>
+    </div>
   `;
 }
 
