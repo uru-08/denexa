@@ -3047,3 +3047,51 @@ body{
     font-size:1.63rem;
   }
 }
+
+
+/* =========================================================
+   V42 - FIX BOTONES TACTILES
+   Corrige Agregar al pedido y Continuar pedido.
+========================================================= */
+
+/* Solo el carrito flotante necesita translateX(-50%) porque esta centrado
+   con left:50%. Los botones normales NO deben moverse al presionarlos. */
+.primary-action:active{
+  transform:scale(.985) !important;
+}
+
+/* El carrito conserva su centrado al presionarlo. */
+.floating-cart:active{
+  transform:translateX(-50%) scale(.985) !important;
+}
+
+/* Toda el area visible del boton recibe el toque. */
+.primary-action{
+  position:relative;
+  z-index:2;
+  width:100%;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+/* Los detalles decorativos nunca bloquean el click. */
+.primary-action::after,
+.welcome-button::after{
+  pointer-events:none;
+}
+
+/* Asegurar que las zonas inferiores no queden tapadas por capas vecinas. */
+.product-actions{
+  z-index:20;
+}
+
+.cart-summary{
+  z-index:20;
+}
+
+#addToCartButton,
+#continueOrderButton{
+  pointer-events:auto;
+  cursor:pointer;
+}
