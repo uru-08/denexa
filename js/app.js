@@ -553,28 +553,36 @@ function openProduct(product) {
         : ""
     }
 
-    <div class="product-modal-body">
+    <div class="product-modal-layout">
 
-      <h2>${escapeHTML(product.name)}</h2>
+      <div class="product-modal-scroll">
 
-      ${
-        product.description
-          ? `
-            <p class="product-modal-description">
-              ${escapeHTML(product.description)}
-            </p>
-          `
-          : ""
-      }
+        <div class="product-modal-body">
 
-      <div id="liveProductPrice" class="live-price">
-        ${money(product.price)}
-      </div>
+          <h2>${escapeHTML(product.name)}</h2>
 
-      <div id="productFormError" class="form-error"></div>
+          ${
+            product.description
+              ? `
+                <p class="product-modal-description">
+                  ${escapeHTML(product.description)}
+                </p>
+              `
+              : ""
+          }
 
-      <div id="optionGroups" class="option-groups">
-        ${renderOptionGroups(product)}
+          <div id="liveProductPrice" class="live-price">
+            ${money(product.price)}
+          </div>
+
+          <div id="productFormError" class="form-error"></div>
+
+          <div id="optionGroups" class="option-groups">
+            ${renderOptionGroups(product)}
+          </div>
+
+        </div>
+
       </div>
 
       <div class="product-actions">
@@ -769,11 +777,7 @@ function bindProductFormEvents() {
     .getElementById("addToCartButton")
     ?.addEventListener(
       "click",
-      (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        addCurrentProductToCart();
-      }
+      addCurrentProductToCart
     );
 }
 
@@ -1667,10 +1671,7 @@ document
 
 continueOrderButton.addEventListener(
   "click",
-  (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
+  () => {
     if (!cart.length) {
       showToast(
         "Agreg\u00e1 al menos un producto antes de continuar."
