@@ -4,6 +4,7 @@ const LOCAL_LOGO_URL = "assets/mamma-mia-logo.png";
 
 const welcomeScreen = document.getElementById("welcomeScreen");
 const enterStoreButton = document.getElementById("enterStoreButton");
+const orderingStatusNotice = document.getElementById("orderingStatusNotice");
 const welcomeStatusText = document.getElementById("welcomeStatusText");
 
 const storeName = document.getElementById("storeName");
@@ -158,13 +159,84 @@ async function insertRow(tableName, payload, returnRepresentation = true) {
     : data;
 }
 
+
+function applyOrderingStatus() {
+  if (!business) {
+    return;
+  }
+
+  const status =
+    business.ordering_status || "open";
+
+  const isOpen =
+    status === "open";
+
+  if (enterStoreButton) {
+    enterStoreButton.disabled = !isOpen;
+    enterStoreButton.classList.toggle(
+      "disabled",
+      !isOpen
+    );
+
+    const label =
+      enterStoreButton.querySelector("span");
+
+    if (label) {
+      label.textContent =
+        status === "sold_out"
+          ? "Pedidos cerrados por hoy"
+          : status === "closed"
+            ? "Pedidos cerrados"
+            : "Hacer mi pedido";
+    }
+  }
+
+  const welcomeStatusText =
+    document.getElementById("welcomeStatusText");
+
+  if (welcomeStatusText) {
+    welcomeStatusText.textContent =
+      status === "sold_out"
+        ? "Stock agotado por hoy"
+        : status === "closed"
+          ? "Pedidos cerrados"
+          : "Tomando pedidos";
+  }
+
+  if (orderingStatusNotice) {
+    if (status === "sold_out") {
+      orderingStatusNotice.hidden = false;
+      orderingStatusNotice.innerHTML = `
+        <strong>POR HOY AGOTAMOS NUESTRO STOCK</strong>
+        <span>
+          ${escapeHTML(
+            business.sold_out_message ||
+            "Muchas gracias a todos. Nos reencontramos manana."
+          )}
+        </span>
+      `;
+    } else if (status === "closed") {
+      orderingStatusNotice.hidden = false;
+      orderingStatusNotice.innerHTML = `
+        <strong>PEDIDOS CERRADOS</strong>
+        <span>
+          En este momento no estamos tomando nuevos pedidos.
+        </span>
+      `;
+    } else {
+      orderingStatusNotice.hidden = true;
+      orderingStatusNotice.innerHTML = "";
+    }
+  }
+}
+
 async function loadStore() {
   catalogContent.innerHTML =
     '<div class="loading-card">Cargando el men\u00fa...</div>';
 
   try {
     const businesses = await requestJSON(
-      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,active"
+      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,active,ordering_status,sold_out_message"
     );
 
     business =
@@ -185,6 +257,7 @@ async function loadStore() {
     }
 
     applyBusinessBranding();
+    applyOrderingStatus();
 
     const [
       allCategories,
@@ -196,7 +269,7 @@ async function loadStore() {
         "categories?select=id,business_id,name,active,sort_order"
       ),
       requestJSON(
-        "products?select=id,business_id,category_id,name,description,price,image_url,featured,active,sort_order,old_price"
+        "products?select=id,business_id,category_id,name,description,price,image_url,featured,active,available,sort_order,old_price"
       ),
       requestJSON(
         "product_option_groups?select=id,product_id,name,selection_type,required,max_select,sort_order,active"
@@ -414,6 +487,11 @@ function renderCatalog() {
         );
 
         if (product) {
+          if (product.available === false) {
+            showToast("Este producto esta agotado por el momento.");
+            return;
+          }
+
           openProduct(product);
         }
       };
@@ -451,9 +529,9 @@ function renderProductCard(product) {
 
   return `
     <div
-      class="product-card"
+      class="product-card ${product.available === false ? "product-sold-out" : ""}"
       role="button"
-      tabindex="0"
+      tabindex="${product.available === false ? "-1" : "0"}"
       data-product-id="${escapeHTML(product.id)}"
       aria-label="Abrir ${escapeHTML(product.name)}"
     >
@@ -485,9 +563,11 @@ function renderProductCard(product) {
         }
 
         ${
-          product.featured
-            ? '<span class="featured-badge">DESTACADO</span>'
-            : ""
+          product.available === false
+            ? '<span class="sold-out-badge">AGOTADO</span>'
+            : product.featured
+              ? '<span class="featured-badge">DESTACADO</span>'
+              : ""
         }
       </div>
 
