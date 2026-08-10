@@ -3114,3 +3114,143 @@ body{
   transform:none !important;
   filter:brightness(.96);
 }
+
+
+/* =========================================================
+   V47 - SOLUCION ESTRUCTURAL DEFINITIVA DE BOTONES
+   Los botones ya NO viven dentro del area que hace scroll.
+========================================================= */
+
+/* Shells de modal: no scrollean y no hacen hit-testing ambiguo. */
+.product-modal-card,
+.cart-modal-card{
+  overflow:hidden !important;
+  display:flex !important;
+  flex-direction:column !important;
+  max-height:92dvh !important;
+  overscroll-behavior:none !important;
+  touch-action:auto !important;
+}
+
+/* El contenido dinamico del producto ocupa el alto disponible. */
+#productModalContent{
+  min-height:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  flex:1 1 auto !important;
+}
+
+.product-modal-layout{
+  min-height:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  flex:1 1 auto !important;
+}
+
+/* SOLO esta parte del producto puede desplazarse. */
+.product-modal-scroll{
+  min-height:0 !important;
+  flex:1 1 auto !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+}
+
+/* El footer de Agregar queda completamente fuera del scroll. */
+.product-actions{
+  position:relative !important;
+  inset:auto !important;
+  flex:0 0 auto !important;
+  z-index:20 !important;
+  margin:0 !important;
+  padding:12px 16px max(16px,env(safe-area-inset-bottom)) !important;
+  border-top:1px solid var(--line) !important;
+  background:#fff !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  box-shadow:0 -8px 22px rgba(3,27,70,.08) !important;
+}
+
+/* En carrito, SOLO la lista de productos hace scroll. */
+.cart-modal-card{
+  padding-bottom:0 !important;
+}
+
+.cart-modal-card .modal-title-row{
+  flex:0 0 auto !important;
+}
+
+.cart-items{
+  min-height:0 !important;
+  flex:1 1 auto !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+}
+
+/* Continuar queda fuera del scroll. */
+.cart-summary{
+  position:relative !important;
+  inset:auto !important;
+  flex:0 0 auto !important;
+  z-index:20 !important;
+  margin:0 !important;
+  padding:14px 16px max(18px,env(safe-area-inset-bottom)) !important;
+  border-top:1px solid var(--line) !important;
+  background:#fff !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  box-shadow:0 -8px 22px rgba(3,27,70,.08) !important;
+}
+
+/* Botones nativos: una sola superficie real, sin pseudo-capas tocables. */
+#addToCartButton,
+#continueOrderButton{
+  position:relative !important;
+  z-index:30 !important;
+  min-height:52px !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  transform:none !important;
+  -webkit-tap-highlight-color:transparent !important;
+}
+
+#addToCartButton::before,
+#addToCartButton::after,
+#continueOrderButton::before,
+#continueOrderButton::after{
+  pointer-events:none !important;
+}
+
+/* Nada se mueve al tocar; solo cambia luminosidad. */
+#addToCartButton:active,
+#continueOrderButton:active{
+  transform:none !important;
+  filter:brightness(.95);
+}
+
+/* Backdrop no invade el modal visual ni tactil. */
+.modal-backdrop{
+  z-index:0 !important;
+}
+
+.modal-card{
+  z-index:2 !important;
+}
+
+@media(max-width:720px){
+  .product-actions{
+    grid-template-columns:118px minmax(0,1fr) !important;
+    gap:9px !important;
+  }
+
+  #addToCartButton,
+  #continueOrderButton{
+    min-height:54px !important;
+    font-size:.9rem !important;
+  }
+}
