@@ -659,11 +659,12 @@
             <select id="productCategory" required></select>
           </label>
 
-          <label id="productPriceField">
-            Precio
-            <input id="productPrice" type="number" min="0" step="0.01">
+          <label>
+            Precio base
+            <input id="productPrice" type="number" min="0" step="0.01" required>
             <small class="field-help">
-              Solo para productos de precio fijo.
+              En pizzas, coloc&aacute; aqu&iacute; el precio de la muzzarella.
+              Los gustos y extras se suman desde Opciones y extras.
             </small>
           </label>
 
@@ -978,7 +979,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/comercio.js?v=55"></script>
+  <script src="js/comercio.js?v=64"></script>
 
 </body>
 </html>
