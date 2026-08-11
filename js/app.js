@@ -520,12 +520,26 @@ function renderProductCard(product) {
   const productGroups = getProductGroups(product.id);
   const hasOptions = productGroups.length > 0;
 
+  const productCategory =
+    categories.find(
+      (category) =>
+        String(category.id) ===
+        String(product.category_id)
+    );
+
+  const pizzaProduct =
+    normalizeText(
+      productCategory?.name || ""
+    ).includes("pizza");
+
   const priceText =
-    Number(product.price || 0) > 0
-      ? money(product.price)
-      : hasOptions
-        ? "Eleg\u00ed opciones"
-        : money(0);
+    pizzaProduct && hasOptions
+      ? "Eleg\u00ed tama\u00f1o"
+      : Number(product.price || 0) > 0
+        ? money(product.price)
+        : hasOptions
+          ? "Eleg\u00ed opciones"
+          : money(0);
 
   return `
     <div
@@ -604,6 +618,54 @@ function getProductGroups(productId) {
         String(group.product_id) === String(productId)
     )
     .sort(sortByOrderThenId);
+}
+
+
+function currentProductIsPizza() {
+  const category =
+    categories.find(
+      (item) =>
+        String(item.id) ===
+        String(currentProduct?.category_id)
+    );
+
+  return normalizeText(
+    category?.name || ""
+  ).includes("pizza");
+}
+
+function isSizeGroup(group) {
+  const name =
+    normalizeText(group?.name || "");
+
+  if (
+    name.includes("tamano") ||
+    name.includes("medida") ||
+    name.includes("size")
+  ) {
+    return true;
+  }
+
+  const groupOptions =
+    options.filter(
+      (option) =>
+        String(option.group_id) ===
+        String(group?.id)
+    );
+
+  return groupOptions.some((option) => {
+    const optionName =
+      normalizeText(
+        option.name || ""
+      );
+
+    return (
+      optionName.includes("individual") ||
+      optionName.includes("1/2 metro") ||
+      optionName.includes("medio metro") ||
+      optionName.includes("1 metro")
+    );
+  });
 }
 
 function getGroupOptions(groupId) {
@@ -744,9 +806,13 @@ function renderOptionGroups(product) {
                   <strong>${escapeHTML(option.name)}</strong>
                   <small>
                     ${
-                      Number(option.price_delta || 0) > 0
-                        ? `+ ${money(option.price_delta)}`
-                        : "Sin costo adicional"
+                      isSizeGroup(group)
+                        ? money(
+                            Number(option.price_delta || 0)
+                          )
+                        : Number(option.price_delta || 0) > 0
+                          ? `+ ${money(option.price_delta)}`
+                          : "Sin costo adicional"
                     }
                   </small>
                 </span>
@@ -969,8 +1035,13 @@ function clearInvalidSelections() {
 }
 
 function currentUnitPrice() {
+  const pizzaProduct =
+    currentProductIsPizza();
+
   let total =
-    Number(currentProduct?.price || 0);
+    pizzaProduct
+      ? 0
+      : Number(currentProduct?.price || 0);
 
   const selectedIds =
     getSelectedOptionIds();
@@ -978,10 +1049,13 @@ function currentUnitPrice() {
   options
     .filter(
       (option) =>
-        selectedIds.has(String(option.id))
+        selectedIds.has(
+          String(option.id)
+        )
     )
     .forEach((option) => {
-      total += Number(option.price_delta || 0);
+      total +=
+        Number(option.price_delta || 0);
     });
 
   return total;
@@ -1022,6 +1096,9 @@ function validateProductSelection() {
   const productGroups =
     getProductGroups(currentProduct.id);
 
+  const pizzaProduct =
+    currentProductIsPizza();
+
   for (const group of productGroups) {
     const visibleOptions =
       visibleOptionsForGroup(group);
@@ -1031,13 +1108,22 @@ function validateProductSelection() {
     }
 
     const chosen =
-      selectedOptions.get(String(group.id)) || [];
+      selectedOptions.get(
+        String(group.id)
+      ) || [];
+
+    const requiredForThisProduct =
+      pizzaProduct
+        ? isSizeGroup(group)
+        : Boolean(group.required);
 
     if (
-      group.required &&
+      requiredForThisProduct &&
       chosen.length === 0
     ) {
-      return `Eleg\u00ed una opci\u00f3n en ${group.name}.`;
+      return pizzaProduct
+        ? "Eleg\u00ed el tama\u00f1o de la pizza."
+        : `Eleg\u00ed una opci\u00f3n en ${group.name}.`;
     }
 
     const maxSelect =
@@ -1077,12 +1163,20 @@ function addCurrentProductToCart() {
         );
 
         if (option) {
+          const rawOptionPrice =
+            Number(
+              option.price_delta || 0
+            );
+
+          const optionContribution =
+            rawOptionPrice;
+
           selected.push({
             groupId:group.id,
             groupName:group.name,
             optionId:option.id,
             optionName:option.name,
-            price:Number(option.price_delta || 0)
+            price:optionContribution
           });
         }
       });
