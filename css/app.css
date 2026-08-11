@@ -3718,3 +3718,59 @@ body{
     min-height:82px !important;
   }
 }
+
+
+/* =========================================================
+   V65 - AVISO DE STOCK AGOTADO GRANDE Y VISIBLE
+========================================================= */
+
+.welcome-status-message{
+  width:min(720px,92%);
+  margin:18px auto 22px !important;
+  padding:22px 20px !important;
+  border:2px solid #b42318 !important;
+  border-radius:18px !important;
+  background:#fff1f0 !important;
+  box-shadow:0 10px 30px rgba(180,35,24,.16) !important;
+  color:#8f1d14 !important;
+  font-size:1.08rem !important;
+  font-weight:850 !important;
+  line-height:1.5 !important;
+  text-align:center !important;
+}
+
+.welcome-status-message::before{
+  content:"ATENCIÓN";
+  display:block;
+  margin-bottom:8px;
+  font-size:1.25rem;
+  font-weight:950;
+  letter-spacing:.08em;
+  color:#b42318;
+}
+
+@media(max-width:600px){
+  .welcome-status-message{
+    width:calc(100% - 28px);
+    margin:16px auto 20px !important;
+    padding:20px 16px !important;
+    border-radius:16px !important;
+    font-size:1.05rem !important;
+    line-height:1.48 !important;
+  }
+
+  .welcome-status-message::before{
+    font-size:1.18rem;
+  }
+}
+
+@media(min-width:900px){
+  .welcome-status-message{
+    padding:26px 28px !important;
+    font-size:1.15rem !important;
+  }
+
+  .welcome-status-message::before{
+    font-size:1.35rem;
+  }
+}
