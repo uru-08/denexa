@@ -1,4 +1,26 @@
 const navItems = document.querySelectorAll(".nav-item");
+const merchantPanelLogo = document.getElementById("merchantPanelLogo");
+const storeDesignForm = document.getElementById("storeDesignForm");
+const designLogoFile = document.getElementById("designLogoFile");
+const designLogoUrl = document.getElementById("designLogoUrl");
+const designLogoPreview = document.getElementById("designLogoPreview");
+const designPrimaryColor = document.getElementById("designPrimaryColor");
+const designSecondaryColor = document.getElementById("designSecondaryColor");
+const designAccentColor = document.getElementById("designAccentColor");
+const designHeroTitle = document.getElementById("designHeroTitle");
+const designHeroDescription = document.getElementById("designHeroDescription");
+const designButtonText = document.getElementById("designButtonText");
+const designHeroImageFile = document.getElementById("designHeroImageFile");
+const designHeroImageUrl = document.getElementById("designHeroImageUrl");
+const storeDesignMessage = document.getElementById("storeDesignMessage");
+const saveStoreDesignButton = document.getElementById("saveStoreDesignButton");
+const restoreStoreDesignButton = document.getElementById("restoreStoreDesignButton");
+const designPreview = document.getElementById("designPreview");
+const designPreviewLogo = document.getElementById("designPreviewLogo");
+const designPreviewTitle = document.getElementById("designPreviewTitle");
+const designPreviewDescription = document.getElementById("designPreviewDescription");
+const designPreviewButton = document.getElementById("designPreviewButton");
+
 const sections = document.querySelectorAll(".page-section");
 
 const businessModal = document.getElementById("businessModal");
@@ -188,6 +210,10 @@ navItems.forEach((button) => {
 
     if (sectionId === "orders") {
       await loadOrders();
+    }
+
+    if (sectionId === "storeDesign") {
+      fillStoreDesignForm();
     }
   });
 });
@@ -386,6 +412,420 @@ async function deleteTableRow(tableName, id) {
 }
 
 
+
+
+function safeThemeColor(value, fallback) {
+  return /^#[0-9a-f]{6}$/i.test(
+    String(value || "")
+  )
+    ? String(value)
+    : fallback;
+}
+
+function renderMerchantPanelLogo() {
+  if (!merchantPanelLogo) {
+    return;
+  }
+
+  const url =
+    selectedBusiness?.logo_url || "";
+
+  if (url) {
+    merchantPanelLogo.innerHTML = `
+      <img
+        src="${escapeHTML(url)}"
+        alt="${escapeHTML(selectedBusiness?.name || "Logo")}"
+      >
+    `;
+  } else {
+    merchantPanelLogo.innerHTML = "<span>MM</span>";
+  }
+}
+
+function fillStoreDesignForm() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  const primary =
+    safeThemeColor(
+      selectedBusiness.primary_color,
+      "#0B43A0"
+    );
+
+  const secondary =
+    safeThemeColor(
+      selectedBusiness.secondary_color,
+      "#0E5BD8"
+    );
+
+  const accent =
+    safeThemeColor(
+      selectedBusiness.accent_color,
+      "#F4C565"
+    );
+
+  designLogoUrl.value =
+    selectedBusiness.logo_url || "";
+
+  designPrimaryColor.value = primary;
+  designSecondaryColor.value = secondary;
+  designAccentColor.value = accent;
+
+  designHeroTitle.value =
+    selectedBusiness.hero_title ||
+    selectedBusiness.name ||
+    "Mamma Mia";
+
+  designHeroDescription.value =
+    selectedBusiness.hero_description ||
+    "Pizzas y empanadas preparadas para disfrutar. Elegí lo que más te guste y armá tu pedido.";
+
+  designButtonText.value =
+    selectedBusiness.welcome_button_text ||
+    "Hacer mi pedido";
+
+  designHeroImageUrl.value =
+    selectedBusiness.hero_image_url || "";
+
+  updateStoreDesignPreview();
+  renderMerchantPanelLogo();
+}
+
+function updateStoreDesignPreview() {
+  if (!designPreview) {
+    return;
+  }
+
+  const primary =
+    designPrimaryColor?.value || "#0B43A0";
+
+  const secondary =
+    designSecondaryColor?.value || "#0E5BD8";
+
+  const accent =
+    designAccentColor?.value || "#F4C565";
+
+  designPreview.style.setProperty(
+    "--preview-primary",
+    primary
+  );
+
+  designPreview.style.setProperty(
+    "--preview-secondary",
+    secondary
+  );
+
+  designPreview.style.setProperty(
+    "--preview-accent",
+    accent
+  );
+
+  const logoUrl =
+    designLogoUrl?.value.trim() || "";
+
+  designLogoPreview.innerHTML =
+    logoUrl
+      ? `<img src="${escapeHTML(logoUrl)}" alt="Logo">`
+      : "<span>MM</span>";
+
+  designPreviewLogo.innerHTML =
+    logoUrl
+      ? `<img src="${escapeHTML(logoUrl)}" alt="Logo">`
+      : "MM";
+
+  designPreviewTitle.textContent =
+    designHeroTitle?.value.trim() ||
+    selectedBusiness?.name ||
+    "Mamma Mia";
+
+  designPreviewDescription.textContent =
+    designHeroDescription?.value.trim() ||
+    "Pizzas y empanadas preparadas para disfrutar.";
+
+  designPreviewButton.textContent =
+    designButtonText?.value.trim() ||
+    "Hacer mi pedido";
+
+  const heroUrl =
+    designHeroImageUrl?.value.trim() || "";
+
+  designPreview.style.backgroundImage =
+    heroUrl
+      ? `linear-gradient(155deg,${primary}e6,${secondary}e6),url("${heroUrl}")`
+      : `linear-gradient(155deg,${primary},${secondary})`;
+}
+
+async function uploadBrandAsset(file, kind) {
+  if (!file) {
+    return null;
+  }
+
+  const ext =
+    String(file.name || "")
+      .split(".")
+      .pop()
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "") ||
+    "jpg";
+
+  const objectPath =
+    `${selectedBusiness.id}/branding/${kind}-${Date.now()}.${ext}`;
+
+  const uploadUrl =
+    `${SUPABASE_URL}/storage/v1/object/product-images/${objectPath}`;
+
+  const response = await fetch(
+    uploadUrl,
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization:
+          `Bearer ${SUPABASE_KEY}`,
+        "Content-Type":
+          file.type || "image/jpeg",
+        "x-upsert": "false"
+      },
+      body:file
+    }
+  );
+
+  const responseText =
+    await response.text();
+
+  if (!response.ok) {
+    throw new Error(
+      `No se pudo subir la imagen (${response.status}): ${responseText || response.statusText}`
+    );
+  }
+
+  return (
+    `${SUPABASE_URL}/storage/v1/object/public/product-images/${objectPath}`
+  );
+}
+
+async function saveBusinessBrandingRPC(payload) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/rpc/set_business_branding`,
+      {
+        method:"POST",
+        headers:supabaseHeaders({
+          Prefer:"return=representation"
+        }),
+        body:JSON.stringify({
+          p_business_id:
+            Number(selectedBusiness.id),
+          p_logo_url:
+            payload.logo_url || null,
+          p_primary_color:
+            payload.primary_color,
+          p_secondary_color:
+            payload.secondary_color,
+          p_accent_color:
+            payload.accent_color,
+          p_hero_title:
+            payload.hero_title || null,
+          p_hero_description:
+            payload.hero_description || null,
+          p_hero_image_url:
+            payload.hero_image_url || null,
+          p_welcome_button_text:
+            payload.welcome_button_text || null
+        })
+      }
+    );
+
+  const data =
+    responseText.trim()
+      ? JSON.parse(responseText)
+      : null;
+
+  return Array.isArray(data)
+    ? data[0] || null
+    : data;
+}
+
+async function saveStoreDesign() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  saveStoreDesignButton.disabled = true;
+  saveStoreDesignButton.textContent =
+    "Guardando...";
+
+  storeDesignMessage.textContent = "";
+
+  try {
+    let logoUrl =
+      designLogoUrl.value.trim();
+
+    let heroImageUrl =
+      designHeroImageUrl.value.trim();
+
+    if (designLogoFile.files?.[0]) {
+      logoUrl =
+        await uploadBrandAsset(
+          designLogoFile.files[0],
+          "logo"
+        );
+    }
+
+    if (designHeroImageFile.files?.[0]) {
+      heroImageUrl =
+        await uploadBrandAsset(
+          designHeroImageFile.files[0],
+          "hero"
+        );
+    }
+
+    const payload = {
+      logo_url:logoUrl,
+      primary_color:
+        designPrimaryColor.value,
+      secondary_color:
+        designSecondaryColor.value,
+      accent_color:
+        designAccentColor.value,
+      hero_title:
+        designHeroTitle.value.trim(),
+      hero_description:
+        designHeroDescription.value.trim(),
+      hero_image_url:heroImageUrl,
+      welcome_button_text:
+        designButtonText.value.trim()
+    };
+
+    const saved =
+      await saveBusinessBrandingRPC(
+        payload
+      );
+
+    if (!saved?.id) {
+      throw new Error(
+        "Supabase no devolvió el diseño guardado."
+      );
+    }
+
+    Object.assign(
+      selectedBusiness,
+      saved
+    );
+
+    designLogoUrl.value =
+      saved.logo_url || "";
+
+    designHeroImageUrl.value =
+      saved.hero_image_url || "";
+
+    designLogoFile.value = "";
+    designHeroImageFile.value = "";
+
+    updateStoreDesignPreview();
+    renderMerchantPanelLogo();
+
+    storeDesignMessage.textContent =
+      "Diseño guardado. La tienda ya puede mostrar los cambios.";
+
+    showToast(
+      "Diseño de la tienda actualizado.",
+      "success"
+    );
+  } catch (error) {
+    console.error(
+      "Error guardando diseño:",
+      error
+    );
+
+    storeDesignMessage.textContent =
+      `No se pudo guardar: ${error.message || "error desconocido"}`;
+
+    showToast(
+      "No se pudo guardar el diseño.",
+      "error"
+    );
+  } finally {
+    saveStoreDesignButton.disabled = false;
+    saveStoreDesignButton.textContent =
+      "Guardar diseño";
+  }
+}
+
+function restoreStoreDesignDefaults() {
+  designPrimaryColor.value = "#0B43A0";
+  designSecondaryColor.value = "#0E5BD8";
+  designAccentColor.value = "#F4C565";
+  designHeroTitle.value =
+    selectedBusiness?.name || "Mamma Mia";
+  designHeroDescription.value =
+    "Pizzas y empanadas preparadas para disfrutar. Elegí lo que más te guste y armá tu pedido.";
+  designButtonText.value =
+    "Hacer mi pedido";
+  designHeroImageUrl.value = "";
+  designHeroImageFile.value = "";
+  updateStoreDesignPreview();
+}
+
+[
+  designLogoUrl,
+  designPrimaryColor,
+  designSecondaryColor,
+  designAccentColor,
+  designHeroTitle,
+  designHeroDescription,
+  designButtonText,
+  designHeroImageUrl
+].filter(Boolean).forEach(
+  (field) => {
+    field.addEventListener(
+      "input",
+      updateStoreDesignPreview
+    );
+  }
+);
+
+designLogoFile?.addEventListener(
+  "change",
+  () => {
+    const file =
+      designLogoFile.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const reader =
+      new FileReader();
+
+    reader.onload = () => {
+      const url =
+        String(reader.result || "");
+
+      designLogoPreview.innerHTML =
+        `<img src="${url}" alt="Logo">`;
+
+      designPreviewLogo.innerHTML =
+        `<img src="${url}" alt="Logo">`;
+    };
+
+    reader.readAsDataURL(file);
+  }
+);
+
+storeDesignForm?.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    await saveStoreDesign();
+  }
+);
+
+restoreStoreDesignButton?.addEventListener(
+  "click",
+  restoreStoreDesignDefaults
+);
 
 async function uploadProductImage(blob) {
   if (!blob) {
