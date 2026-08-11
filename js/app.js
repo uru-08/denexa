@@ -11,6 +11,11 @@ const storeName = document.getElementById("storeName");
 const storeNameSmall = document.getElementById("storeNameSmall");
 const storeSubtitle = document.getElementById("storeSubtitle");
 const storeLogo = document.getElementById("storeLogo");
+const welcomeLogo = document.getElementById("welcomeLogo");
+const welcomeBusinessName = document.getElementById("welcomeBusinessName");
+const welcomeBusinessDescription = document.getElementById("welcomeBusinessDescription");
+const welcomeButtonText = document.getElementById("welcomeButtonText");
+
 const storeStatus = document.getElementById("storeStatus");
 
 const categoryTabs = document.getElementById("categoryTabs");
@@ -358,7 +363,7 @@ async function loadStore() {
 
   try {
     const businesses = await requestJSON(
-      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,active,ordering_status,sold_out_message"
+      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,active,ordering_status,sold_out_message"
     );
 
     business =
@@ -471,29 +476,180 @@ function sortByOrderThenId(a, b) {
   return Number(a.id || 0) - Number(b.id || 0);
 }
 
+function hexToDark(hex, factor = 0.62) {
+  const value =
+    /^#[0-9a-f]{6}$/i.test(
+      String(hex || "")
+    )
+      ? String(hex).slice(1)
+      : "0B43A0";
+
+  const r =
+    Math.round(
+      parseInt(value.slice(0,2),16) *
+      factor
+    );
+
+  const g =
+    Math.round(
+      parseInt(value.slice(2,4),16) *
+      factor
+    );
+
+  const b =
+    Math.round(
+      parseInt(value.slice(4,6),16) *
+      factor
+    );
+
+  return (
+    "#" +
+    [r,g,b]
+      .map(
+        (n) =>
+          n
+            .toString(16)
+            .padStart(2,"0")
+      )
+      .join("")
+  );
+}
+
+function safeBrandColor(
+  value,
+  fallback
+) {
+  return /^#[0-9a-f]{6}$/i.test(
+    String(value || "")
+  )
+    ? String(value)
+    : fallback;
+}
+
 function applyBusinessBranding() {
-  const name = business.name || "Mamma Mia";
+  const name =
+    business.name || "Mamma Mia";
+
+  const primary =
+    safeBrandColor(
+      business.primary_color,
+      "#0B43A0"
+    );
+
+  const secondary =
+    safeBrandColor(
+      business.secondary_color,
+      "#0E5BD8"
+    );
+
+  const accent =
+    safeBrandColor(
+      business.accent_color,
+      "#F4C565"
+    );
+
+  const dark =
+    hexToDark(primary,.60);
+
+  const deep =
+    hexToDark(primary,.42);
 
   storeName.textContent = name;
   storeNameSmall.textContent = name;
-  document.title = `${name} | Pedidos`;
+  document.title =
+    `${name} | Pedidos`;
 
   document.documentElement.style.setProperty(
     "--primary",
-    "#0B43A0"
+    primary
   );
 
   document.documentElement.style.setProperty(
     "--primary-2",
-    "#0E5BD8"
+    secondary
   );
 
   document.documentElement.style.setProperty(
     "--primary-dark",
-    "#052B6C"
+    dark
   );
 
-  const isClosed = business.active === false;
+  document.documentElement.style.setProperty(
+    "--primary-deep",
+    deep
+  );
+
+  document.documentElement.style.setProperty(
+    "--accent",
+    accent
+  );
+
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute(
+      "content",
+      primary
+    );
+
+  const logoUrl =
+    business.logo_url ||
+    LOCAL_LOGO_URL;
+
+  storeLogo.innerHTML = `
+    <img
+      src="${escapeHTML(logoUrl)}"
+      alt="${escapeHTML(name)}"
+    >
+  `;
+
+  if (welcomeLogo) {
+    welcomeLogo.src =
+      logoUrl;
+    welcomeLogo.alt =
+      name;
+  }
+
+  if (welcomeBusinessName) {
+    welcomeBusinessName.textContent =
+      business.hero_title ||
+      name;
+  }
+
+  if (welcomeBusinessDescription) {
+    welcomeBusinessDescription.textContent =
+      business.hero_description ||
+      "Pizzas y empanadas preparadas para disfrutar. Elegí lo que más te guste y armá tu pedido.";
+  }
+
+  if (welcomeButtonText) {
+    welcomeButtonText.textContent =
+      business.welcome_button_text ||
+      "Hacer mi pedido";
+  }
+
+  if (welcomeScreen) {
+    const heroImage =
+      business.hero_image_url || "";
+
+    welcomeScreen.classList.toggle(
+      "has-custom-hero",
+      Boolean(heroImage)
+    );
+
+    if (heroImage) {
+      welcomeScreen.style.setProperty(
+        "--custom-hero-image",
+        `url("${heroImage.replaceAll('"','%22')}")`
+      );
+    } else {
+      welcomeScreen.style.removeProperty(
+        "--custom-hero-image"
+      );
+    }
+  }
+
+  const isClosed =
+    business.active === false;
 
   storeStatus.innerHTML = `
     <span class="status-dot"></span>
@@ -510,16 +666,9 @@ function applyBusinessBranding() {
       ? "Cerrado en este momento"
       : "Tomando pedidos";
 
-  storeLogo.innerHTML = `
-    <img
-      src="${LOCAL_LOGO_URL}"
-      alt="${escapeHTML(name)}"
-    >
-  `;
-
   if (business.address) {
     storeSubtitle.textContent =
-      `${business.address} \u00b7 Eleg\u00ed tus favoritos y arm\u00e1 tu pedido.`;
+      `${business.address} · Elegí tus favoritos y armá tu pedido.`;
   }
 }
 
