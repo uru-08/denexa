@@ -231,6 +231,127 @@ function applyOrderingStatus() {
   }
 }
 
+
+function orderingIsOpen() {
+  return (
+    business &&
+    (business.ordering_status || "open") === "open"
+  );
+}
+
+function closeOrderingModals() {
+  if (productModal?.classList.contains("open")) {
+    closeProductModal();
+  }
+
+  if (cartModal?.classList.contains("open")) {
+    closeCartModal();
+  }
+
+  if (checkoutModal?.classList.contains("open")) {
+    closeCheckoutModal();
+  }
+}
+
+function showOrderingClosedMessage() {
+  const status =
+    business?.ordering_status || "closed";
+
+  showToast(
+    status === "sold_out"
+      ? "Por hoy agotamos nuestro stock. No estamos tomando mas pedidos."
+      : "En este momento no estamos tomando pedidos."
+  );
+}
+
+async function refreshOrderingStatusFromSupabase() {
+  if (!business?.id) {
+    return false;
+  }
+
+  try {
+    const rows =
+      await requestJSON(
+        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,active`
+      );
+
+    const fresh =
+      Array.isArray(rows)
+        ? rows[0]
+        : null;
+
+    if (!fresh) {
+      return orderingIsOpen();
+    }
+
+    const previousStatus =
+      business.ordering_status || "open";
+
+    business.ordering_status =
+      fresh.ordering_status || "open";
+
+    business.sold_out_message =
+      fresh.sold_out_message ??
+      business.sold_out_message;
+
+    business.active =
+      fresh.active ?? business.active;
+
+    applyOrderingStatus();
+
+    if (storeStatus) {
+      const status =
+        business.ordering_status || "open";
+
+      const label =
+        status === "sold_out"
+          ? "Stock agotado"
+          : status === "closed"
+            ? "Pedidos cerrados"
+            : "Tomando pedidos";
+
+      storeStatus.innerHTML = `
+        <span class="status-dot"></span>
+        <span>${label}</span>
+      `;
+
+      storeStatus.classList.toggle(
+        "closed",
+        status !== "open"
+      );
+    }
+
+    if (
+      previousStatus === "open" &&
+      business.ordering_status !== "open"
+    ) {
+      closeOrderingModals();
+      showOrderingClosedMessage();
+    }
+
+    return orderingIsOpen();
+  } catch (error) {
+    console.error(
+      "Error verificando estado de pedidos:",
+      error
+    );
+
+    return orderingIsOpen();
+  }
+}
+
+async function requireOrderingOpen() {
+  const isOpen =
+    await refreshOrderingStatusFromSupabase();
+
+  if (!isOpen) {
+    showOrderingClosedMessage();
+    return false;
+  }
+
+  return true;
+}
+
 async function loadStore() {
   catalogContent.innerHTML =
     '<div class="loading-card">Cargando el men\u00fa...</div>';
@@ -480,7 +601,11 @@ function renderCatalog() {
   catalogContent
     .querySelectorAll(".product-card")
     .forEach((card) => {
-      const openCardProduct = () => {
+      const openCardProduct = async () => {
+        if (!(await requireOrderingOpen())) {
+          return;
+        }
+
         const product = products.find(
           (item) =>
             String(item.id) ===
@@ -1580,7 +1705,11 @@ function validateProductSelection() {
   return "";
 }
 
-function addCurrentProductToCart() {
+async function addCurrentProductToCart() {
+  if (!(await requireOrderingOpen())) {
+    return;
+  }
+
   const error =
     validateProductSelection();
 
@@ -2274,9 +2403,19 @@ checkoutForm.addEventListener(
 
     confirmOrderButton.disabled = true;
     confirmOrderButton.textContent =
-      "Enviando pedido...";
+      "Verificando disponibilidad...";
 
     try {
+      if (!(await requireOrderingOpen())) {
+        confirmOrderButton.disabled = false;
+        confirmOrderButton.textContent =
+          "Confirmar pedido";
+        return;
+      }
+
+      confirmOrderButton.textContent =
+        "Enviando pedido...";
+
       const order =
         await saveOrderToSupabase();
 
@@ -2367,7 +2506,13 @@ document.body.classList.add("welcome-open");
 
 enterStoreButton?.addEventListener(
   "click",
-  enterStore
+  async () => {
+    if (!(await requireOrderingOpen())) {
+      return;
+    }
+
+    enterStore();
+  }
 );
 
 closeProductButton.addEventListener(
@@ -2384,7 +2529,13 @@ document
 
 cartButton.addEventListener(
   "click",
-  openCartModal
+  async () => {
+    if (!(await requireOrderingOpen())) {
+      return;
+    }
+
+    openCartModal();
+  }
 );
 
 closeCartButton.addEventListener(
@@ -2401,10 +2552,14 @@ document
 
 continueOrderButton.addEventListener(
   "click",
-  () => {
+  async () => {
+    if (!(await requireOrderingOpen())) {
+      return;
+    }
+
     if (!cart.length) {
       showToast(
-        "Agreg\u00e1 al menos un producto antes de continuar."
+        "Agregá al menos un producto antes de continuar."
       );
       return;
     }
@@ -2442,3 +2597,12 @@ document.addEventListener(
 );
 
 loadStore();
+
+window.setInterval(
+  () => {
+    if (business?.id) {
+      refreshOrderingStatusFromSupabase();
+    }
+  },
+  10000
+);
