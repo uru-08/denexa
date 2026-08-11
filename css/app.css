@@ -3643,3 +3643,78 @@ body{
   display:none !important;
 }
 
+
+
+/* =========================================================
+   V62 - EMPANADAS POR SABOR Y CANTIDAD
+========================================================= */
+
+.empanada-flavor-row{
+  cursor:default !important;
+  justify-content:space-between;
+}
+
+.empanada-flavor-row.has-quantity{
+  border-color:var(--primary);
+  background:var(--surface-soft);
+  box-shadow:0 0 0 2px rgba(11,67,160,.06);
+}
+
+.empanada-quantity-control{
+  display:grid;
+  grid-template-columns:42px 42px 42px;
+  align-items:center;
+  overflow:hidden;
+  flex:0 0 auto;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:#fff;
+}
+
+.empanada-quantity-control button{
+  height:42px;
+  border:0;
+  background:#fff;
+  color:var(--primary);
+  font-size:1.2rem;
+  font-weight:950;
+  cursor:pointer;
+}
+
+.empanada-quantity-control strong{
+  text-align:center;
+  color:var(--text);
+  font-size:.95rem;
+}
+
+.empanadas-main-quantity-hidden{
+  display:none !important;
+}
+
+.empanadas-cart-breakdown{
+  line-height:1.7;
+}
+
+.empanadas-cart-breakdown strong{
+  color:var(--primary);
+}
+
+@media(max-width:520px){
+  .empanada-flavor-row{
+    gap:12px;
+  }
+
+  .empanada-quantity-control{
+    grid-template-columns:38px 36px 38px;
+  }
+
+  .empanada-quantity-control button{
+    height:40px;
+  }
+}
+
+@media(min-width:900px){
+  .empanada-flavor-row{
+    min-height:82px !important;
+  }
+}
