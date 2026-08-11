@@ -3020,12 +3020,11 @@ async function loadProducts() {
 
   if (!selectedBusiness) {
     subtitle.textContent =
-      "Seleccion\u00e1 un comercio para administrar sus productos.";
+      "No se encontro el comercio.";
 
     container.className = "panel empty-state";
     container.textContent =
-      "Entr\u00e1 en Comercios, toc\u00e1 Administrar y luego Productos.";
-
+      "No hay un comercio seleccionado.";
     return;
   }
 
@@ -3041,12 +3040,28 @@ async function loadProducts() {
         ),
         getTableData(
           "categories",
-          "id,name,business_id"
+          "id,name,business_id,active"
         )
       ]);
 
+    const merchantCategories =
+      categories
+        .filter(
+          (category) =>
+            String(category.business_id) ===
+            String(selectedBusiness.id)
+        )
+        .sort(
+          (a, b) =>
+            String(a.name || "")
+              .localeCompare(
+                String(b.name || ""),
+                "es"
+              )
+        );
+
     const categoryMap = new Map(
-      categories.map(
+      merchantCategories.map(
         (category) => [
           String(category.id),
           category.name
@@ -3067,15 +3082,13 @@ async function loadProducts() {
       );
 
     const header = `
-      <div class="section-toolbar">
-
+      <div class="section-toolbar products-main-toolbar">
         <div>
           <strong>
             ${escapeHTML(selectedBusiness.name)}
           </strong>
-
           <small>
-            Productos de este comercio
+            ${filtered.length} producto${filtered.length === 1 ? "" : "s"}
           </small>
         </div>
 
@@ -3086,11 +3099,10 @@ async function loadProducts() {
         >
           + Nuevo producto
         </button>
-
       </div>
     `;
 
-    container.className = "panel";
+    container.className = "panel products-panel";
 
     if (!filtered.length) {
       container.innerHTML =
@@ -3099,11 +3111,45 @@ async function loadProducts() {
           Todav\u00eda no hay productos para este comercio.
         </div>`;
     } else {
-      container.innerHTML =
-        header +
-        filtered.map((product) => `
-          <div class="list-item product-row">
+      const categoryGroups = [];
 
+      merchantCategories.forEach((category) => {
+        const categoryProducts =
+          filtered.filter(
+            (product) =>
+              String(product.category_id) ===
+              String(category.id)
+          );
+
+        if (categoryProducts.length) {
+          categoryGroups.push({
+            id: category.id,
+            name: category.name,
+            products: categoryProducts
+          });
+        }
+      });
+
+      const uncategorized =
+        filtered.filter(
+          (product) =>
+            !categoryMap.has(
+              String(product.category_id)
+            )
+        );
+
+      if (uncategorized.length) {
+        categoryGroups.push({
+          id: "uncategorized",
+          name: "SIN CATEGORIA",
+          products: uncategorized
+        });
+      }
+
+      const productCard = (product) => `
+        <div class="merchant-product-card">
+
+          <div class="merchant-product-main">
             <div class="product-thumb">
               ${
                 product.image_url
@@ -3121,12 +3167,12 @@ async function loadProducts() {
               }
             </div>
 
-            <div>
-              <strong>
+            <div class="merchant-product-copy">
+              <strong class="merchant-product-name">
                 ${escapeHTML(product.name || "Sin nombre")}
               </strong>
 
-              <small>
+              <small class="merchant-product-category">
                 ${escapeHTML(
                   categoryMap.get(
                     String(product.category_id)
@@ -3134,10 +3180,14 @@ async function loadProducts() {
                 )}
               </small>
 
-              <small>
-                <span class="product-price">
-                  $${Number(product.price || 0)}
+              <div class="merchant-product-price-row">
+                <span class="merchant-product-price-label">
+                  Precio base
                 </span>
+
+                <strong class="product-price">
+                  $${Number(product.price || 0)}
+                </strong>
 
                 ${
                   product.old_price
@@ -3148,51 +3198,105 @@ async function loadProducts() {
                     `
                     : ""
                 }
-              </small>
+              </div>
 
-              ${
-                product.featured
-                  ? `
-                    <span class="product-badge">
-                      Destacado
-                    </span>
-                  `
-                  : ""
-              }
+              <div class="merchant-product-badges">
+                <span class="status-pill ${product.active ? "" : "inactive"}">
+                  ${product.active ? "Activo" : "Inactivo"}
+                </span>
+
+                ${
+                  product.available === false
+                    ? `
+                      <span class="merchant-stock-badge sold-out">
+                        Agotado
+                      </span>
+                    `
+                    : `
+                      <span class="merchant-stock-badge available">
+                        Con stock
+                      </span>
+                    `
+                }
+
+                ${
+                  product.featured
+                    ? `
+                      <span class="product-badge">
+                        Destacado
+                      </span>
+                    `
+                    : ""
+                }
+              </div>
             </div>
-
-            <div class="product-management-actions">
-              <span class="status-pill ${product.active ? "" : "inactive"}">
-                ${product.active ? "Activo" : "Inactivo"}
-              </span>
-
-              <button
-                type="button"
-                class="compact-button product-stock-button ${product.available === false ? "stock-off" : "stock-on"}"
-                data-product-id="${escapeHTML(product.id)}"
-                data-next-available="${product.available === false ? "true" : "false"}"
-              >
-                ${product.available === false ? "Reactivar stock" : "Agotar producto"}
-              </button>
-
-              <button
-                type="button"
-                class="secondary-button compact-button edit-product-button"
-                data-product-id="${escapeHTML(product.id)}"
-              >
-                Editar producto
-              </button>
-
-              <button
-                type="button"
-                class="secondary-button compact-button modifiers-button"
-                data-product-id="${escapeHTML(product.id)}"
-              >
-                Opciones y extras
-              </button>
-            </div>
-
           </div>
+
+          <div class="product-management-actions merchant-product-actions">
+            <button
+              type="button"
+              class="compact-button product-stock-button ${product.available === false ? "stock-off" : "stock-on"}"
+              data-product-id="${escapeHTML(product.id)}"
+              data-next-available="${product.available === false ? "true" : "false"}"
+            >
+              ${product.available === false ? "Reactivar stock" : "Agotar producto"}
+            </button>
+
+            <button
+              type="button"
+              class="secondary-button compact-button edit-product-button"
+              data-product-id="${escapeHTML(product.id)}"
+            >
+              Editar
+            </button>
+
+            <button
+              type="button"
+              class="secondary-button compact-button modifiers-button"
+              data-product-id="${escapeHTML(product.id)}"
+            >
+              Opciones y extras
+            </button>
+
+            <button
+              type="button"
+              class="compact-button delete-product-button"
+              data-product-id="${escapeHTML(product.id)}"
+            >
+              Eliminar
+            </button>
+          </div>
+
+        </div>
+      `;
+
+      container.innerHTML =
+        header +
+        categoryGroups.map((group) => `
+          <section
+            class="merchant-product-category-group"
+            data-category-id="${escapeHTML(group.id)}"
+          >
+            <div class="merchant-category-heading">
+              <div>
+                <span class="merchant-category-kicker">
+                  CATEGORIA
+                </span>
+                <h3>
+                  ${escapeHTML(group.name)}
+                </h3>
+              </div>
+
+              <span class="merchant-category-count">
+                ${group.products.length}
+                producto${group.products.length === 1 ? "" : "s"}
+              </span>
+            </div>
+
+            <div class="merchant-category-products">
+              ${group.products.map(productCard).join("")}
+            </div>
+          </section>
         `).join("");
     }
 
@@ -3230,11 +3334,16 @@ async function loadProducts() {
 
             await loadProducts();
           } catch (error) {
-            console.error("Error actualizando stock:", error);
+            console.error(
+              "Error actualizando stock:",
+              error
+            );
+
             showToast(
               "No se pudo actualizar el stock.",
               "error"
             );
+
             button.disabled = false;
           }
         });
@@ -3268,6 +3377,120 @@ async function loadProducts() {
 
           if (product) {
             openModifiersModal(product);
+          }
+        });
+      });
+
+    container
+      .querySelectorAll(".delete-product-button")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          const product =
+            filtered.find(
+              (item) =>
+                String(item.id) ===
+                String(button.dataset.productId)
+            );
+
+          if (!product) {
+            return;
+          }
+
+          const confirmed =
+            window.confirm(
+              `Vas a eliminar "${product.name}".\n\n` +
+              "Esta accion es definitiva. Si solo se termino el stock, usa Agotar producto.\n\n" +
+              "Queres eliminarlo?"
+            );
+
+          if (!confirmed) {
+            return;
+          }
+
+          button.disabled = true;
+          button.textContent = "Eliminando...";
+
+          try {
+            const allGroups =
+              await getTableData(
+                "product_option_groups",
+                "id,product_id"
+              );
+
+            const groupIds =
+              allGroups
+                .filter(
+                  (group) =>
+                    String(group.product_id) ===
+                    String(product.id)
+                )
+                .map(
+                  (group) =>
+                    String(group.id)
+                );
+
+            if (groupIds.length) {
+              const allOptions =
+                await getTableData(
+                  "product_options",
+                  "id,group_id"
+                );
+
+              const optionIds =
+                allOptions
+                  .filter(
+                    (option) =>
+                      groupIds.includes(
+                        String(option.group_id)
+                      )
+                  )
+                  .map(
+                    (option) =>
+                      option.id
+                  );
+
+              for (const optionId of optionIds) {
+                await deleteTableRow(
+                  "product_options",
+                  optionId
+                );
+              }
+
+              for (const groupId of groupIds) {
+                await deleteTableRow(
+                  "product_option_groups",
+                  groupId
+                );
+              }
+            }
+
+            await deleteTableRow(
+              "products",
+              product.id
+            );
+
+            showToast(
+              "Producto eliminado correctamente.",
+              "success"
+            );
+
+            await Promise.all([
+              loadDashboard(),
+              loadProducts()
+            ]);
+          } catch (error) {
+            console.error(
+              "Error eliminando producto:",
+              error
+            );
+
+            showToast(
+              "No se pudo eliminar el producto.",
+              "error"
+            );
+
+            button.disabled = false;
+            button.textContent = "Eliminar";
           }
         });
       });
@@ -3443,6 +3666,23 @@ productForm.addEventListener(
     ) {
       productFormMessage.textContent =
         "Escrib\u00ed un precio v\u00e1lido.";
+      return;
+    }
+
+    const selectedCategoryName =
+      productCategory
+        .options[
+          productCategory.selectedIndex
+        ]?.textContent
+        ?.trim()
+        ?.toUpperCase() || "";
+
+    if (
+      selectedCategoryName.includes("PIZZA") &&
+      price <= 0
+    ) {
+      productFormMessage.textContent =
+        "En pizzas, el precio base debe ser mayor a $0. Coloc\u00e1 el precio de la muzzarella y despu\u00e9s sum\u00e1 los gustos desde Opciones y extras.";
       return;
     }
 
