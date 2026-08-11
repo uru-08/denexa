@@ -9,7 +9,7 @@
     name="description"
     content="Hac&eacute; tu pedido online en Mamma Mia."
   >
-  <link rel="stylesheet" href="css/app.css?v=65">
+  <link rel="stylesheet" href="css/app.css?v=67">
 </head>
 
 <body>
@@ -28,6 +28,7 @@
       <div class="welcome-logo-wrap">
         <div class="welcome-logo-ring"></div>
         <img
+          id="welcomeLogo"
           class="welcome-logo"
           src="assets/mamma-mia-logo.png"
           alt="Mamma Mia Pizzas y Empanadas"
@@ -36,15 +37,15 @@
 
       <div class="welcome-copy">
         <p class="welcome-kicker">BIENVENIDOS A</p>
-        <h1>Mamma Mia</h1>
-        <p>
+        <h1 id="welcomeBusinessName">Mamma Mia</h1>
+        <p id="welcomeBusinessDescription">
           Pizzas y empanadas preparadas para disfrutar.
           Eleg&iacute; lo que m&aacute;s te guste y arm&aacute; tu pedido.
         </p>
       </div>
 
       <button id="enterStoreButton" class="welcome-button" type="button">
-        <span>Hacer mi pedido</span>
+        <span id="welcomeButtonText">Hacer mi pedido</span>
         <span class="welcome-arrow" aria-hidden="true">&rarr;</span>
       </button>
 
@@ -333,6 +334,6 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=32"></script>
-  <script src="js/app.js?v=63"></script>
+  <script src="js/app.js?v=67"></script>
 </body>
 </html>
