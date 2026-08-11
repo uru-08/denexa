@@ -3323,3 +3323,178 @@ body{
   letter-spacing:.08em;
   box-shadow:0 8px 20px rgba(180,35,24,.22);
 }
+
+
+/* =========================================================
+   V57 - MODAL PRODUCTO DESKTOP / PC
+   Mejora solo escritorio. Mobile queda intacto.
+========================================================= */
+
+@media (min-width: 900px){
+
+  .modal{
+    align-items:center !important;
+    justify-content:center !important;
+    padding:28px !important;
+  }
+
+  .product-modal-card{
+    position:relative !important;
+    width:min(1180px,94vw) !important;
+    height:min(820px,90vh) !important;
+    max-height:90vh !important;
+    display:grid !important;
+    grid-template-columns:minmax(420px,48%) minmax(420px,52%) !important;
+    grid-template-rows:1fr !important;
+    overflow:hidden !important;
+    border-radius:24px !important;
+    background:#fff !important;
+  }
+
+  .product-modal-card > .product-modal-image{
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    max-height:none !important;
+    object-fit:cover !important;
+    border-radius:0 !important;
+    grid-column:1 !important;
+    grid-row:1 !important;
+  }
+
+  #productModalContent{
+    grid-column:2 !important;
+    grid-row:1 !important;
+    min-height:0 !important;
+    height:100% !important;
+    display:flex !important;
+    flex-direction:column !important;
+    overflow:hidden !important;
+    background:#fff !important;
+  }
+
+  .product-modal-layout{
+    min-height:0 !important;
+    height:100% !important;
+    display:flex !important;
+    flex-direction:column !important;
+  }
+
+  .product-modal-scroll{
+    min-height:0 !important;
+    flex:1 1 auto !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    padding:28px 30px 18px !important;
+    scrollbar-width:thin;
+  }
+
+  .product-modal-body{
+    padding:0 !important;
+    max-width:none !important;
+  }
+
+  .product-modal-body h2{
+    margin:0 0 6px !important;
+    font-size:2rem !important;
+    line-height:1.05 !important;
+  }
+
+  .product-modal-description{
+    margin:0 0 14px !important;
+    font-size:1rem !important;
+    line-height:1.45 !important;
+  }
+
+  .live-price{
+    margin:0 0 18px !important;
+    font-size:1.3rem !important;
+  }
+
+  .option-groups{
+    display:grid !important;
+    gap:18px !important;
+  }
+
+  .option-group{
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  .option-group-header{
+    position:sticky !important;
+    top:-1px !important;
+    z-index:2 !important;
+    background:#fff !important;
+    padding:10px 0 9px !important;
+    margin-bottom:8px !important;
+    border-bottom:1px solid #e3e8ef !important;
+  }
+
+  .option-group-header h3{
+    font-size:1.15rem !important;
+  }
+
+  .option-list{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:10px !important;
+  }
+
+  .option-row{
+    min-height:78px !important;
+    padding:14px 15px !important;
+    border-radius:16px !important;
+    align-items:center !important;
+  }
+
+  .option-copy strong{
+    font-size:1rem !important;
+  }
+
+  .option-copy small{
+    margin-top:3px !important;
+    font-size:.88rem !important;
+  }
+
+  .product-actions{
+    flex:0 0 auto !important;
+    display:grid !important;
+    grid-template-columns:170px minmax(0,1fr) !important;
+    gap:12px !important;
+    align-items:center !important;
+    padding:16px 20px 18px !important;
+    border-top:1px solid #dfe5ed !important;
+    box-shadow:0 -10px 30px rgba(15,23,42,.07) !important;
+    background:#fff !important;
+  }
+
+  .quantity-control{
+    min-height:58px !important;
+  }
+
+  #addToCartButton{
+    min-height:58px !important;
+    font-size:1rem !important;
+  }
+
+  #closeProductModalButton,
+  .product-modal-card .close-button{
+    position:absolute !important;
+    top:18px !important;
+    right:18px !important;
+    z-index:50 !important;
+    width:52px !important;
+    height:52px !important;
+    border-radius:15px !important;
+  }
+}
+
+@media (min-width: 1200px){
+  .product-modal-card{
+    width:min(1260px,92vw) !important;
+    height:min(860px,88vh) !important;
+    grid-template-columns:46% 54% !important;
+  }
+}
+
