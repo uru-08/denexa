@@ -2044,3 +2044,68 @@ select{
     grid-template-columns:1fr;
   }
 }
+
+
+/* =========================================================
+   LIMPIEZA DE TURNO V51
+========================================================= */
+
+.orders-toolbar-actions{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.orders-cleanup-hint{
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+  margin-top:11px;
+  padding:10px 11px;
+  border:1px solid #f0d8a7;
+  border-radius:10px;
+  background:#fffaf0;
+}
+
+.orders-cleanup-hint strong{
+  flex:0 0 auto;
+  color:#8a5a05;
+  font-size:.70rem;
+}
+
+.orders-cleanup-hint span{
+  color:#6c5a34;
+  font-size:.69rem;
+  line-height:1.4;
+}
+
+.order-action-button.remove{
+  flex:0 0 auto;
+  border:1px solid #e9b0ab;
+  background:#fff;
+  color:#b42318;
+}
+
+.order-action-button.remove:hover{
+  background:#fff0ef;
+}
+
+@media(max-width:680px){
+  .orders-toolbar-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .orders-toolbar-actions button{
+    width:100%;
+  }
+
+  .orders-cleanup-hint{
+    display:grid;
+    gap:4px;
+  }
+
+  .order-action-button.remove{
+    flex:auto;
+  }
+}
