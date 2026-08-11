@@ -681,6 +681,103 @@ function isPlainMuzzarellaOption(option) {
   );
 }
 
+
+function refreshPlainMuzzarellaVisibility(group) {
+  if (!group) {
+    return;
+  }
+
+  const plainOption =
+    getGroupOptions(group.id)
+      .find(isPlainMuzzarellaOption);
+
+  if (!plainOption) {
+    return;
+  }
+
+  const groupElement =
+    productModalContent.querySelector(
+      `.option-group[data-group-id="${group.id}"]`
+    );
+
+  if (!groupElement) {
+    return;
+  }
+
+  const plainInput =
+    groupElement.querySelector(
+      `input[value="${plainOption.id}"]`
+    );
+
+  if (!plainInput) {
+    return;
+  }
+
+  const otherRows =
+    Array.from(
+      groupElement.querySelectorAll(
+        ".option-row"
+      )
+    )
+      .filter(
+        (row) =>
+          String(row.dataset.optionId) !==
+          String(plainOption.id)
+      );
+
+  if (plainInput.checked) {
+    otherRows.forEach((row) => {
+      row.style.display = "none";
+
+      const input =
+        row.querySelector("input");
+
+      if (input) {
+        input.checked = false;
+      }
+    });
+
+    selectedOptions.set(
+      String(group.id),
+      [String(plainOption.id)]
+    );
+
+    return;
+  }
+
+  const anyExtraChecked =
+    otherRows.some(
+      (row) =>
+        row.querySelector("input")?.checked
+    );
+
+  if (anyExtraChecked) {
+    const plainRow =
+      groupElement.querySelector(
+        `.option-row[data-option-id="${plainOption.id}"]`
+      );
+
+    if (plainRow) {
+      plainRow.style.display = "none";
+    }
+
+    return;
+  }
+
+  const plainRow =
+    groupElement.querySelector(
+      `.option-row[data-option-id="${plainOption.id}"]`
+    );
+
+  if (plainRow) {
+    plainRow.style.display = "flex";
+  }
+
+  otherRows.forEach((row) => {
+    row.style.display = "flex";
+  });
+}
+
 function getGroupOptions(groupId) {
   return options
     .filter(
@@ -762,6 +859,11 @@ function openProduct(product) {
   productModal.classList.add("open");
   productModal.setAttribute("aria-hidden","false");
   document.body.classList.add("modal-open");
+
+  getProductGroups(currentProduct.id)
+    .forEach(
+      refreshPlainMuzzarellaVisibility
+    );
 
   refreshDependentOptions();
   refreshPrice();
@@ -945,6 +1047,7 @@ function bindProductFormEvents() {
         );
       }
 
+      refreshPlainMuzzarellaVisibility(group);
       clearInvalidSelections();
       refreshDependentOptions();
       refreshPrice();
@@ -1033,8 +1136,29 @@ function refreshDependentOptions() {
           const visible =
             optionIsVisible(option,selectedIds);
 
+          const plainOption =
+            getGroupOptions(group.id)
+              .find(isPlainMuzzarellaOption);
+
+          const plainInput =
+            plainOption
+              ? groupElement.querySelector(
+                  `input[value="${plainOption.id}"]`
+                )
+              : null;
+
+          const hideBecausePlainSelected =
+            Boolean(
+              plainOption &&
+              plainInput?.checked &&
+              String(option.id) !==
+              String(plainOption.id)
+            );
+
           row.style.display =
-            visible ? "flex" : "none";
+            visible && !hideBecausePlainSelected
+              ? "flex"
+              : "none";
 
           if (visible) {
             visibleCount += 1;
@@ -1045,6 +1169,8 @@ function refreshDependentOptions() {
         "hidden",
         visibleCount === 0
       );
+
+      refreshPlainMuzzarellaVisibility(group);
     });
 }
 
