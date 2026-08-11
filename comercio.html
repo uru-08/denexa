@@ -6,7 +6,7 @@
 
   <title>Mamma Mia | Panel del comercio</title>
 
-  <link rel="stylesheet" href="css/comercio.css?v=66">
+  <link rel="stylesheet" href="css/comercio.css?v=67">
 </head>
 
 <body>
@@ -14,7 +14,9 @@
   <aside class="sidebar">
 
     <div class="brand">
-      <div class="brand-mark merchant-logo-mark">MM</div>
+      <div class="brand-mark merchant-logo-mark" id="merchantPanelLogo">
+        <span>MM</span>
+      </div>
 
       <div>
         <strong>MAMMA MIA</strong>
@@ -47,6 +49,11 @@
       <button class="nav-item" data-section="storeStatus" type="button">
         <span class="nav-icon">E</span>
         <span>Estado del local</span>
+      </button>
+
+      <button class="nav-item" data-section="storeDesign" type="button">
+        <span class="nav-icon">DI</span>
+        <span>Dise&ntilde;o</span>
       </button>
 
     </nav>
@@ -201,6 +208,140 @@
         <button id="merchantSaveMessage" class="secondary-button" type="button">
           Guardar mensaje
         </button>
+      </div>
+    </section>
+
+
+    <section id="storeDesign" class="page-section">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">MI MARCA</p>
+          <h1>Dise&ntilde;o de mi tienda</h1>
+          <p class="subtitle">
+            Cambi&aacute; logo, colores y textos de la web de pedidos sin tocar c&oacute;digo.
+          </p>
+        </div>
+      </header>
+
+      <div class="design-layout">
+        <form id="storeDesignForm" class="panel design-form">
+
+          <div class="design-block">
+            <div>
+              <p class="eyebrow">IDENTIDAD</p>
+              <h2>Logo del comercio</h2>
+              <p class="design-help">Pod&eacute;s subir una imagen nueva o pegar una URL.</p>
+            </div>
+
+            <div class="design-logo-row">
+              <div id="designLogoPreview" class="design-logo-preview">
+                <span>MM</span>
+              </div>
+
+              <div class="design-logo-fields">
+                <label>
+                  Subir nuevo logo
+                  <input id="designLogoFile" type="file" accept="image/*">
+                </label>
+
+                <label>
+                  URL del logo
+                  <input id="designLogoUrl" type="url" placeholder="https://...">
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="design-block">
+            <div>
+              <p class="eyebrow">COLORES</p>
+              <h2>Paleta de la tienda</h2>
+              <p class="design-help">Los cambios se aplican a la web del cliente.</p>
+            </div>
+
+            <div class="design-colors">
+              <label>
+                Color principal
+                <input id="designPrimaryColor" type="color" value="#0B43A0">
+              </label>
+
+              <label>
+                Color secundario
+                <input id="designSecondaryColor" type="color" value="#0E5BD8">
+              </label>
+
+              <label>
+                Color de detalle
+                <input id="designAccentColor" type="color" value="#F4C565">
+              </label>
+            </div>
+          </div>
+
+          <div class="design-block">
+            <div>
+              <p class="eyebrow">PORTADA</p>
+              <h2>Textos de bienvenida</h2>
+            </div>
+
+            <div class="form-grid">
+              <label>
+                T&iacute;tulo
+                <input id="designHeroTitle" type="text" maxlength="80" placeholder="Mamma Mia">
+              </label>
+
+              <label class="full-width">
+                Descripci&oacute;n
+                <textarea id="designHeroDescription" rows="3" maxlength="240" placeholder="Pizzas y empanadas preparadas para disfrutar."></textarea>
+              </label>
+
+              <label>
+                Texto del bot&oacute;n
+                <input id="designButtonText" type="text" maxlength="40" placeholder="Hacer mi pedido">
+              </label>
+
+              <label>
+                Imagen de fondo opcional
+                <input id="designHeroImageFile" type="file" accept="image/*">
+              </label>
+
+              <label class="full-width">
+                URL imagen de fondo
+                <input id="designHeroImageUrl" type="url" placeholder="https://...">
+              </label>
+            </div>
+          </div>
+
+          <div id="storeDesignMessage" class="form-message"></div>
+
+          <div class="design-actions">
+            <button id="saveStoreDesignButton" class="primary-button" type="submit">
+              Guardar dise&ntilde;o
+            </button>
+
+            <button id="restoreStoreDesignButton" class="secondary-button" type="button">
+              Restaurar estilo Mamma Mia
+            </button>
+          </div>
+        </form>
+
+        <aside class="panel design-preview-card">
+          <p class="eyebrow">VISTA PREVIA</p>
+          <div id="designPreview" class="design-preview">
+            <div class="design-preview-top">
+              <div id="designPreviewLogo" class="design-preview-logo">MM</div>
+              <span>Tomando pedidos</span>
+            </div>
+            <div class="design-preview-copy">
+              <small>BIENVENIDOS A</small>
+              <strong id="designPreviewTitle">Mamma Mia</strong>
+              <p id="designPreviewDescription">Pizzas y empanadas preparadas para disfrutar.</p>
+              <button id="designPreviewButton" type="button">Hacer mi pedido</button>
+            </div>
+          </div>
+          <p class="design-preview-note">
+            Esta vista es orientativa. La web del cliente se actualiza al guardar.
+          </p>
+        </aside>
       </div>
     </section>
 
@@ -987,7 +1128,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/comercio.js?v=66"></script>
+  <script src="js/comercio.js?v=67"></script>
 
 </body>
 </html>
