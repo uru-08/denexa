@@ -1886,6 +1886,14 @@ modifierOptionForm.addEventListener(
 );
 
 
+
+function currentMerchantBusinessId() {
+  return (
+    selectedBusiness?.id ??
+    MERCHANT_BUSINESS_ID
+  );
+}
+
 function orderMoney(value) {
   return `$${Number(value || 0).toLocaleString("es-UY")}`;
 }
@@ -2180,11 +2188,14 @@ function renderOrderCard(order) {
 }
 
 function updateOrdersCounters() {
+  const merchantBusinessId =
+    currentMerchantBusinessId();
+
   const merchantOrders =
     ordersCache.filter(
       (order) =>
         String(order.business_id) ===
-        String(MERCHANT_BUSINESS_ID)
+        String(merchantBusinessId)
     );
 
   const today = merchantOrders.filter(
@@ -2291,12 +2302,15 @@ function renderOrders() {
 function renderDashboardOrders() {
   if (!dashboardOrdersList) return;
 
+  const merchantBusinessId =
+    currentMerchantBusinessId();
+
   const latest =
     ordersCache
       .filter(
         (order) =>
           String(order.business_id) ===
-          String(MERCHANT_BUSINESS_ID)
+          String(merchantBusinessId)
       )
       .slice(0, 5);
 
@@ -2646,14 +2660,25 @@ async function archiveSingleOrder(orderId) {
 }
 
 async function clearMerchantShiftOrders() {
+  const merchantBusinessId =
+    currentMerchantBusinessId();
+
   const merchantOrders =
     ordersCache.filter(
       (order) =>
         String(order.business_id) ===
-        String(MERCHANT_BUSINESS_ID)
+        String(merchantBusinessId)
     );
 
-  if (!merchantOrders.length) {
+  let ordersToClear =
+    merchantOrders;
+
+  if (!ordersToClear.length) {
+    ordersToClear =
+      filteredOrders();
+  }
+
+  if (!ordersToClear.length) {
     showToast(
       "No hay pedidos para limpiar.",
       "success"
@@ -2661,9 +2686,27 @@ async function clearMerchantShiftOrders() {
     return;
   }
 
+  console.log(
+    "Limpiar turno:",
+    {
+      selectedBusinessId:
+        selectedBusiness?.id ?? null,
+      configuredMerchantId:
+        MERCHANT_BUSINESS_ID,
+      ordersToClear:
+        ordersToClear.map(
+          (order) => ({
+            id: order.id,
+            business_id: order.business_id,
+            status: order.status
+          })
+        )
+    }
+  );
+
   const confirmed =
     window.confirm(
-      `Vas a limpiar ${merchantOrders.length} pedido${merchantOrders.length === 1 ? "" : "s"} del turno.\n\n` +
+      `Vas a limpiar ${ordersToClear.length} pedido${ordersToClear.length === 1 ? "" : "s"} del turno.\n\n` +
       "Incluye pedidos activos, entregados y cancelados.\n" +
       "El panel quedara en cero para comenzar el proximo turno.\n\n" +
       "Queres continuar?"
@@ -2680,7 +2723,7 @@ async function clearMerchantShiftOrders() {
   }
 
   try {
-    for (const order of merchantOrders) {
+    for (const order of ordersToClear) {
       await updateTableRow(
         "orders",
         order.id,
