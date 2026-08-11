@@ -2660,69 +2660,116 @@ async function archiveSingleOrder(orderId) {
 }
 
 async function clearMerchantShiftOrders() {
-  const merchantBusinessId =
-    currentMerchantBusinessId();
-
-  const merchantOrders =
-    ordersCache.filter(
-      (order) =>
-        String(order.business_id) ===
-        String(merchantBusinessId)
-    );
-
-  let ordersToClear =
-    merchantOrders;
-
-  if (!ordersToClear.length) {
-    ordersToClear =
-      filteredOrders();
-  }
-
-  if (!ordersToClear.length) {
-    showToast(
-      "No hay pedidos para limpiar.",
-      "success"
-    );
-    return;
-  }
-
-  console.log(
-    "Limpiar turno:",
-    {
-      selectedBusinessId:
-        selectedBusiness?.id ?? null,
-      configuredMerchantId:
-        MERCHANT_BUSINESS_ID,
-      ordersToClear:
-        ordersToClear.map(
-          (order) => ({
-            id: order.id,
-            business_id: order.business_id,
-            status: order.status
-          })
-        )
-    }
-  );
-
-  const confirmed =
-    window.confirm(
-      `Vas a limpiar ${ordersToClear.length} pedido${ordersToClear.length === 1 ? "" : "s"} del turno.\n\n` +
-      "Incluye pedidos activos, entregados y cancelados.\n" +
-      "El panel quedara en cero para comenzar el proximo turno.\n\n" +
-      "Queres continuar?"
-    );
-
-  if (!confirmed) {
-    return;
-  }
-
   if (clearShiftOrdersButton) {
     clearShiftOrdersButton.disabled = true;
     clearShiftOrdersButton.textContent =
-      "Limpiando...";
+      "Buscando pedidos...";
   }
 
   try {
+    /*
+      IMPORTANTE:
+      No usamos ordersCache para decidir qu\u00e9 borrar.
+      Hacemos una lectura NUEVA de Supabase al tocar el bot\u00f3n.
+      As\u00ed evitamos cualquier desincronizaci\u00f3n del panel.
+    */
+    const freshOrders =
+      await getTableData(
+        "orders",
+        "id,business_id,status,archived,created_at"
+      );
+
+    const merchantBusinessId =
+      currentMerchantBusinessId();
+
+    let ordersToClear =
+      freshOrders.filter(
+        (order) =>
+          order.archived !== true &&
+          String(order.business_id) ===
+          String(merchantBusinessId)
+      );
+
+    /*
+      Respaldo adicional:
+      Si por una migraci\u00f3n vieja hay pedidos visibles cuyo business_id
+      no coincide, tomamos exactamente los IDs que el panel est\u00e1 mostrando.
+    */
+    if (!ordersToClear.length) {
+      const visibleOrderIds =
+        [
+          ...document.querySelectorAll(
+            "#ordersList [data-remove-order]"
+          )
+        ]
+          .map(
+            (button) =>
+              String(button.dataset.orderId || "")
+          )
+          .filter(Boolean);
+
+      ordersToClear =
+        freshOrders.filter(
+          (order) =>
+            order.archived !== true &&
+            visibleOrderIds.includes(
+              String(order.id)
+            )
+        );
+    }
+
+    /*
+      Tercer respaldo:
+      Si el DOM todav\u00eda no se actualiz\u00f3, usamos los pedidos
+      no archivados que ya tiene el panel en memoria.
+    */
+    if (!ordersToClear.length) {
+      const cachedIds =
+        ordersCache
+          .filter(
+            (order) =>
+              order.archived !== true
+          )
+          .map(
+            (order) =>
+              String(order.id)
+          );
+
+      ordersToClear =
+        freshOrders.filter(
+          (order) =>
+            order.archived !== true &&
+            cachedIds.includes(
+              String(order.id)
+            )
+        );
+    }
+
+    if (!ordersToClear.length) {
+      showToast(
+        "No hay pedidos para limpiar.",
+        "success"
+      );
+      return;
+    }
+
+    const confirmed =
+      window.confirm(
+        `Vas a limpiar ${ordersToClear.length} pedido${ordersToClear.length === 1 ? "" : "s"} del turno.\n\n` +
+        "Se quitaran del panel los pedidos activos, entregados y cancelados.\n" +
+        "El proximo turno comenzara desde cero.\n\n" +
+        "Queres continuar?"
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    if (clearShiftOrdersButton) {
+      clearShiftOrdersButton.textContent =
+        "Limpiando...";
+    }
+
     for (const order of ordersToClear) {
       await updateTableRow(
         "orders",
@@ -2731,12 +2778,15 @@ async function clearMerchantShiftOrders() {
       );
     }
 
+    /*
+      Refrescamos desde Supabase, no solo la vista.
+    */
+    await loadOrders();
+
     showToast(
-      "Turno limpiado. El panel arranca desde cero.",
+      `Turno limpiado: ${ordersToClear.length} pedido${ordersToClear.length === 1 ? "" : "s"} quitado${ordersToClear.length === 1 ? "" : "s"}.`,
       "success"
     );
-
-    await loadOrders();
   } catch (error) {
     console.error(
       "Error limpiando turno:",
@@ -2744,7 +2794,7 @@ async function clearMerchantShiftOrders() {
     );
 
     showToast(
-      "No se pudo limpiar todo el turno.",
+      "No se pudo limpiar el turno. Revisa la consola para ver el error.",
       "error"
     );
   } finally {
