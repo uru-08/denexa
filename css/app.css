@@ -3774,3 +3774,25 @@ body{
     font-size:1.35rem;
   }
 }
+
+
+/* =========================================================
+   V67 - BRANDING DINAMICO DEL COMERCIO
+========================================================= */
+
+.welcome-screen.has-custom-hero{
+  background:
+    linear-gradient(
+      155deg,
+      color-mix(in srgb,var(--primary-deep) 88%,transparent),
+      color-mix(in srgb,var(--primary-2) 84%,transparent)
+    ),
+    var(--custom-hero-image);
+  background-position:center;
+  background-size:cover;
+}
+
+.welcome-logo,
+.store-logo img{
+  object-fit:cover;
+}
