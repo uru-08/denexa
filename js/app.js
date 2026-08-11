@@ -65,6 +65,7 @@ let options = [];
 let currentProduct = null;
 let currentQuantity = 1;
 let selectedOptions = new Map();
+let empanadaFlavorCounts = new Map();
 
 let cart = [];
 
@@ -794,6 +795,123 @@ function syncExclusivePlainOption(group) {
   });
 }
 
+
+function currentProductIsEmpanadas() {
+  const category =
+    categories.find(
+      (item) =>
+        String(item.id) ===
+        String(currentProduct?.category_id)
+    );
+
+  const categoryName =
+    normalizeText(
+      category?.name || ""
+    );
+
+  const productName =
+    normalizeText(
+      currentProduct?.name || ""
+    );
+
+  return (
+    categoryName.includes("empanada") ||
+    productName.includes("empanada")
+  );
+}
+
+function empanadaFlavorCount(optionId) {
+  return Number(
+    empanadaFlavorCounts.get(
+      String(optionId)
+    ) || 0
+  );
+}
+
+function empanadaTotalQuantity() {
+  let total = 0;
+
+  empanadaFlavorCounts.forEach(
+    (quantity) => {
+      total += Number(quantity || 0);
+    }
+  );
+
+  return total;
+}
+
+function empanadaTotalPrice() {
+  let total = 0;
+
+  empanadaFlavorCounts.forEach(
+    (quantity, optionId) => {
+      const option =
+        options.find(
+          (item) =>
+            String(item.id) ===
+            String(optionId)
+        );
+
+      if (!option) {
+        return;
+      }
+
+      total +=
+        Number(quantity || 0) *
+        Number(option.price_delta || 0);
+    }
+  );
+
+  return total;
+}
+
+function selectedEmpanadaFlavors() {
+  const result = [];
+
+  empanadaFlavorCounts.forEach(
+    (quantity, optionId) => {
+      const qty =
+        Number(quantity || 0);
+
+      if (qty <= 0) {
+        return;
+      }
+
+      const option =
+        options.find(
+          (item) =>
+            String(item.id) ===
+            String(optionId)
+        );
+
+      if (!option) {
+        return;
+      }
+
+      const group =
+        groups.find(
+          (item) =>
+            String(item.id) ===
+            String(option.group_id)
+        );
+
+      result.push({
+        optionId:option.id,
+        optionName:option.name,
+        groupId:group?.id ?? option.group_id,
+        groupName:group?.name || "Sabores",
+        quantity:qty,
+        unitPrice:Number(option.price_delta || 0),
+        total:
+          qty *
+          Number(option.price_delta || 0)
+      });
+    }
+  );
+
+  return result;
+}
+
 function getGroupOptions(groupId) {
   return options
     .filter(
@@ -807,6 +925,7 @@ function openProduct(product) {
   currentProduct = product;
   currentQuantity = 1;
   selectedOptions = new Map();
+  empanadaFlavorCounts = new Map();
 
   productModalContent.innerHTML = `
     ${
@@ -855,7 +974,11 @@ function openProduct(product) {
 
       <div class="product-actions">
 
-        <div class="quantity-control">
+        <div class="quantity-control ${
+          currentProductIsEmpanadas()
+            ? "empanadas-main-quantity-hidden"
+            : ""
+        }">
           <button id="decreaseQuantity" type="button" aria-label="Quitar uno">-</button>
           <strong id="quantityValue">1</strong>
           <button id="increaseQuantity" type="button" aria-label="Agregar uno">+</button>
@@ -908,15 +1031,40 @@ function renderOptionGroups(product) {
           <h3>${escapeHTML(group.name)}</h3>
           <span>
             ${
-              group.required
-                ? "OBLIGATORIO"
-                : "OPCIONAL"
+              currentProductIsEmpanadas()
+                ? "ELEG&Iacute; CANTIDADES"
+                : group.required
+                  ? "OBLIGATORIO"
+                  : "OPCIONAL"
             }
           </span>
         </div>
 
         <div class="option-list">
           ${groupOptions.map((option) => {
+            if (currentProductIsEmpanadas()) {
+              return `
+                <div
+                  class="option-row empanada-flavor-row"
+                  data-option-id="${escapeHTML(option.id)}"
+                >
+                  <span class="option-copy">
+                    <strong>${escapeHTML(option.name)}</strong>
+                    <small>${money(option.price_delta)} c/u</small>
+                  </span>
+
+                  <div
+                    class="empanada-quantity-control"
+                    data-empanada-option-id="${escapeHTML(option.id)}"
+                  >
+                    <button type="button" class="empanada-minus">-</button>
+                    <strong class="empanada-flavor-count">0</strong>
+                    <button type="button" class="empanada-plus">+</button>
+                  </div>
+                </div>
+              `;
+            }
+
             const inputType =
               group.selection_type === "single"
                 ? "radio"
@@ -958,6 +1106,63 @@ function renderOptionGroups(product) {
 }
 
 function bindProductFormEvents() {
+  if (currentProductIsEmpanadas()) {
+    productModalContent
+      .querySelectorAll(".empanada-quantity-control")
+      .forEach((control) => {
+        const optionId =
+          String(control.dataset.empanadaOptionId);
+
+        const countElement =
+          control.querySelector(".empanada-flavor-count");
+
+        const syncCount = () => {
+          const count =
+            empanadaFlavorCount(optionId);
+
+          if (countElement) {
+            countElement.textContent =
+              String(count);
+          }
+
+          control
+            .closest(".empanada-flavor-row")
+            ?.classList.toggle(
+              "has-quantity",
+              count > 0
+            );
+
+          refreshPrice();
+          hideProductError();
+        };
+
+        control
+          .querySelector(".empanada-minus")
+          ?.addEventListener("click", () => {
+            empanadaFlavorCounts.set(
+              optionId,
+              Math.max(
+                0,
+                empanadaFlavorCount(optionId) - 1
+              )
+            );
+
+            syncCount();
+          });
+
+        control
+          .querySelector(".empanada-plus")
+          ?.addEventListener("click", () => {
+            empanadaFlavorCounts.set(
+              optionId,
+              empanadaFlavorCount(optionId) + 1
+            );
+
+            syncCount();
+          });
+      });
+  }
+
   const optionInputs =
     productModalContent.querySelectorAll(
       '.option-row input'
@@ -1207,6 +1412,10 @@ function clearInvalidSelections() {
 }
 
 function currentUnitPrice() {
+  if (currentProductIsEmpanadas()) {
+    return empanadaTotalPrice();
+  }
+
   const pizzaProduct =
     currentProductIsPizza();
 
@@ -1221,13 +1430,10 @@ function currentUnitPrice() {
   options
     .filter(
       (option) =>
-        selectedIds.has(
-          String(option.id)
-        )
+        selectedIds.has(String(option.id))
     )
     .forEach((option) => {
-      total +=
-        Number(option.price_delta || 0);
+      total += Number(option.price_delta || 0);
     });
 
   return total;
@@ -1244,14 +1450,42 @@ function refreshPrice() {
     return;
   }
 
-  const unitPrice = currentUnitPrice();
-  const total = unitPrice * currentQuantity;
+  if (currentProductIsEmpanadas()) {
+    const quantity =
+      empanadaTotalQuantity();
+
+    const total =
+      empanadaTotalPrice();
+
+    target.textContent =
+      quantity > 0
+        ? `${quantity} empanada${quantity === 1 ? "" : "s"} - ${money(total)}`
+        : "Elegi los sabores y cantidades";
+
+    button.textContent =
+      quantity > 0
+        ? `Agregar ${quantity} empanada${quantity === 1 ? "" : "s"} - ${money(total)}`
+        : "Elegi al menos 1 empanada";
+
+    button.disabled =
+      quantity === 0;
+
+    return;
+  }
+
+  button.disabled = false;
+
+  const unitPrice =
+    currentUnitPrice();
+
+  const total =
+    unitPrice * currentQuantity;
 
   target.textContent =
     `Total: ${money(total)}`;
 
   button.textContent =
-    `Agregar \u00b7 ${money(total)}`;
+    `Agregar - ${money(total)}`;
 }
 
 function visibleOptionsForGroup(group) {
@@ -1265,6 +1499,14 @@ function visibleOptionsForGroup(group) {
 }
 
 function validateProductSelection() {
+  if (currentProductIsEmpanadas()) {
+    return (
+      empanadaTotalQuantity() > 0
+        ? ""
+        : "Elegi al menos una empanada."
+    );
+  }
+
   const productGroups =
     getProductGroups(currentProduct.id);
 
@@ -1344,6 +1586,51 @@ function addCurrentProductToCart() {
 
   if (error) {
     showProductError(error);
+    return;
+  }
+
+  if (currentProductIsEmpanadas()) {
+    const flavors =
+      selectedEmpanadaFlavors();
+
+    const quantity =
+      empanadaTotalQuantity();
+
+    const total =
+      empanadaTotalPrice();
+
+    cart.push({
+      key:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`,
+      type:"empanadas",
+      productId:currentProduct.id,
+      productName:currentProduct.name,
+      quantity,
+      unitPrice:
+        quantity > 0
+          ? total / quantity
+          : 0,
+      total,
+      flavors,
+      options:flavors.map(
+        (flavor) => ({
+          groupId:flavor.groupId,
+          groupName:flavor.groupName,
+          optionId:flavor.optionId,
+          optionName:
+            `${flavor.quantity} ${flavor.optionName}`,
+          price:flavor.unitPrice
+        })
+      )
+    });
+
+    saveCart();
+    updateCartBar();
+    closeProductModal();
+
+    showToast(
+      `${quantity} empanada${quantity === 1 ? "" : "s"} agregada${quantity === 1 ? "" : "s"} al pedido.`
+    );
+
     return;
   }
 
@@ -1427,6 +1714,7 @@ function closeProductModal() {
 
   currentProduct = null;
   selectedOptions = new Map();
+  empanadaFlavorCounts = new Map();
 }
 
 function openCartModal() {
@@ -1452,46 +1740,92 @@ function renderCart() {
     return;
   }
 
-  cartItems.innerHTML = cart.map((item) => `
-    <article class="cart-item">
+  cartItems.innerHTML =
+    cart.map((item) => {
+      if (
+        item.type === "empanadas" &&
+        Array.isArray(item.flavors)
+      ) {
+        return `
+          <article class="cart-item empanadas-cart-item">
 
-      <div class="cart-item-top">
-        <div>
-          <h3>
-            ${item.quantity} x ${escapeHTML(item.productName)}
-          </h3>
+            <div class="cart-item-top">
+              <div>
+                <h3>
+                  ${item.quantity} EMPANADA${item.quantity === 1 ? "" : "S"}
+                </h3>
 
-          ${
-            item.options.length
-              ? `
-                <p class="cart-item-options">
-                  ${item.options.map(
-                    (option) =>
-                      `${escapeHTML(option.groupName)}: ${escapeHTML(option.optionName)}`
+                <p class="cart-item-options empanadas-cart-breakdown">
+                  ${item.flavors.map(
+                    (flavor) =>
+                      `<strong>${escapeHTML(flavor.quantity)}</strong> ${escapeHTML(flavor.optionName)}`
                   ).join("<br>")}
                 </p>
-              `
-              : ""
-          }
-        </div>
+              </div>
 
-        <strong>${money(item.total)}</strong>
-      </div>
+              <strong>${money(item.total)}</strong>
+            </div>
 
-      <div class="cart-item-bottom">
-        <span>${money(item.unitPrice)} c/u</span>
+            <div class="cart-item-bottom">
+              <span>
+                ${item.flavors.length}
+                sabor${item.flavors.length === 1 ? "" : "es"}
+              </span>
 
-        <button
-          type="button"
-          class="cart-remove"
-          data-cart-key="${escapeHTML(item.key)}"
-        >
-          Eliminar
-        </button>
-      </div>
+              <button
+                type="button"
+                class="cart-remove"
+                data-cart-key="${escapeHTML(item.key)}"
+              >
+                Eliminar
+              </button>
+            </div>
 
-    </article>
-  `).join("");
+          </article>
+        `;
+      }
+
+      return `
+        <article class="cart-item">
+
+          <div class="cart-item-top">
+            <div>
+              <h3>
+                ${item.quantity} x ${escapeHTML(item.productName)}
+              </h3>
+
+              ${
+                item.options.length
+                  ? `
+                    <p class="cart-item-options">
+                      ${item.options.map(
+                        (option) =>
+                          `${escapeHTML(option.groupName)}: ${escapeHTML(option.optionName)}`
+                      ).join("<br>")}
+                    </p>
+                  `
+                  : ""
+              }
+            </div>
+
+            <strong>${money(item.total)}</strong>
+          </div>
+
+          <div class="cart-item-bottom">
+            <span>${money(item.unitPrice)} c/u</span>
+
+            <button
+              type="button"
+              class="cart-remove"
+              data-cart-key="${escapeHTML(item.key)}"
+            >
+              Eliminar
+            </button>
+          </div>
+
+        </article>
+      `;
+    }).join("");
 
   cartItems
     .querySelectorAll(".cart-remove")
@@ -1739,6 +2073,30 @@ function whatsappOrderMessage() {
   ];
 
   cart.forEach((item) => {
+    if (
+      item.type === "empanadas" &&
+      Array.isArray(item.flavors)
+    ) {
+      const quantity =
+        Number(item.quantity || 0);
+
+      lines.push(
+        `*${quantity} EMPANADA${quantity === 1 ? "" : "S"}*`
+      );
+
+      item.flavors.forEach((flavor) => {
+        lines.push(
+          `${flavor.quantity} ${String(flavor.optionName || "").trim().toUpperCase()}`
+        );
+      });
+
+      lines.push(
+        `Subtotal: *${money(item.total)}*`
+      );
+      lines.push("");
+      return;
+    }
+
     const quantity = Number(item.quantity || 1);
     const productName =
       String(item.productName || "Producto")
