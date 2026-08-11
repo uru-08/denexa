@@ -675,21 +675,31 @@ function isPlainMuzzarellaOption(option) {
       option?.name || ""
     );
 
+  const mentionsMuzzarella =
+    name.includes("muzzarella") ||
+    name.includes("mozzarella");
+
+  const saysSolo =
+    name.includes("solo");
+
   return (
-    name.includes("solo muzzarella") ||
-    name.includes("solo mozzarella")
+    mentionsMuzzarella &&
+    saysSolo
   );
 }
 
-
-function refreshPlainMuzzarellaVisibility(group) {
+function syncExclusivePlainOption(group) {
   if (!group) {
     return;
   }
 
+  const groupOptions =
+    getGroupOptions(group.id);
+
   const plainOption =
-    getGroupOptions(group.id)
-      .find(isPlainMuzzarellaOption);
+    groupOptions.find(
+      isPlainMuzzarellaOption
+    );
 
   if (!plainOption) {
     return;
@@ -704,38 +714,52 @@ function refreshPlainMuzzarellaVisibility(group) {
     return;
   }
 
-  const plainInput =
+  const plainRow =
     groupElement.querySelector(
-      `input[value="${plainOption.id}"]`
+      `.option-row[data-option-id="${plainOption.id}"]`
+    );
+
+  const plainInput =
+    plainRow?.querySelector("input");
+
+  const extraRows =
+    Array.from(
+      groupElement.querySelectorAll(
+        ".option-row"
+      )
+    ).filter(
+      (row) =>
+        String(row.dataset.optionId) !==
+        String(plainOption.id)
     );
 
   if (!plainInput) {
     return;
   }
 
-  const otherRows =
-    Array.from(
-      groupElement.querySelectorAll(
-        ".option-row"
-      )
-    )
-      .filter(
-        (row) =>
-          String(row.dataset.optionId) !==
-          String(plainOption.id)
-      );
+  const selectedExtraRows =
+    extraRows.filter(
+      (row) =>
+        row.querySelector("input")?.checked
+    );
 
   if (plainInput.checked) {
-    otherRows.forEach((row) => {
-      row.style.display = "none";
-
+    extraRows.forEach((row) => {
       const input =
         row.querySelector("input");
 
       if (input) {
         input.checked = false;
       }
+
+      row.classList.add(
+        "pizza-exclusive-hidden"
+      );
     });
+
+    plainRow?.classList.remove(
+      "pizza-exclusive-hidden"
+    );
 
     selectedOptions.set(
       String(group.id),
@@ -745,36 +769,28 @@ function refreshPlainMuzzarellaVisibility(group) {
     return;
   }
 
-  const anyExtraChecked =
-    otherRows.some(
-      (row) =>
-        row.querySelector("input")?.checked
+  if (selectedExtraRows.length) {
+    plainRow?.classList.add(
+      "pizza-exclusive-hidden"
     );
 
-  if (anyExtraChecked) {
-    const plainRow =
-      groupElement.querySelector(
-        `.option-row[data-option-id="${plainOption.id}"]`
+    extraRows.forEach((row) => {
+      row.classList.remove(
+        "pizza-exclusive-hidden"
       );
-
-    if (plainRow) {
-      plainRow.style.display = "none";
-    }
+    });
 
     return;
   }
 
-  const plainRow =
-    groupElement.querySelector(
-      `.option-row[data-option-id="${plainOption.id}"]`
+  plainRow?.classList.remove(
+    "pizza-exclusive-hidden"
+  );
+
+  extraRows.forEach((row) => {
+    row.classList.remove(
+      "pizza-exclusive-hidden"
     );
-
-  if (plainRow) {
-    plainRow.style.display = "flex";
-  }
-
-  otherRows.forEach((row) => {
-    row.style.display = "flex";
   });
 }
 
@@ -860,12 +876,13 @@ function openProduct(product) {
   productModal.setAttribute("aria-hidden","false");
   document.body.classList.add("modal-open");
 
+  refreshDependentOptions();
+
   getProductGroups(currentProduct.id)
     .forEach(
-      refreshPlainMuzzarellaVisibility
+      syncExclusivePlainOption
     );
 
-  refreshDependentOptions();
   refreshPrice();
 }
 
@@ -963,11 +980,6 @@ function bindProductFormEvents() {
         return;
       }
 
-      /*
-        Si este grupo contiene "Solo muzzarella",
-        esa opcion es excluyente con todas las demas.
-        No dependemos del nombre de la categoria ni del grupo.
-      */
       const plainOption =
         getGroupOptions(group.id)
           .find(isPlainMuzzarellaOption);
@@ -1047,9 +1059,10 @@ function bindProductFormEvents() {
         );
       }
 
-      refreshPlainMuzzarellaVisibility(group);
+      syncExclusivePlainOption(group);
       clearInvalidSelections();
       refreshDependentOptions();
+      syncExclusivePlainOption(group);
       refreshPrice();
       hideProductError();
     });
@@ -1136,29 +1149,8 @@ function refreshDependentOptions() {
           const visible =
             optionIsVisible(option,selectedIds);
 
-          const plainOption =
-            getGroupOptions(group.id)
-              .find(isPlainMuzzarellaOption);
-
-          const plainInput =
-            plainOption
-              ? groupElement.querySelector(
-                  `input[value="${plainOption.id}"]`
-                )
-              : null;
-
-          const hideBecausePlainSelected =
-            Boolean(
-              plainOption &&
-              plainInput?.checked &&
-              String(option.id) !==
-              String(plainOption.id)
-            );
-
           row.style.display =
-            visible && !hideBecausePlainSelected
-              ? "flex"
-              : "none";
+            visible ? "flex" : "none";
 
           if (visible) {
             visibleCount += 1;
@@ -1169,8 +1161,6 @@ function refreshDependentOptions() {
         "hidden",
         visibleCount === 0
       );
-
-      refreshPlainMuzzarellaVisibility(group);
     });
 }
 
