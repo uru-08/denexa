@@ -91,6 +91,7 @@ const modifierOptionModalTitle = document.getElementById("modifierOptionModalTit
 const modifierOptionGroupName = document.getElementById("modifierOptionGroupName");
 const modifierOptionName = document.getElementById("modifierOptionName");
 const modifierOptionPrice = document.getElementById("modifierOptionPrice");
+const modifierOptionPriceLabel = document.getElementById("modifierOptionPriceLabel");
 const modifierOptionParent = document.getElementById("modifierOptionParent");
 const modifierOptionSortOrder = document.getElementById("modifierOptionSortOrder");
 const modifierOptionActive = document.getElementById("modifierOptionActive");
@@ -103,6 +104,7 @@ const ordersList = document.getElementById("ordersList");
 const ordersBusinessFilter = document.getElementById("ordersBusinessFilter");
 const ordersStatusFilter = document.getElementById("ordersStatusFilter");
 const refreshOrdersButton = document.getElementById("refreshOrdersButton");
+const clearShiftOrdersButton = document.getElementById("clearShiftOrdersButton");
 const ordersLastUpdate = document.getElementById("ordersLastUpdate");
 const dashboardOrdersList = document.getElementById("dashboardOrdersList");
 const dashboardGoOrdersButton = document.getElementById("dashboardGoOrdersButton");
@@ -1273,6 +1275,22 @@ function closeModifierOptionModal() {
   editingModifierOptionId = null;
 }
 
+
+function isSizeModifierGroup(group) {
+  const name =
+    String(group?.name || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim()
+      .toLowerCase();
+
+  return (
+    name.includes("tamano") ||
+    name.includes("tamanos") ||
+    name.includes("size")
+  );
+}
+
 async function openModifierOptionModal(group, option = null) {
   selectedModifierGroup = group;
   modifierOptionForm.reset();
@@ -1284,12 +1302,33 @@ async function openModifierOptionModal(group, option = null) {
   modifierOptionGroupName.textContent =
     group.name || "";
 
+  const sizeGroup =
+    isSizeModifierGroup(group);
+
+  if (modifierOptionPriceLabel) {
+    modifierOptionPriceLabel.textContent =
+      sizeGroup
+        ? "Precio final del tama\u00f1o"
+        : "Precio adicional";
+  }
+
+  if (modifierOptionPrice) {
+    modifierOptionPrice.min =
+      sizeGroup
+        ? String(Number(selectedProduct?.price || 0))
+        : "0";
+  }
+
   saveModifierOptionButton.textContent =
     option ? "Guardar cambios" : "Guardar opci\u00f3n";
 
   modifierOptionName.value = option?.name || "";
   modifierOptionPrice.value =
-    option?.price_delta ?? 0;
+    option?.price_delta ?? (
+      sizeGroup
+        ? Number(selectedProduct?.price || 0)
+        : 0
+    );
   modifierOptionSortOrder.value =
     option?.sort_order ?? 0;
 
@@ -1775,6 +1814,23 @@ modifierOptionForm.addEventListener(
       return;
     }
 
+    const sizeGroup =
+      isSizeModifierGroup(
+        selectedModifierGroup
+      );
+
+    const basePrice =
+      Number(selectedProduct?.price || 0);
+
+    if (
+      sizeGroup &&
+      price < basePrice
+    ) {
+      modifierOptionFormMessage.textContent =
+        `El precio final del tama\u00f1o no puede ser menor al precio base (${basePrice}).`;
+      return;
+    }
+
     const payload = {
       group_id: selectedModifierGroup.id,
       name,
@@ -2097,25 +2153,28 @@ function renderOrderCard(order) {
 
       ${paymentBlock}
 
-      ${
-        actions.length
-          ? `
-            <div class="order-actions">
-              ${actions.map(([status, label, kind]) => `
-                <button
-                  type="button"
-                  class="order-action-button ${kind}"
-                  data-order-action
-                  data-order-id="${escapeHTML(order.id)}"
-                  data-next-status="${escapeHTML(status)}"
-                >
-                  ${escapeHTML(label)}
-                </button>
-              `).join("")}
-            </div>
-          `
-          : ""
-      }
+      <div class="order-actions">
+        ${actions.map(([status, label, kind]) => `
+          <button
+            type="button"
+            class="order-action-button ${kind}"
+            data-order-action
+            data-order-id="${escapeHTML(order.id)}"
+            data-next-status="${escapeHTML(status)}"
+          >
+            ${escapeHTML(label)}
+          </button>
+        `).join("")}
+
+        <button
+          type="button"
+          class="order-action-button remove"
+          data-remove-order
+          data-order-id="${escapeHTML(order.id)}"
+        >
+          Quitar pedido
+        </button>
+      </div>
     </article>
   `;
 }
@@ -2232,7 +2291,14 @@ function renderOrders() {
 function renderDashboardOrders() {
   if (!dashboardOrdersList) return;
 
-  const latest = ordersCache.slice(0, 5);
+  const latest =
+    ordersCache
+      .filter(
+        (order) =>
+          String(order.business_id) ===
+          String(MERCHANT_BUSINESS_ID)
+      )
+      .slice(0, 5);
 
   dashboardOrdersList.innerHTML =
     latest.length
@@ -2338,7 +2404,7 @@ async function loadOrders() {
     const [orders, items, options] = await Promise.all([
       getTableData(
         "orders",
-        "id,business_id,customer_name,customer_phone,delivery_type,delivery_address,delivery_reference,payment_method,cash_amount,notes,status,total,source,created_at"
+        "id,business_id,customer_name,customer_phone,delivery_type,delivery_address,delivery_reference,payment_method,cash_amount,notes,status,total,source,archived,created_at"
       ),
       getTableData(
         "order_items",
@@ -2350,11 +2416,17 @@ async function loadOrders() {
       )
     ]);
 
-    ordersCache = orders.sort(
-      (a, b) =>
-        new Date(b.created_at) -
-        new Date(a.created_at)
-    );
+    ordersCache =
+      orders
+        .filter(
+          (order) =>
+            order.archived !== true
+        )
+        .sort(
+          (a, b) =>
+            new Date(b.created_at) -
+            new Date(a.created_at)
+        );
 
     orderItemsCache = items;
     orderItemOptionsCache = options;
@@ -2524,6 +2596,123 @@ function openCustomerWhatsApp(url, reservedWindow = null) {
   }
 }
 
+
+async function archiveSingleOrder(orderId) {
+  const order =
+    ordersCache.find(
+      (item) =>
+        String(item.id) ===
+        String(orderId)
+    );
+
+  if (!order) {
+    return;
+  }
+
+  const confirmed =
+    window.confirm(
+      `Quitar el pedido #${order.id} del panel?\n\n` +
+      "Dejara de aparecer en Pedidos y en el resumen del turno."
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    await updateTableRow(
+      "orders",
+      order.id,
+      { archived: true }
+    );
+
+    showToast(
+      `Pedido #${order.id} quitado del turno.`,
+      "success"
+    );
+
+    await loadOrders();
+  } catch (error) {
+    console.error(
+      "Error quitando pedido:",
+      error
+    );
+
+    showToast(
+      "No se pudo quitar el pedido.",
+      "error"
+    );
+  }
+}
+
+async function clearMerchantShiftOrders() {
+  const merchantOrders =
+    ordersCache.filter(
+      (order) =>
+        String(order.business_id) ===
+        String(MERCHANT_BUSINESS_ID)
+    );
+
+  if (!merchantOrders.length) {
+    showToast(
+      "No hay pedidos para limpiar.",
+      "success"
+    );
+    return;
+  }
+
+  const confirmed =
+    window.confirm(
+      `Vas a limpiar ${merchantOrders.length} pedido${merchantOrders.length === 1 ? "" : "s"} del turno.\n\n` +
+      "Incluye pedidos activos, entregados y cancelados.\n" +
+      "El panel quedara en cero para comenzar el proximo turno.\n\n" +
+      "Queres continuar?"
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  if (clearShiftOrdersButton) {
+    clearShiftOrdersButton.disabled = true;
+    clearShiftOrdersButton.textContent =
+      "Limpiando...";
+  }
+
+  try {
+    for (const order of merchantOrders) {
+      await updateTableRow(
+        "orders",
+        order.id,
+        { archived: true }
+      );
+    }
+
+    showToast(
+      "Turno limpiado. El panel arranca desde cero.",
+      "success"
+    );
+
+    await loadOrders();
+  } catch (error) {
+    console.error(
+      "Error limpiando turno:",
+      error
+    );
+
+    showToast(
+      "No se pudo limpiar todo el turno.",
+      "error"
+    );
+  } finally {
+    if (clearShiftOrdersButton) {
+      clearShiftOrdersButton.disabled = false;
+      clearShiftOrdersButton.textContent =
+        "Limpiar turno";
+    }
+  }
+}
+
 async function updateOrderStatus(orderId, status) {
   const order =
     ordersCache.find(
@@ -2615,13 +2804,34 @@ refreshOrdersButton?.addEventListener(
   loadOrders
 );
 
+clearShiftOrdersButton?.addEventListener(
+  "click",
+  clearMerchantShiftOrders
+);
+
 ordersList?.addEventListener(
   "click",
   (event) => {
-    const button =
-      event.target.closest("[data-order-action]");
+    const removeButton =
+      event.target.closest(
+        "[data-remove-order]"
+      );
 
-    if (!button) return;
+    if (removeButton) {
+      archiveSingleOrder(
+        removeButton.dataset.orderId
+      );
+      return;
+    }
+
+    const button =
+      event.target.closest(
+        "[data-order-action]"
+      );
+
+    if (!button) {
+      return;
+    }
 
     button.disabled = true;
 
