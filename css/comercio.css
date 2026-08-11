@@ -2047,65 +2047,545 @@ select{
 
 
 /* =========================================================
-   LIMPIEZA DE TURNO V51
+   V66 - PANEL COMERCIO PREMIUM / MAMMA MIA
+   Capa visual. Mantiene la logica existente.
 ========================================================= */
 
-.orders-toolbar-actions{
-  display:flex;
+:root{
+  --merchant-blue:#083d91;
+  --merchant-blue-dark:#031d49;
+  --merchant-blue-soft:#edf4ff;
+  --merchant-gold:#d8ab47;
+  --merchant-gold-soft:#fff8e8;
+  --merchant-ink:#10213d;
+  --merchant-muted:#65758c;
+  --merchant-bg:#f4f7fb;
+}
+
+body{
+  background:
+    radial-gradient(circle at 92% 0%,rgba(216,171,71,.12),transparent 25rem),
+    radial-gradient(circle at 35% 10%,rgba(8,61,145,.07),transparent 28rem),
+    var(--merchant-bg);
+}
+
+.sidebar{
+  background:
+    radial-gradient(circle at 20% 0%,rgba(255,255,255,.10),transparent 13rem),
+    linear-gradient(180deg,#031b43 0%,#07377f 54%,#0a4eb6 100%);
+  box-shadow:10px 0 36px rgba(3,29,73,.18);
+}
+
+.brand{
+  gap:14px;
+}
+
+.merchant-logo-mark{
+  width:52px;
+  height:52px;
+  flex:0 0 52px;
+  border-radius:17px;
+  border:2px solid var(--merchant-gold) !important;
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.18),
+    inset 0 0 0 3px rgba(216,171,71,.10);
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.12rem;
+  letter-spacing:-.05em;
+}
+
+.brand strong{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.08rem;
+  letter-spacing:.06em;
+}
+
+.brand span{
+  font-size:.78rem;
+  opacity:.88;
+}
+
+.nav{
   gap:8px;
+}
+
+.nav-item{
+  min-height:48px;
+  border-radius:14px;
+  padding:10px 12px;
+  font-weight:800;
+}
+
+.nav-item.active{
+  background:linear-gradient(135deg,rgba(255,255,255,.17),rgba(255,255,255,.10));
+  border-color:rgba(216,171,71,.88);
+  box-shadow:
+    inset 3px 0 0 var(--merchant-gold),
+    0 8px 20px rgba(0,0,0,.10);
+}
+
+.nav-icon{
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.main{
+  max-width:1500px;
+  margin:0 auto;
+  padding:34px 38px 56px;
+}
+
+.page-header{
   align-items:center;
+  margin-bottom:22px;
 }
 
-.orders-cleanup-hint{
-  display:flex;
-  gap:8px;
-  align-items:flex-start;
-  margin-top:11px;
-  padding:10px 11px;
-  border:1px solid #f0d8a7;
-  border-radius:10px;
-  background:#fffaf0;
+.page-header h1{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(1.9rem,3vw,2.65rem);
+  color:var(--merchant-ink);
 }
 
-.orders-cleanup-hint strong{
-  flex:0 0 auto;
-  color:#8a5a05;
-  font-size:.70rem;
+.eyebrow{
+  color:#7a3ad7;
+  letter-spacing:.16em;
 }
 
-.orders-cleanup-hint span{
-  color:#6c5a34;
-  font-size:.69rem;
-  line-height:1.4;
+.subtitle{
+  color:var(--merchant-muted);
 }
 
-.order-action-button.remove{
-  flex:0 0 auto;
-  border:1px solid #e9b0ab;
-  background:#fff;
-  color:#b42318;
+.status-badge{
+  border-radius:999px;
+  padding:10px 16px;
+  font-size:.76rem;
+  font-weight:950;
+  letter-spacing:.035em;
+  box-shadow:0 7px 18px rgba(22,118,71,.08);
 }
 
-.order-action-button.remove:hover{
-  background:#fff0ef;
+.cards{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
 }
 
-@media(max-width:680px){
-  .orders-toolbar-actions{
-    display:grid;
-    grid-template-columns:1fr 1fr;
+.metric-card{
+  min-height:116px;
+  padding:18px;
+  border:1px solid rgba(215,222,232,.85);
+  border-top:3px solid #7657e8;
+  border-radius:20px;
+  box-shadow:0 10px 28px rgba(16,33,61,.07);
+}
+
+.metric-card:hover{
+  transform:translateY(-2px);
+}
+
+.metric-card.order-metric.sales{
+  background:linear-gradient(135deg,#fffdf7,#fff7df);
+  border-top-color:var(--merchant-gold);
+}
+
+.metric-icon{
+  width:48px;
+  height:48px;
+  flex:0 0 48px;
+  border-radius:15px;
+}
+
+.metric-card small{
+  color:#66758a;
+  font-size:.76rem;
+  font-weight:850;
+}
+
+.metric-card strong{
+  margin-top:2px;
+  color:var(--merchant-ink);
+  font-size:1.72rem;
+}
+
+.panel{
+  border:1px solid rgba(215,222,232,.82);
+  border-radius:22px;
+  box-shadow:0 12px 32px rgba(16,33,61,.075);
+}
+
+.merchant-quick-panel{
+  margin-top:16px;
+  padding:20px 22px;
+  border-top:3px solid var(--merchant-gold);
+}
+
+.merchant-quick-panel h2,
+.dashboard-orders-panel h2,
+.merchant-status-panel h2{
+  font-family:Georgia,"Times New Roman",serif;
+}
+
+.merchant-quick-actions{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(130px,1fr));
+  gap:9px;
+  min-width:min(520px,48vw);
+}
+
+.merchant-quick-actions button{
+  min-height:46px;
+  border-radius:13px;
+  padding:10px 12px;
+  font-size:.82rem;
+}
+
+.primary-button{
+  border-radius:13px;
+  background:linear-gradient(135deg,#6d28d9,#4f46e5);
+  box-shadow:0 8px 20px rgba(79,70,229,.18);
+}
+
+.secondary-button,
+.danger-button{
+  border-radius:13px;
+}
+
+.dashboard-orders-panel{
+  margin-top:16px;
+  padding:20px 22px;
+}
+
+.products-panel{
+  border-radius:22px !important;
+  box-shadow:0 12px 34px rgba(16,33,61,.08);
+}
+
+.products-main-toolbar{
+  padding:14px 16px;
+  background:linear-gradient(180deg,#fff,#fbfcff);
+}
+
+.merchant-product-category-group{
+  padding:16px;
+  border-top:8px solid #f4f7fb;
+}
+
+.merchant-category-heading{
+  margin-bottom:10px;
+  padding-bottom:8px;
+  border-bottom:2px solid rgba(216,171,71,.72);
+}
+
+.merchant-category-heading h3{
+  font-family:Georgia,"Times New Roman",serif;
+  color:var(--merchant-blue);
+}
+
+.merchant-category-products{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.merchant-product-card{
+  grid-template-columns:1fr;
+  align-content:start;
+  padding:13px;
+  gap:11px;
+  border-radius:18px;
+  box-shadow:0 8px 22px rgba(16,33,61,.055);
+}
+
+.merchant-product-main{
+  grid-template-columns:78px minmax(0,1fr);
+  gap:12px;
+  align-items:start;
+}
+
+.merchant-product-card .product-thumb{
+  width:78px;
+  height:78px;
+  border-radius:14px;
+}
+
+.merchant-product-name{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:.98rem;
+  line-height:1.15;
+}
+
+.merchant-product-category{
+  font-size:.72rem;
+}
+
+.merchant-product-price-row{
+  margin-top:5px;
+}
+
+.merchant-product-badges{
+  margin-top:6px;
+}
+
+.merchant-product-actions{
+  min-width:0;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:7px !important;
+}
+
+.merchant-product-actions button{
+  min-height:38px;
+  padding:8px 9px;
+  border-radius:11px;
+  font-size:.72rem;
+}
+
+.merchant-status-panel{
+  max-width:920px;
+}
+
+.order-card{
+  border-radius:18px;
+  box-shadow:0 8px 22px rgba(16,33,61,.06);
+}
+
+/* Tablet / mobile: menu horizontal compacto */
+@media(max-width:760px){
+  body{
+    display:block;
   }
 
-  .orders-toolbar-actions button{
+  .sidebar{
+    position:sticky;
+    top:0;
+    z-index:80;
     width:100%;
+    height:auto;
+    padding:12px 14px 10px;
+    box-shadow:0 8px 28px rgba(3,29,73,.22);
   }
 
-  .orders-cleanup-hint{
+  .brand{
+    padding:0 2px 10px;
+    border-bottom:1px solid rgba(255,255,255,.12);
+  }
+
+  .merchant-logo-mark{
+    width:42px;
+    height:42px;
+    flex-basis:42px;
+    border-radius:13px;
+    font-size:.94rem;
+  }
+
+  .brand strong{
+    font-size:.92rem;
+  }
+
+  .brand span{
+    margin-top:1px;
+    font-size:.68rem;
+  }
+
+  .nav{
+    display:flex;
+    gap:7px;
+    margin-top:9px;
+    overflow-x:auto;
+    padding:1px 1px 5px;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  .nav::-webkit-scrollbar{
+    display:none;
+  }
+
+  .nav-item{
+    width:auto;
+    min-width:max-content;
+    min-height:40px;
+    flex:0 0 auto;
+    gap:7px;
+    padding:7px 11px;
+    border-radius:12px;
+    font-size:.74rem;
+  }
+
+  .nav-icon{
+    width:25px;
+    height:25px;
+    flex-basis:25px;
+    border-radius:8px;
+    font-size:.59rem;
+  }
+
+  .main{
+    padding:20px 14px 42px;
+  }
+
+  .page-header{
     display:grid;
-    gap:4px;
+    gap:12px;
+    margin-bottom:16px;
   }
 
-  .order-action-button.remove{
-    flex:auto;
+  .page-header h1{
+    font-size:2rem;
+  }
+
+  .subtitle{
+    margin-top:5px;
+    font-size:.88rem;
+    line-height:1.42;
+  }
+
+  .status-badge{
+    width:max-content;
+    max-width:100%;
+    padding:8px 12px;
+    font-size:.68rem;
+  }
+
+  .cards{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:9px;
+  }
+
+  .metric-card{
+    min-height:88px;
+    display:grid;
+    grid-template-columns:36px minmax(0,1fr);
+    gap:9px;
+    padding:12px 10px;
+    border-radius:16px;
+  }
+
+  .metric-icon{
+    width:36px;
+    height:36px;
+    flex-basis:36px;
+    border-radius:11px;
+    font-size:.67rem;
+  }
+
+  .metric-card small{
+    font-size:.62rem;
+  }
+
+  .metric-card strong{
+    font-size:1.25rem;
+  }
+
+  .merchant-quick-panel{
+    display:grid;
+    gap:14px;
+    padding:16px;
+  }
+
+  .merchant-quick-panel h2{
+    font-size:1.35rem;
+  }
+
+  .merchant-quick-panel p{
+    font-size:.86rem;
+  }
+
+  .merchant-quick-actions{
+    min-width:0;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+  }
+
+  .merchant-quick-actions button{
+    width:100%;
+    min-height:44px;
+    padding:8px 6px;
+    font-size:.68rem;
+    line-height:1.15;
+  }
+
+  .dashboard-orders-panel{
+    padding:16px;
+  }
+
+  .merchant-product-category-group{
+    padding:13px 10px;
+  }
+
+  .merchant-category-products{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .merchant-product-card{
+    padding:11px;
+    gap:10px;
+  }
+
+  .merchant-product-main{
+    grid-template-columns:74px minmax(0,1fr);
+    gap:10px;
+  }
+
+  .merchant-product-card .product-thumb{
+    width:74px;
+    height:74px;
+  }
+
+  .merchant-product-actions{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+
+  .merchant-product-actions button{
+    min-height:40px;
+    font-size:.68rem;
+  }
+
+  .merchant-status-buttons{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:7px;
+  }
+
+  .merchant-status-buttons button{
+    min-height:44px;
+    padding:8px 6px;
+    font-size:.68rem;
+    line-height:1.15;
+  }
+}
+
+@media(max-width:430px){
+  .cards{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+
+  .metric-card{
+    grid-template-columns:1fr;
+    text-align:center;
+    justify-items:center;
+    gap:5px;
+    min-height:96px;
+  }
+
+  .metric-card strong{
+    font-size:1.18rem;
+  }
+
+  .merchant-quick-actions,
+  .merchant-status-buttons{
+    grid-template-columns:1fr 1fr !important;
+  }
+
+  .merchant-quick-actions .danger-button,
+  .merchant-status-buttons .danger-button{
+    grid-column:1 / -1;
+  }
+}
+
+@media(min-width:1200px){
+  .merchant-category-products{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .main{
+    padding-left:46px;
+    padding-right:46px;
   }
 }
