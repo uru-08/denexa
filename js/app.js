@@ -668,6 +668,19 @@ function isSizeGroup(group) {
   });
 }
 
+
+function isPlainMuzzarellaOption(option) {
+  const name =
+    normalizeText(
+      option?.name || ""
+    );
+
+  return (
+    name.includes("solo muzzarella") ||
+    name.includes("solo mozzarella")
+  );
+}
+
 function getGroupOptions(groupId) {
   return options
     .filter(
@@ -846,6 +859,49 @@ function bindProductFormEvents() {
 
       if (!group) {
         return;
+      }
+
+      if (
+        currentProductIsPizza() &&
+        !isSizeGroup(group)
+      ) {
+        const currentOption =
+          options.find(
+            (option) =>
+              String(option.id) ===
+              String(input.value)
+          );
+
+        const plainOption =
+          getGroupOptions(group.id)
+            .find(isPlainMuzzarellaOption);
+
+        const plainInput =
+          plainOption
+            ? groupElement.querySelector(
+                `input[value="${plainOption.id}"]`
+              )
+            : null;
+
+        if (
+          input.checked &&
+          isPlainMuzzarellaOption(
+            currentOption
+          )
+        ) {
+          groupElement
+            .querySelectorAll("input")
+            .forEach((otherInput) => {
+              if (otherInput !== input) {
+                otherInput.checked = false;
+              }
+            });
+        } else if (
+          input.checked &&
+          plainInput
+        ) {
+          plainInput.checked = false;
+        }
       }
 
       if (group.selection_type === "single") {
@@ -1111,6 +1167,33 @@ function validateProductSelection() {
       selectedOptions.get(
         String(group.id)
       ) || [];
+
+    if (
+      pizzaProduct &&
+      !isSizeGroup(group) &&
+      chosen.length > 1
+    ) {
+      const chosenOptions =
+        chosen
+          .map(
+            (id) =>
+              options.find(
+                (option) =>
+                  String(option.id) ===
+                  String(id)
+              )
+          )
+          .filter(Boolean);
+
+      const hasPlain =
+        chosenOptions.some(
+          isPlainMuzzarellaOption
+        );
+
+      if (hasPlain) {
+        return "Elegi Solo Muzzarella o los extras, no ambas cosas.";
+      }
+    }
 
     const requiredForThisProduct =
       pizzaProduct
