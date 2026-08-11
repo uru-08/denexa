@@ -6,7 +6,7 @@
 
   <title>Mamma Mia | Panel del comercio</title>
 
-  <link rel="stylesheet" href="css/comercio.css?v=49">
+  <link rel="stylesheet" href="css/comercio.css?v=51">
 </head>
 
 <body>
@@ -286,11 +286,25 @@
             </select>
           </label>
 
-          <button id="refreshOrdersButton" class="secondary-button" type="button">
-            Actualizar
-          </button>
+          <div class="orders-toolbar-actions">
+            <button id="refreshOrdersButton" class="secondary-button" type="button">
+              Actualizar
+            </button>
+
+            <button id="clearShiftOrdersButton" class="danger-button" type="button">
+              Limpiar turno
+            </button>
+          </div>
         </div>
         <div id="ordersLastUpdate" class="orders-last-update">Esperando datos...</div>
+
+        <div class="orders-cleanup-hint">
+          <strong>Limpiar turno</strong>
+          <span>
+            Quita del panel todos los pedidos de Mamma Mia, activos y finalizados,
+            para comenzar el pr&oacute;ximo turno desde cero.
+          </span>
+        </div>
       </div>
 
       <div id="ordersList" class="orders-board">
@@ -910,7 +924,7 @@
           </label>
 
           <label>
-            Precio adicional
+            <span id="modifierOptionPriceLabel">Precio adicional</span>
             <input
               id="modifierOptionPrice"
               type="number"
@@ -965,7 +979,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/comercio.js?v=49"></script>
+  <script src="js/comercio.js?v=51"></script>
 
 </body>
 </html>
