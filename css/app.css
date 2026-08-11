@@ -3633,3 +3633,13 @@ body{
     padding:32px 36px 24px !important;
   }
 }
+
+
+/* =========================================================
+   V61 - SOLO MUZZARELLA EXCLUYENTE REAL
+========================================================= */
+
+.option-row.pizza-exclusive-hidden{
+  display:none !important;
+}
+
