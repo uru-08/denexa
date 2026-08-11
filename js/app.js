@@ -861,10 +861,16 @@ function bindProductFormEvents() {
         return;
       }
 
-      if (
-        currentProductIsPizza() &&
-        !isSizeGroup(group)
-      ) {
+      /*
+        Si este grupo contiene "Solo muzzarella",
+        esa opcion es excluyente con todas las demas.
+        No dependemos del nombre de la categoria ni del grupo.
+      */
+      const plainOption =
+        getGroupOptions(group.id)
+          .find(isPlainMuzzarellaOption);
+
+      if (plainOption) {
         const currentOption =
           options.find(
             (option) =>
@@ -872,16 +878,10 @@ function bindProductFormEvents() {
               String(input.value)
           );
 
-        const plainOption =
-          getGroupOptions(group.id)
-            .find(isPlainMuzzarellaOption);
-
         const plainInput =
-          plainOption
-            ? groupElement.querySelector(
-                `input[value="${plainOption.id}"]`
-              )
-            : null;
+          groupElement.querySelector(
+            `input[value="${plainOption.id}"]`
+          );
 
         if (
           input.checked &&
@@ -1169,9 +1169,9 @@ function validateProductSelection() {
       ) || [];
 
     if (
-      pizzaProduct &&
-      !isSizeGroup(group) &&
-      chosen.length > 1
+      chosen.length > 1 &&
+      getGroupOptions(group.id)
+        .some(isPlainMuzzarellaOption)
     ) {
       const chosenOptions =
         chosen
@@ -1185,12 +1185,11 @@ function validateProductSelection() {
           )
           .filter(Boolean);
 
-      const hasPlain =
+      if (
         chosenOptions.some(
           isPlainMuzzarellaOption
-        );
-
-      if (hasPlain) {
+        )
+      ) {
         return "Elegi Solo Muzzarella o los extras, no ambas cosas.";
       }
     }
