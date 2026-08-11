@@ -2305,6 +2305,23 @@ function updateOrdersCounters() {
 
   setText("ordersTodayCount", today.length);
   setText("pendingOrdersCount", active.length);
+
+  const salesToday =
+    today
+      .filter(
+        (order) =>
+          order.status !== "cancelled"
+      )
+      .reduce(
+        (sum, order) =>
+          sum + Number(order.total || 0),
+        0
+      );
+
+  setText(
+    "salesTodayTotal",
+    orderMoney(salesToday)
+  );
 }
 
 function populateOrdersBusinessFilter() {
