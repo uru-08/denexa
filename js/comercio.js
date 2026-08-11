@@ -42,6 +42,7 @@ const productForm = document.getElementById("productForm");
 const productName = document.getElementById("productName");
 const productCategory = document.getElementById("productCategory");
 const productPrice = document.getElementById("productPrice");
+const productPriceField = document.getElementById("productPriceField");
 const productOldPrice = document.getElementById("productOldPrice");
 const productSortOrder = document.getElementById("productSortOrder");
 const productFeatured = document.getElementById("productFeatured");
@@ -500,6 +501,44 @@ async function getSelectedBusinessCategories() {
   );
 }
 
+
+function normalizeCommerceText(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+function selectedProductCategoryIsPizza() {
+  const option =
+    productCategory?.options[
+      productCategory.selectedIndex
+    ];
+
+  return normalizeCommerceText(
+    option?.textContent || ""
+  ).includes("pizza");
+}
+
+function syncProductPriceMode() {
+  const pizza =
+    selectedProductCategoryIsPizza();
+
+  if (productPriceField) {
+    productPriceField.hidden = pizza;
+  }
+
+  if (productPrice) {
+    if (pizza) {
+      productPrice.value = "0";
+      productPrice.required = false;
+    } else {
+      productPrice.required = true;
+    }
+  }
+}
+
 async function openProductModal(product = null) {
   if (!selectedBusiness) {
     showToast(
@@ -608,6 +647,8 @@ async function openProductModal(product = null) {
       productActive.checked = true;
       productFeatured.checked = false;
     }
+
+    syncProductPriceMode();
 
     productModal.classList.add("open");
     productModal.setAttribute("aria-hidden", "false");
@@ -1278,17 +1319,38 @@ function closeModifierOptionModal() {
 
 function isSizeModifierGroup(group) {
   const name =
-    String(group?.name || "")
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .trim()
-      .toLowerCase();
+    normalizeCommerceText(
+      group?.name || ""
+    );
 
-  return (
+  if (
     name.includes("tamano") ||
-    name.includes("tamanos") ||
+    name.includes("medida") ||
     name.includes("size")
-  );
+  ) {
+    return true;
+  }
+
+  const groupOptions =
+    currentModifierOptions.filter(
+      (option) =>
+        String(option.group_id) ===
+        String(group?.id)
+    );
+
+  return groupOptions.some((option) => {
+    const optionName =
+      normalizeCommerceText(
+        option.name || ""
+      );
+
+    return (
+      optionName.includes("individual") ||
+      optionName.includes("1/2 metro") ||
+      optionName.includes("medio metro") ||
+      optionName.includes("1 metro")
+    );
+  });
 }
 
 async function openModifierOptionModal(group, option = null) {
@@ -1308,15 +1370,12 @@ async function openModifierOptionModal(group, option = null) {
   if (modifierOptionPriceLabel) {
     modifierOptionPriceLabel.textContent =
       sizeGroup
-        ? "Precio final del tama\u00f1o"
+        ? "Precio de este tama\u00f1o"
         : "Precio adicional";
   }
 
   if (modifierOptionPrice) {
-    modifierOptionPrice.min =
-      sizeGroup
-        ? String(Number(selectedProduct?.price || 0))
-        : "0";
+    modifierOptionPrice.min = "0";
   }
 
   saveModifierOptionButton.textContent =
@@ -1324,11 +1383,7 @@ async function openModifierOptionModal(group, option = null) {
 
   modifierOptionName.value = option?.name || "";
   modifierOptionPrice.value =
-    option?.price_delta ?? (
-      sizeGroup
-        ? Number(selectedProduct?.price || 0)
-        : 0
-    );
+    option?.price_delta ?? 0;
   modifierOptionSortOrder.value =
     option?.sort_order ?? 0;
 
@@ -1814,22 +1869,6 @@ modifierOptionForm.addEventListener(
       return;
     }
 
-    const sizeGroup =
-      isSizeModifierGroup(
-        selectedModifierGroup
-      );
-
-    const basePrice =
-      Number(selectedProduct?.price || 0);
-
-    if (
-      sizeGroup &&
-      price < basePrice
-    ) {
-      modifierOptionFormMessage.textContent =
-        `El precio final del tama\u00f1o no puede ser menor al precio base (${basePrice}).`;
-      return;
-    }
 
     const payload = {
       group_id: selectedModifierGroup.id,
@@ -3942,6 +3981,11 @@ businessForm.addEventListener(
 );
 
 
+productCategory?.addEventListener(
+  "change",
+  syncProductPriceMode
+);
+
 productForm.addEventListener(
   "submit",
   async (event) => {
@@ -3949,7 +3993,13 @@ productForm.addEventListener(
 
     const name = productName.value.trim();
     const categoryId = productCategory.value;
-    const price = Number(productPrice.value);
+    const pizzaProduct =
+      selectedProductCategoryIsPizza();
+
+    const price =
+      pizzaProduct
+        ? 0
+        : Number(productPrice.value);
 
     if (!name) {
       productFormMessage.textContent =
@@ -3964,30 +4014,17 @@ productForm.addEventListener(
     }
 
     if (
-      !Number.isFinite(price) ||
-      price < 0
+      !pizzaProduct &&
+      (
+        !Number.isFinite(price) ||
+        price < 0
+      )
     ) {
       productFormMessage.textContent =
         "Escrib\u00ed un precio v\u00e1lido.";
       return;
     }
 
-    const selectedCategoryName =
-      productCategory
-        .options[
-          productCategory.selectedIndex
-        ]?.textContent
-        ?.trim()
-        ?.toUpperCase() || "";
-
-    if (
-      selectedCategoryName.includes("PIZZA") &&
-      price <= 0
-    ) {
-      productFormMessage.textContent =
-        "En pizzas, el precio base debe ser mayor a $0. Coloc\u00e1 el precio de la muzzarella y despu\u00e9s sum\u00e1 los gustos desde Opciones y extras.";
-      return;
-    }
 
     saveProductButton.disabled = true;
     saveProductButton.textContent =
