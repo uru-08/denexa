@@ -1780,3 +1780,267 @@ select{
     width:100%;
   }
 }
+
+
+/* =========================================================
+   PRODUCTOS V49 - CATEGORIAS + ELIMINAR + PRECIO BASE
+========================================================= */
+
+.field-help{
+  display:block;
+  margin-top:6px;
+  color:#65758b;
+  font-size:.70rem;
+  font-weight:650;
+  line-height:1.4;
+}
+
+.products-panel{
+  padding:0 !important;
+  overflow:hidden;
+}
+
+.products-main-toolbar{
+  padding:16px 18px;
+  border-bottom:1px solid #e5eaf1;
+  background:#fff;
+}
+
+.merchant-product-category-group{
+  padding:18px;
+  border-top:10px solid #f5f8fc;
+}
+
+.merchant-product-category-group:first-of-type{
+  border-top:0;
+}
+
+.merchant-category-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:12px;
+  margin-bottom:12px;
+  padding-bottom:9px;
+  border-bottom:2px solid rgba(217,169,61,.72);
+}
+
+.merchant-category-kicker{
+  display:block;
+  margin-bottom:3px;
+  color:#6b7890;
+  font-size:.58rem;
+  font-weight:950;
+  letter-spacing:.12em;
+}
+
+.merchant-category-heading h3{
+  margin:0;
+  color:#0a347f;
+  font-size:1.18rem;
+  font-weight:950;
+}
+
+.merchant-category-count{
+  padding:5px 8px;
+  border-radius:999px;
+  background:#eef5ff;
+  color:#46638a;
+  font-size:.65rem;
+  font-weight:850;
+  white-space:nowrap;
+}
+
+.merchant-category-products{
+  display:grid;
+  gap:12px;
+}
+
+.merchant-product-card{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:14px;
+  align-items:center;
+  padding:14px;
+  border:1px solid #dfe6ef;
+  border-radius:15px;
+  background:#fff;
+  box-shadow:0 7px 22px rgba(15,23,42,.05);
+}
+
+.merchant-product-main{
+  display:grid;
+  grid-template-columns:92px minmax(0,1fr);
+  gap:13px;
+  align-items:center;
+  min-width:0;
+}
+
+.merchant-product-card .product-thumb{
+  width:92px;
+  height:92px;
+  border-radius:14px;
+  overflow:hidden;
+}
+
+.merchant-product-copy{
+  min-width:0;
+}
+
+.merchant-product-name{
+  display:block;
+  color:#10213d;
+  font-size:1rem;
+  font-weight:950;
+  overflow-wrap:anywhere;
+}
+
+.merchant-product-category{
+  display:block;
+  margin-top:3px;
+  color:#627189;
+  font-weight:750;
+}
+
+.merchant-product-price-row{
+  display:flex;
+  align-items:baseline;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:7px;
+}
+
+.merchant-product-price-label{
+  color:#6b7890;
+  font-size:.64rem;
+  font-weight:850;
+  text-transform:uppercase;
+}
+
+.merchant-product-price-row .product-price{
+  color:#0b3f99;
+  font-size:1rem;
+  font-weight:950;
+}
+
+.merchant-product-badges{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+
+.merchant-stock-badge{
+  display:inline-flex;
+  padding:5px 8px;
+  border-radius:999px;
+  font-size:.62rem;
+  font-weight:900;
+}
+
+.merchant-stock-badge.available{
+  border:1px solid #bfe5cf;
+  background:#edf9f2;
+  color:#167647;
+}
+
+.merchant-stock-badge.sold-out{
+  border:1px solid #efc1bc;
+  background:#fff0ef;
+  color:#b42318;
+}
+
+.merchant-product-actions{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(120px,1fr));
+  gap:8px !important;
+  min-width:270px;
+}
+
+.merchant-product-actions button{
+  width:100%;
+  min-height:40px;
+  margin:0 !important;
+  line-height:1.15;
+}
+
+.delete-product-button{
+  border:1px solid #e9b0ab;
+  background:#fff;
+  color:#b42318;
+}
+
+.delete-product-button:hover{
+  background:#fff0ef;
+}
+
+@media(max-width:860px){
+  .merchant-product-card{
+    grid-template-columns:1fr;
+  }
+
+  .merchant-product-actions{
+    min-width:0;
+  }
+}
+
+@media(max-width:620px){
+  .merchant-product-category-group{
+    padding:13px 11px;
+  }
+
+  .products-main-toolbar{
+    padding:13px 11px;
+  }
+
+  .merchant-category-heading{
+    align-items:center;
+  }
+
+  .merchant-product-card{
+    padding:12px;
+    gap:12px;
+  }
+
+  .merchant-product-main{
+    grid-template-columns:86px minmax(0,1fr);
+    align-items:start;
+  }
+
+  .merchant-product-card .product-thumb{
+    width:86px;
+    height:86px;
+  }
+
+  .merchant-product-name{
+    font-size:.94rem;
+  }
+
+  .merchant-product-actions{
+    display:grid !important;
+    grid-template-columns:1fr 1fr;
+    gap:8px !important;
+  }
+
+  .merchant-product-actions button{
+    min-height:44px;
+    padding:9px 7px;
+    font-size:.73rem;
+    white-space:normal;
+  }
+}
+
+@media(max-width:390px){
+  .merchant-product-main{
+    grid-template-columns:78px minmax(0,1fr);
+  }
+
+  .merchant-product-card .product-thumb{
+    width:78px;
+    height:78px;
+  }
+
+  .merchant-product-actions{
+    grid-template-columns:1fr;
+  }
+}
