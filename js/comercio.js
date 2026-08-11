@@ -42,7 +42,6 @@ const productForm = document.getElementById("productForm");
 const productName = document.getElementById("productName");
 const productCategory = document.getElementById("productCategory");
 const productPrice = document.getElementById("productPrice");
-const productPriceField = document.getElementById("productPriceField");
 const productOldPrice = document.getElementById("productOldPrice");
 const productSortOrder = document.getElementById("productSortOrder");
 const productFeatured = document.getElementById("productFeatured");
@@ -244,6 +243,69 @@ async function requestText(url, options = {}) {
   }
 
   return responseText;
+}
+
+
+async function setBusinessOrderingStatusRPC(
+  businessId,
+  status,
+  soldOutMessage = null
+) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/rpc/set_business_ordering_status`,
+      {
+        method: "POST",
+        headers: supabaseHeaders({
+          Prefer: "return=representation"
+        }),
+        body: JSON.stringify({
+          p_business_id:
+            Number(businessId),
+          p_status:
+            status,
+          p_message:
+            soldOutMessage
+        })
+      }
+    );
+
+  if (!responseText.trim()) {
+    return null;
+  }
+
+  const data =
+    JSON.parse(responseText);
+
+  if (Array.isArray(data)) {
+    return data[0] || null;
+  }
+
+  return data;
+}
+
+async function readBusinessOrderingStatus(
+  businessId
+) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/businesses?id=eq.${encodeURIComponent(businessId)}&select=id,name,ordering_status,sold_out_message`,
+      {
+        method: "GET",
+        headers: supabaseHeaders()
+      }
+    );
+
+  if (!responseText.trim()) {
+    return null;
+  }
+
+  const rows =
+    JSON.parse(responseText);
+
+  return Array.isArray(rows)
+    ? rows[0] || null
+    : null;
 }
 
 async function getTableData(tableName, select = "*") {
@@ -501,44 +563,6 @@ async function getSelectedBusinessCategories() {
   );
 }
 
-
-function normalizeCommerceText(value) {
-  return String(value || "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim()
-    .toLowerCase();
-}
-
-function selectedProductCategoryIsPizza() {
-  const option =
-    productCategory?.options[
-      productCategory.selectedIndex
-    ];
-
-  return normalizeCommerceText(
-    option?.textContent || ""
-  ).includes("pizza");
-}
-
-function syncProductPriceMode() {
-  const pizza =
-    selectedProductCategoryIsPizza();
-
-  if (productPriceField) {
-    productPriceField.hidden = pizza;
-  }
-
-  if (productPrice) {
-    if (pizza) {
-      productPrice.value = "0";
-      productPrice.required = false;
-    } else {
-      productPrice.required = true;
-    }
-  }
-}
-
 async function openProductModal(product = null) {
   if (!selectedBusiness) {
     showToast(
@@ -647,8 +671,6 @@ async function openProductModal(product = null) {
       productActive.checked = true;
       productFeatured.checked = false;
     }
-
-    syncProductPriceMode();
 
     productModal.classList.add("open");
     productModal.setAttribute("aria-hidden", "false");
@@ -1319,38 +1341,17 @@ function closeModifierOptionModal() {
 
 function isSizeModifierGroup(group) {
   const name =
-    normalizeCommerceText(
-      group?.name || ""
-    );
+    String(group?.name || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim()
+      .toLowerCase();
 
-  if (
+  return (
     name.includes("tamano") ||
-    name.includes("medida") ||
+    name.includes("tamanos") ||
     name.includes("size")
-  ) {
-    return true;
-  }
-
-  const groupOptions =
-    currentModifierOptions.filter(
-      (option) =>
-        String(option.group_id) ===
-        String(group?.id)
-    );
-
-  return groupOptions.some((option) => {
-    const optionName =
-      normalizeCommerceText(
-        option.name || ""
-      );
-
-    return (
-      optionName.includes("individual") ||
-      optionName.includes("1/2 metro") ||
-      optionName.includes("medio metro") ||
-      optionName.includes("1 metro")
-    );
-  });
+  );
 }
 
 async function openModifierOptionModal(group, option = null) {
@@ -1370,12 +1371,15 @@ async function openModifierOptionModal(group, option = null) {
   if (modifierOptionPriceLabel) {
     modifierOptionPriceLabel.textContent =
       sizeGroup
-        ? "Precio de este tama\u00f1o"
+        ? "Precio final del tama\u00f1o"
         : "Precio adicional";
   }
 
   if (modifierOptionPrice) {
-    modifierOptionPrice.min = "0";
+    modifierOptionPrice.min =
+      sizeGroup
+        ? String(Number(selectedProduct?.price || 0))
+        : "0";
   }
 
   saveModifierOptionButton.textContent =
@@ -1383,7 +1387,11 @@ async function openModifierOptionModal(group, option = null) {
 
   modifierOptionName.value = option?.name || "";
   modifierOptionPrice.value =
-    option?.price_delta ?? 0;
+    option?.price_delta ?? (
+      sizeGroup
+        ? Number(selectedProduct?.price || 0)
+        : 0
+    );
   modifierOptionSortOrder.value =
     option?.sort_order ?? 0;
 
@@ -1869,6 +1877,22 @@ modifierOptionForm.addEventListener(
       return;
     }
 
+    const sizeGroup =
+      isSizeModifierGroup(
+        selectedModifierGroup
+      );
+
+    const basePrice =
+      Number(selectedProduct?.price || 0);
+
+    if (
+      sizeGroup &&
+      price < basePrice
+    ) {
+      modifierOptionFormMessage.textContent =
+        `El precio final del tama\u00f1o no puede ser menor al precio base (${basePrice}).`;
+      return;
+    }
 
     const payload = {
       group_id: selectedModifierGroup.id,
@@ -3041,56 +3065,108 @@ function syncMerchantStatusUI() {
 
 async function setMerchantOrderingStatus(status) {
   if (!selectedBusiness) {
+    showToast(
+      "No se encontro el comercio.",
+      "error"
+    );
     return;
   }
 
-  try {
-    const payload = {
-      ordering_status: status
-    };
+  const message =
+    status === "sold_out" &&
+    merchantSoldOutMessage
+      ? merchantSoldOutMessage.value.trim()
+      : selectedBusiness.sold_out_message || null;
 
-    if (
-      status === "sold_out" &&
-      merchantSoldOutMessage
-    ) {
-      payload.sold_out_message =
-        merchantSoldOutMessage.value.trim();
+  const buttons = [
+    merchantOpenButton,
+    merchantCloseButton,
+    merchantSoldOutButton,
+    merchantStatusOpen,
+    merchantStatusClosed,
+    merchantStatusSoldOut
+  ].filter(Boolean);
+
+  buttons.forEach(
+    (button) => {
+      button.disabled = true;
     }
+  );
 
-    await updateTableRow(
-      "businesses",
+  try {
+    await setBusinessOrderingStatusRPC(
       selectedBusiness.id,
-      payload
+      status,
+      message
     );
 
-    selectedBusiness.ordering_status = status;
+    /*
+      Lectura inmediata de Supabase.
+      No damos por hecho que se guardo:
+      verificamos el valor real de la base.
+    */
+    const verified =
+      await readBusinessOrderingStatus(
+        selectedBusiness.id
+      );
 
-    if (payload.sold_out_message !== undefined) {
-      selectedBusiness.sold_out_message =
-        payload.sold_out_message;
+    if (!verified) {
+      throw new Error(
+        "Supabase no devolvio el comercio al verificar el estado."
+      );
     }
+
+    if (
+      String(
+        verified.ordering_status || ""
+      ) !== String(status)
+    ) {
+      throw new Error(
+        `Supabase no guardo el estado solicitado. Estado real: ${verified.ordering_status || "sin valor"}`
+      );
+    }
+
+    selectedBusiness.ordering_status =
+      verified.ordering_status;
+
+    selectedBusiness.sold_out_message =
+      verified.sold_out_message ??
+      message;
 
     syncMerchantStatusUI();
 
     showToast(
       status === "open"
-        ? "Pedidos abiertos."
+        ? "Pedidos abiertos correctamente."
         : status === "closed"
-          ? "Pedidos cerrados."
-          : "Stock agotado activado.",
+          ? "Pedidos cerrados correctamente."
+          : "Stock agotado activado correctamente.",
       "success"
     );
   } catch (error) {
-    console.error("Error actualizando estado del local:", error);
+    console.error(
+      "Error actualizando estado real del local:",
+      error
+    );
+
     showToast(
-      "No se pudo cambiar el estado del local.",
+      `No se pudo guardar el estado en Supabase: ${error.message || "error desconocido"}`,
       "error"
+    );
+  } finally {
+    buttons.forEach(
+      (button) => {
+        button.disabled = false;
+      }
     );
   }
 }
 
 async function saveMerchantSoldOutMessage() {
-  if (!selectedBusiness || !merchantSoldOutMessage) {
+  if (
+    !selectedBusiness ||
+    !merchantSoldOutMessage
+  ) {
     return;
   }
 
@@ -3098,22 +3174,42 @@ async function saveMerchantSoldOutMessage() {
     const message =
       merchantSoldOutMessage.value.trim();
 
-    await updateTableRow(
-      "businesses",
+    const currentStatus =
+      selectedBusiness.ordering_status ||
+      "open";
+
+    await setBusinessOrderingStatusRPC(
       selectedBusiness.id,
-      { sold_out_message: message }
+      currentStatus,
+      message
     );
 
-    selectedBusiness.sold_out_message = message;
+    const verified =
+      await readBusinessOrderingStatus(
+        selectedBusiness.id
+      );
+
+    if (!verified) {
+      throw new Error(
+        "No se pudo verificar el mensaje."
+      );
+    }
+
+    selectedBusiness.sold_out_message =
+      verified.sold_out_message || "";
 
     showToast(
-      "Mensaje guardado.",
+      "Mensaje guardado correctamente.",
       "success"
     );
   } catch (error) {
-    console.error("Error guardando mensaje:", error);
+    console.error(
+      "Error guardando mensaje:",
+      error
+    );
+
     showToast(
-      "No se pudo guardar el mensaje.",
+      `No se pudo guardar el mensaje: ${error.message || "error desconocido"}`,
       "error"
     );
   }
@@ -3981,11 +4077,6 @@ businessForm.addEventListener(
 );
 
 
-productCategory?.addEventListener(
-  "change",
-  syncProductPriceMode
-);
-
 productForm.addEventListener(
   "submit",
   async (event) => {
@@ -3993,13 +4084,7 @@ productForm.addEventListener(
 
     const name = productName.value.trim();
     const categoryId = productCategory.value;
-    const pizzaProduct =
-      selectedProductCategoryIsPizza();
-
-    const price =
-      pizzaProduct
-        ? 0
-        : Number(productPrice.value);
+    const price = Number(productPrice.value);
 
     if (!name) {
       productFormMessage.textContent =
@@ -4014,17 +4099,30 @@ productForm.addEventListener(
     }
 
     if (
-      !pizzaProduct &&
-      (
-        !Number.isFinite(price) ||
-        price < 0
-      )
+      !Number.isFinite(price) ||
+      price < 0
     ) {
       productFormMessage.textContent =
         "Escrib\u00ed un precio v\u00e1lido.";
       return;
     }
 
+    const selectedCategoryName =
+      productCategory
+        .options[
+          productCategory.selectedIndex
+        ]?.textContent
+        ?.trim()
+        ?.toUpperCase() || "";
+
+    if (
+      selectedCategoryName.includes("PIZZA") &&
+      price <= 0
+    ) {
+      productFormMessage.textContent =
+        "En pizzas, el precio base debe ser mayor a $0. Coloc\u00e1 el precio de la muzzarella y despu\u00e9s sum\u00e1 los gustos desde Opciones y extras.";
+      return;
+    }
 
     saveProductButton.disabled = true;
     saveProductButton.textContent =
