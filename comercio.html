@@ -6,7 +6,7 @@
 
   <title>Mamma Mia | Panel del comercio</title>
 
-  <link rel="stylesheet" href="css/comercio.css?v=68">
+  <link rel="stylesheet" href="css/comercio.css?v=69">
 </head>
 
 <body>
@@ -357,7 +357,7 @@
           <p class="eyebrow">PROMOCIONES</p>
           <h1>Promo del d&iacute;a</h1>
           <p class="subtitle">
-            Public&aacute; una promo destacada en la pantalla de bienvenida y cambiala cuando quieras.
+            Cre&aacute; una promo y mostrala autom&aacute;ticamente en la pantalla de bienvenida.
           </p>
         </div>
 
@@ -370,55 +370,116 @@
 
         <form id="dailyPromoForm" class="panel promo-admin-form">
 
-          <div class="promo-admin-heading">
+          <div class="promo-switch-card">
             <div>
-              <p class="eyebrow">CONTROL</p>
-              <h2>Promoci&oacute;n activa</h2>
+              <p class="eyebrow">VISIBILIDAD</p>
+              <h2>Mostrar promo en la tienda</h2>
               <p>
-                Si est&aacute; apagada, el cliente no ver&aacute; ning&uacute;n cartel promocional.
+                Cuando est&aacute; activada, todos los clientes la ven al entrar.
               </p>
             </div>
 
-            <label class="promo-switch">
+            <label class="promo-toggle">
               <input id="dailyPromoActive" type="checkbox">
-              <span class="promo-switch-track">
-                <span class="promo-switch-knob"></span>
+              <span class="promo-toggle-track">
+                <span class="promo-toggle-knob"></span>
               </span>
-              <strong id="dailyPromoSwitchText">Desactivada</strong>
+              <strong id="dailyPromoActiveText">Desactivada</strong>
             </label>
           </div>
 
-          <div class="promo-admin-fields">
+          <div class="promo-fields">
             <label>
-              Encabezado peque&ntilde;o
+              Etiqueta
               <input
                 id="dailyPromoBadge"
                 type="text"
                 maxlength="40"
-                value="PROMO DEL D&Iacute;A"
-                placeholder="PROMO DEL DÃA"
+                placeholder="PROMO DEL D&Iacute;A"
               >
+              <small>Ejemplo: PROMO DEL D&Iacute;A, SOLO HOY, OFERTA ESPECIAL.</small>
             </label>
 
             <label>
-              Texto destacado
+              T&iacute;tulo
               <input
                 id="dailyPromoTitle"
                 type="text"
-                maxlength="70"
-                placeholder="10% DE DESCUENTO"
+                maxlength="90"
+                placeholder="&iexcl;No te la pierdas!"
               >
             </label>
 
             <label class="full-width">
-              Detalle de la promoci&oacute;n
+              Promoci&oacute;n
               <textarea
-                id="dailyPromoDescription"
+                id="dailyPromoText"
                 rows="4"
-                maxlength="220"
-                placeholder="En pizzas de 1/2 metro. Â¡No te la pierdas!"
+                maxlength="260"
+                placeholder="10% de descuento en pizzas de 1/2 metro."
               ></textarea>
             </label>
+            <label class="full-width promo-rule-divider">
+              Tipo de promoci&oacute;n
+              <select id="dailyPromoRuleType">
+                <option value="announcement">Solo anuncio</option>
+                <option value="percent">Descuento autom&aacute;tico (%)</option>
+                <option value="gift">Producto de regalo</option>
+              </select>
+              <small>Las promociones autom&aacute;ticas modifican el precio o agregan el regalo al carrito.</small>
+            </label>
+
+            <div id="promoAutomaticFields" class="full-width promo-rule-box" hidden>
+              <div class="promo-rule-grid">
+                <label>
+                  Se activa con
+                  <select id="promoTargetType">
+                    <option value="category">Una categor&iacute;a completa</option>
+                    <option value="product">Un producto</option>
+                  </select>
+                </label>
+
+                <label>
+                  Elegir categor&iacute;a / producto
+                  <select id="promoTargetId"></select>
+                </label>
+              </div>
+
+              <div id="promoPercentFields" class="promo-rule-grid" hidden>
+                <label>
+                  Descuento %
+                  <input id="promoDiscountPercent" type="number" min="1" max="100" step="1" value="15">
+                </label>
+                <div class="promo-rule-example">
+                  En pizzas se descuenta el tama&ntilde;o/base. Los extras conservan su precio.
+                </div>
+              </div>
+
+              <div id="promoGiftFields" class="promo-rule-grid" hidden>
+                <label>
+                  Cantidad necesaria
+                  <input id="promoTriggerQty" type="number" min="1" step="1" value="2">
+                </label>
+
+                <label>
+                  Producto de regalo
+                  <select id="promoRewardProductId"></select>
+                </label>
+
+                <label>
+                  Cantidad de regalo
+                  <input id="promoRewardQty" type="number" min="1" step="1" value="1">
+                </label>
+
+                <label class="promo-repeat-label">
+                  <input id="promoRepeat" type="checkbox" checked>
+                  <span>
+                    Repetir por m&uacute;ltiplos
+                    <small>Ej.: cada 2 hamburguesas = 1 papas. Con 4, entrega 2 papas.</small>
+                  </span>
+                </label>
+              </div>
+            </div>
           </div>
 
           <div id="dailyPromoMessage" class="form-message"></div>
@@ -428,8 +489,8 @@
               Guardar promo
             </button>
 
-            <button id="clearDailyPromoButton" class="secondary-button" type="button">
-              Limpiar contenido
+            <button id="disableDailyPromoButton" class="secondary-button" type="button">
+              Desactivar promo
             </button>
           </div>
 
@@ -438,20 +499,16 @@
         <aside class="panel promo-preview-panel">
           <p class="eyebrow">VISTA PREVIA</p>
 
-          <div class="promo-preview-card">
-            <div class="promo-preview-spark">%</div>
-
-            <div>
-              <small id="dailyPromoPreviewBadge">PROMO DEL D&Iacute;A</small>
-              <strong id="dailyPromoPreviewTitle">10% DE DESCUENTO</strong>
-              <p id="dailyPromoPreviewDescription">
-                En pizzas de 1/2 metro. &iexcl;No te la pierdas!
-              </p>
-            </div>
+          <div id="dailyPromoPreview" class="daily-promo-preview">
+            <span id="dailyPromoPreviewBadge">PROMO DEL D&Iacute;A</span>
+            <strong id="dailyPromoPreviewTitle">&iexcl;No te la pierdas!</strong>
+            <p id="dailyPromoPreviewText">
+              10% de descuento en pizzas de 1/2 metro.
+            </p>
           </div>
 
-          <p class="promo-preview-note">
-            El cliente ver&aacute; este aviso en la portada antes de entrar al men&uacute;.
+          <p class="promo-preview-help">
+            As&iacute; se destacar&aacute; la promoci&oacute;n en la bienvenida de la tienda.
           </p>
         </aside>
 
@@ -1241,7 +1298,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/comercio.js?v=68"></script>
+  <script src="js/comercio.js?v=69"></script>
 
 </body>
 </html>
