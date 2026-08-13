@@ -15,10 +15,10 @@ const welcomeLogo = document.getElementById("welcomeLogo");
 const welcomeBusinessName = document.getElementById("welcomeBusinessName");
 const welcomeBusinessDescription = document.getElementById("welcomeBusinessDescription");
 const welcomeButtonText = document.getElementById("welcomeButtonText");
-const dailyPromoNotice = document.getElementById("dailyPromoNotice");
-const dailyPromoBadgeText = document.getElementById("dailyPromoBadgeText");
-const dailyPromoTitleText = document.getElementById("dailyPromoTitleText");
-const dailyPromoDescriptionText = document.getElementById("dailyPromoDescriptionText");
+const dailyPromoBanner = document.getElementById("dailyPromoBanner");
+const dailyPromoBannerBadge = document.getElementById("dailyPromoBannerBadge");
+const dailyPromoBannerTitle = document.getElementById("dailyPromoBannerTitle");
+const dailyPromoBannerText = document.getElementById("dailyPromoBannerText");
 
 
 const storeStatus = document.getElementById("storeStatus");
@@ -282,7 +282,7 @@ async function refreshOrderingStatusFromSupabase() {
   try {
     const rows =
       await requestJSON(
-        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,active,daily_promo_active,daily_promo_badge,daily_promo_title,daily_promo_description`
+        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,promo_active,promo_badge,promo_title,promo_text,active`
       );
 
     const fresh =
@@ -307,23 +307,32 @@ async function refreshOrderingStatusFromSupabase() {
     business.active =
       fresh.active ?? business.active;
 
-    business.daily_promo_active =
-      fresh.daily_promo_active === true;
+    business.promo_active =
+      fresh.promo_active ?? false;
 
-    business.daily_promo_badge =
-      fresh.daily_promo_badge ??
-      business.daily_promo_badge;
+    business.promo_badge =
+      fresh.promo_badge ??
+      business.promo_badge;
 
-    business.daily_promo_title =
-      fresh.daily_promo_title ??
-      business.daily_promo_title;
+    business.promo_title =
+      fresh.promo_title ??
+      business.promo_title;
 
-    business.daily_promo_description =
-      fresh.daily_promo_description ??
-      business.daily_promo_description;
+    business.promo_text =
+      fresh.promo_text ??
+      business.promo_text;
+    business.promo_rule_type = fresh.promo_rule_type ?? business.promo_rule_type;
+    business.promo_target_type = fresh.promo_target_type ?? business.promo_target_type;
+    business.promo_target_id = fresh.promo_target_id ?? business.promo_target_id;
+    business.promo_discount_percent = fresh.promo_discount_percent ?? business.promo_discount_percent;
+    business.promo_trigger_qty = fresh.promo_trigger_qty ?? business.promo_trigger_qty;
+    business.promo_reward_product_id = fresh.promo_reward_product_id ?? business.promo_reward_product_id;
+    business.promo_reward_qty = fresh.promo_reward_qty ?? business.promo_reward_qty;
+    business.promo_repeat = fresh.promo_repeat ?? business.promo_repeat;
+
+    applyDailyPromo();
 
     applyOrderingStatus();
-    applyDailyPromo();
 
     if (storeStatus) {
       const status =
@@ -384,7 +393,7 @@ async function loadStore() {
 
   try {
     const businesses = await requestJSON(
-      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,daily_promo_active,daily_promo_badge,daily_promo_title,daily_promo_description,active,ordering_status,sold_out_message"
+      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,active,ordering_status,sold_out_message"
     );
 
     business =
@@ -405,8 +414,8 @@ async function loadStore() {
     }
 
     applyBusinessBranding();
-    applyOrderingStatus();
     applyDailyPromo();
+    applyOrderingStatus();
 
     const [
       allCategories,
@@ -550,43 +559,56 @@ function safeBrandColor(
 
 
 function applyDailyPromo() {
-  if (!dailyPromoNotice || !business) {
+  if (!dailyPromoBanner) {
     return;
   }
 
   const active =
-    business.daily_promo_active === true;
+    business?.promo_active === true;
 
   const title =
     String(
-      business.daily_promo_title || ""
+      business?.promo_title || ""
     ).trim();
 
-  const shouldShow =
-    active && Boolean(title);
+  const text =
+    String(
+      business?.promo_text || ""
+    ).trim();
 
-  dailyPromoNotice.hidden =
-    !shouldShow;
-
-  dailyPromoNotice.classList.toggle(
-    "is-visible",
-    shouldShow
-  );
-
-  if (!shouldShow) {
+  if (
+    !active ||
+    !title ||
+    !text
+  ) {
+    dailyPromoBanner.hidden = true;
+    dailyPromoBanner.classList.remove(
+      "is-visible"
+    );
     return;
   }
 
-  dailyPromoBadgeText.textContent =
-    business.daily_promo_badge ||
-    "PROMO DEL DÍA";
+  dailyPromoBannerBadge.textContent =
+    String(
+      business?.promo_badge ||
+      "PROMO DEL DÍA"
+    ).trim();
 
-  dailyPromoTitleText.textContent =
+  dailyPromoBannerTitle.textContent =
     title;
 
-  dailyPromoDescriptionText.textContent =
-    business.daily_promo_description ||
-    "¡Aprovechala hoy!";
+  dailyPromoBannerText.textContent =
+    text;
+
+  dailyPromoBanner.hidden = false;
+
+  requestAnimationFrame(
+    () => {
+      dailyPromoBanner.classList.add(
+        "is-visible"
+      );
+    }
+  );
 }
 
 function applyBusinessBranding() {
@@ -735,6 +757,62 @@ function applyBusinessBranding() {
   }
 }
 
+
+function activePromoRuleType(){
+  return business?.promo_active===true ? (business.promo_rule_type||"announcement") : "announcement";
+}
+
+function productMatchesPromo(product){
+  if(!product || business?.promo_active!==true) return false;
+  const target=String(business?.promo_target_id??"");
+  if(!target) return false;
+  return business?.promo_target_type==="product"
+    ? String(product.id)===target
+    : String(product.category_id)===target;
+}
+
+function percentPromoForProduct(product){
+  if(activePromoRuleType()!=="percent" || !productMatchesPromo(product)) return 0;
+  return Math.min(100,Math.max(0,Number(business?.promo_discount_percent||0)));
+}
+
+function applyPercentDiscount(amount,product){
+  const value=Number(amount||0);
+  const percent=percentPromoForProduct(product);
+  return percent>0 ? Math.round(value*(1-percent/100)) : value;
+}
+
+function productById(id){
+  return products.find(x=>String(x.id)===String(id))||null;
+}
+
+function cartGiftItems(){
+  if(activePromoRuleType()!=="gift") return [];
+  const target=String(business?.promo_target_id??"");
+  const trigger=Math.max(1,Number(business?.promo_trigger_qty||1));
+  const rewardQty=Math.max(1,Number(business?.promo_reward_qty||1));
+  const reward=productById(business?.promo_reward_product_id);
+  if(!target || !reward) return [];
+
+  let matched=0;
+  cart.forEach(item=>{
+    const p=productById(item.productId);
+    if(!p) return;
+    const ok=business?.promo_target_type==="product"
+      ? String(p.id)===target
+      : String(p.category_id)===target;
+    if(ok) matched+=Number(item.quantity||0);
+  });
+
+  let times=Math.floor(matched/trigger);
+  if(business?.promo_repeat===false) times=Math.min(1,times);
+  const qty=times*rewardQty;
+  return qty>0 ? [{
+    type:"promo_gift",productId:reward.id,productName:reward.name,
+    quantity:qty,unitPrice:0,total:0,options:[],promoLabel:"REGALO PROMO"
+  }] : [];
+}
+
 function renderCatalog() {
   const visibleCategories = categories.filter(
     (category) =>
@@ -870,13 +948,25 @@ function renderProductCard(product) {
       productCategory?.name || ""
     ).includes("pizza");
 
+  const promoPercent =
+    percentPromoForProduct(product);
+
+  const discountedFixedPrice =
+    applyPercentDiscount(product.price,product);
+
   const priceText =
     pizzaProduct && hasOptions
-      ? "Eleg\u00ed tama\u00f1o"
+      ? promoPercent > 0
+        ? `<span class="promo-price-chip">-${promoPercent}% HOY</span> Elegí tamaño`
+        : "Elegí tamaño"
       : Number(product.price || 0) > 0
-        ? money(product.price)
+        ? promoPercent > 0
+          ? `<span class="promo-old-price">${money(product.price)}</span> <strong class="promo-new-price">${money(discountedFixedPrice)}</strong> <span class="promo-price-chip">-${promoPercent}%</span>`
+          : money(product.price)
         : hasOptions
-          ? "Eleg\u00ed opciones"
+          ? promoPercent > 0
+            ? `<span class="promo-price-chip">-${promoPercent}% HOY</span> Elegí opciones`
+            : "Elegí opciones"
           : money(0);
 
   return `
@@ -1195,7 +1285,10 @@ function empanadaTotalPrice() {
 
       total +=
         Number(quantity || 0) *
-        Number(option.price_delta || 0);
+        applyPercentDiscount(
+          Number(option.price_delta || 0),
+          currentProduct
+        );
     }
   );
 
@@ -1387,7 +1480,7 @@ function renderOptionGroups(product) {
                 >
                   <span class="option-copy">
                     <strong>${escapeHTML(option.name)}</strong>
-                    <small>${money(option.price_delta)} c/u</small>
+                    <small>${percentPromoForProduct(currentProduct)>0 ? `<s>${money(option.price_delta)}</s> ${money(applyPercentDiscount(option.price_delta,currentProduct))}` : money(option.price_delta)} c/u</small>
                   </span>
 
                   <div
@@ -1424,8 +1517,10 @@ function renderOptionGroups(product) {
                   <small>
                     ${
                       isSizeGroup(group)
-                        ? money(
-                            Number(option.price_delta || 0)
+                        ? (
+                            percentPromoForProduct(product) > 0
+                              ? `<s>${money(Number(option.price_delta || 0))}</s> ${money(applyPercentDiscount(Number(option.price_delta || 0),product))}`
+                              : money(Number(option.price_delta || 0))
                           )
                         : Number(option.price_delta || 0) > 0
                           ? `+ ${money(option.price_delta)}`
@@ -1753,27 +1848,21 @@ function currentUnitPrice() {
     return empanadaTotalPrice();
   }
 
-  const pizzaProduct =
-    currentProductIsPizza();
+  const pizzaProduct=currentProductIsPizza();
+  const selectedIds=getSelectedOptionIds();
+  let basePrice=pizzaProduct ? 0 : Number(currentProduct?.price||0);
+  let extrasTotal=0;
 
-  let total =
-    pizzaProduct
-      ? 0
-      : Number(currentProduct?.price || 0);
-
-  const selectedIds =
-    getSelectedOptionIds();
-
-  options
-    .filter(
-      (option) =>
-        selectedIds.has(String(option.id))
-    )
-    .forEach((option) => {
-      total += Number(option.price_delta || 0);
+  getProductGroups(currentProduct.id).forEach(group=>{
+    getGroupOptions(group.id).forEach(option=>{
+      if(!selectedIds.has(String(option.id))) return;
+      const price=Number(option.price_delta||0);
+      if(pizzaProduct && isSizeGroup(group)) basePrice=price;
+      else extrasTotal+=price;
     });
+  });
 
-  return total;
+  return applyPercentDiscount(basePrice,currentProduct)+extrasTotal;
 }
 
 function refreshPrice() {
@@ -1951,6 +2040,7 @@ async function addCurrentProductToCart() {
           ? total / quantity
           : 0,
       total,
+      promoPercent:percentPromoForProduct(currentProduct),
       flavors,
       options:flavors.map(
         (flavor) => ({
@@ -2018,6 +2108,7 @@ async function addCurrentProductToCart() {
     quantity:currentQuantity,
     unitPrice,
     total:unitPrice * currentQuantity,
+    promoPercent:percentPromoForProduct(currentProduct),
     options:selected
   });
 
@@ -2147,6 +2238,11 @@ function renderCart() {
                   `
                   : ""
               }
+              ${
+                Number(item.promoPercent || 0) > 0
+                  ? `<p class="cart-promo-applied">PROMO -${Number(item.promoPercent)}% APLICADA</p>`
+                  : ""
+              }
             </div>
 
             <strong>${money(item.total)}</strong>
@@ -2167,6 +2263,22 @@ function renderCart() {
         </article>
       `;
     }).join("");
+
+  const giftItems = cartGiftItems();
+
+  if (giftItems.length) {
+    cartItems.innerHTML += giftItems.map(gift => `
+      <article class="cart-item promo-gift-cart-item">
+        <div class="cart-item-top">
+          <div>
+            <h3>${gift.quantity} x ${escapeHTML(gift.productName)}</h3>
+            <p class="cart-item-options">🎁 REGALO PROMO</p>
+          </div>
+          <strong>GRATIS</strong>
+        </div>
+      </article>
+    `).join("");
+  }
 
   cartItems
     .querySelectorAll(".cart-remove")
@@ -2399,6 +2511,33 @@ async function saveOrderToSupabase() {
     }
   }
 
+  for (const gift of cartGiftItems()) {
+    const giftOrderItem=await insertRow(
+      "order_items",
+      {
+        order_id:order.id,
+        product_id:gift.productId,
+        product_name:gift.productName,
+        quantity:gift.quantity,
+        unit_price:0,
+        total:0
+      }
+    );
+
+    if(giftOrderItem?.id){
+      await insertRow(
+        "order_item_options",
+        {
+          order_item_id:giftOrderItem.id,
+          group_name:"PROMO",
+          option_name:"REGALO",
+          price_delta:0
+        },
+        false
+      );
+    }
+  }
+
   return order;
 }
 
@@ -2494,11 +2633,24 @@ function whatsappOrderMessage() {
       );
     });
 
+    if (Number(item.promoPercent || 0) > 0) {
+      lines.push(`PROMO APLICADA: -${Number(item.promoPercent)}%`);
+    }
+
     lines.push(
       `Subtotal: *${money(item.total)}*`
     );
     lines.push("");
   });
+
+  const gifts=cartGiftItems();
+  if(gifts.length){
+    lines.push("🎁 *REGALO PROMO*");
+    gifts.forEach(gift=>{
+      lines.push(`${gift.quantity} ${String(gift.productName||"").trim().toUpperCase()} - GRATIS`);
+    });
+    lines.push("");
+  }
 
   const notes =
     customerNotes.value.trim();
