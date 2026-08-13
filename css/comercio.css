@@ -2863,3 +2863,241 @@ body{
     min-height:390px;
   }
 }
+
+
+/* =========================================================
+   V68 - PROMO DEL DÍA
+========================================================= */
+
+.promo-admin-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(290px,.75fr);
+  gap:18px;
+  align-items:start;
+}
+
+.promo-admin-form{
+  padding:22px;
+}
+
+.promo-admin-heading{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:center;
+  padding-bottom:20px;
+  border-bottom:1px solid #e6ebf2;
+}
+
+.promo-admin-heading h2{
+  margin:3px 0 4px;
+  font-family:Georgia,"Times New Roman",serif;
+  color:var(--merchant-ink);
+}
+
+.promo-admin-heading p{
+  margin:0;
+  color:var(--merchant-muted);
+  font-size:.82rem;
+  line-height:1.45;
+}
+
+.promo-switch{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  flex:0 0 auto;
+  cursor:pointer;
+  user-select:none;
+}
+
+.promo-switch input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.promo-switch-track{
+  width:52px;
+  height:30px;
+  position:relative;
+  border-radius:999px;
+  background:#d9e0ea;
+  transition:.2s ease;
+}
+
+.promo-switch-knob{
+  width:22px;
+  height:22px;
+  position:absolute;
+  top:4px;
+  left:4px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 3px 8px rgba(16,33,61,.18);
+  transition:.2s ease;
+}
+
+.promo-switch input:checked + .promo-switch-track{
+  background:linear-gradient(135deg,#11a461,#168449);
+}
+
+.promo-switch input:checked + .promo-switch-track .promo-switch-knob{
+  transform:translateX(22px);
+}
+
+.promo-switch strong{
+  min-width:82px;
+  color:var(--merchant-ink);
+  font-size:.78rem;
+}
+
+.promo-admin-fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:20px;
+}
+
+.promo-admin-fields label{
+  display:grid;
+  gap:6px;
+  color:#42516a;
+  font-size:.78rem;
+  font-weight:800;
+}
+
+.promo-admin-fields input,
+.promo-admin-fields textarea{
+  width:100%;
+  border:1px solid #d8e0eb;
+  border-radius:12px;
+  padding:11px 12px;
+  background:#fff;
+  color:var(--merchant-ink);
+}
+
+.promo-admin-fields .full-width{
+  grid-column:1 / -1;
+}
+
+.promo-admin-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+
+.promo-preview-panel{
+  position:sticky;
+  top:24px;
+  padding:16px;
+}
+
+.promo-preview-card{
+  min-height:300px;
+  margin-top:10px;
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:20px;
+  position:relative;
+  overflow:hidden;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 90% 10%,rgba(255,255,255,.18),transparent 10rem),
+    linear-gradient(145deg,#7a1d14,#d6432f 55%,#ed7c36);
+  color:#fff;
+  box-shadow:0 18px 42px rgba(159,47,32,.20);
+}
+
+.promo-preview-card::after{
+  content:"";
+  position:absolute;
+  inset:10px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:18px;
+  pointer-events:none;
+}
+
+.promo-preview-spark{
+  width:62px;
+  height:62px;
+  display:grid;
+  place-items:center;
+  border-radius:18px;
+  background:#fff;
+  color:#b3271d;
+  font-size:1.55rem;
+  font-weight:950;
+  box-shadow:0 10px 24px rgba(0,0,0,.14);
+}
+
+.promo-preview-card small{
+  display:block;
+  margin-bottom:6px;
+  font-weight:950;
+  letter-spacing:.13em;
+}
+
+.promo-preview-card strong{
+  display:block;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:2rem;
+  line-height:1.05;
+}
+
+.promo-preview-card p{
+  margin:10px 0 0;
+  max-width:320px;
+  font-size:.92rem;
+  line-height:1.45;
+}
+
+.promo-preview-note{
+  margin:12px 2px 0;
+  color:var(--merchant-muted);
+  font-size:.74rem;
+  line-height:1.4;
+}
+
+@media(max-width:900px){
+  .promo-admin-layout{
+    grid-template-columns:1fr;
+  }
+
+  .promo-preview-panel{
+    position:static;
+  }
+}
+
+@media(max-width:560px){
+  .promo-admin-form{
+    padding:16px;
+  }
+
+  .promo-admin-heading{
+    display:grid;
+  }
+
+  .promo-admin-fields{
+    grid-template-columns:1fr;
+  }
+
+  .promo-admin-fields .full-width{
+    grid-column:auto;
+  }
+
+  .promo-admin-actions{
+    display:grid;
+  }
+
+  .promo-admin-actions button{
+    width:100%;
+  }
+
+  .promo-preview-card{
+    min-height:250px;
+  }
+}
