@@ -55,6 +55,13 @@ const deliveryExtraFields = document.getElementById("deliveryExtraFields");
 const paymentMethod = document.getElementById("paymentMethod");
 const cashAmount = document.getElementById("cashAmount");
 const cashAmountField = document.getElementById("cashAmountField");
+const transferInfoCard = document.getElementById("transferInfoCard");
+const transferBankName = document.getElementById("transferBankName");
+const transferAccountHolder = document.getElementById("transferAccountHolder");
+const transferAccountNumber = document.getElementById("transferAccountNumber");
+const transferCurrency = document.getElementById("transferCurrency");
+const transferInstructions = document.getElementById("transferInstructions");
+
 const customerNotes = document.getElementById("customerNotes");
 const checkoutItemsCount = document.getElementById("checkoutItemsCount");
 const checkoutTotal = document.getElementById("checkoutTotal");
@@ -282,7 +289,7 @@ async function refreshOrderingStatusFromSupabase() {
   try {
     const rows =
       await requestJSON(
-        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,active`
+        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,active`
       );
 
     const fresh =
@@ -329,6 +336,26 @@ async function refreshOrderingStatusFromSupabase() {
     business.promo_reward_product_id = fresh.promo_reward_product_id ?? business.promo_reward_product_id;
     business.promo_reward_qty = fresh.promo_reward_qty ?? business.promo_reward_qty;
     business.promo_repeat = fresh.promo_repeat ?? business.promo_repeat;
+    business.payment_bank_name =
+      fresh.payment_bank_name ??
+      business.payment_bank_name;
+
+    business.payment_account_holder =
+      fresh.payment_account_holder ??
+      business.payment_account_holder;
+
+    business.payment_account_number =
+      fresh.payment_account_number ??
+      business.payment_account_number;
+
+    business.payment_currency =
+      fresh.payment_currency ??
+      business.payment_currency;
+
+    business.payment_instructions =
+      fresh.payment_instructions ??
+      business.payment_instructions;
+
 
     applyDailyPromo();
 
@@ -393,7 +420,7 @@ async function loadStore() {
 
   try {
     const businesses = await requestJSON(
-      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,active,ordering_status,sold_out_message"
+      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,active,ordering_status,sold_out_message"
     );
 
     business =
@@ -2790,6 +2817,46 @@ function syncDeliveryFields() {
   syncPaymentFields();
 }
 
+function paymentDisplayDefaults() {
+  return {
+    bank:"Banco / Institución",
+    holder:"Nombre del titular",
+    account:"0000000000",
+    currency:"Pesos uruguayos",
+    instructions:
+      "Realizá la transferencia por el total del pedido. Conservá el comprobante."
+  };
+}
+
+function renderTransferInfo() {
+  const defaults =
+    paymentDisplayDefaults();
+
+  if (!transferInfoCard) {
+    return;
+  }
+
+  transferBankName.textContent =
+    business?.payment_bank_name ||
+    defaults.bank;
+
+  transferAccountHolder.textContent =
+    business?.payment_account_holder ||
+    defaults.holder;
+
+  transferAccountNumber.textContent =
+    business?.payment_account_number ||
+    defaults.account;
+
+  transferCurrency.textContent =
+    business?.payment_currency ||
+    defaults.currency;
+
+  transferInstructions.textContent =
+    business?.payment_instructions ||
+    defaults.instructions;
+}
+
 function syncPaymentFields() {
   const isDelivery =
     deliveryType.value === "delivery";
@@ -2797,13 +2864,25 @@ function syncPaymentFields() {
   const isCash =
     paymentMethod.value === "cash";
 
+  const isTransfer =
+    paymentMethod.value === "transfer";
+
   cashAmountField.style.display =
     isDelivery && isCash
       ? "grid"
       : "none";
 
+  if (transferInfoCard) {
+    transferInfoCard.hidden =
+      !(isDelivery && isTransfer);
+  }
+
   if (!isDelivery || !isCash) {
     cashAmount.value = "";
+  }
+
+  if (isDelivery && isTransfer) {
+    renderTransferInfo();
   }
 }
 
@@ -3129,7 +3208,7 @@ function whatsappOrderMessage() {
         );
       }
     } else {
-      lines.push("Transferencia");
+      lines.push("Transferencia / Débito");
     }
   }
 
@@ -3227,6 +3306,7 @@ checkoutForm.addEventListener(
       deliveryType.value = "delivery";
       paymentMethod.value = "cash";
       syncDeliveryFields();
+      syncPaymentFields();
 
       window.location.href =
         whatsappUrl;
