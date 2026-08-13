@@ -788,6 +788,10 @@ function productById(id){
 
 function cartGiftItems(){
   if(activePromoRuleType()!=="gift") return [];
+
+  if (promoUsesIncludedFreeUnits()) {
+    return [];
+  }
   const target=String(business?.promo_target_id??"");
   const trigger=Math.max(1,Number(business?.promo_trigger_qty||1));
   const rewardQty=Math.max(1,Number(business?.promo_reward_qty||1));
@@ -812,6 +816,318 @@ function cartGiftItems(){
     quantity:qty,unitPrice:0,total:0,options:[],promoLabel:"REGALO PROMO"
   }] : [];
 }
+
+function promoGiftRule() {
+  if (
+    activePromoRuleType() !== "gift"
+  ) {
+    return null;
+  }
+
+  const triggerQty =
+    Math.max(
+      1,
+      Number(
+        business?.promo_trigger_qty ||
+        1
+      )
+    );
+
+  const rewardQty =
+    Math.max(
+      1,
+      Number(
+        business?.promo_reward_qty ||
+        1
+      )
+    );
+
+  const rewardProduct =
+    productById(
+      business?.promo_reward_product_id
+    );
+
+  if (!rewardProduct) {
+    return null;
+  }
+
+  return {
+    triggerQty,
+    rewardQty,
+    rewardProduct,
+    repeat:
+      business?.promo_repeat !== false
+  };
+}
+
+function productMatchesGiftTarget(product) {
+  if (!product) {
+    return false;
+  }
+
+  const target =
+    String(
+      business?.promo_target_id ?? ""
+    );
+
+  if (!target) {
+    return false;
+  }
+
+  return (
+    business?.promo_target_type ===
+    "product"
+      ? String(product.id) === target
+      : String(product.category_id) ===
+        target
+  );
+}
+
+function promoUsesIncludedFreeUnits() {
+  const rule =
+    promoGiftRule();
+
+  if (!rule) {
+    return false;
+  }
+
+  /*
+    Si el producto que se regala también pertenece al producto/categoría
+    que activa la promo, interpretamos la regla como:
+    "de la cantidad elegida, X unidades son gratis".
+
+    Ejemplo:
+    categoría Empanadas / cada 10 / 2 Empanadas gratis
+    El cliente elige 12 -> paga 10.
+  */
+  return productMatchesGiftTarget(
+    rule.rewardProduct
+  );
+}
+
+function totalGiftTargetQuantity() {
+  let total = 0;
+
+  cart.forEach((item) => {
+    const product =
+      productById(
+        item.productId
+      );
+
+    if (
+      productMatchesGiftTarget(
+        product
+      )
+    ) {
+      total +=
+        Number(
+          item.quantity || 0
+        );
+    }
+  });
+
+  return total;
+}
+
+function totalIncludedFreeQuantity() {
+  const rule =
+    promoGiftRule();
+
+  if (
+    !rule ||
+    !promoUsesIncludedFreeUnits()
+  ) {
+    return 0;
+  }
+
+  const matchingQty =
+    totalGiftTargetQuantity();
+
+  let times =
+    Math.floor(
+      matchingQty /
+      rule.triggerQty
+    );
+
+  if (!rule.repeat) {
+    times =
+      Math.min(
+        1,
+        times
+      );
+  }
+
+  return (
+    times *
+    rule.rewardQty
+  );
+}
+
+function includedGiftAllocation() {
+  const allocation =
+    new Map();
+
+  let remainingFree =
+    totalIncludedFreeQuantity();
+
+  if (remainingFree <= 0) {
+    return allocation;
+  }
+
+  const rewardProductId =
+    String(
+      business?.promo_reward_product_id ??
+      ""
+    );
+
+  /*
+    Descontamos las unidades gratis únicamente del producto configurado
+    como regalo. Recorremos de atrás hacia adelante para mantener estable
+    el cálculo si el mismo producto fue agregado más de una vez.
+  */
+  [...cart]
+    .reverse()
+    .forEach((item) => {
+      if (remainingFree <= 0) {
+        return;
+      }
+
+      if (
+        String(item.productId) !==
+        rewardProductId
+      ) {
+        return;
+      }
+
+      const qty =
+        Number(
+          item.quantity || 0
+        );
+
+      const freeQty =
+        Math.min(
+          qty,
+          remainingFree
+        );
+
+      if (freeQty > 0) {
+        allocation.set(
+          item.key,
+          freeQty
+        );
+
+        remainingFree -=
+          freeQty;
+      }
+    });
+
+  return allocation;
+}
+
+function includedFreeQtyForItem(item) {
+  return Number(
+    includedGiftAllocation().get(
+      item.key
+    ) || 0
+  );
+}
+
+function itemEffectiveTotal(item) {
+  const rawTotal =
+    Number(
+      item.total || 0
+    );
+
+  const freeQty =
+    includedFreeQtyForItem(
+      item
+    );
+
+  if (
+    freeQty <= 0 ||
+    Number(item.quantity || 0) <= 0
+  ) {
+    return rawTotal;
+  }
+
+  const unitValue =
+    rawTotal /
+    Number(item.quantity);
+
+  return Math.max(
+    0,
+    rawTotal -
+    unitValue * freeQty
+  );
+}
+
+function itemPromoSavings(item) {
+  return Math.max(
+    0,
+    Number(item.total || 0) -
+    itemEffectiveTotal(item)
+  );
+}
+
+function currentProductNewFreeUnits(
+  candidateQuantity
+) {
+  const rule =
+    promoGiftRule();
+
+  if (
+    !rule ||
+    !promoUsesIncludedFreeUnits() ||
+    !currentProduct ||
+    String(currentProduct.id) !==
+      String(rule.rewardProduct.id) ||
+    !productMatchesGiftTarget(
+      currentProduct
+    )
+  ) {
+    return 0;
+  }
+
+  const existingQty =
+    totalGiftTargetQuantity();
+
+  const beforeTimes =
+    Math.floor(
+      existingQty /
+      rule.triggerQty
+    );
+
+  const afterTimes =
+    Math.floor(
+      (
+        existingQty +
+        Number(
+          candidateQuantity || 0
+        )
+      ) /
+      rule.triggerQty
+    );
+
+  const safeBefore =
+    rule.repeat
+      ? beforeTimes
+      : Math.min(1,beforeTimes);
+
+  const safeAfter =
+    rule.repeat
+      ? afterTimes
+      : Math.min(1,afterTimes);
+
+  return Math.max(
+    0,
+    (
+      safeAfter -
+      safeBefore
+    ) *
+    rule.rewardQty
+  );
+}
+
 
 function renderCatalog() {
   const visibleCategories = categories.filter(
@@ -1880,17 +2196,38 @@ function refreshPrice() {
     const quantity =
       empanadaTotalQuantity();
 
-    const total =
+    const rawTotal =
       empanadaTotalPrice();
+
+    const freeQty =
+      currentProductNewFreeUnits(
+        quantity
+      );
+
+    const unitValue =
+      quantity > 0
+        ? rawTotal / quantity
+        : 0;
+
+    const total =
+      Math.max(
+        0,
+        rawTotal -
+        unitValue * freeQty
+      );
 
     target.textContent =
       quantity > 0
-        ? `${quantity} empanada${quantity === 1 ? "" : "s"} - ${money(total)}`
+        ? freeQty > 0
+          ? `${quantity} empanadas · ${freeQty} GRATIS · Pagás ${money(total)}`
+          : `${quantity} empanada${quantity === 1 ? "" : "s"} - ${money(total)}`
         : "Elegi los sabores y cantidades";
 
     button.textContent =
       quantity > 0
-        ? `Agregar ${quantity} empanada${quantity === 1 ? "" : "s"} - ${money(total)}`
+        ? freeQty > 0
+          ? `Agregar ${quantity} · ${freeQty} GRATIS · ${money(total)}`
+          : `Agregar ${quantity} empanada${quantity === 1 ? "" : "s"} - ${money(total)}`
         : "Elegi al menos 1 empanada";
 
     button.disabled =
@@ -2195,8 +2532,27 @@ function renderCart() {
                 </p>
               </div>
 
-              <strong>${money(item.total)}</strong>
+              <strong>
+                ${
+                  includedFreeQtyForItem(item) > 0
+                    ? money(itemEffectiveTotal(item))
+                    : money(item.total)
+                }
+              </strong>
             </div>
+
+            ${
+              includedFreeQtyForItem(item) > 0
+                ? `
+                  <div class="included-promo-summary">
+                    🎁 ${includedFreeQtyForItem(item)} EMPANADA${includedFreeQtyForItem(item) === 1 ? "" : "S"} GRATIS
+                    <small>
+                      Ahorrás ${money(itemPromoSavings(item))}
+                    </small>
+                  </div>
+                `
+                : ""
+            }
 
             <div class="cart-item-bottom">
               <span>
@@ -2245,8 +2601,23 @@ function renderCart() {
               }
             </div>
 
-            <strong>${money(item.total)}</strong>
+            <strong>
+              ${money(itemEffectiveTotal(item))}
+            </strong>
           </div>
+
+          ${
+            includedFreeQtyForItem(item) > 0
+              ? `
+                <div class="included-promo-summary">
+                  🎁 ${includedFreeQtyForItem(item)} UNIDAD${includedFreeQtyForItem(item) === 1 ? "" : "ES"} GRATIS
+                  <small>
+                    Ahorrás ${money(itemPromoSavings(item))}
+                  </small>
+                </div>
+              `
+              : ""
+          }
 
           <div class="cart-item-bottom">
             <span>${money(item.unitPrice)} c/u</span>
@@ -2302,7 +2673,8 @@ function renderCart() {
 function cartGrandTotal() {
   return cart.reduce(
     (sum,item) =>
-      sum + Number(item.total || 0),
+      sum +
+      itemEffectiveTotal(item),
     0
   );
 }
@@ -2488,13 +2860,38 @@ async function saveOrderToSupabase() {
         product_id:item.productId,
         product_name:item.productName,
         quantity:item.quantity,
-        unit_price:item.unitPrice,
-        total:item.total
+        unit_price:
+          Number(item.quantity || 0) > 0
+            ? itemEffectiveTotal(item) /
+              Number(item.quantity)
+            : 0,
+        total:
+          itemEffectiveTotal(item)
       }
     );
 
     if (!orderItem?.id) {
       continue;
+    }
+
+    const freeQty =
+      includedFreeQtyForItem(
+        item
+      );
+
+    if (freeQty > 0) {
+      await insertRow(
+        "order_item_options",
+        {
+          order_item_id:orderItem.id,
+          group_name:"PROMO",
+          option_name:
+            `${freeQty} UNIDAD${freeQty === 1 ? "" : "ES"} GRATIS`,
+          price_delta:
+            -itemPromoSavings(item)
+        },
+        false
+      );
     }
 
     for (const option of item.options) {
@@ -2570,8 +2967,22 @@ function whatsappOrderMessage() {
         );
       });
 
+      const freeQty =
+        includedFreeQtyForItem(
+          item
+        );
+
+      if (freeQty > 0) {
+        lines.push(
+          `🎁 PROMO: ${freeQty} EMPANADA${freeQty === 1 ? "" : "S"} GRATIS`
+        );
+        lines.push(
+          `Ahorrás: ${money(itemPromoSavings(item))}`
+        );
+      }
+
       lines.push(
-        `Subtotal: *${money(item.total)}*`
+        `Subtotal: *${money(itemEffectiveTotal(item))}*`
       );
       lines.push("");
       return;
@@ -2637,8 +3048,22 @@ function whatsappOrderMessage() {
       lines.push(`PROMO APLICADA: -${Number(item.promoPercent)}%`);
     }
 
+    const includedFree =
+      includedFreeQtyForItem(
+        item
+      );
+
+    if (includedFree > 0) {
+      lines.push(
+        `🎁 PROMO: ${includedFree} UNIDAD${includedFree === 1 ? "" : "ES"} GRATIS`
+      );
+      lines.push(
+        `Ahorrás: ${money(itemPromoSavings(item))}`
+      );
+    }
+
     lines.push(
-      `Subtotal: *${money(item.total)}*`
+      `Subtotal: *${money(itemEffectiveTotal(item))}*`
     );
     lines.push("");
   });
