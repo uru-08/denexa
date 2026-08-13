@@ -61,6 +61,11 @@
         <span>Promo del d&iacute;a</span>
       </button>
 
+      <button class="nav-item" data-section="payments" type="button">
+        <span class="nav-icon">$</span>
+        <span>Cobros</span>
+      </button>
+
     </nav>
 
   </aside>
@@ -513,6 +518,87 @@
         </aside>
 
       </div>
+    </section>
+
+
+    <section id="payments" class="page-section">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">COBROS</p>
+          <h1>Datos para transferencias</h1>
+          <p class="subtitle">
+            Complet&aacute; los datos que ver&aacute; el cliente cuando elija pagar por transferencia o d&eacute;bito.
+          </p>
+        </div>
+      </header>
+
+      <form id="paymentSettingsForm" class="panel">
+        <div class="form-grid">
+
+          <label>
+            Banco / instituci&oacute;n
+            <input
+              id="paymentBankName"
+              type="text"
+              maxlength="80"
+              placeholder="Ejemplo: Banco / InstituciÃ³n"
+            >
+          </label>
+
+          <label>
+            Titular de la cuenta
+            <input
+              id="paymentAccountHolder"
+              type="text"
+              maxlength="100"
+              placeholder="Ejemplo: Nombre del titular"
+            >
+          </label>
+
+          <label>
+            N&uacute;mero de cuenta
+            <input
+              id="paymentAccountNumber"
+              type="text"
+              maxlength="100"
+              placeholder="Ejemplo: 0000000000"
+            >
+          </label>
+
+          <label>
+            Moneda
+            <input
+              id="paymentCurrency"
+              type="text"
+              maxlength="30"
+              placeholder="Ejemplo: Pesos uruguayos"
+            >
+          </label>
+
+          <label class="full-width">
+            Instrucciones para el cliente
+            <textarea
+              id="paymentInstructions"
+              rows="4"
+              maxlength="300"
+              placeholder="Ejemplo: RealizÃ¡ la transferencia por el total del pedido. ConservÃ¡ el comprobante."
+            ></textarea>
+          </label>
+
+        </div>
+
+        <p class="subtitle" style="margin-top:14px;">
+          Estos datos son propios de cada comercio. Pod&eacute;s cambiarlos cuando quieras sin tocar GitHub.
+        </p>
+
+        <div id="paymentSettingsMessage" class="form-message"></div>
+
+        <div class="modal-actions" style="justify-content:flex-start;">
+          <button id="savePaymentSettingsButton" class="primary-button" type="submit">
+            Guardar datos de cobro
+          </button>
+        </div>
+      </form>
     </section>
 
     <section id="businesses" class="page-section merchant-master-section">
@@ -1298,7 +1384,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/comercio.js?v=72"></script>
+  <script src="js/comercio.js?v=76"></script>
 
 </body>
 </html>
