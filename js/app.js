@@ -282,7 +282,7 @@ async function refreshOrderingStatusFromSupabase() {
   try {
     const rows =
       await requestJSON(
-        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,promo_active,promo_badge,promo_title,promo_text,active`
+        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,active`
       );
 
     const fresh =
@@ -789,6 +789,12 @@ function productById(id){
 function cartGiftItems(){
   if(activePromoRuleType()!=="gift") return [];
 
+  /*
+    Si el regalo es el mismo producto/categoría de la promo,
+    se descuenta dentro de la cantidad comprada (v74).
+    Si es un producto diferente —por ejemplo 6 empanadas
+    => 1 Coca Cola 500 ml— se agrega aparte como GRATIS.
+  */
   if (promoUsesIncludedFreeUnits()) {
     return [];
   }
@@ -3323,6 +3329,14 @@ cartButton.addEventListener(
       return;
     }
 
+    /*
+      V75:
+      requireOrderingOpen() también actualiza en este momento
+      toda la configuración de la promoción desde Supabase.
+      Así el carrito siempre calcula el beneficio vigente,
+      aunque el comercio haya cambiado la promo con la web
+      del cliente ya abierta.
+    */
     openCartModal();
   }
 );
