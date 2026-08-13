@@ -867,30 +867,143 @@ function promoDefaults() {
 }
 
 async function loadPromoBuilderOptions() {
-  const [allCategories,allProducts] =
-    await Promise.all([
-      getTableData("categories","id,business_id,name,active"),
-      getTableData("products","id,business_id,category_id,name,active,available")
+  if (!selectedBusiness?.id) {
+    promoTargetId.innerHTML =
+      '<option value="">No hay comercio seleccionado</option>';
+
+    promoRewardProductId.innerHTML =
+      '<option value="">No hay comercio seleccionado</option>';
+
+    return;
+  }
+
+  const businessId =
+    encodeURIComponent(
+      selectedBusiness.id
+    );
+
+  try {
+    /*
+      V70:
+      Consultamos directamente los registros del comercio,
+      igual que hace el resto del panel. No cargamos toda la
+      tabla y luego filtramos en el navegador.
+    */
+    const [
+      categoriesText,
+      productsText
+    ] = await Promise.all([
+      requestText(
+        `${SUPABASE_REST}/categories?business_id=eq.${businessId}&active=eq.true&select=id,name&order=name.asc`,
+        {
+          method:"GET",
+          headers:supabaseHeaders()
+        }
+      ),
+      requestText(
+        `${SUPABASE_REST}/products?business_id=eq.${businessId}&active=eq.true&select=id,category_id,name,available&order=name.asc`,
+        {
+          method:"GET",
+          headers:supabaseHeaders()
+        }
+      )
     ]);
 
-  const cats = allCategories.filter(
-    x => String(x.business_id) === String(selectedBusiness.id) && x.active !== false
-  );
-  const prods = allProducts.filter(
-    x => String(x.business_id) === String(selectedBusiness.id) && x.active !== false
-  );
+    const cats =
+      categoriesText.trim()
+        ? JSON.parse(categoriesText)
+        : [];
 
-  promoTargetId.dataset.categories =
-    JSON.stringify(cats.map(x=>({id:x.id,name:x.name})));
-  promoTargetId.dataset.products =
-    JSON.stringify(prods.map(x=>({id:x.id,name:x.name})));
+    const prods =
+      productsText.trim()
+        ? JSON.parse(productsText)
+        : [];
 
-  promoRewardProductId.innerHTML =
-    prods.length
-      ? prods.map(x=>`<option value="${escapeHTML(x.id)}">${escapeHTML(x.name)}</option>`).join("")
-      : '<option value="">Sin productos</option>';
+    const safeCats =
+      Array.isArray(cats)
+        ? cats
+        : [];
 
-  refreshPromoTargetOptions();
+    const safeProds =
+      Array.isArray(prods)
+        ? prods
+        : [];
+
+    promoTargetId.dataset.categories =
+      JSON.stringify(
+        safeCats.map(
+          (item) => ({
+            id:item.id,
+            name:item.name
+          })
+        )
+      );
+
+    promoTargetId.dataset.products =
+      JSON.stringify(
+        safeProds.map(
+          (item) => ({
+            id:item.id,
+            name:item.name
+          })
+        )
+      );
+
+    promoRewardProductId.innerHTML =
+      safeProds.length
+        ? safeProds
+            .map(
+              (item) => `
+                <option value="${escapeHTML(item.id)}">
+                  ${escapeHTML(item.name)}
+                </option>
+              `
+            )
+            .join("")
+        : '<option value="">No hay productos cargados</option>';
+
+    refreshPromoTargetOptions();
+
+    if (
+      selectedBusiness.promo_target_id
+    ) {
+      promoTargetId.value =
+        String(
+          selectedBusiness.promo_target_id
+        );
+    }
+
+    if (
+      selectedBusiness.promo_reward_product_id
+    ) {
+      promoRewardProductId.value =
+        String(
+          selectedBusiness.promo_reward_product_id
+        );
+    }
+
+    if (
+      !safeCats.length &&
+      !safeProds.length
+    ) {
+      dailyPromoMessage.textContent =
+        "No se encontraron categorías ni productos para este comercio.";
+    }
+  } catch (error) {
+    console.error(
+      "Error cargando categorías/productos para promociones:",
+      error
+    );
+
+    promoTargetId.innerHTML =
+      '<option value="">No se pudieron cargar las opciones</option>';
+
+    promoRewardProductId.innerHTML =
+      '<option value="">No se pudieron cargar los productos</option>';
+
+    dailyPromoMessage.textContent =
+      `No se pudieron cargar categorías y productos: ${error.message || "error desconocido"}`;
+  }
 }
 
 function refreshPromoTargetOptions() {
@@ -5089,7 +5202,7 @@ async function initAdmin() {
   syncMerchantStatusUI();
   renderMerchantPanelLogo();
   fillStoreDesignForm();
-  fillDailyPromoForm();
+  await fillDailyPromoForm();
 
   await loadCategories();
   await loadProducts();
