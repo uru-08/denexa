@@ -3934,3 +3934,150 @@ body{
   font-size:.72rem;
   font-weight:800;
 }
+
+
+/* =========================================================
+   V76 - DATOS DE TRANSFERENCIA + BOTÓN CONFIRMAR
+========================================================= */
+
+.transfer-info-card[hidden]{
+  display:none !important;
+}
+
+.transfer-info-card{
+  grid-column:1 / -1;
+  margin-top:2px;
+  padding:15px;
+  border:1px solid #b9d1f0;
+  border-radius:16px;
+  background:
+    linear-gradient(145deg,#f4f8ff,#ffffff);
+  box-shadow:
+    0 10px 28px rgba(5,43,108,.08);
+}
+
+.transfer-info-head{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding-bottom:12px;
+  border-bottom:1px solid #dce7f5;
+}
+
+.transfer-info-icon{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  flex:0 0 auto;
+  border-radius:13px;
+  background:linear-gradient(
+    135deg,
+    var(--primary),
+    var(--primary-2)
+  );
+  color:#fff;
+  font-size:1.1rem;
+  font-weight:950;
+}
+
+.transfer-info-head strong{
+  display:block;
+  color:var(--text);
+  font-size:.94rem;
+}
+
+.transfer-info-head small{
+  display:block;
+  margin-top:2px;
+  color:var(--muted);
+  font-size:.72rem;
+  font-weight:700;
+}
+
+.transfer-info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+
+.transfer-info-grid > div{
+  padding:10px 11px;
+  border:1px solid #e0e8f3;
+  border-radius:12px;
+  background:#fff;
+}
+
+.transfer-info-grid span{
+  display:block;
+  color:var(--muted);
+  font-size:.68rem;
+  font-weight:800;
+}
+
+.transfer-info-grid strong{
+  display:block;
+  margin-top:3px;
+  overflow-wrap:anywhere;
+  color:var(--text);
+  font-size:.86rem;
+}
+
+.transfer-instructions{
+  margin:11px 0 0;
+  padding:10px 11px;
+  border-radius:11px;
+  background:#eef5ff;
+  color:#334967;
+  font-size:.76rem;
+  font-weight:750;
+  line-height:1.45;
+}
+
+/*
+  Solución específica para Confirmar pedido.
+  Todo el rectángulo del botón recibe el toque.
+*/
+#confirmOrderButton{
+  position:relative !important;
+  z-index:30 !important;
+  isolation:isolate !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  min-height:60px !important;
+  padding:15px 18px !important;
+  margin-top:4px !important;
+  border:0 !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  -webkit-tap-highlight-color:transparent !important;
+  cursor:pointer !important;
+}
+
+#confirmOrderButton::before,
+#confirmOrderButton::after{
+  pointer-events:none !important;
+}
+
+#confirmOrderButton:not(:disabled){
+  opacity:1 !important;
+}
+
+#checkoutForm{
+  position:relative;
+  z-index:3;
+}
+
+@media(max-width:650px){
+  .transfer-info-grid{
+    grid-template-columns:1fr;
+  }
+
+  #confirmOrderButton{
+    min-height:62px !important;
+    font-size:1rem !important;
+  }
+}
