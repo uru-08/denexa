@@ -3910,3 +3910,27 @@ body{
 .cart-promo-applied{margin:7px 0 0;color:#15803d;font-size:.76rem;font-weight:900}
 .promo-gift-cart-item{border:1px solid #b8e4c7!important;background:#f1fff5!important}
 .promo-gift-cart-item strong{color:#15803d}
+
+
+/* =========================================================
+   V74 - UNIDADES GRATIS INCLUIDAS EN LA CANTIDAD
+========================================================= */
+
+.included-promo-summary{
+  margin:10px 0 2px;
+  padding:10px 12px;
+  border:1px solid #b8e4c7;
+  border-radius:12px;
+  background:#f1fff5;
+  color:#15803d;
+  font-size:.78rem;
+  font-weight:950;
+}
+
+.included-promo-summary small{
+  display:block;
+  margin-top:3px;
+  color:#397a51;
+  font-size:.72rem;
+  font-weight:800;
+}
