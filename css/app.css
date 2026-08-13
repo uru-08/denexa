@@ -4081,3 +4081,71 @@ body{
     font-size:1rem !important;
   }
 }
+
+
+/* =========================================================
+   V77 - FIX DEFINITIVO BOTÓN CONFIRMAR PEDIDO
+========================================================= */
+
+/*
+  Había una regla histórica:
+  .floating-cart:active,
+  .primary-action:active {
+    transform:translateX(-50%) scale(.985);
+  }
+
+  En Confirmar pedido eso desplazaba el botón hacia la izquierda
+  en el instante del toque. En móviles el elemento podía salir de
+  debajo del dedo y el click quedaba cancelado/intermitente.
+
+  Este botón NO debe moverse nunca.
+*/
+#confirmOrderButton,
+#confirmOrderButton:hover,
+#confirmOrderButton:focus,
+#confirmOrderButton:focus-visible,
+#confirmOrderButton:active{
+  transform:none !important;
+  left:auto !important;
+  right:auto !important;
+  translate:none !important;
+}
+
+#confirmOrderButton:active{
+  filter:brightness(.96) !important;
+}
+
+/* Área táctil completa y estable */
+#confirmOrderButton{
+  width:100% !important;
+  min-height:62px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  position:relative !important;
+  z-index:50 !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  -webkit-tap-highlight-color:transparent !important;
+  user-select:none !important;
+  -webkit-user-select:none !important;
+}
+
+/* Ningún adorno puede interceptar el toque */
+#confirmOrderButton::before,
+#confirmOrderButton::after{
+  pointer-events:none !important;
+}
+
+/* El formulario no crea una capa por encima del botón */
+#checkoutForm{
+  isolation:isolate;
+}
+
+#checkoutForm > *{
+  position:relative;
+}
+
+#checkoutForm > #confirmOrderButton{
+  z-index:50 !important;
+}
