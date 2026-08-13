@@ -4105,12 +4105,21 @@ async function loadBusinesses() {
     document.getElementById("businessesList");
 
   try {
-    const businesses = await getTableData(
-      "businesses",
-      "id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,active,ordering_status,sold_out_message"
-    );
+    /*
+      V72:
+      Cargamos businesses con select=*.
+      Así, si Supabase todavía no tiene alguna columna opcional nueva
+      (branding/promos), el panel NO pierde la conexión completa.
+    */
+    const businesses =
+      await getTableData(
+        "businesses",
+        "*"
+      );
 
-    businessesCache = businesses;
+    if (businesses.length) {
+      businessesCache = businesses;
+    }
 
     if (!businesses.length) {
       container.className = "panel empty-state";
@@ -5175,14 +5184,8 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-async function initAdmin() {
-  await Promise.all([
-    loadDashboard(),
-    loadBusinesses(),
-    loadUsers()
-  ]);
-
-  selectedBusiness =
+async function resolveMerchantBusiness() {
+  const fromCache =
     businessesCache.find(
       (business) =>
         String(business.id) ===
@@ -5191,22 +5194,130 @@ async function initAdmin() {
     businessesCache[0] ||
     null;
 
+  if (fromCache) {
+    return fromCache;
+  }
+
+  /*
+    En algunos celulares, al recargar, la consulta general de comercios
+    puede tardar unas décimas más que el resto del panel. V70 mostraba
+    un error aunque segundos después todo quedara funcionando.
+
+    Antes de mostrar un error, V71 consulta directamente Mamma Mia.
+  */
+  for (
+    let attempt = 0;
+    attempt < 3;
+    attempt += 1
+  ) {
+    try {
+      const responseText =
+        await requestText(
+          `${SUPABASE_REST}/businesses?id=eq.${encodeURIComponent(MERCHANT_BUSINESS_ID)}&select=*`,
+          {
+            method:"GET",
+            headers:supabaseHeaders()
+          }
+        );
+
+      const rows =
+        responseText.trim()
+          ? JSON.parse(responseText)
+          : [];
+
+      const merchant =
+        Array.isArray(rows)
+          ? rows[0] || null
+          : null;
+
+      if (merchant) {
+        const exists =
+          businessesCache.some(
+            (item) =>
+              String(item.id) ===
+              String(merchant.id)
+          );
+
+        if (!exists) {
+          businessesCache.push(
+            merchant
+          );
+        }
+
+        return merchant;
+      }
+    } catch (error) {
+      console.warn(
+        `Reintento ${attempt + 1} cargando comercio:`,
+        error
+      );
+    }
+
+    await new Promise(
+      (resolve) =>
+        setTimeout(
+          resolve,
+          350 * (attempt + 1)
+        )
+    );
+  }
+
+  return null;
+}
+
+async function initAdmin() {
+  /*
+    Primero cargamos la lista de comercios.
+    El resto del panel depende de selectedBusiness.
+  */
+  await loadBusinesses();
+
+  selectedBusiness =
+    await resolveMerchantBusiness();
+
   if (!selectedBusiness) {
+    console.error(
+      "No se pudo cargar el comercio Mamma Mia."
+    );
+
     showToast(
-      "No se encontro el comercio Mamma Mia.",
+      "No se pudo conectar con el comercio. Recargá la página.",
       "error"
     );
+
     return;
   }
 
+  /*
+    Apenas tenemos el comercio real, sincronizamos todos los textos
+    que en HTML arrancan como "Cargando estado...".
+  */
   syncMerchantStatusUI();
   renderMerchantPanelLogo();
   fillStoreDesignForm();
-  await fillDailyPromoForm();
 
+  /*
+    El dashboard y usuarios ya pueden cargar en paralelo sin bloquear
+    la conexión principal del comercio.
+  */
+  await Promise.all([
+    loadDashboard(),
+    loadUsers()
+  ]);
+
+  /*
+    Las secciones comerciales se cargan recién después de tener
+    selectedBusiness confirmado.
+  */
   await loadCategories();
   await loadProducts();
+  await fillDailyPromoForm();
   await loadOrders();
+
+  /*
+    Volvemos a sincronizar por seguridad después de todas las lecturas.
+  */
+  syncMerchantStatusUI();
 
   if (ordersBusinessFilter) {
     ordersBusinessFilter.value =
