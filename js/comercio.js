@@ -15,25 +15,37 @@ const designHeroImageUrl = document.getElementById("designHeroImageUrl");
 const storeDesignMessage = document.getElementById("storeDesignMessage");
 const saveStoreDesignButton = document.getElementById("saveStoreDesignButton");
 const restoreStoreDesignButton = document.getElementById("restoreStoreDesignButton");
+const dailyPromoForm = document.getElementById("dailyPromoForm");
+const dailyPromoActive = document.getElementById("dailyPromoActive");
+const dailyPromoActiveText = document.getElementById("dailyPromoActiveText");
+const dailyPromoBadge = document.getElementById("dailyPromoBadge");
+const dailyPromoTitle = document.getElementById("dailyPromoTitle");
+const dailyPromoText = document.getElementById("dailyPromoText");
+const dailyPromoMessage = document.getElementById("dailyPromoMessage");
+const saveDailyPromoButton = document.getElementById("saveDailyPromoButton");
+const disableDailyPromoButton = document.getElementById("disableDailyPromoButton");
+const dailyPromoStatusBadge = document.getElementById("dailyPromoStatusBadge");
+const dailyPromoPreview = document.getElementById("dailyPromoPreview");
+const dailyPromoPreviewBadge = document.getElementById("dailyPromoPreviewBadge");
+const dailyPromoPreviewTitle = document.getElementById("dailyPromoPreviewTitle");
+const dailyPromoPreviewText = document.getElementById("dailyPromoPreviewText");
+const dailyPromoRuleType = document.getElementById("dailyPromoRuleType");
+const promoAutomaticFields = document.getElementById("promoAutomaticFields");
+const promoTargetType = document.getElementById("promoTargetType");
+const promoTargetId = document.getElementById("promoTargetId");
+const promoPercentFields = document.getElementById("promoPercentFields");
+const promoDiscountPercent = document.getElementById("promoDiscountPercent");
+const promoGiftFields = document.getElementById("promoGiftFields");
+const promoTriggerQty = document.getElementById("promoTriggerQty");
+const promoRewardProductId = document.getElementById("promoRewardProductId");
+const promoRewardQty = document.getElementById("promoRewardQty");
+const promoRepeat = document.getElementById("promoRepeat");
+
 const designPreview = document.getElementById("designPreview");
 const designPreviewLogo = document.getElementById("designPreviewLogo");
 const designPreviewTitle = document.getElementById("designPreviewTitle");
 const designPreviewDescription = document.getElementById("designPreviewDescription");
 const designPreviewButton = document.getElementById("designPreviewButton");
-const dailyPromoForm = document.getElementById("dailyPromoForm");
-const dailyPromoActive = document.getElementById("dailyPromoActive");
-const dailyPromoBadge = document.getElementById("dailyPromoBadge");
-const dailyPromoTitle = document.getElementById("dailyPromoTitle");
-const dailyPromoDescription = document.getElementById("dailyPromoDescription");
-const dailyPromoMessage = document.getElementById("dailyPromoMessage");
-const dailyPromoSwitchText = document.getElementById("dailyPromoSwitchText");
-const dailyPromoStatusBadge = document.getElementById("dailyPromoStatusBadge");
-const saveDailyPromoButton = document.getElementById("saveDailyPromoButton");
-const clearDailyPromoButton = document.getElementById("clearDailyPromoButton");
-const dailyPromoPreviewBadge = document.getElementById("dailyPromoPreviewBadge");
-const dailyPromoPreviewTitle = document.getElementById("dailyPromoPreviewTitle");
-const dailyPromoPreviewDescription = document.getElementById("dailyPromoPreviewDescription");
-
 
 const sections = document.querySelectorAll(".page-section");
 
@@ -231,7 +243,7 @@ navItems.forEach((button) => {
     }
 
     if (sectionId === "dailyPromo") {
-      fillDailyPromoForm();
+      await fillDailyPromoForm();
     }
   });
 });
@@ -846,221 +858,240 @@ restoreStoreDesignButton?.addEventListener(
 );
 
 
-function fillDailyPromoForm() {
-  if (!selectedBusiness) {
-    return;
-  }
-
-  dailyPromoActive.checked =
-    selectedBusiness.daily_promo_active === true;
-
-  dailyPromoBadge.value =
-    selectedBusiness.daily_promo_badge ||
-    "PROMO DEL DÍA";
-
-  dailyPromoTitle.value =
-    selectedBusiness.daily_promo_title ||
-    "";
-
-  dailyPromoDescription.value =
-    selectedBusiness.daily_promo_description ||
-    "";
-
-  updateDailyPromoPreview();
+function promoDefaults() {
+  return {
+    badge:"PROMO DEL DÍA",
+    title:"¡No te la pierdas!",
+    text:"10% de descuento en pizzas de 1/2 metro."
+  };
 }
 
-function updateDailyPromoPreview() {
-  if (!dailyPromoActive) {
-    return;
-  }
+async function loadPromoBuilderOptions() {
+  const [allCategories,allProducts] =
+    await Promise.all([
+      getTableData("categories","id,business_id,name,active"),
+      getTableData("products","id,business_id,category_id,name,active,available")
+    ]);
 
-  const active =
-    dailyPromoActive.checked;
-
-  dailyPromoSwitchText.textContent =
-    active
-      ? "Activada"
-      : "Desactivada";
-
-  dailyPromoStatusBadge.textContent =
-    active
-      ? "Promo activa"
-      : "Promo desactivada";
-
-  dailyPromoStatusBadge.classList.toggle(
-    "closed",
-    !active
+  const cats = allCategories.filter(
+    x => String(x.business_id) === String(selectedBusiness.id) && x.active !== false
+  );
+  const prods = allProducts.filter(
+    x => String(x.business_id) === String(selectedBusiness.id) && x.active !== false
   );
 
+  promoTargetId.dataset.categories =
+    JSON.stringify(cats.map(x=>({id:x.id,name:x.name})));
+  promoTargetId.dataset.products =
+    JSON.stringify(prods.map(x=>({id:x.id,name:x.name})));
+
+  promoRewardProductId.innerHTML =
+    prods.length
+      ? prods.map(x=>`<option value="${escapeHTML(x.id)}">${escapeHTML(x.name)}</option>`).join("")
+      : '<option value="">Sin productos</option>';
+
+  refreshPromoTargetOptions();
+}
+
+function refreshPromoTargetOptions() {
+  let items=[];
+  try {
+    items=JSON.parse(
+      promoTargetType.value === "product"
+        ? promoTargetId.dataset.products || "[]"
+        : promoTargetId.dataset.categories || "[]"
+    );
+  } catch(e) {}
+
+  promoTargetId.innerHTML =
+    items.length
+      ? items.map(x=>`<option value="${escapeHTML(x.id)}">${escapeHTML(x.name)}</option>`).join("")
+      : '<option value="">Sin opciones</option>';
+}
+
+function updatePromoRuleFields() {
+  const type=dailyPromoRuleType.value;
+  promoAutomaticFields.hidden =
+    type === "announcement";
+  promoPercentFields.hidden =
+    type !== "percent";
+  promoGiftFields.hidden =
+    type !== "gift";
+}
+
+function updateDailyPromoUI() {
+  if (!dailyPromoActive) return;
+
+  const defaults=promoDefaults();
+  const active=Boolean(dailyPromoActive.checked);
+
+  dailyPromoActiveText.textContent =
+    active ? "Activada" : "Desactivada";
+  dailyPromoStatusBadge.textContent =
+    active ? "Promo activa" : "Promo desactivada";
+  dailyPromoStatusBadge.classList.toggle("closed",!active);
+  dailyPromoPreview.classList.toggle("inactive",!active);
+
   dailyPromoPreviewBadge.textContent =
-    dailyPromoBadge.value.trim() ||
-    "PROMO DEL DÍA";
-
+    dailyPromoBadge.value.trim() || defaults.badge;
   dailyPromoPreviewTitle.textContent =
-    dailyPromoTitle.value.trim() ||
-    "10% DE DESCUENTO";
+    dailyPromoTitle.value.trim() || defaults.title;
 
-  dailyPromoPreviewDescription.textContent =
-    dailyPromoDescription.value.trim() ||
-    "En pizzas de 1/2 metro. ¡No te la pierdas!";
+  let text=dailyPromoText.value.trim() || defaults.text;
+  if (dailyPromoRuleType.value === "percent") {
+    text += ` · ${Number(promoDiscountPercent.value||0)}% automático`;
+  }
+  if (dailyPromoRuleType.value === "gift") {
+    const gift=promoRewardProductId.selectedOptions?.[0]?.textContent?.trim() || "regalo";
+    text += ` · Cada ${Number(promoTriggerQty.value||1)} = ${Number(promoRewardQty.value||1)} ${gift} GRATIS`;
+  }
+  dailyPromoPreviewText.textContent=text;
+  updatePromoRuleFields();
+}
+
+async function fillDailyPromoForm() {
+  if (!selectedBusiness) return;
+
+  const defaults=promoDefaults();
+  dailyPromoActive.checked=selectedBusiness.promo_active === true;
+  dailyPromoBadge.value=selectedBusiness.promo_badge || defaults.badge;
+  dailyPromoTitle.value=selectedBusiness.promo_title || defaults.title;
+  dailyPromoText.value=selectedBusiness.promo_text || defaults.text;
+  dailyPromoRuleType.value=selectedBusiness.promo_rule_type || "announcement";
+  promoTargetType.value=selectedBusiness.promo_target_type || "category";
+  promoDiscountPercent.value=Number(selectedBusiness.promo_discount_percent || 15);
+  promoTriggerQty.value=Number(selectedBusiness.promo_trigger_qty || 2);
+  promoRewardQty.value=Number(selectedBusiness.promo_reward_qty || 1);
+  promoRepeat.checked=selectedBusiness.promo_repeat !== false;
+  dailyPromoMessage.textContent="";
+
+  await loadPromoBuilderOptions();
+  refreshPromoTargetOptions();
+
+  if (selectedBusiness.promo_target_id) {
+    promoTargetId.value=String(selectedBusiness.promo_target_id);
+  }
+  if (selectedBusiness.promo_reward_product_id) {
+    promoRewardProductId.value=String(selectedBusiness.promo_reward_product_id);
+  }
+
+  updateDailyPromoUI();
 }
 
 async function saveDailyPromoRPC(payload) {
-  const responseText =
-    await requestText(
-      `${SUPABASE_REST}/rpc/set_business_daily_promo`,
-      {
-        method:"POST",
-        headers:supabaseHeaders({
-          Prefer:"return=representation"
-        }),
-        body:JSON.stringify({
-          p_business_id:
-            Number(selectedBusiness.id),
-          p_active:
-            Boolean(payload.active),
-          p_badge:
-            payload.badge || null,
-          p_title:
-            payload.title || null,
-          p_description:
-            payload.description || null
-        })
-      }
-    );
+  const responseText=await requestText(
+    `${SUPABASE_REST}/rpc/set_business_daily_promo`,
+    {
+      method:"POST",
+      headers:supabaseHeaders({Prefer:"return=representation"}),
+      body:JSON.stringify({
+        p_business_id:Number(selectedBusiness.id),
+        p_active:Boolean(payload.active),
+        p_badge:payload.badge || null,
+        p_title:payload.title || null,
+        p_text:payload.text || null,
+        p_rule_type:payload.ruleType,
+        p_target_type:payload.targetType,
+        p_target_id:payload.targetId,
+        p_discount_percent:payload.discountPercent,
+        p_trigger_qty:payload.triggerQty,
+        p_reward_product_id:payload.rewardProductId,
+        p_reward_qty:payload.rewardQty,
+        p_repeat:payload.repeat
+      })
+    }
+  );
 
-  const data =
-    responseText.trim()
-      ? JSON.parse(responseText)
-      : null;
-
-  return Array.isArray(data)
-    ? data[0] || null
-    : data;
+  const data=responseText.trim()?JSON.parse(responseText):null;
+  return Array.isArray(data)?data[0]||null:data;
 }
 
 async function saveDailyPromo() {
-  if (!selectedBusiness) {
+  if (!selectedBusiness) return;
+
+  const ruleType=dailyPromoRuleType.value;
+  const payload={
+    active:dailyPromoActive.checked,
+    badge:dailyPromoBadge.value.trim(),
+    title:dailyPromoTitle.value.trim(),
+    text:dailyPromoText.value.trim(),
+    ruleType,
+    targetType:promoTargetType.value,
+    targetId:promoTargetId.value?Number(promoTargetId.value):null,
+    discountPercent:ruleType==="percent"?Number(promoDiscountPercent.value):null,
+    triggerQty:ruleType==="gift"?Math.max(1,Number(promoTriggerQty.value||1)):null,
+    rewardProductId:ruleType==="gift"&&promoRewardProductId.value?Number(promoRewardProductId.value):null,
+    rewardQty:ruleType==="gift"?Math.max(1,Number(promoRewardQty.value||1)):null,
+    repeat:Boolean(promoRepeat.checked)
+  };
+
+  if (payload.active && (!payload.title || !payload.text)) {
+    dailyPromoMessage.textContent="Para activar la promo, completá el título y la promoción.";
+    return;
+  }
+  if (payload.active && ruleType!=="announcement" && !payload.targetId) {
+    dailyPromoMessage.textContent="Elegí la categoría o producto que activa la promoción.";
+    return;
+  }
+  if (payload.active && ruleType==="percent" && (payload.discountPercent<1 || payload.discountPercent>100)) {
+    dailyPromoMessage.textContent="El descuento debe estar entre 1% y 100%.";
+    return;
+  }
+  if (payload.active && ruleType==="gift" && !payload.rewardProductId) {
+    dailyPromoMessage.textContent="Elegí el producto de regalo.";
     return;
   }
 
-  saveDailyPromoButton.disabled = true;
-  saveDailyPromoButton.textContent =
-    "Guardando...";
-
-  dailyPromoMessage.textContent = "";
+  saveDailyPromoButton.disabled=true;
+  disableDailyPromoButton.disabled=true;
+  saveDailyPromoButton.textContent="Guardando...";
+  dailyPromoMessage.textContent="";
 
   try {
-    const payload = {
-      active:
-        dailyPromoActive.checked,
-      badge:
-        dailyPromoBadge.value.trim(),
-      title:
-        dailyPromoTitle.value.trim(),
-      description:
-        dailyPromoDescription.value.trim()
-    };
-
-    if (
-      payload.active &&
-      !payload.title
-    ) {
-      throw new Error(
-        "Escribí el texto principal de la promoción."
-      );
-    }
-
-    const saved =
-      await saveDailyPromoRPC(
-        payload
-      );
-
-    if (!saved?.id) {
-      throw new Error(
-        "Supabase no devolvió la promoción guardada."
-      );
-    }
-
-    Object.assign(
-      selectedBusiness,
-      saved
-    );
-
-    fillDailyPromoForm();
-
-    dailyPromoMessage.textContent =
-      selectedBusiness.daily_promo_active
-        ? "Promo publicada correctamente."
-        : "Promo guardada y desactivada.";
-
-    showToast(
-      selectedBusiness.daily_promo_active
-        ? "Promo del día publicada."
-        : "Promo del día desactivada.",
-      "success"
-    );
-  } catch (error) {
-    console.error(
-      "Error guardando promo:",
-      error
-    );
-
-    dailyPromoMessage.textContent =
-      `No se pudo guardar: ${error.message || "error desconocido"}`;
-
-    showToast(
-      "No se pudo guardar la promo.",
-      "error"
-    );
+    const saved=await saveDailyPromoRPC(payload);
+    if (!saved?.id) throw new Error("Supabase no devolvió la promoción guardada.");
+    Object.assign(selectedBusiness,saved);
+    await fillDailyPromoForm();
+    dailyPromoMessage.textContent=saved.promo_active
+      ? "Promoción activa y aplicada automáticamente."
+      : "Promo guardada pero desactivada.";
+    showToast(saved.promo_active?"Promoción activada.":"Promo guardada.","success");
+  } catch(error) {
+    console.error("Error guardando promo:",error);
+    dailyPromoMessage.textContent=`No se pudo guardar: ${error.message||"error desconocido"}`;
+    showToast("No se pudo guardar la promo.","error");
   } finally {
-    saveDailyPromoButton.disabled = false;
-    saveDailyPromoButton.textContent =
-      "Guardar promo";
+    saveDailyPromoButton.disabled=false;
+    disableDailyPromoButton.disabled=false;
+    saveDailyPromoButton.textContent="Guardar promo";
   }
 }
 
 [
-  dailyPromoBadge,
-  dailyPromoTitle,
-  dailyPromoDescription
-].filter(Boolean).forEach(
-  (field) => {
-    field.addEventListener(
-      "input",
-      updateDailyPromoPreview
-    );
-  }
-);
+  dailyPromoBadge,dailyPromoTitle,dailyPromoText,dailyPromoRuleType,
+  promoDiscountPercent,promoTriggerQty,promoRewardQty,promoRewardProductId
+].filter(Boolean).forEach(field=>{
+  field.addEventListener("input",updateDailyPromoUI);
+  field.addEventListener("change",updateDailyPromoUI);
+});
 
-dailyPromoActive?.addEventListener(
-  "change",
-  updateDailyPromoPreview
-);
+promoTargetType?.addEventListener("change",()=>{
+  refreshPromoTargetOptions();
+  updateDailyPromoUI();
+});
 
-dailyPromoForm?.addEventListener(
-  "submit",
-  async (event) => {
-    event.preventDefault();
-    await saveDailyPromo();
-  }
-);
+dailyPromoActive?.addEventListener("change",updateDailyPromoUI);
 
-clearDailyPromoButton?.addEventListener(
-  "click",
-  () => {
-    dailyPromoActive.checked = false;
-    dailyPromoBadge.value =
-      "PROMO DEL DÍA";
-    dailyPromoTitle.value = "";
-    dailyPromoDescription.value = "";
+dailyPromoForm?.addEventListener("submit",async(event)=>{
+  event.preventDefault();
+  await saveDailyPromo();
+});
 
-    updateDailyPromoPreview();
-
-    dailyPromoMessage.textContent =
-      "Contenido limpio. Tocá Guardar promo para confirmar.";
-  }
-);
+disableDailyPromoButton?.addEventListener("click",async()=>{
+  dailyPromoActive.checked=false;
+  updateDailyPromoUI();
+  await saveDailyPromo();
+});
 
 async function uploadProductImage(blob) {
   if (!blob) {
@@ -3963,7 +3994,7 @@ async function loadBusinesses() {
   try {
     const businesses = await getTableData(
       "businesses",
-      "id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,daily_promo_active,daily_promo_badge,daily_promo_title,daily_promo_description,active,ordering_status,sold_out_message"
+      "id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,active,ordering_status,sold_out_message"
     );
 
     businessesCache = businesses;
