@@ -6,7 +6,7 @@
 
   <title>Mamma Mia | Panel del comercio</title>
 
-  <link rel="stylesheet" href="css/comercio.css?v=67">
+  <link rel="stylesheet" href="css/comercio.css?v=68">
 </head>
 
 <body>
@@ -54,6 +54,11 @@
       <button class="nav-item" data-section="storeDesign" type="button">
         <span class="nav-icon">DI</span>
         <span>Dise&ntilde;o</span>
+      </button>
+
+      <button class="nav-item" data-section="dailyPromo" type="button">
+        <span class="nav-icon">%</span>
+        <span>Promo del d&iacute;a</span>
       </button>
 
     </nav>
@@ -342,6 +347,114 @@
             Esta vista es orientativa. La web del cliente se actualiza al guardar.
           </p>
         </aside>
+      </div>
+    </section>
+
+
+    <section id="dailyPromo" class="page-section">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">PROMOCIONES</p>
+          <h1>Promo del d&iacute;a</h1>
+          <p class="subtitle">
+            Public&aacute; una promo destacada en la pantalla de bienvenida y cambiala cuando quieras.
+          </p>
+        </div>
+
+        <span id="dailyPromoStatusBadge" class="status-badge closed">
+          Promo desactivada
+        </span>
+      </header>
+
+      <div class="promo-admin-layout">
+
+        <form id="dailyPromoForm" class="panel promo-admin-form">
+
+          <div class="promo-admin-heading">
+            <div>
+              <p class="eyebrow">CONTROL</p>
+              <h2>Promoci&oacute;n activa</h2>
+              <p>
+                Si est&aacute; apagada, el cliente no ver&aacute; ning&uacute;n cartel promocional.
+              </p>
+            </div>
+
+            <label class="promo-switch">
+              <input id="dailyPromoActive" type="checkbox">
+              <span class="promo-switch-track">
+                <span class="promo-switch-knob"></span>
+              </span>
+              <strong id="dailyPromoSwitchText">Desactivada</strong>
+            </label>
+          </div>
+
+          <div class="promo-admin-fields">
+            <label>
+              Encabezado peque&ntilde;o
+              <input
+                id="dailyPromoBadge"
+                type="text"
+                maxlength="40"
+                value="PROMO DEL D&Iacute;A"
+                placeholder="PROMO DEL DÃA"
+              >
+            </label>
+
+            <label>
+              Texto destacado
+              <input
+                id="dailyPromoTitle"
+                type="text"
+                maxlength="70"
+                placeholder="10% DE DESCUENTO"
+              >
+            </label>
+
+            <label class="full-width">
+              Detalle de la promoci&oacute;n
+              <textarea
+                id="dailyPromoDescription"
+                rows="4"
+                maxlength="220"
+                placeholder="En pizzas de 1/2 metro. Â¡No te la pierdas!"
+              ></textarea>
+            </label>
+          </div>
+
+          <div id="dailyPromoMessage" class="form-message"></div>
+
+          <div class="promo-admin-actions">
+            <button id="saveDailyPromoButton" class="primary-button" type="submit">
+              Guardar promo
+            </button>
+
+            <button id="clearDailyPromoButton" class="secondary-button" type="button">
+              Limpiar contenido
+            </button>
+          </div>
+
+        </form>
+
+        <aside class="panel promo-preview-panel">
+          <p class="eyebrow">VISTA PREVIA</p>
+
+          <div class="promo-preview-card">
+            <div class="promo-preview-spark">%</div>
+
+            <div>
+              <small id="dailyPromoPreviewBadge">PROMO DEL D&Iacute;A</small>
+              <strong id="dailyPromoPreviewTitle">10% DE DESCUENTO</strong>
+              <p id="dailyPromoPreviewDescription">
+                En pizzas de 1/2 metro. &iexcl;No te la pierdas!
+              </p>
+            </div>
+          </div>
+
+          <p class="promo-preview-note">
+            El cliente ver&aacute; este aviso en la portada antes de entrar al men&uacute;.
+          </p>
+        </aside>
+
       </div>
     </section>
 
@@ -1128,7 +1241,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/comercio.js?v=67"></script>
+  <script src="js/comercio.js?v=68"></script>
 
 </body>
 </html>
