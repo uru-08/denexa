@@ -15,6 +15,11 @@ const welcomeLogo = document.getElementById("welcomeLogo");
 const welcomeBusinessName = document.getElementById("welcomeBusinessName");
 const welcomeBusinessDescription = document.getElementById("welcomeBusinessDescription");
 const welcomeButtonText = document.getElementById("welcomeButtonText");
+const dailyPromoNotice = document.getElementById("dailyPromoNotice");
+const dailyPromoBadgeText = document.getElementById("dailyPromoBadgeText");
+const dailyPromoTitleText = document.getElementById("dailyPromoTitleText");
+const dailyPromoDescriptionText = document.getElementById("dailyPromoDescriptionText");
+
 
 const storeStatus = document.getElementById("storeStatus");
 
@@ -277,7 +282,7 @@ async function refreshOrderingStatusFromSupabase() {
   try {
     const rows =
       await requestJSON(
-        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,active`
+        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,active,daily_promo_active,daily_promo_badge,daily_promo_title,daily_promo_description`
       );
 
     const fresh =
@@ -302,7 +307,23 @@ async function refreshOrderingStatusFromSupabase() {
     business.active =
       fresh.active ?? business.active;
 
+    business.daily_promo_active =
+      fresh.daily_promo_active === true;
+
+    business.daily_promo_badge =
+      fresh.daily_promo_badge ??
+      business.daily_promo_badge;
+
+    business.daily_promo_title =
+      fresh.daily_promo_title ??
+      business.daily_promo_title;
+
+    business.daily_promo_description =
+      fresh.daily_promo_description ??
+      business.daily_promo_description;
+
     applyOrderingStatus();
+    applyDailyPromo();
 
     if (storeStatus) {
       const status =
@@ -363,7 +384,7 @@ async function loadStore() {
 
   try {
     const businesses = await requestJSON(
-      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,active,ordering_status,sold_out_message"
+      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,daily_promo_active,daily_promo_badge,daily_promo_title,daily_promo_description,active,ordering_status,sold_out_message"
     );
 
     business =
@@ -385,6 +406,7 @@ async function loadStore() {
 
     applyBusinessBranding();
     applyOrderingStatus();
+    applyDailyPromo();
 
     const [
       allCategories,
@@ -524,6 +546,47 @@ function safeBrandColor(
   )
     ? String(value)
     : fallback;
+}
+
+
+function applyDailyPromo() {
+  if (!dailyPromoNotice || !business) {
+    return;
+  }
+
+  const active =
+    business.daily_promo_active === true;
+
+  const title =
+    String(
+      business.daily_promo_title || ""
+    ).trim();
+
+  const shouldShow =
+    active && Boolean(title);
+
+  dailyPromoNotice.hidden =
+    !shouldShow;
+
+  dailyPromoNotice.classList.toggle(
+    "is-visible",
+    shouldShow
+  );
+
+  if (!shouldShow) {
+    return;
+  }
+
+  dailyPromoBadgeText.textContent =
+    business.daily_promo_badge ||
+    "PROMO DEL DÍA";
+
+  dailyPromoTitleText.textContent =
+    title;
+
+  dailyPromoDescriptionText.textContent =
+    business.daily_promo_description ||
+    "¡Aprovechala hoy!";
 }
 
 function applyBusinessBranding() {
