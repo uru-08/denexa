@@ -29,6 +29,15 @@ const dailyPromoPreview = document.getElementById("dailyPromoPreview");
 const dailyPromoPreviewBadge = document.getElementById("dailyPromoPreviewBadge");
 const dailyPromoPreviewTitle = document.getElementById("dailyPromoPreviewTitle");
 const dailyPromoPreviewText = document.getElementById("dailyPromoPreviewText");
+const paymentSettingsForm = document.getElementById("paymentSettingsForm");
+const paymentBankName = document.getElementById("paymentBankName");
+const paymentAccountHolder = document.getElementById("paymentAccountHolder");
+const paymentAccountNumber = document.getElementById("paymentAccountNumber");
+const paymentCurrency = document.getElementById("paymentCurrency");
+const paymentInstructions = document.getElementById("paymentInstructions");
+const paymentSettingsMessage = document.getElementById("paymentSettingsMessage");
+const savePaymentSettingsButton = document.getElementById("savePaymentSettingsButton");
+
 const dailyPromoRuleType = document.getElementById("dailyPromoRuleType");
 const promoAutomaticFields = document.getElementById("promoAutomaticFields");
 const promoTargetType = document.getElementById("promoTargetType");
@@ -244,6 +253,10 @@ navItems.forEach((button) => {
 
     if (sectionId === "dailyPromo") {
       await fillDailyPromoForm();
+    }
+
+    if (sectionId === "payments") {
+      fillPaymentSettingsForm();
     }
   });
 });
@@ -855,6 +868,173 @@ storeDesignForm?.addEventListener(
 restoreStoreDesignButton?.addEventListener(
   "click",
   restoreStoreDesignDefaults
+);
+
+
+function paymentDefaults() {
+  return {
+    bank:"Banco / Institución",
+    holder:"Nombre del titular",
+    account:"0000000000",
+    currency:"Pesos uruguayos",
+    instructions:
+      "Realizá la transferencia por el total del pedido. Conservá el comprobante."
+  };
+}
+
+function fillPaymentSettingsForm() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  const defaults =
+    paymentDefaults();
+
+  paymentBankName.value =
+    selectedBusiness.payment_bank_name ||
+    defaults.bank;
+
+  paymentAccountHolder.value =
+    selectedBusiness.payment_account_holder ||
+    defaults.holder;
+
+  paymentAccountNumber.value =
+    selectedBusiness.payment_account_number ||
+    defaults.account;
+
+  paymentCurrency.value =
+    selectedBusiness.payment_currency ||
+    defaults.currency;
+
+  paymentInstructions.value =
+    selectedBusiness.payment_instructions ||
+    defaults.instructions;
+
+  paymentSettingsMessage.textContent = "";
+}
+
+async function savePaymentSettingsRPC(payload) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/rpc/set_business_payment_settings`,
+      {
+        method:"POST",
+        headers:supabaseHeaders({
+          Prefer:"return=representation"
+        }),
+        body:JSON.stringify({
+          p_business_id:
+            Number(selectedBusiness.id),
+          p_bank_name:
+            payload.bank,
+          p_account_holder:
+            payload.holder,
+          p_account_number:
+            payload.account,
+          p_currency:
+            payload.currency,
+          p_instructions:
+            payload.instructions
+        })
+      }
+    );
+
+  const data =
+    responseText.trim()
+      ? JSON.parse(responseText)
+      : null;
+
+  return Array.isArray(data)
+    ? data[0] || null
+    : data;
+}
+
+async function savePaymentSettings() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  const payload = {
+    bank:
+      paymentBankName.value.trim(),
+    holder:
+      paymentAccountHolder.value.trim(),
+    account:
+      paymentAccountNumber.value.trim(),
+    currency:
+      paymentCurrency.value.trim(),
+    instructions:
+      paymentInstructions.value.trim()
+  };
+
+  if (
+    !payload.bank ||
+    !payload.holder ||
+    !payload.account
+  ) {
+    paymentSettingsMessage.textContent =
+      "Completá banco, titular y número de cuenta.";
+    return;
+  }
+
+  savePaymentSettingsButton.disabled = true;
+  savePaymentSettingsButton.textContent =
+    "Guardando...";
+
+  paymentSettingsMessage.textContent = "";
+
+  try {
+    const saved =
+      await savePaymentSettingsRPC(
+        payload
+      );
+
+    if (!saved?.id) {
+      throw new Error(
+        "Supabase no devolvió los datos guardados."
+      );
+    }
+
+    Object.assign(
+      selectedBusiness,
+      saved
+    );
+
+    fillPaymentSettingsForm();
+
+    paymentSettingsMessage.textContent =
+      "Datos guardados. Ya están disponibles para los clientes.";
+
+    showToast(
+      "Datos de cobro actualizados.",
+      "success"
+    );
+  } catch (error) {
+    console.error(
+      "Error guardando datos de cobro:",
+      error
+    );
+
+    paymentSettingsMessage.textContent =
+      `No se pudo guardar: ${error.message || "error desconocido"}`;
+
+    showToast(
+      "No se pudieron guardar los datos.",
+      "error"
+    );
+  } finally {
+    savePaymentSettingsButton.disabled = false;
+    savePaymentSettingsButton.textContent =
+      "Guardar datos de cobro";
+  }
+}
+
+paymentSettingsForm?.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    await savePaymentSettings();
+  }
 );
 
 
@@ -5295,6 +5475,7 @@ async function initAdmin() {
   syncMerchantStatusUI();
   renderMerchantPanelLogo();
   fillStoreDesignForm();
+  fillPaymentSettingsForm();
 
   /*
     El dashboard y usuarios ya pueden cargar en paralelo sin bloquear
