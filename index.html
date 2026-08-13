@@ -9,7 +9,7 @@
     name="description"
     content="Hac&eacute; tu pedido online en Mamma Mia."
   >
-  <link rel="stylesheet" href="css/app.css?v=74">
+  <link rel="stylesheet" href="css/app.css?v=76">
 </head>
 
 <body>
@@ -266,7 +266,7 @@
               <span>Forma de pago</span>
               <select id="paymentMethod">
                 <option value="cash">Efectivo</option>
-                <option value="transfer">Transferencia</option>
+                <option value="transfer">Transferencia / D&eacute;bito</option>
               </select>
             </label>
 
@@ -274,6 +274,42 @@
               <span>&iquest;Con cu&aacute;nto paga?</span>
               <input id="cashAmount" type="number" min="0" step="1" inputmode="numeric">
             </label>
+
+            <div id="transferInfoCard" class="transfer-info-card full-width" hidden>
+              <div class="transfer-info-head">
+                <span class="transfer-info-icon">$</span>
+                <div>
+                  <strong>Datos para transferir</strong>
+                  <small>Us&aacute; estos datos para realizar el pago.</small>
+                </div>
+              </div>
+
+              <div class="transfer-info-grid">
+                <div>
+                  <span>Banco / instituci&oacute;n</span>
+                  <strong id="transferBankName">Banco / Instituci&oacute;n</strong>
+                </div>
+
+                <div>
+                  <span>Titular</span>
+                  <strong id="transferAccountHolder">Nombre del titular</strong>
+                </div>
+
+                <div>
+                  <span>N&uacute;mero de cuenta</span>
+                  <strong id="transferAccountNumber">0000000000</strong>
+                </div>
+
+                <div>
+                  <span>Moneda</span>
+                  <strong id="transferCurrency">Pesos uruguayos</strong>
+                </div>
+              </div>
+
+              <p id="transferInstructions" class="transfer-instructions">
+                Realiz&aacute; la transferencia por el total del pedido. Conserv&aacute; el comprobante.
+              </p>
+            </div>
 
           </div>
 
@@ -341,6 +377,6 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=32"></script>
-  <script src="js/app.js?v=75"></script>
+  <script src="js/app.js?v=76"></script>
 </body>
 </html>
