@@ -99,17 +99,11 @@ const saveModifierOptionButton = document.getElementById("saveModifierOptionButt
 const closeModifierOptionModalButton = document.getElementById("closeModifierOptionModalButton");
 const cancelModifierOptionButton = document.getElementById("cancelModifierOptionButton");
 
-const ordersList = document.getElementById("ordersList");
-const ordersBusinessFilter = document.getElementById("ordersBusinessFilter");
-const ordersStatusFilter = document.getElementById("ordersStatusFilter");
-const refreshOrdersButton = document.getElementById("refreshOrdersButton");
-const ordersLastUpdate = document.getElementById("ordersLastUpdate");
-const dashboardOrdersList = document.getElementById("dashboardOrdersList");
-const dashboardGoOrdersButton = document.getElementById("dashboardGoOrdersButton");
-
 const toast = document.getElementById("toast");
 
 let businessesCache = [];
+let masterOrdersCache = [];
+
 let selectedBusiness = null;
 let editingBusinessId = null;
 let editingProductId = null;
@@ -131,14 +125,6 @@ let editingModifierGroupId = null;
 let editingModifierOptionId = null;
 let currentModifierGroups = [];
 let currentModifierOptions = [];
-let ordersCache = [];
-let orderItemsCache = [];
-let orderItemOptionsCache = [];
-let knownOrderIds = new Set();
-let ordersFirstLoad = true;
-let ordersLoading = false;
-let ordersPollTimer = null;
-
 
 
 function openSection(sectionId) {
@@ -169,10 +155,6 @@ navItems.forEach((button) => {
 
     if (sectionId === "products") {
       await loadProducts();
-    }
-
-    if (sectionId === "orders") {
-      await loadOrders();
     }
   });
 });
@@ -310,32 +292,19 @@ async function deleteTableRow(tableName, id) {
 
 
 async function uploadProductImage(blob) {
-  if (!blob) {
-    throw new Error(
-      "Storage: no hay una imagen preparada para subir."
-    );
-  }
-
-  const safeBusinessId =
-    String(selectedBusiness.id);
-
+  const safeBusinessId = String(selectedBusiness.id);
   const fileName =
     `${Date.now()}-${Math.random().toString(36).slice(2,10)}.jpg`;
-
   const objectPath =
     `${safeBusinessId}/${fileName}`;
 
-  const uploadUrl =
-    `${SUPABASE_URL}/storage/v1/object/product-images/${objectPath}`;
-
   const response = await fetch(
-    uploadUrl,
+    `${SUPABASE_URL}/storage/v1/object/product-images/${objectPath}`,
     {
       method: "POST",
       headers: {
         apikey: SUPABASE_KEY,
-        Authorization:
-          `Bearer ${SUPABASE_KEY}`,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
         "Content-Type": "image/jpeg",
         "x-upsert": "false"
       },
@@ -343,132 +312,15 @@ async function uploadProductImage(blob) {
     }
   );
 
-  const responseText =
-    await response.text();
+  const responseText = await response.text();
 
   if (!response.ok) {
     throw new Error(
-      `Storage ${response.status}: ${responseText || response.statusText}`
+      `Storage ${response.status}: ${responseText}`
     );
   }
 
-  const publicUrl =
-    `${SUPABASE_URL}/storage/v1/object/public/product-images/${objectPath}`;
-
-  if (!publicUrl.startsWith("http")) {
-    throw new Error(
-      "Storage: no se pudo generar la URL publica."
-    );
-  }
-
-  return publicUrl;
-}
-
-async function getProductById(productId) {
-  const responseText =
-    await requestText(
-      `${SUPABASE_REST}/products?id=eq.${encodeURIComponent(productId)}&select=id,image_url,name`,
-      {
-        method: "GET",
-        headers: supabaseHeaders()
-      }
-    );
-
-  if (!responseText.trim()) {
-    return null;
-  }
-
-  const rows = JSON.parse(responseText);
-
-  return Array.isArray(rows)
-    ? rows[0] || null
-    : rows;
-}
-
-async function updateProductAndVerify(
-  productId,
-  payload
-) {
-  await requestText(
-    `${SUPABASE_REST}/products?id=eq.${encodeURIComponent(productId)}`,
-    {
-      method: "PATCH",
-      headers: supabaseHeaders({
-        Prefer: "return=minimal"
-      }),
-      body: JSON.stringify(payload)
-    }
-  );
-
-  const updated =
-    await getProductById(productId);
-
-  if (!updated?.id) {
-    throw new Error(
-      "Producto: no se pudo volver a leer el producto despues de guardarlo."
-    );
-  }
-
-  const expectedImage =
-    payload.image_url || null;
-
-  const savedImage =
-    updated.image_url || null;
-
-  if (expectedImage !== savedImage) {
-    throw new Error(
-      "Producto: Supabase no guardo la URL de la imagen en image_url."
-    );
-  }
-
-  return updated;
-}
-
-async function insertProductAndVerify(payload) {
-  const responseText =
-    await requestText(
-      `${SUPABASE_REST}/products?select=id`,
-      {
-        method: "POST",
-        headers: supabaseHeaders({
-          Prefer: "return=representation"
-        }),
-        body: JSON.stringify(payload)
-      }
-    );
-
-  let inserted = null;
-
-  if (responseText.trim()) {
-    const rows = JSON.parse(responseText);
-    inserted =
-      Array.isArray(rows)
-        ? rows[0] || null
-        : rows;
-  }
-
-  if (!inserted?.id) {
-    throw new Error(
-      "Producto: no se pudo obtener el ID del producto creado."
-    );
-  }
-
-  const saved =
-    await getProductById(inserted.id);
-
-  const expectedImage =
-    payload.image_url || null;
-
-  const savedImage =
-    saved?.image_url || null;
-
-  if (expectedImage !== savedImage) {
-    throw new Error(
-      "Producto: Supabase no guardo la URL de la imagen en image_url."
-    );
-  }
-
-  return saved;
+  return `${SUPABASE_URL}/storage/v1/object/public/product-images/${objectPath}`;
 }
 
 async function getSelectedBusinessCategories() {
@@ -1816,43 +1668,13 @@ modifierOptionForm.addEventListener(
   }
 );
 
-
-function orderMoney(value) {
-  return `$${Number(value || 0).toLocaleString("es-UY")}`;
+function moneyUY(value) {
+  return "$" + Math.round(Number(value || 0)).toLocaleString("es-UY");
 }
 
-function orderStatusLabel(status) {
-  const labels = {
-    received: "NUEVO",
-    approved: "ACEPTADO",
-    preparing: "EN PREPARACION",
-    ready: "LISTO",
-    on_the_way: "EN CAMINO",
-    delivered: "ENTREGADO",
-    cancelled: "CANCELADO"
-  };
-  return labels[status] || String(status || "").toUpperCase();
-}
-
-function orderDeliveryLabel(type) {
-  return type === "pickup"
-    ? "RETIRO EN EL LOCAL"
-    : "DELIVERY";
-}
-
-function formatOrderDate(value) {
-  if (!value) return "";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "";
-  return new Intl.DateTimeFormat(
-    "es-UY",
-    { day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" }
-  ).format(date);
-}
-
-function isToday(value) {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return false;
+function isTodayLocal(dateValue) {
+  if (!dateValue) return false;
+  const date = new Date(dateValue);
   const now = new Date();
   return (
     date.getFullYear() === now.getFullYear() &&
@@ -1861,803 +1683,264 @@ function isToday(value) {
   );
 }
 
-function getBusinessNameById(id) {
-  return (
-    businessesCache.find(
-      (business) =>
-        String(business.id) === String(id)
-    )?.name ||
-    `Comercio #${id}`
+function isPendingOrder(order) {
+  const status = String(order?.status || "").toLowerCase();
+  return ![
+    "delivered",
+    "completed",
+    "cancelled",
+    "canceled",
+    "archived"
+  ].includes(status);
+}
+
+async function loadMasterOrders() {
+  try {
+    masterOrdersCache = await getTableData(
+      "orders",
+      "id,business_id,status,total,archived,created_at"
+    );
+  } catch (error) {
+    console.warn("No se pudo cargar orders:", error);
+    masterOrdersCache = [];
+  }
+  return masterOrdersCache;
+}
+
+function renderMasterBusinessSummary() {
+  const container = document.getElementById("businessDailySummary");
+  if (!container) return;
+
+  if (!businessesCache.length) {
+    container.innerHTML =
+      '<div class="empty-state">Todavía no hay comercios.</div>';
+    return;
+  }
+
+  const todayOrders = masterOrdersCache.filter(
+    (order) => order.archived !== true && isTodayLocal(order.created_at)
   );
-}
 
-function getOrderItems(orderId) {
-  return orderItemsCache.filter(
-    (item) =>
-      String(item.order_id) === String(orderId)
-  );
-}
-
-function getOrderItemOptions(itemId) {
-  return orderItemOptionsCache.filter(
-    (option) =>
-      String(option.order_item_id) === String(itemId)
-  );
-}
-
-function orderNextActions(order) {
-  if (order.status === "received") {
-    return [
-      ["approved", "Aceptar y avisar", "primary"],
-      ["cancelled", "Cancelar", "danger"]
-    ];
-  }
-
-  if (order.status === "approved") {
-    return [
-      ["preparing", "Iniciar preparacion", "primary"]
-    ];
-  }
-
-  if (order.status === "preparing") {
-    return [
-      [
-        "ready",
-        order.delivery_type === "pickup"
-          ? "Listo y avisar"
-          : "Marcar como listo",
-        "primary"
-      ]
-    ];
-  }
-
-  if (order.status === "ready") {
-    return [
-      [
-        order.delivery_type === "pickup"
-          ? "delivered"
-          : "on_the_way",
-        order.delivery_type === "pickup"
-          ? "Pedido retirado"
-          : "Enviar delivery y avisar",
-        "primary"
-      ]
-    ];
-  }
-
-  if (order.status === "on_the_way") {
-    return [
-      ["delivered", "Marcar entregado", "primary"]
-    ];
-  }
-
-  return [];
-}
-
-function renderOrderItems(order) {
-  const items = getOrderItems(order.id);
-
-  if (!items.length) {
-    return '<div class="order-empty-items">Sin detalle de productos.</div>';
-  }
-
-  return items.map((item) => {
-    const options = getOrderItemOptions(item.id);
+  container.innerHTML = businessesCache.map((business) => {
+    const orders = todayOrders.filter(
+      (order) => String(order.business_id) === String(business.id)
+    );
+    const sales = orders.reduce(
+      (sum, order) => sum + Number(order.total || 0),
+      0
+    );
+    const average = orders.length ? sales / orders.length : 0;
+    const pending = orders.filter(isPendingOrder).length;
 
     return `
-      <div class="order-product-line">
-        <div class="order-product-title">
-          <strong>
-            ${escapeHTML(item.quantity || 1)} x
-            ${escapeHTML(item.product_name || "Producto")}
-          </strong>
-          <span>${orderMoney(item.total)}</span>
+      <article class="master-business-row">
+        <div class="master-business-name">
+          <strong>${escapeHTML(business.name || "Sin nombre")}</strong>
+          <small>${business.active ? "Activo" : "Inactivo"}</small>
         </div>
-
-        ${
-          options.length
-            ? `
-              <div class="order-options-list">
-                ${options.map((option) => `
-                  <span>
-                    ${escapeHTML(option.group_name || "Opcion")}:
-                    <strong>${escapeHTML(option.option_name || "")}</strong>
-                    ${
-                      Number(option.price_delta || 0) > 0
-                        ? ` (+${orderMoney(option.price_delta)})`
-                        : ""
-                    }
-                  </span>
-                `).join("")}
-              </div>
-            `
-            : ""
-        }
-      </div>
+        <div><span>Pedidos</span><strong>${orders.length}</strong></div>
+        <div><span>Facturación</span><strong>${moneyUY(sales)}</strong></div>
+        <div><span>Ticket prom.</span><strong>${moneyUY(average)}</strong></div>
+        <div><span>Pendientes</span><strong>${pending}</strong></div>
+      </article>
     `;
   }).join("");
 }
 
-function renderOrderCard(order) {
-  const actions = orderNextActions(order);
-
-  const deliveryBlock =
-    order.delivery_type === "pickup"
-      ? `
-        <span class="order-delivery-mode pickup">
-          RETIRO EN EL LOCAL
-        </span>
-      `
-      : `
-        <span class="order-delivery-mode delivery">
-          DELIVERY
-        </span>
-        <span>
-          <strong>Direccion:</strong>
-          ${escapeHTML(order.delivery_address || "Sin direccion")}
-        </span>
-        ${
-          order.delivery_reference
-            ? `
-              <span>
-                <strong>Referencia:</strong>
-                ${escapeHTML(order.delivery_reference)}
-              </span>
-            `
-            : ""
-        }
-      `;
-
-  const paymentBlock =
-    order.delivery_type === "pickup"
-      ? ""
-      : `
-        <div class="order-payment">
-          <strong>Pago:</strong>
-          <span>
-            ${
-              order.payment_method === "cash"
-                ? "Efectivo"
-                : order.payment_method === "transfer"
-                  ? "Transferencia"
-                  : "Sin especificar"
-            }
-          </span>
-          ${
-            order.payment_method === "cash" && order.cash_amount
-              ? `<span>Paga con ${orderMoney(order.cash_amount)}</span>`
-              : ""
-          }
-        </div>
-      `;
-
-  return `
-    <article class="order-card status-${escapeHTML(order.status || "received")}">
-      <div class="order-card-top">
-        <div>
-          <div class="order-number-line">
-            <strong>Pedido #${escapeHTML(order.id)}</strong>
-            <span>${escapeHTML(formatOrderDate(order.created_at))}</span>
-          </div>
-          <div class="order-business-name">
-            ${escapeHTML(getBusinessNameById(order.business_id))}
-          </div>
-        </div>
-
-        <span class="order-status-badge status-${escapeHTML(order.status || "received")}">
-          ${escapeHTML(orderStatusLabel(order.status))}
-        </span>
-      </div>
-
-      <div class="order-customer-grid">
-        <div>
-          <small>CLIENTE</small>
-          <strong>${escapeHTML(order.customer_name || "Sin nombre")}</strong>
-          <span>${escapeHTML(order.customer_phone || "")}</span>
-        </div>
-
-        <div class="order-delivery-box">
-          ${deliveryBlock}
-        </div>
-      </div>
-
-      <div class="order-products-box">
-        <div class="order-section-label">PEDIDO</div>
-        ${renderOrderItems(order)}
-      </div>
-
-      ${
-        order.notes
-          ? `
-            <div class="order-notes-box">
-              <strong>OBSERVACIONES</strong>
-              <span>${escapeHTML(order.notes)}</span>
-            </div>
-          `
-          : ""
-      }
-
-      <div class="order-total-row">
-        <span>TOTAL</span>
-        <strong>${orderMoney(order.total)}</strong>
-      </div>
-
-      ${paymentBlock}
-
-      ${
-        actions.length
-          ? `
-            <div class="order-actions">
-              ${actions.map(([status, label, kind]) => `
-                <button
-                  type="button"
-                  class="order-action-button ${kind}"
-                  data-order-action
-                  data-order-id="${escapeHTML(order.id)}"
-                  data-next-status="${escapeHTML(status)}"
-                >
-                  ${escapeHTML(label)}
-                </button>
-              `).join("")}
-            </div>
-          `
-          : ""
-      }
-    </article>
-  `;
-}
-
-function updateOrdersCounters() {
-  const today = ordersCache.filter(
-    (order) => isToday(order.created_at)
-  );
-
-  const active = ordersCache.filter(
-    (order) =>
-      !["delivered", "cancelled"].includes(order.status)
-  );
-
-  const setText = (id, value) => {
-    const element = document.getElementById(id);
-    if (element) element.textContent = value;
-  };
-
-  setText(
-    "ordersNewCount",
-    ordersCache.filter((order) => order.status === "received").length
-  );
-
-  setText(
-    "ordersPreparingCount",
-    ordersCache.filter(
-      (order) =>
-        order.status === "approved" ||
-        order.status === "preparing"
-    ).length
-  );
-
-  setText(
-    "ordersReadyCount",
-    ordersCache.filter(
-      (order) =>
-        order.status === "ready" ||
-        order.status === "on_the_way"
-    ).length
-  );
-
-  setText(
-    "ordersDeliveredCount",
-    today.filter((order) => order.status === "delivered").length
-  );
-
-  setText("ordersTodayCount", today.length);
-  setText("pendingOrdersCount", active.length);
-}
-
-function populateOrdersBusinessFilter() {
-  if (!ordersBusinessFilter) return;
-
-  const current = ordersBusinessFilter.value || "all";
-
-  ordersBusinessFilter.innerHTML = `
-    <option value="all">Todos los comercios</option>
-    ${businessesCache.map((business) => `
-      <option value="${escapeHTML(business.id)}">
-        ${escapeHTML(business.name)}
-      </option>
-    `).join("")}
-  `;
-
-  if (
-    [...ordersBusinessFilter.options]
-      .some((option) => option.value === current)
-  ) {
-    ordersBusinessFilter.value = current;
-  }
-}
-
-function filteredOrders() {
-  const business = ordersBusinessFilter?.value || "all";
-  const status = ordersStatusFilter?.value || "active";
-
-  return ordersCache.filter((order) => {
-    const businessOk =
-      business === "all" ||
-      String(order.business_id) === String(business);
-
-    let statusOk = true;
-
-    if (status === "active") {
-      statusOk =
-        !["delivered", "cancelled"].includes(order.status);
-    } else if (status !== "all") {
-      statusOk = order.status === status;
-    }
-
-    return businessOk && statusOk;
-  });
-}
-
-function renderOrders() {
-  if (!ordersList) return;
-
-  const orders = filteredOrders();
-
-  ordersList.innerHTML =
-    orders.length
-      ? orders.map(renderOrderCard).join("")
-      : '<div class="panel empty-state">No hay pedidos para estos filtros.</div>';
-}
-
-function renderDashboardOrders() {
-  if (!dashboardOrdersList) return;
-
-  const latest = ordersCache.slice(0, 5);
-
-  dashboardOrdersList.innerHTML =
-    latest.length
-      ? latest.map((order) => `
-          <div class="dashboard-order-row">
-            <div>
-              <strong>
-                #${escapeHTML(order.id)}
-                - ${escapeHTML(order.customer_name || "Cliente")}
-              </strong>
-              <small>
-                ${escapeHTML(getBusinessNameById(order.business_id))}
-                \u00b7
-                ${escapeHTML(orderDeliveryLabel(order.delivery_type))}
-              </small>
-            </div>
-
-            <div class="dashboard-order-right">
-              <span class="order-status-badge status-${escapeHTML(order.status)}">
-                ${escapeHTML(orderStatusLabel(order.status))}
-              </span>
-              <strong>${orderMoney(order.total)}</strong>
-            </div>
-          </div>
-        `).join("")
-      : '<div class="empty-state">Todavia no hay pedidos.</div>';
-}
-
-function playNewOrderSound() {
+async function loadDashboard() {
   try {
-    const AudioContextClass =
-      window.AudioContext ||
-      window.webkitAudioContext;
-
-    if (!AudioContextClass) return;
-
-    const context = new AudioContextClass();
-    const oscillator = context.createOscillator();
-    const gain = context.createGain();
-
-    oscillator.frequency.value = 880;
-
-    gain.gain.setValueAtTime(
-      0.001,
-      context.currentTime
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      0.12,
-      context.currentTime + 0.02
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      0.001,
-      context.currentTime + 0.30
-    );
-
-    oscillator.connect(gain);
-    gain.connect(context.destination);
-    oscillator.start();
-    oscillator.stop(context.currentTime + 0.32);
-  } catch (error) {
-    console.warn("Sonido no disponible:", error);
-  }
-}
-
-function detectNewOrders() {
-  const currentIds = new Set(
-    ordersCache.map((order) => String(order.id))
-  );
-
-  if (ordersFirstLoad) {
-    knownOrderIds = currentIds;
-    ordersFirstLoad = false;
-    return;
-  }
-
-  const newOrders = ordersCache.filter(
-    (order) =>
-      !knownOrderIds.has(String(order.id))
-  );
-
-  if (newOrders.length) {
-    playNewOrderSound();
-
-    showToast(
-      newOrders.length === 1
-        ? "Ingreso un nuevo pedido."
-        : `Ingresaron ${newOrders.length} pedidos nuevos.`,
-      "success"
-    );
-  }
-
-  knownOrderIds = currentIds;
-}
-
-async function loadOrders() {
-  if (ordersLoading) return;
-
-  ordersLoading = true;
-
-  try {
-    const [orders, items, options] = await Promise.all([
+    const [businesses, products] = await Promise.all([
       getTableData(
-        "orders",
-        "id,business_id,customer_name,customer_phone,delivery_type,delivery_address,delivery_reference,payment_method,cash_amount,notes,status,total,source,created_at"
+        "businesses",
+        "id,name,slug,active"
       ),
       getTableData(
-        "order_items",
-        "id,order_id,product_id,product_name,quantity,unit_price,total"
-      ),
-      getTableData(
-        "order_item_options",
-        "id,order_item_id,group_name,option_name,price_delta"
+        "products",
+        "id,active"
       )
     ]);
 
-    ordersCache = orders.sort(
-      (a, b) =>
-        new Date(b.created_at) -
-        new Date(a.created_at)
+    businessesCache = businesses;
+    await loadMasterOrders();
+
+    const todayOrders = masterOrdersCache.filter(
+      (order) => order.archived !== true && isTodayLocal(order.created_at)
     );
 
-    orderItemsCache = items;
-    orderItemOptionsCache = options;
-
-    detectNewOrders();
-    populateOrdersBusinessFilter();
-    updateOrdersCounters();
-    renderOrders();
-    renderDashboardOrders();
-
-    if (ordersLastUpdate) {
-      ordersLastUpdate.textContent =
-        `Ultima actualizacion: ${
-          new Intl.DateTimeFormat(
-            "es-UY",
-            { hour:"2-digit", minute:"2-digit", second:"2-digit" }
-          ).format(new Date())
-        }`;
-    }
-  } catch (error) {
-    console.error("Error cargando pedidos:", error);
-
-    if (ordersList) {
-      ordersList.innerHTML =
-        '<div class="panel error">No se pudieron cargar los pedidos. Revisa las tablas orders, order_items y order_item_options.</div>';
-    }
-  } finally {
-    ordersLoading = false;
-  }
-}
-
-
-function normalizeCustomerWhatsAppPhone(phone) {
-  let digits =
-    String(phone || "")
-      .replace(/\D/g, "");
-
-  if (!digits) {
-    return "";
-  }
-
-  if (
-    digits.length === 9 &&
-    digits.startsWith("09")
-  ) {
-    digits =
-      `598${digits.slice(1)}`;
-  }
-
-  if (
-    digits.length === 8 &&
-    digits.startsWith("9")
-  ) {
-    digits =
-      `598${digits}`;
-  }
-
-  return digits;
-}
-
-function customerWhatsAppNotification(order, nextStatus) {
-  const businessName =
-    getBusinessNameById(order.business_id);
-
-  if (nextStatus === "approved") {
-    return [
-      `\u2705 *${businessName.toUpperCase()}*`,
-      "",
-      "*TU PEDIDO FUE CONFIRMADO*",
-      "",
-      `Hola ${order.customer_name || ""}, recibimos tu pedido y ya fue aceptado.`,
-      "",
-      `Total: *${orderMoney(order.total)}*`,
-      "",
-      "Te avisaremos cuando haya una novedad importante."
-    ].join("\n");
-  }
-
-  if (
-    nextStatus === "ready" &&
-    order.delivery_type === "pickup"
-  ) {
-    return [
-      `\ud83c\udf55 *${businessName.toUpperCase()}*`,
-      "",
-      "*TU PEDIDO ESTA LISTO*",
-      "",
-      `Hola ${order.customer_name || ""}, tu pedido ya esta listo para retirar.`,
-      "",
-      "\ud83c\udfea *RETIRO EN EL LOCAL*",
-      "",
-      "Te esperamos. Gracias por elegirnos."
-    ].join("\n");
-  }
-
-  if (
-    nextStatus === "on_the_way" &&
-    order.delivery_type !== "pickup"
-  ) {
-    return [
-      `\ud83d\udef5 *${businessName.toUpperCase()}*`,
-      "",
-      "*TU PEDIDO ESTA EN CAMINO*",
-      "",
-      `Hola ${order.customer_name || ""}, tu pedido salio para delivery.`,
-      "",
-      `Direccion: ${order.delivery_address || ""}`,
-      "",
-      "En breve lo vas a recibir. Gracias por elegirnos."
-    ].join("\n");
-  }
-
-  return "";
-}
-
-function getCustomerWhatsAppUrl(order, nextStatus) {
-  const phone =
-    normalizeCustomerWhatsAppPhone(
-      order.customer_phone
+    const sales = todayOrders.reduce(
+      (sum, order) => sum + Number(order.total || 0),
+      0
     );
 
-  const message =
-    customerWhatsAppNotification(
-      order,
-      nextStatus
-    );
-
-  if (!phone || !message) {
-    return "";
-  }
-
-  return (
-    `https://wa.me/${phone}` +
-    `?text=${encodeURIComponent(message)}`
-  );
-}
-
-function openCustomerWhatsApp(url, reservedWindow = null) {
-  if (!url) {
-    if (reservedWindow && !reservedWindow.closed) {
-      reservedWindow.close();
-    }
-    return;
-  }
-
-  try {
-    if (reservedWindow && !reservedWindow.closed) {
-      reservedWindow.location.href = url;
-      return;
-    }
-  } catch (error) {
-    console.warn(
-      "No se pudo reutilizar la ventana de WhatsApp:",
-      error
-    );
-  }
-
-  const opened =
-    window.open(
-      url,
-      "_blank",
-      "noopener,noreferrer"
-    );
-
-  if (!opened) {
-    window.location.href = url;
-  }
-}
-
-async function updateOrderStatus(orderId, status) {
-  const order =
-    ordersCache.find(
-      (item) =>
-        String(item.id) ===
-        String(orderId)
-    );
-
-  if (!order) {
-    showToast(
-      "No se encontro el pedido.",
-      "error"
-    );
-    return;
-  }
-
-  const whatsappUrl =
-    getCustomerWhatsAppUrl(
-      order,
-      status
-    );
-
-  let reservedWhatsAppWindow = null;
-
-  if (whatsappUrl) {
-    try {
-      reservedWhatsAppWindow =
-        window.open(
-          "about:blank",
-          "_blank"
-        );
-    } catch (error) {
-      reservedWhatsAppWindow = null;
-    }
-  }
-
-  try {
-    await updateTableRow(
-      "orders",
-      orderId,
-      { status }
-    );
-
-    showToast(
-      `Pedido #${orderId}: ${orderStatusLabel(status)}.`,
-      "success"
-    );
-
-    if (whatsappUrl) {
-      openCustomerWhatsApp(
-        whatsappUrl,
-        reservedWhatsAppWindow
-      );
-    }
-
-    await loadOrders();
-  } catch (error) {
-    console.error(
-      "Error actualizando pedido:",
-      error
-    );
-
-    if (
-      reservedWhatsAppWindow &&
-      !reservedWhatsAppWindow.closed
-    ) {
-      reservedWhatsAppWindow.close();
-    }
-
-    showToast(
-      "No se pudo cambiar el estado del pedido.",
-      "error"
-    );
-  }
-}
-
-ordersBusinessFilter?.addEventListener(
-  "change",
-  renderOrders
-);
-
-ordersStatusFilter?.addEventListener(
-  "change",
-  renderOrders
-);
-
-refreshOrdersButton?.addEventListener(
-  "click",
-  loadOrders
-);
-
-ordersList?.addEventListener(
-  "click",
-  (event) => {
-    const button =
-      event.target.closest("[data-order-action]");
-
-    if (!button) return;
-
-    button.disabled = true;
-
-    updateOrderStatus(
-      button.dataset.orderId,
-      button.dataset.nextStatus
-    );
-  }
-);
-
-dashboardGoOrdersButton?.addEventListener(
-  "click",
-  async () => {
-    openSection("orders");
-    await loadOrders();
-  }
-);
-
-function startOrdersPolling() {
-  if (ordersPollTimer) return;
-
-  ordersPollTimer = setInterval(
-    () => loadOrders(),
-    10000
-  );
-}
-
-async function loadDashboard() {
-  try {
-    const [
-      businesses,
-      categories,
-      products,
-      users
-    ] = await Promise.all([
-      getTableData("businesses", "id"),
-      getTableData("categories", "id"),
-      getTableData("products", "id"),
-      getTableData("users", "id")
-    ]);
+    const pending = todayOrders.filter(isPendingOrder).length;
+    const average = todayOrders.length ? sales / todayOrders.length : 0;
 
     document.getElementById("businessesCount").textContent =
       businesses.length;
-
-    document.getElementById("categoriesCount").textContent =
-      categories.length;
-
     document.getElementById("productsCount").textContent =
-      products.length;
+      products.filter((item) => item.active !== false).length;
+    document.getElementById("masterOrdersToday").textContent =
+      todayOrders.length;
+    document.getElementById("masterSalesToday").textContent =
+      moneyUY(sales);
+    document.getElementById("masterAverageTicket").textContent =
+      moneyUY(average);
+    document.getElementById("masterPendingOrders").textContent =
+      pending;
 
-    document.getElementById("usersCount").textContent =
-      users.length;
+    renderMasterBusinessSummary();
+    populateCleanupBusinesses();
   } catch (error) {
     console.error("Error cargando dashboard:", error);
   }
 }
+
+document
+  .getElementById("refreshMasterSummary")
+  ?.addEventListener("click", async () => {
+    const button = document.getElementById("refreshMasterSummary");
+    button.disabled = true;
+    button.textContent = "Actualizando...";
+    await loadDashboard();
+    button.disabled = false;
+    button.textContent = "Actualizar";
+  });
+
+function populateCleanupBusinesses() {
+  const select = document.getElementById("cleanupBusinessSelect");
+  if (!select) return;
+
+  const current = select.value;
+
+  select.innerHTML =
+    '<option value="">Seleccionar comercio</option>' +
+    businessesCache.map(
+      (business) =>
+        `<option value="${escapeHTML(business.id)}">${escapeHTML(business.name || "Sin nombre")}</option>`
+    ).join("");
+
+  if (businessesCache.some((b) => String(b.id) === String(current))) {
+    select.value = current;
+  }
+
+  updateCleanupStats();
+}
+
+function updateCleanupStats() {
+  const select = document.getElementById("cleanupBusinessSelect");
+  const stats = document.getElementById("cleanupBusinessStats");
+  const button = document.getElementById("clearBusinessOrdersButton");
+
+  if (!select || !stats || !button) return;
+
+  const id = select.value;
+  if (!id) {
+    stats.textContent =
+      "Seleccioná un comercio para ver cuántos pedidos tiene guardados.";
+    button.disabled = true;
+    return;
+  }
+
+  const business = businessesCache.find(
+    (item) => String(item.id) === String(id)
+  );
+
+  const orders = masterOrdersCache.filter(
+    (order) => String(order.business_id) === String(id)
+  );
+
+  const sales = orders.reduce(
+    (sum, order) => sum + Number(order.total || 0),
+    0
+  );
+
+  stats.innerHTML = `
+    <strong>${escapeHTML(business?.name || "Comercio")}</strong>
+    <span>${orders.length} pedidos guardados · ${moneyUY(sales)} de facturación histórica</span>
+  `;
+
+  button.disabled = orders.length === 0;
+}
+
+document
+  .getElementById("cleanupBusinessSelect")
+  ?.addEventListener("change", updateCleanupStats);
+
+async function clearSelectedBusinessOrders() {
+  const select = document.getElementById("cleanupBusinessSelect");
+  const button = document.getElementById("clearBusinessOrdersButton");
+  const message = document.getElementById("cleanupOrdersMessage");
+
+  const id = select?.value;
+  if (!id) return;
+
+  const business = businessesCache.find(
+    (item) => String(item.id) === String(id)
+  );
+
+  const count = masterOrdersCache.filter(
+    (order) => String(order.business_id) === String(id)
+  ).length;
+
+  if (!count) return;
+
+  const confirmed = window.confirm(
+    `Vas a eliminar ${count} pedidos de ${business?.name || "este comercio"}. Esta acción no se puede deshacer. ¿Continuar?`
+  );
+
+  if (!confirmed) return;
+
+  button.disabled = true;
+  button.textContent = "Eliminando...";
+  message.textContent = "";
+
+  try {
+    const response = await fetch(
+      `${SUPABASE_REST}/rpc/admin_clear_business_orders`,
+      {
+        method:"POST",
+        headers:supabaseHeaders(),
+        body:JSON.stringify({
+          p_business_id:Number(id)
+        })
+      }
+    );
+
+    const text = await response.text();
+
+    if (!response.ok) {
+      throw new Error(
+        `Supabase ${response.status}: ${text || response.statusText}`
+      );
+    }
+
+    message.textContent =
+      `Listo. Se eliminaron los pedidos de ${business?.name || "este comercio"}.`;
+
+    showToast(
+      "Pedidos de prueba eliminados.",
+      "success"
+    );
+
+    await loadDashboard();
+    updateCleanupStats();
+  } catch (error) {
+    console.error("Error limpiando pedidos:", error);
+    message.textContent =
+      `No se pudieron eliminar: ${error.message || "error desconocido"}`;
+    showToast(
+      "No se pudieron eliminar los pedidos.",
+      "error"
+    );
+  } finally {
+    button.textContent = "Eliminar pedidos de prueba";
+    updateCleanupStats();
+  }
+}
+
+document
+  .getElementById("clearBusinessOrdersButton")
+  ?.addEventListener("click", clearSelectedBusinessOrders);
 
 async function loadBusinesses() {
   const container =
@@ -2670,6 +1953,7 @@ async function loadBusinesses() {
     );
 
     businessesCache = businesses;
+    populateCleanupBusinesses();
 
     if (!businesses.length) {
       container.className = "panel empty-state";
@@ -3280,22 +2564,15 @@ productForm.addEventListener(
             : null
       };
 
-      if (
-        croppedProductImageBlob &&
-        !imageUrl
-      ) {
-        throw new Error(
-          "Imagen: no se genero una URL para guardar."
-        );
-      }
-
       if (editingProductId) {
-        await updateProductAndVerify(
+        await updateTableRow(
+          "products",
           editingProductId,
           payload
         );
       } else {
-        await insertProductAndVerify(
+        await insertTableRow(
+          "products",
           payload
         );
       }
@@ -3327,14 +2604,7 @@ productForm.addEventListener(
         message.includes("storage")
       ) {
         productFormMessage.textContent =
-          "La foto no pudo subirse a Supabase Storage. Ejecuta el archivo SQL de la v29 una sola vez y volve a probar.";
-      } else if (
-        message.includes("imagen") ||
-        message.includes("Imagen") ||
-        message.includes("Producto:")
-      ) {
-        productFormMessage.textContent =
-          message;
+          "No se pudo subir la imagen. Revis\u00e1 las policies del bucket product-images.";
       } else {
         productFormMessage.textContent =
           editingProductId
@@ -3457,9 +2727,6 @@ async function initAdmin() {
 
   await loadCategories();
   await loadProducts();
-  await loadOrders();
-
-  startOrdersPolling();
 }
 
 initAdmin();
