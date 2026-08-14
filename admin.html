@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Proyecto X | Super Panel</title>
+  <title>DENEXA | Super Panel</title>
 
-  <link rel="stylesheet" href="css/admin.css?v=46">
+  <link rel="stylesheet" href="css/admin.css?v=78">
 </head>
 
 <body>
@@ -14,10 +14,10 @@
   <aside class="sidebar">
 
     <div class="brand">
-      <div class="brand-mark">X</div>
+      <div class="brand-mark">D</div>
 
       <div>
-        <strong>PROYECTO X</strong>
+        <strong>DENEXA</strong>
         <span>Super Panel</span>
       </div>
     </div>
@@ -82,87 +82,54 @@
         <span class="status-badge">Sistema activo</span>
       </header>
 
-      <div class="cards">
+      <div class="cards denexa-master-metrics">
 
         <article class="metric-card">
           <span class="metric-icon">C</span>
-          <div>
-            <small>Comercios</small>
-            <strong id="businessesCount">0</strong>
-          </div>
+          <div><small>Comercios</small><strong id="businessesCount">0</strong></div>
         </article>
 
         <article class="metric-card">
-          <span class="metric-icon">CA</span>
-          <div>
-            <small>Categor&iacute;as</small>
-            <strong id="categoriesCount">0</strong>
-          </div>
+          <span class="metric-icon">P</span>
+          <div><small>Pedidos hoy</small><strong id="masterOrdersToday">0</strong></div>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-icon">$</span>
+          <div><small>Facturaci&oacute;n hoy</small><strong id="masterSalesToday">$0</strong></div>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-icon">T</span>
+          <div><small>Ticket promedio</small><strong id="masterAverageTicket">$0</strong></div>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-icon">!</span>
+          <div><small>Pendientes</small><strong id="masterPendingOrders">0</strong></div>
         </article>
 
         <article class="metric-card">
           <span class="metric-icon">PR</span>
-          <div>
-            <small>Productos</small>
-            <strong id="productsCount">0</strong>
-          </div>
-        </article>
-
-        <article class="metric-card">
-          <span class="metric-icon">U</span>
-          <div>
-            <small>Usuarios</small>
-            <strong id="usersCount">0</strong>
-          </div>
-        </article>
-
-        <article class="metric-card order-metric">
-          <span class="metric-icon">P</span>
-          <div>
-            <small>Pedidos hoy</small>
-            <strong id="ordersTodayCount">0</strong>
-          </div>
-        </article>
-
-        <article class="metric-card order-metric pending">
-          <span class="metric-icon">!</span>
-          <div>
-            <small>Pendientes</small>
-            <strong id="pendingOrdersCount">0</strong>
-          </div>
+          <div><small>Productos activos</small><strong id="productsCount">0</strong></div>
         </article>
 
       </div>
 
-      <div class="panel welcome-panel">
-
-        <div>
-          <p class="eyebrow">PR&Oacute;XIMO PASO</p>
-          <h2>Administr&aacute; tus comercios</h2>
-
-          <p>
-            Desde el Super Panel pod&eacute;s crear comercios y administrar
-            sus categor&iacute;as, productos y datos generales.
-          </p>
-        </div>
-
-        <button class="primary-button go-businesses" type="button">
-          Ir a Comercios
-        </button>
-
-      </div>
-
-      <div class="panel dashboard-orders-panel">
-        <div class="orders-panel-title">
+      <div class="panel master-summary-panel">
+        <div class="master-summary-head">
           <div>
-            <p class="eyebrow">ACTIVIDAD</p>
-            <h2>Ultimos pedidos</h2>
+            <p class="eyebrow">HOY</p>
+            <h2>Rendimiento por comercio</h2>
+            <p>Resumen comercial sin mostrar datos personales de los clientes.</p>
           </div>
-          <button id="dashboardGoOrdersButton" class="secondary-button" type="button">
-            Ver pedidos
+          <button id="refreshMasterSummary" class="secondary-button" type="button">
+            Actualizar
           </button>
         </div>
-        <div id="dashboardOrdersList">Cargando pedidos...</div>
+        <div id="businessDailySummary" class="master-business-summary">
+          Cargando resumen...
+        </div>
       </div>
 
     </section>
@@ -195,77 +162,39 @@
     <section id="orders" class="page-section">
       <header class="page-header">
         <div>
-          <p class="eyebrow">CENTRAL DE PEDIDOS</p>
-          <h1>Pedidos</h1>
-          <p class="subtitle">Recib&iacute;, acept&aacute; y segu&iacute; cada pedido desde un solo lugar.</p>
+          <p class="eyebrow">ADMINISTRACI&Oacute;N</p>
+          <h1>Historial de pedidos</h1>
+          <p class="subtitle">
+            Ac&aacute; no mostramos pedidos individuales. Us&aacute; esta secci&oacute;n solamente para limpiar pruebas de un comercio.
+          </p>
         </div>
-        <span class="orders-live-badge">
-          <span class="orders-live-dot"></span>
-          Actualizaci&oacute;n autom&aacute;tica
-        </span>
       </header>
 
-      <div class="orders-whatsapp-note">
-        <strong>WhatsApp al cliente</strong>
-        <span>
-          Se prepara un aviso al aceptar el pedido,
-          cuando un retiro queda listo y cuando un delivery sale en camino.
-          El comercio solo debe tocar Enviar en WhatsApp.
-        </span>
-      </div>
-
-      <div class="orders-summary-grid">
-        <article class="order-summary-card new">
-          <span>Nuevos</span>
-          <strong id="ordersNewCount">0</strong>
-        </article>
-        <article class="order-summary-card preparing">
-          <span>Preparando</span>
-          <strong id="ordersPreparingCount">0</strong>
-        </article>
-        <article class="order-summary-card ready">
-          <span>Listos</span>
-          <strong id="ordersReadyCount">0</strong>
-        </article>
-        <article class="order-summary-card delivered">
-          <span>Entregados hoy</span>
-          <strong id="ordersDeliveredCount">0</strong>
-        </article>
-      </div>
-
-      <div class="panel orders-toolbar-panel">
-        <div class="orders-toolbar">
-          <label>
-            <span>Comercio</span>
-            <select id="ordersBusinessFilter">
-              <option value="all">Todos los comercios</option>
-            </select>
-          </label>
-
-          <label>
-            <span>Estado</span>
-            <select id="ordersStatusFilter">
-              <option value="active">Pedidos activos</option>
-              <option value="all">Todos</option>
-              <option value="received">Nuevos</option>
-              <option value="approved">Aceptados</option>
-              <option value="preparing">En preparaci&oacute;n</option>
-              <option value="ready">Listos</option>
-              <option value="on_the_way">En camino</option>
-              <option value="delivered">Entregados</option>
-              <option value="cancelled">Cancelados</option>
-            </select>
-          </label>
-
-          <button id="refreshOrdersButton" class="secondary-button" type="button">
-            Actualizar
-          </button>
+      <div class="panel cleanup-panel">
+        <div>
+          <h2>Limpiar pedidos de prueba</h2>
+          <p>
+            Elimina el historial de pedidos del comercio elegido, incluyendo sus productos y opciones asociadas.
+            No elimina productos, categor&iacute;as ni configuraci&oacute;n del comercio.
+          </p>
         </div>
-        <div id="ordersLastUpdate" class="orders-last-update">Esperando datos...</div>
-      </div>
 
-      <div id="ordersList" class="orders-board">
-        <div class="panel loading">Cargando pedidos...</div>
+        <label class="cleanup-field">
+          <span>Comercio</span>
+          <select id="cleanupBusinessSelect">
+            <option value="">Cargando comercios...</option>
+          </select>
+        </label>
+
+        <div id="cleanupBusinessStats" class="cleanup-stats">
+          Seleccion&aacute; un comercio para ver cu&aacute;ntos pedidos tiene guardados.
+        </div>
+
+        <button id="clearBusinessOrdersButton" class="danger-button" type="button" disabled>
+          Eliminar pedidos de prueba
+        </button>
+
+        <p id="cleanupOrdersMessage" class="form-message"></p>
       </div>
     </section>
 
@@ -345,7 +274,7 @@
           <p class="eyebrow">SISTEMA</p>
           <h1>Configuraci&oacute;n</h1>
           <p class="subtitle">
-            Configuraci&oacute;n general de Proyecto X.
+            Configuraci&oacute;n general de DENEXA.
           </p>
         </div>
       </header>
@@ -931,8 +860,8 @@
 
   <div id="toast" class="toast" aria-live="polite"></div>
 
-  <script src="js/config.js?v=30"></script>
-  <script src="js/admin.js?v=46"></script>
+  <script src="js/config.js?v=28"></script>
+  <script src="js/admin.js?v=78"></script>
 
 </body>
 </html>
