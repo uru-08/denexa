@@ -1143,474 +1143,163 @@ select{
 
 
 /* =========================================================
-   CENTRAL DE PEDIDOS V45
+   DENEXA SUPER PANEL V78
 ========================================================= */
 
-.order-metric{
-  background:linear-gradient(135deg,#f8fbff,#eef5ff);
+.denexa-master-metrics{
+  grid-template-columns:repeat(3,minmax(0,1fr));
 }
 
-.order-metric.pending{
-  background:linear-gradient(135deg,#fffdf8,#fff6df);
+.master-summary-panel{
+  margin-top:22px;
 }
 
-.dashboard-orders-panel{
-  margin-top:18px;
-}
-
-.orders-panel-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:14px;
-  margin-bottom:14px;
-}
-
-.orders-panel-title h2{
-  margin:0;
-}
-
-.dashboard-order-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:14px;
-  padding:12px 0;
-  border-top:1px solid #e9edf3;
-}
-
-.dashboard-order-row:first-child{
-  border-top:0;
-}
-
-.dashboard-order-row small{
-  display:block;
-  margin-top:3px;
-  color:#6b778b;
-}
-
-.dashboard-order-right{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.orders-live-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 11px;
-  border:1px solid #cee9d9;
-  border-radius:999px;
-  background:#f0fbf4;
-  color:#157347;
-  font-size:.74rem;
-  font-weight:850;
-}
-
-.orders-live-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:#23a66f;
-  box-shadow:0 0 0 4px rgba(35,166,111,.12);
-}
-
-.orders-summary-grid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:12px;
-  margin-bottom:16px;
-}
-
-.order-summary-card{
-  padding:14px;
-  border:1px solid #e1e7ef;
-  border-radius:14px;
-  background:#fff;
-  box-shadow:0 7px 20px rgba(15,23,42,.05);
-}
-
-.order-summary-card span{
-  display:block;
-  color:#64748b;
-  font-size:.68rem;
-  font-weight:900;
-  text-transform:uppercase;
-}
-
-.order-summary-card strong{
-  display:block;
-  margin-top:4px;
-  font-size:1.65rem;
-}
-
-.order-summary-card.new{border-top:4px solid #2563eb;}
-.order-summary-card.preparing{border-top:4px solid #f59e0b;}
-.order-summary-card.ready{border-top:4px solid #7c3aed;}
-.order-summary-card.delivered{border-top:4px solid #16a34a;}
-
-.orders-toolbar-panel{
-  margin-bottom:16px;
-}
-
-.orders-toolbar{
-  display:grid;
-  grid-template-columns:1fr 1fr auto;
-  align-items:end;
-  gap:12px;
-}
-
-.orders-toolbar label{
-  display:grid;
-  gap:6px;
-}
-
-.orders-toolbar label span{
-  color:#526075;
-  font-size:.72rem;
-  font-weight:850;
-}
-
-.orders-toolbar select{
-  min-height:43px;
-  padding:9px 11px;
-  border:1px solid #d7dfeb;
-  border-radius:10px;
-  background:#fff;
-}
-
-.orders-last-update{
-  margin-top:8px;
-  color:#7a8698;
-  font-size:.69rem;
-}
-
-.orders-board{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:16px;
-}
-
-.order-card{
-  overflow:hidden;
-  border:1px solid #dde4ec;
-  border-top:5px solid #94a3b8;
-  border-radius:17px;
-  background:#fff;
-  box-shadow:0 12px 30px rgba(15,23,42,.07);
-}
-
-.order-card.status-received{border-top-color:#2563eb;}
-.order-card.status-approved,
-.order-card.status-preparing{border-top-color:#f59e0b;}
-.order-card.status-ready{border-top-color:#7c3aed;}
-.order-card.status-on_the_way{border-top-color:#0891b2;}
-.order-card.status-delivered{border-top-color:#16a34a;}
-.order-card.status-cancelled{border-top-color:#dc2626;opacity:.78;}
-
-.order-card-top{
+.master-summary-head{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  gap:12px;
-  padding:14px 15px 11px;
-  border-bottom:1px solid #edf1f5;
+  gap:18px;
+  margin-bottom:18px;
 }
 
-.order-number-line{
-  display:flex;
-  gap:8px;
-  align-items:baseline;
+.master-summary-head h2{
+  margin:2px 0 6px;
 }
 
-.order-number-line span{
-  color:#66758a;
-  font-size:.69rem;
+.master-summary-head p{
+  margin:0;
+  color:var(--muted);
 }
 
-.order-business-name{
-  margin-top:3px;
-  color:#536176;
-  font-size:.73rem;
-  font-weight:750;
-}
-
-.order-status-badge{
-  display:inline-flex;
-  padding:6px 8px;
-  border-radius:999px;
-  background:#eef2f7;
-  color:#475569;
-  font-size:.61rem;
-  font-weight:950;
-  white-space:nowrap;
-}
-
-.order-status-badge.status-received{background:#eaf2ff;color:#1d4ed8;}
-.order-status-badge.status-approved,
-.order-status-badge.status-preparing{background:#fff3d6;color:#a16207;}
-.order-status-badge.status-ready{background:#f1eafe;color:#6d28d9;}
-.order-status-badge.status-on_the_way{background:#e5f7fb;color:#0e7490;}
-.order-status-badge.status-delivered{background:#e8f8ee;color:#15803d;}
-.order-status-badge.status-cancelled{background:#feeceb;color:#b91c1c;}
-
-.order-customer-grid{
+.master-business-summary{
   display:grid;
-  grid-template-columns:.9fr 1.1fr;
-  gap:10px;
-  padding:12px 15px;
-  background:#fbfcfe;
-}
-
-.order-customer-grid small{
-  display:block;
-  margin-bottom:4px;
-  color:#7b8798;
-  font-size:.59rem;
-  font-weight:950;
-  letter-spacing:.08em;
-}
-
-.order-customer-grid strong{
-  display:block;
-  color:#172033;
-}
-
-.order-customer-grid span{
-  display:block;
-  margin-top:3px;
-  color:#536176;
-  font-size:.73rem;
-  line-height:1.4;
-}
-
-.order-delivery-mode{
-  display:inline-flex !important;
-  width:max-content;
-  margin:0 0 5px !important;
-  padding:5px 7px;
-  border-radius:8px;
-  font-size:.61rem !important;
-  font-weight:950;
-}
-
-.order-delivery-mode.delivery{background:#eaf2ff;color:#1d4ed8;}
-.order-delivery-mode.pickup{background:#fff3d6;color:#9a6500;}
-
-.order-products-box{
-  padding:13px 15px;
-}
-
-.order-section-label{
-  margin-bottom:8px;
-  color:#66758a;
-  font-size:.61rem;
-  font-weight:950;
-  letter-spacing:.09em;
-}
-
-.order-product-line{
-  padding:9px 0;
-  border-top:1px solid #edf1f5;
-}
-
-.order-product-line:first-of-type{
-  border-top:0;
-  padding-top:0;
-}
-
-.order-product-title{
-  display:flex;
-  justify-content:space-between;
   gap:10px;
 }
 
-.order-product-title strong{
-  color:#101828;
+.master-business-row{
+  display:grid;
+  grid-template-columns:minmax(180px,1.4fr) repeat(4,minmax(100px,1fr));
+  gap:12px;
+  align-items:center;
+  padding:14px 15px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
 }
 
-.order-product-title span{
-  font-weight:850;
-  white-space:nowrap;
-}
-
-.order-options-list{
+.master-business-row > div:not(.master-business-name){
   display:grid;
   gap:3px;
-  margin-top:5px;
-  padding-left:10px;
-  border-left:3px solid #dce6f3;
 }
 
-.order-options-list span{
-  color:#617086;
-  font-size:.69rem;
-}
-
-.order-notes-box{
-  margin:0 15px 12px;
-  padding:10px 11px;
-  border:1px solid #f0d49d;
-  border-radius:10px;
-  background:#fff9ea;
-}
-
-.order-notes-box strong{
-  display:block;
-  color:#8a5a05;
-  font-size:.62rem;
-}
-
-.order-notes-box span{
-  display:block;
-  margin-top:4px;
-  color:#54400f;
-  font-size:.75rem;
+.master-business-row span,
+.master-business-name small{
+  color:var(--muted);
+  font-size:.72rem;
   font-weight:750;
 }
 
-.order-total-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:12px 15px;
-  border-top:1px solid #e7ecf2;
-  border-bottom:1px solid #e7ecf2;
-  background:#f7f9fc;
+.master-business-row strong{
+  color:var(--text);
 }
 
-.order-total-row span{
-  color:#526075;
-  font-size:.68rem;
-  font-weight:950;
+.master-business-name{
+  display:grid;
+  gap:3px;
 }
 
-.order-total-row strong{
-  font-size:1.18rem;
+.cleanup-panel{
+  max-width:760px;
+  display:grid;
+  gap:18px;
 }
 
-.order-payment{
-  display:flex;
+.cleanup-panel h2{
+  margin:0 0 6px;
+}
+
+.cleanup-panel p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+.cleanup-field{
+  display:grid;
   gap:7px;
-  flex-wrap:wrap;
-  padding:9px 15px;
-  color:#58677d;
-  font-size:.69rem;
 }
 
-.order-actions{
-  display:flex;
-  gap:8px;
-  padding:12px 15px 15px;
+.cleanup-field span{
+  font-weight:850;
 }
 
-.order-action-button{
-  flex:1;
-  min-height:43px;
+.cleanup-field select{
+  width:100%;
+  min-height:48px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:var(--text);
+  font:inherit;
+}
+
+.cleanup-stats{
+  display:grid;
+  gap:4px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--surface-soft,#f7f9fc);
+}
+
+.cleanup-stats span{
+  color:var(--muted);
+  font-size:.82rem;
+}
+
+.danger-button{
+  min-height:46px;
+  padding:11px 16px;
   border:0;
-  border-radius:10px;
-  padding:9px 12px;
-  font-weight:900;
+  border-radius:11px;
+  background:#b42318;
+  color:#fff;
+  font-weight:850;
   cursor:pointer;
 }
 
-.order-action-button.primary{
-  background:linear-gradient(135deg,#1d4ed8,#2563eb);
-  color:#fff;
+.danger-button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
 }
 
-.order-action-button.danger{
-  flex:0 0 auto;
-  border:1px solid #ffd2cf;
-  background:#fff0ef;
-  color:#b42318;
-}
-
-.order-empty-items{
-  padding:9px;
-  border-radius:8px;
-  background:#f8fafc;
-  color:#64748b;
-  font-size:.72rem;
-}
-
-@media(max-width:980px){
-  .orders-summary-grid{
+@media(max-width:900px){
+  .denexa-master-metrics{
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
 
-  .orders-board{
-    grid-template-columns:1fr;
+  .master-business-row{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .master-business-name{
+    grid-column:1 / -1;
+    padding-bottom:8px;
+    border-bottom:1px solid var(--line);
   }
 }
 
-@media(max-width:680px){
-  .orders-live-badge{
-    display:none;
+@media(max-width:560px){
+  .denexa-master-metrics{
+    grid-template-columns:1fr 1fr;
   }
 
-  .orders-toolbar{
-    grid-template-columns:1fr;
-  }
-
-  .orders-toolbar .secondary-button{
-    width:100%;
-  }
-
-  .order-customer-grid{
-    grid-template-columns:1fr;
-  }
-
-  .order-actions{
+  .master-summary-head{
     flex-direction:column;
   }
 
-  .order-action-button.danger{
-    flex:auto;
-  }
-
-  .dashboard-order-row{
-    align-items:flex-start;
-  }
-
-  .dashboard-order-right{
-    display:grid;
-    justify-items:end;
-  }
-}
-
-
-/* =========================================================
-   WHATSAPP ESTADOS V46
-========================================================= */
-
-.orders-whatsapp-note{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  margin-bottom:14px;
-  padding:11px 13px;
-  border:1px solid #bfe8cf;
-  border-radius:12px;
-  background:#f2fbf5;
-}
-
-.orders-whatsapp-note strong{
-  flex:0 0 auto;
-  color:#147347;
-  font-size:.74rem;
-}
-
-.orders-whatsapp-note span{
-  color:#49645a;
-  font-size:.72rem;
-  line-height:1.45;
-}
-
-@media(max-width:680px){
-  .orders-whatsapp-note{
-    display:grid;
-    gap:4px;
+  .master-business-row{
+    grid-template-columns:1fr 1fr;
   }
 }
