@@ -1116,8 +1116,8 @@ function updateCustomerNoticesOrdersState() {
     enabled === 0
       ? "Avisos desactivados."
       : enabled === 3
-        ? "3 avisos activos."
-        : `${enabled} aviso${enabled === 1 ? "" : "s"} activo${enabled === 1 ? "" : "s"}.`;
+        ? "3 avisos disponibles. Vos elegís cuándo enviarlos."
+        : `${enabled} aviso${enabled === 1 ? "" : "s"} disponible${enabled === 1 ? "" : "s"}. Vos elegís cuándo enviarlo${enabled === 1 ? "" : "s"}.`;
 }
 
 async function saveCustomerNoticesRPC(payload) {
@@ -3264,16 +3264,8 @@ function customerNoticeEnabledFor(order, nextStatus) {
 }
 
 function compactActionLabel(order, status, label) {
-  const notify =
-    customerNoticeEnabledFor(
-      order,
-      status
-    );
-
   if (status === "approved") {
-    return notify
-      ? "Aceptar · WA"
-      : "Aceptar";
+    return "Aceptar";
   }
 
   if (status === "preparing") {
@@ -3281,19 +3273,11 @@ function compactActionLabel(order, status, label) {
   }
 
   if (status === "ready") {
-    return order.delivery_type === "pickup"
-      ? (
-          notify
-            ? "Listo · WA"
-            : "Listo"
-        )
-      : "Listo";
+    return "Listo";
   }
 
   if (status === "on_the_way") {
-    return notify
-      ? "En camino · WA"
-      : "En camino";
+    return "En camino";
   }
 
   if (status === "delivered") {
@@ -3301,6 +3285,56 @@ function compactActionLabel(order, status, label) {
   }
 
   return label;
+}
+
+function noticeStatusAvailableForOrder(order) {
+  if (!order || !selectedBusiness) {
+    return "";
+  }
+
+  if (
+    order.status === "approved" &&
+    selectedBusiness.notice_approved_enabled !== false
+  ) {
+    return "approved";
+  }
+
+  if (
+    order.status === "ready" &&
+    order.delivery_type === "pickup" &&
+    selectedBusiness.notice_ready_enabled !== false
+  ) {
+    return "ready";
+  }
+
+  if (
+    order.status === "on_the_way" &&
+    order.delivery_type !== "pickup" &&
+    selectedBusiness.notice_delivery_enabled !== false
+  ) {
+    return "on_the_way";
+  }
+
+  return "";
+}
+
+function noticeButtonLabel(order) {
+  const status =
+    noticeStatusAvailableForOrder(order);
+
+  if (status === "approved") {
+    return "Avisar: aceptado";
+  }
+
+  if (status === "ready") {
+    return "Avisar: listo";
+  }
+
+  if (status === "on_the_way") {
+    return "Avisar: en camino";
+  }
+
+  return "";
 }
 
 function orderNextActions(order) {
@@ -3508,6 +3542,21 @@ function renderOrderCard(order) {
             ${escapeHTML(compactActionLabel(order,status,label))}
           </button>
         `).join("")}
+
+        ${
+          noticeStatusAvailableForOrder(order)
+            ? `
+              <button
+                type="button"
+                class="order-action-button secondary"
+                data-send-customer-notice
+                data-order-id="${escapeHTML(order.id)}"
+              >
+                ${escapeHTML(noticeButtonLabel(order))}
+              </button>
+            `
+            : ""
+        }
 
         <button
           type="button"
@@ -4202,26 +4251,6 @@ async function updateOrderStatus(orderId, status) {
     return;
   }
 
-  const whatsappUrl =
-    getCustomerWhatsAppUrl(
-      order,
-      status
-    );
-
-  let reservedWhatsAppWindow = null;
-
-  if (whatsappUrl) {
-    try {
-      reservedWhatsAppWindow =
-        window.open(
-          "about:blank",
-          "_blank"
-        );
-    } catch (error) {
-      reservedWhatsAppWindow = null;
-    }
-  }
-
   try {
     await updateTableRow(
       "orders",
@@ -4234,13 +4263,12 @@ async function updateOrderStatus(orderId, status) {
       "success"
     );
 
-    if (whatsappUrl) {
-      openCustomerWhatsApp(
-        whatsappUrl,
-        reservedWhatsAppWindow
-      );
-    }
-
+    /*
+      V80:
+      Cambiar el estado NO abre WhatsApp automáticamente.
+      Si ese estado tiene un aviso habilitado, después aparece
+      un botón separado "Avisar..." y el comercio decide si lo usa.
+    */
     await loadOrders();
   } catch (error) {
     console.error(
@@ -4248,19 +4276,57 @@ async function updateOrderStatus(orderId, status) {
       error
     );
 
-    if (
-      reservedWhatsAppWindow &&
-      !reservedWhatsAppWindow.closed
-    ) {
-      reservedWhatsAppWindow.close();
-    }
-
     showToast(
       "No se pudo cambiar el estado del pedido.",
       "error"
     );
   }
 }
+
+function sendCustomerNoticeForOrder(orderId) {
+  const order =
+    ordersCache.find(
+      (item) =>
+        String(item.id) ===
+        String(orderId)
+    );
+
+  if (!order) {
+    showToast(
+      "No se encontro el pedido.",
+      "error"
+    );
+    return;
+  }
+
+  const noticeStatus =
+    noticeStatusAvailableForOrder(order);
+
+  if (!noticeStatus) {
+    showToast(
+      "No hay un aviso activo para este estado.",
+      "error"
+    );
+    return;
+  }
+
+  const url =
+    getCustomerWhatsAppUrl(
+      order,
+      noticeStatus
+    );
+
+  if (!url) {
+    showToast(
+      "No se pudo preparar el aviso. Revisá el teléfono del cliente y el mensaje configurado.",
+      "error"
+    );
+    return;
+  }
+
+  openCustomerWhatsApp(url);
+}
+
 
 ordersBusinessFilter?.addEventListener(
   "change",
@@ -4293,6 +4359,18 @@ ordersList?.addEventListener(
     if (removeButton) {
       archiveSingleOrder(
         removeButton.dataset.orderId
+      );
+      return;
+    }
+
+    const noticeButton =
+      event.target.closest(
+        "[data-send-customer-notice]"
+      );
+
+    if (noticeButton) {
+      sendCustomerNoticeForOrder(
+        noticeButton.dataset.orderId
       );
       return;
     }
