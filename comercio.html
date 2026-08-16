@@ -7,6 +7,85 @@
   <title>Mamma Mia | Panel del comercio</title>
 
   <link rel="stylesheet" href="css/comercio.css?v=69">
+
+<style>
+  .compact-notice{
+    padding:10px 13px !important;
+    gap:4px !important;
+  }
+
+  .compact-notice span{
+    font-size:.78rem !important;
+  }
+
+  .notice-settings-intro{
+    padding-bottom:16px;
+    border-bottom:1px solid #e4e8ef;
+  }
+
+  .notice-settings-intro p{
+    margin:6px 0 0;
+    color:#667085;
+    line-height:1.5;
+  }
+
+  .notice-settings-list{
+    display:grid;
+    gap:14px;
+    margin-top:16px;
+  }
+
+  .notice-setting-card{
+    display:grid;
+    gap:12px;
+    padding:15px;
+    border:1px solid #e0e6ef;
+    border-radius:14px;
+    background:#fff;
+  }
+
+  .notice-setting-card .checkbox-label{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+  }
+
+  .notice-setting-card .checkbox-label span{
+    display:grid;
+    gap:2px;
+  }
+
+  .notice-setting-card small{
+    color:#667085;
+    font-weight:600;
+  }
+
+  .notice-setting-card textarea{
+    width:100%;
+    resize:vertical;
+  }
+
+  .notice-placeholders{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:7px;
+    margin-top:15px;
+    padding:12px;
+    border-radius:12px;
+    background:#f7f9fc;
+  }
+
+  .notice-placeholders span{
+    padding:5px 8px;
+    border-radius:8px;
+    background:#fff;
+    border:1px solid #dde4ee;
+    font-size:.78rem;
+    font-weight:800;
+  }
+</style>
+
 </head>
 
 <body>
@@ -64,6 +143,11 @@
       <button class="nav-item" data-section="payments" type="button">
         <span class="nav-icon">$</span>
         <span>Cobros</span>
+      </button>
+
+      <button class="nav-item" data-section="customerNotices" type="button">
+        <span class="nav-icon">WA</span>
+        <span>Avisos al cliente</span>
       </button>
 
     </nav>
@@ -601,6 +685,112 @@
       </form>
     </section>
 
+    <section id="customerNotices" class="page-section">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">WHATSAPP</p>
+          <h1>Avisos al cliente</h1>
+          <p class="subtitle">
+            Eleg&iacute; qu&eacute; avisos quer&eacute;s usar y edit&aacute; el texto que recibe el cliente.
+          </p>
+        </div>
+      </header>
+
+      <form id="customerNoticesForm" class="panel">
+
+        <div class="notice-settings-intro">
+          <strong>Mensajes autom&aacute;ticos preparados por DENEXA</strong>
+          <p>
+            Al cambiar el estado de un pedido, el panel puede abrir WhatsApp con el mensaje listo.
+            El comercio decide qu&eacute; avisos utiliza.
+          </p>
+        </div>
+
+        <div class="notice-settings-list">
+
+          <article class="notice-setting-card">
+            <label class="checkbox-label">
+              <input id="noticeApprovedEnabled" type="checkbox">
+              <span>
+                <strong>Pedido aceptado</strong>
+                <small>Al tocar Aceptar.</small>
+              </span>
+            </label>
+
+            <label class="full-width">
+              Mensaje
+              <textarea
+                id="noticeApprovedMessage"
+                rows="4"
+                maxlength="500"
+              ></textarea>
+            </label>
+          </article>
+
+          <article class="notice-setting-card">
+            <label class="checkbox-label">
+              <input id="noticeReadyEnabled" type="checkbox">
+              <span>
+                <strong>Pedido listo para retirar</strong>
+                <small>Solo para pedidos con retiro en el local.</small>
+              </span>
+            </label>
+
+            <label class="full-width">
+              Mensaje
+              <textarea
+                id="noticeReadyMessage"
+                rows="4"
+                maxlength="500"
+              ></textarea>
+            </label>
+          </article>
+
+          <article class="notice-setting-card">
+            <label class="checkbox-label">
+              <input id="noticeDeliveryEnabled" type="checkbox">
+              <span>
+                <strong>Pedido en camino</strong>
+                <small>Solo para pedidos con delivery.</small>
+              </span>
+            </label>
+
+            <label class="full-width">
+              Mensaje
+              <textarea
+                id="noticeDeliveryMessage"
+                rows="4"
+                maxlength="500"
+              ></textarea>
+            </label>
+          </article>
+
+        </div>
+
+        <div class="notice-placeholders">
+          <strong>Pod&eacute;s usar estas palabras:</strong>
+          <span>{cliente}</span>
+          <span>{comercio}</span>
+          <span>{total}</span>
+          <span>{direccion}</span>
+        </div>
+
+        <p id="customerNoticesMessage" class="form-message"></p>
+
+        <div class="modal-actions" style="justify-content:flex-start;">
+          <button
+            id="saveCustomerNoticesButton"
+            class="primary-button"
+            type="submit"
+          >
+            Guardar avisos
+          </button>
+        </div>
+
+      </form>
+    </section>
+
+
     <section id="businesses" class="page-section merchant-master-section">
 
       <header class="page-header">
@@ -639,13 +829,9 @@
         </span>
       </header>
 
-      <div class="orders-whatsapp-note">
-        <strong>WhatsApp al cliente</strong>
-        <span>
-          Se prepara un aviso al aceptar el pedido,
-          cuando un retiro queda listo y cuando un delivery sale en camino.
-          El comercio solo debe tocar Enviar en WhatsApp.
-        </span>
+      <div class="orders-whatsapp-note compact-notice">
+        <strong>Avisos por WhatsApp</strong>
+        <span id="customerNoticesOrdersState">Configurables desde â€œAvisos al clienteâ€.</span>
       </div>
 
       <div class="orders-summary-grid">
@@ -1384,7 +1570,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/comercio.js?v=76"></script>
+  <script src="js/comercio.js?v=79"></script>
 
 </body>
 </html>
