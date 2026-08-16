@@ -37,6 +37,17 @@ const paymentCurrency = document.getElementById("paymentCurrency");
 const paymentInstructions = document.getElementById("paymentInstructions");
 const paymentSettingsMessage = document.getElementById("paymentSettingsMessage");
 const savePaymentSettingsButton = document.getElementById("savePaymentSettingsButton");
+const customerNoticesForm = document.getElementById("customerNoticesForm");
+const noticeApprovedEnabled = document.getElementById("noticeApprovedEnabled");
+const noticeApprovedMessage = document.getElementById("noticeApprovedMessage");
+const noticeReadyEnabled = document.getElementById("noticeReadyEnabled");
+const noticeReadyMessage = document.getElementById("noticeReadyMessage");
+const noticeDeliveryEnabled = document.getElementById("noticeDeliveryEnabled");
+const noticeDeliveryMessage = document.getElementById("noticeDeliveryMessage");
+const customerNoticesMessage = document.getElementById("customerNoticesMessage");
+const saveCustomerNoticesButton = document.getElementById("saveCustomerNoticesButton");
+const customerNoticesOrdersState = document.getElementById("customerNoticesOrdersState");
+
 
 const dailyPromoRuleType = document.getElementById("dailyPromoRuleType");
 const promoAutomaticFields = document.getElementById("promoAutomaticFields");
@@ -257,6 +268,10 @@ navItems.forEach((button) => {
 
     if (sectionId === "payments") {
       fillPaymentSettingsForm();
+    }
+
+    if (sectionId === "customerNotices") {
+      fillCustomerNoticesForm();
     }
   });
 });
@@ -1034,6 +1049,204 @@ paymentSettingsForm?.addEventListener(
   async (event) => {
     event.preventDefault();
     await savePaymentSettings();
+  }
+);
+
+
+function customerNoticeDefaults() {
+  return {
+    approvedEnabled:true,
+    readyEnabled:true,
+    deliveryEnabled:true,
+    approved:
+      "Hola {cliente}, tu pedido fue confirmado por {comercio}. Total: {total}.",
+    ready:
+      "Hola {cliente}, tu pedido ya está listo para retirar en {comercio}. ¡Te esperamos!",
+    delivery:
+      "Hola {cliente}, tu pedido de {comercio} ya está en camino hacia {direccion}."
+  };
+}
+
+function fillCustomerNoticesForm() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  const defaults =
+    customerNoticeDefaults();
+
+  noticeApprovedEnabled.checked =
+    selectedBusiness.notice_approved_enabled !== false;
+
+  noticeReadyEnabled.checked =
+    selectedBusiness.notice_ready_enabled !== false;
+
+  noticeDeliveryEnabled.checked =
+    selectedBusiness.notice_delivery_enabled !== false;
+
+  noticeApprovedMessage.value =
+    selectedBusiness.notice_approved_message ||
+    defaults.approved;
+
+  noticeReadyMessage.value =
+    selectedBusiness.notice_ready_message ||
+    defaults.ready;
+
+  noticeDeliveryMessage.value =
+    selectedBusiness.notice_delivery_message ||
+    defaults.delivery;
+
+  customerNoticesMessage.textContent = "";
+
+  updateCustomerNoticesOrdersState();
+}
+
+function updateCustomerNoticesOrdersState() {
+  if (!customerNoticesOrdersState || !selectedBusiness) {
+    return;
+  }
+
+  const enabled = [
+    selectedBusiness.notice_approved_enabled !== false,
+    selectedBusiness.notice_ready_enabled !== false,
+    selectedBusiness.notice_delivery_enabled !== false
+  ].filter(Boolean).length;
+
+  customerNoticesOrdersState.textContent =
+    enabled === 0
+      ? "Avisos desactivados."
+      : enabled === 3
+        ? "3 avisos activos."
+        : `${enabled} aviso${enabled === 1 ? "" : "s"} activo${enabled === 1 ? "" : "s"}.`;
+}
+
+async function saveCustomerNoticesRPC(payload) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/rpc/set_business_customer_notices`,
+      {
+        method:"POST",
+        headers:supabaseHeaders({
+          Prefer:"return=representation"
+        }),
+        body:JSON.stringify({
+          p_business_id:
+            Number(selectedBusiness.id),
+          p_approved_enabled:
+            payload.approvedEnabled,
+          p_approved_message:
+            payload.approved,
+          p_ready_enabled:
+            payload.readyEnabled,
+          p_ready_message:
+            payload.ready,
+          p_delivery_enabled:
+            payload.deliveryEnabled,
+          p_delivery_message:
+            payload.delivery
+        })
+      }
+    );
+
+  const data =
+    responseText.trim()
+      ? JSON.parse(responseText)
+      : null;
+
+  return Array.isArray(data)
+    ? data[0] || null
+    : data;
+}
+
+async function saveCustomerNotices() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  const payload = {
+    approvedEnabled:
+      noticeApprovedEnabled.checked,
+    approved:
+      noticeApprovedMessage.value.trim(),
+    readyEnabled:
+      noticeReadyEnabled.checked,
+    ready:
+      noticeReadyMessage.value.trim(),
+    deliveryEnabled:
+      noticeDeliveryEnabled.checked,
+    delivery:
+      noticeDeliveryMessage.value.trim()
+  };
+
+  if (
+    (payload.approvedEnabled && !payload.approved) ||
+    (payload.readyEnabled && !payload.ready) ||
+    (payload.deliveryEnabled && !payload.delivery)
+  ) {
+    customerNoticesMessage.textContent =
+      "Todo aviso activado debe tener un mensaje.";
+    return;
+  }
+
+  saveCustomerNoticesButton.disabled = true;
+  saveCustomerNoticesButton.textContent =
+    "Guardando...";
+
+  customerNoticesMessage.textContent = "";
+
+  try {
+    const saved =
+      await saveCustomerNoticesRPC(
+        payload
+      );
+
+    if (!saved?.id) {
+      throw new Error(
+        "Supabase no devolvió la configuración guardada."
+      );
+    }
+
+    Object.assign(
+      selectedBusiness,
+      saved
+    );
+
+    fillCustomerNoticesForm();
+
+    customerNoticesMessage.textContent =
+      "Avisos guardados correctamente.";
+
+    showToast(
+      "Avisos al cliente actualizados.",
+      "success"
+    );
+
+    renderOrders();
+  } catch (error) {
+    console.error(
+      "Error guardando avisos:",
+      error
+    );
+
+    customerNoticesMessage.textContent =
+      `No se pudo guardar: ${error.message || "error desconocido"}`;
+
+    showToast(
+      "No se pudieron guardar los avisos.",
+      "error"
+    );
+  } finally {
+    saveCustomerNoticesButton.disabled = false;
+    saveCustomerNoticesButton.textContent =
+      "Guardar avisos";
+  }
+}
+
+customerNoticesForm?.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    await saveCustomerNotices();
   }
 );
 
@@ -3024,29 +3237,89 @@ function getOrderItemOptions(itemId) {
   );
 }
 
+function customerNoticeEnabledFor(order, nextStatus) {
+  if (!selectedBusiness) {
+    return false;
+  }
+
+  if (nextStatus === "approved") {
+    return selectedBusiness.notice_approved_enabled !== false;
+  }
+
+  if (
+    nextStatus === "ready" &&
+    order.delivery_type === "pickup"
+  ) {
+    return selectedBusiness.notice_ready_enabled !== false;
+  }
+
+  if (
+    nextStatus === "on_the_way" &&
+    order.delivery_type !== "pickup"
+  ) {
+    return selectedBusiness.notice_delivery_enabled !== false;
+  }
+
+  return false;
+}
+
+function compactActionLabel(order, status, label) {
+  const notify =
+    customerNoticeEnabledFor(
+      order,
+      status
+    );
+
+  if (status === "approved") {
+    return notify
+      ? "Aceptar · WA"
+      : "Aceptar";
+  }
+
+  if (status === "preparing") {
+    return "Preparar";
+  }
+
+  if (status === "ready") {
+    return order.delivery_type === "pickup"
+      ? (
+          notify
+            ? "Listo · WA"
+            : "Listo"
+        )
+      : "Listo";
+  }
+
+  if (status === "on_the_way") {
+    return notify
+      ? "En camino · WA"
+      : "En camino";
+  }
+
+  if (status === "delivered") {
+    return "Entregado";
+  }
+
+  return label;
+}
+
 function orderNextActions(order) {
   if (order.status === "received") {
     return [
-      ["approved", "Aceptar y avisar", "primary"],
+      ["approved", "Aceptar", "primary"],
       ["cancelled", "Cancelar", "danger"]
     ];
   }
 
   if (order.status === "approved") {
     return [
-      ["preparing", "Iniciar preparacion", "primary"]
+      ["preparing", "Preparar", "primary"]
     ];
   }
 
   if (order.status === "preparing") {
     return [
-      [
-        "ready",
-        order.delivery_type === "pickup"
-          ? "Listo y avisar"
-          : "Marcar como listo",
-        "primary"
-      ]
+      ["ready", "Listo", "primary"]
     ];
   }
 
@@ -3057,8 +3330,8 @@ function orderNextActions(order) {
           ? "delivered"
           : "on_the_way",
         order.delivery_type === "pickup"
-          ? "Pedido retirado"
-          : "Enviar delivery y avisar",
+          ? "Entregado"
+          : "En camino",
         "primary"
       ]
     ];
@@ -3066,7 +3339,7 @@ function orderNextActions(order) {
 
   if (order.status === "on_the_way") {
     return [
-      ["delivered", "Marcar entregado", "primary"]
+      ["delivered", "Entregado", "primary"]
     ];
   }
 
@@ -3232,7 +3505,7 @@ function renderOrderCard(order) {
             data-order-id="${escapeHTML(order.id)}"
             data-next-status="${escapeHTML(status)}"
           >
-            ${escapeHTML(label)}
+            ${escapeHTML(compactActionLabel(order,status,label))}
           </button>
         `).join("")}
 
@@ -3580,56 +3853,84 @@ function normalizeCustomerWhatsAppPhone(phone) {
   return digits;
 }
 
-function customerWhatsAppNotification(order, nextStatus) {
+function applyNoticeTemplate(template, order) {
   const businessName =
-    getBusinessNameById(order.business_id);
+    getBusinessNameById(
+      order.business_id
+    );
 
-  if (nextStatus === "approved") {
-    return [
-      `\u2705 *${businessName.toUpperCase()}*`,
-      "",
-      "*TU PEDIDO FUE CONFIRMADO*",
-      "",
-      `Hola ${order.customer_name || ""}, recibimos tu pedido y ya fue aceptado.`,
-      "",
-      `Total: *${orderMoney(order.total)}*`,
-      "",
-      "Te avisaremos cuando haya una novedad importante."
-    ].join("\n");
+  return String(template || "")
+    .replaceAll(
+      "{cliente}",
+      String(order.customer_name || "")
+    )
+    .replaceAll(
+      "{comercio}",
+      String(businessName || "")
+    )
+    .replaceAll(
+      "{total}",
+      orderMoney(order.total)
+    )
+    .replaceAll(
+      "{direccion}",
+      String(order.delivery_address || "")
+    )
+    .trim();
+}
+
+function customerWhatsAppNotification(order, nextStatus) {
+  const defaults =
+    customerNoticeDefaults();
+
+  if (
+    nextStatus === "approved"
+  ) {
+    if (
+      selectedBusiness?.notice_approved_enabled === false
+    ) {
+      return "";
+    }
+
+    return applyNoticeTemplate(
+      selectedBusiness?.notice_approved_message ||
+      defaults.approved,
+      order
+    );
   }
 
   if (
     nextStatus === "ready" &&
     order.delivery_type === "pickup"
   ) {
-    return [
-      `\ud83c\udf55 *${businessName.toUpperCase()}*`,
-      "",
-      "*TU PEDIDO ESTA LISTO*",
-      "",
-      `Hola ${order.customer_name || ""}, tu pedido ya esta listo para retirar.`,
-      "",
-      "\ud83c\udfea *RETIRO EN EL LOCAL*",
-      "",
-      "Te esperamos. Gracias por elegirnos."
-    ].join("\n");
+    if (
+      selectedBusiness?.notice_ready_enabled === false
+    ) {
+      return "";
+    }
+
+    return applyNoticeTemplate(
+      selectedBusiness?.notice_ready_message ||
+      defaults.ready,
+      order
+    );
   }
 
   if (
     nextStatus === "on_the_way" &&
     order.delivery_type !== "pickup"
   ) {
-    return [
-      `\ud83d\udef5 *${businessName.toUpperCase()}*`,
-      "",
-      "*TU PEDIDO ESTA EN CAMINO*",
-      "",
-      `Hola ${order.customer_name || ""}, tu pedido salio para delivery.`,
-      "",
-      `Direccion: ${order.delivery_address || ""}`,
-      "",
-      "En breve lo vas a recibir. Gracias por elegirnos."
-    ].join("\n");
+    if (
+      selectedBusiness?.notice_delivery_enabled === false
+    ) {
+      return "";
+    }
+
+    return applyNoticeTemplate(
+      selectedBusiness?.notice_delivery_message ||
+      defaults.delivery,
+      order
+    );
   }
 
   return "";
@@ -5476,6 +5777,7 @@ async function initAdmin() {
   renderMerchantPanelLogo();
   fillStoreDesignForm();
   fillPaymentSettingsForm();
+  fillCustomerNoticesForm();
 
   /*
     El dashboard y usuarios ya pueden cargar en paralelo sin bloquear
