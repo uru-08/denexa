@@ -3396,16 +3396,59 @@ function enterStore() {
 
 document.body.classList.add("welcome-open");
 
+/*
+  V92 - BOTÓN DE PORTADA
+  No esperamos una consulta de red antes de abrir el menú.
+  La portada ya tiene en memoria el estado del comercio y además
+  ese estado se refresca periódicamente.
+
+  Esto evita que un toque parezca "no hacer nada" por una demora,
+  error de red o comportamiento táctil del navegador móvil.
+*/
+let enteringStore = false;
+
+async function handleEnterStore(event) {
+  event?.preventDefault?.();
+  event?.stopPropagation?.();
+
+  if (
+    enteringStore ||
+    !enterStoreButton ||
+    enterStoreButton.disabled
+  ) {
+    return;
+  }
+
+  if (!orderingIsOpen()) {
+    showOrderingClosedMessage();
+
+    // Actualizamos en segundo plano por si el estado cambió.
+    refreshOrderingStatusFromSupabase();
+    return;
+  }
+
+  enteringStore = true;
+  enterStoreButton.disabled = true;
+
+  // Abrimos de inmediato.
+  enterStore();
+
+  // Verificación no bloqueante del estado real.
+  refreshOrderingStatusFromSupabase()
+    .catch(() => {})
+    .finally(() => {
+      window.setTimeout(() => {
+        enteringStore = false;
+        enterStoreButton.disabled = false;
+      }, 700);
+    });
+}
+
 enterStoreButton?.addEventListener(
   "click",
-  async () => {
-    if (!(await requireOrderingOpen())) {
-      return;
-    }
-
-    enterStore();
-  }
+  handleEnterStore
 );
+
 
 closeProductButton.addEventListener(
   "click",
