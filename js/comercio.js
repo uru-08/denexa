@@ -249,6 +249,11 @@ const merchantLoginPassword =
     "merchantLoginPassword"
   );
 
+const merchantTogglePassword =
+  document.getElementById(
+    "merchantTogglePassword"
+  );
+
 const merchantLoginButton =
   document.getElementById(
     "merchantLoginButton"
@@ -657,10 +662,59 @@ async function logoutMerchant() {
   if (merchantLoginPassword) {
     merchantLoginPassword.value =
       "";
+    merchantLoginPassword.type =
+      "password";
+  }
+
+  if (merchantTogglePassword) {
+    merchantTogglePassword.textContent =
+      "Ver";
+
+    merchantTogglePassword.setAttribute(
+      "aria-pressed",
+      "false"
+    );
   }
 
   showMerchantLogin();
 }
+
+merchantTogglePassword?.addEventListener(
+  "click",
+  () => {
+    const showing =
+      merchantLoginPassword.type ===
+      "text";
+
+    merchantLoginPassword.type =
+      showing
+        ? "password"
+        : "text";
+
+    merchantTogglePassword.textContent =
+      showing
+        ? "Ver"
+        : "Ocultar";
+
+    merchantTogglePassword.setAttribute(
+      "aria-pressed",
+      showing
+        ? "false"
+        : "true"
+    );
+
+    merchantTogglePassword.setAttribute(
+      "aria-label",
+      showing
+        ? "Mostrar contraseña"
+        : "Ocultar contraseña"
+    );
+
+    merchantLoginPassword.focus({
+      preventScroll:true
+    });
+  }
+);
 
 merchantLoginForm?.addEventListener(
   "submit",
