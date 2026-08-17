@@ -1046,6 +1046,33 @@ async function insertTableRow(tableName, payload) {
   return true;
 }
 
+async function insertTableRowReturning(
+  tableName,
+  payload
+) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/${tableName}`,
+      {
+        method:"POST",
+        headers:merchantHeaders({
+          Prefer:"return=representation"
+        }),
+        body:JSON.stringify(payload)
+      }
+    );
+
+  const data =
+    responseText.trim()
+      ? JSON.parse(responseText)
+      : null;
+
+  return Array.isArray(data)
+    ? data[0] || null
+    : data;
+}
+
+
 async function updateTableRow(tableName, id, payload) {
   await requestText(
     `${SUPABASE_REST}/${tableName}?id=eq.${encodeURIComponent(id)}`,
@@ -3415,6 +3442,15 @@ async function loadModifierGroups() {
                         <div class="modifier-actions">
                           <button
                             type="button"
+                            class="secondary-button compact-button duplicate-option-button"
+                            data-group-id="${escapeHTML(group.id)}"
+                            data-option-id="${escapeHTML(option.id)}"
+                          >
+                            Duplicar
+                          </button>
+
+                          <button
+                            type="button"
                             class="secondary-button compact-button edit-option-button"
                             data-group-id="${escapeHTML(group.id)}"
                             data-option-id="${escapeHTML(option.id)}"
@@ -3474,6 +3510,192 @@ async function loadModifierGroups() {
             openModifierGroupModal(group);
           }
         });
+      });
+
+    modifierGroupsList
+      .querySelectorAll(".duplicate-option-button")
+      .forEach((button) => {
+        button.addEventListener(
+          "click",
+          async () => {
+            const sourceOption =
+              currentModifierOptions.find(
+                (item) =>
+                  String(item.id) ===
+                  String(
+                    button.dataset.optionId
+                  )
+              );
+
+            if (!sourceOption) {
+              showToast(
+                "No se encontró la opción a duplicar.",
+                "error"
+              );
+              return;
+            }
+
+            const sourceGroup =
+              currentModifierGroups.find(
+                (item) =>
+                  String(item.id) ===
+                  String(sourceOption.group_id)
+              );
+
+            const dependentOptions =
+              currentModifierOptions.filter(
+                (item) =>
+                  String(
+                    item.depends_on_option_id || ""
+                  ) ===
+                  String(sourceOption.id)
+              );
+
+            const defaultName =
+              `${sourceOption.name} copia`;
+
+            const newName =
+              window.prompt(
+                dependentOptions.length
+                  ? `Vas a duplicar "${sourceOption.name}" y también ${dependentOptions.length} opción${dependentOptions.length === 1 ? "" : "es"} relacionada${dependentOptions.length === 1 ? "" : "s"} (por ejemplo tamaños).\n\nEscribí el nombre de la nueva variante:`
+                  : `Escribí el nombre de la copia de "${sourceOption.name}":`,
+                defaultName
+              );
+
+            if (
+              newName === null
+            ) {
+              return;
+            }
+
+            const cleanName =
+              String(newName).trim();
+
+            if (!cleanName) {
+              showToast(
+                "Escribí un nombre para la nueva variante.",
+                "error"
+              );
+              return;
+            }
+
+            const duplicateExists =
+              currentModifierOptions.some(
+                (item) =>
+                  String(item.group_id) ===
+                    String(sourceOption.group_id) &&
+                  normalizeText(item.name) ===
+                    normalizeText(cleanName)
+              );
+
+            if (duplicateExists) {
+              showToast(
+                "Ya existe una opción con ese nombre en este grupo.",
+                "error"
+              );
+              return;
+            }
+
+            button.disabled = true;
+            button.textContent =
+              "Duplicando...";
+
+            try {
+              /*
+                Duplica primero la opción principal:
+                Ejemplo: Capresse -> Nueva especial.
+              */
+              const newParent =
+                await insertTableRowReturning(
+                  "product_options",
+                  {
+                    group_id:
+                      sourceOption.group_id,
+                    name:
+                      cleanName,
+                    price_delta:
+                      Number(
+                        sourceOption.price_delta || 0
+                      ),
+                    sort_order:
+                      Number(
+                        sourceOption.sort_order || 0
+                      ) + 1,
+                    active:
+                      sourceOption.active !== false,
+                    depends_on_option_id:
+                      sourceOption.depends_on_option_id
+                        ? Number(
+                            sourceOption.depends_on_option_id
+                          )
+                        : null
+                  }
+                );
+
+              if (!newParent?.id) {
+                throw new Error(
+                  "No se pudo obtener el ID de la copia."
+                );
+              }
+
+              /*
+                Si la opción original tenía opciones dependientes
+                (por ejemplo tamaños específicos de Capresse),
+                las copiamos automáticamente y las vinculamos
+                con la nueva especialidad.
+              */
+              for (
+                const child
+                of dependentOptions
+              ) {
+                await insertTableRowReturning(
+                  "product_options",
+                  {
+                    group_id:
+                      child.group_id,
+                    name:
+                      child.name,
+                    price_delta:
+                      Number(
+                        child.price_delta || 0
+                      ),
+                    sort_order:
+                      Number(
+                        child.sort_order || 0
+                      ) + 1,
+                    active:
+                      child.active !== false,
+                    depends_on_option_id:
+                      Number(newParent.id)
+                  }
+                );
+              }
+
+              showToast(
+                dependentOptions.length
+                  ? `"${cleanName}" creada con sus opciones relacionadas. Ahora solo editá los precios que cambien.`
+                  : `"${cleanName}" duplicada correctamente.`,
+                "success"
+              );
+
+              await loadModifierGroups();
+            } catch (error) {
+              console.error(
+                "Error duplicando opción:",
+                error
+              );
+
+              showToast(
+                `No se pudo duplicar: ${error.message || "error desconocido"}`,
+                "error"
+              );
+            } finally {
+              button.disabled = false;
+              button.textContent =
+                "Duplicar";
+            }
+          }
+        );
       });
 
     modifierGroupsList
