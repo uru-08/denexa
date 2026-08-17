@@ -255,6 +255,68 @@
     opacity:.78;
     font-size:.68rem;
   }
+
+  .merchant-password-wrap{
+    position:relative;
+    display:flex;
+    align-items:center;
+  }
+
+  .merchant-password-wrap input{
+    padding-right:74px !important;
+  }
+
+  .merchant-password-toggle{
+    position:absolute;
+    right:7px;
+    top:50%;
+    transform:translateY(-50%);
+    min-width:54px;
+    height:36px;
+    padding:0 10px;
+    border:1px solid #d0d9e7;
+    border-radius:9px;
+    background:#f7f9fc;
+    color:#344054;
+    font:inherit;
+    font-size:.75rem;
+    font-weight:850;
+    cursor:pointer;
+  }
+
+  .merchant-password-toggle:hover{
+    background:#edf3fb;
+  }
+
+  /*
+    V82 - PC:
+    el menÃº lateral puede crecer con nuevas funciones.
+    En escritorio la barra lateral queda fija, pero ahora tiene
+    desplazamiento vertical propio para que nunca queden opciones
+    fuera de pantalla.
+  */
+  @media (min-width:901px){
+    .sidebar{
+      height:100vh !important;
+      max-height:100vh !important;
+      overflow-y:auto !important;
+      overflow-x:hidden !important;
+      overscroll-behavior:contain;
+      scrollbar-gutter:stable;
+      padding-bottom:24px !important;
+      box-sizing:border-box !important;
+    }
+
+    .sidebar .nav{
+      flex:0 0 auto !important;
+      overflow:visible !important;
+      padding-bottom:30px !important;
+    }
+
+    .sidebar .nav-item{
+      flex-shrink:0 !important;
+    }
+  }
 </style>
 
 </head>
@@ -284,7 +346,24 @@
 
         <label>
           Contrase&ntilde;a
-          <input id="merchantLoginPassword" type="password" autocomplete="current-password" minlength="6" required>
+          <div class="merchant-password-wrap">
+            <input
+              id="merchantLoginPassword"
+              type="password"
+              autocomplete="current-password"
+              minlength="6"
+              required
+            >
+            <button
+              id="merchantTogglePassword"
+              class="merchant-password-toggle"
+              type="button"
+              aria-label="Mostrar contrase&ntilde;a"
+              aria-pressed="false"
+            >
+              Ver
+            </button>
+          </div>
         </label>
 
         <button id="merchantLoginButton" class="merchant-login-button" type="submit">
@@ -1786,7 +1865,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/comercio.js?v=81"></script>
+  <script src="js/comercio.js?v=82"></script>
 
 </body>
 </html>
