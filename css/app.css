@@ -5221,3 +5221,41 @@ body{
   }
 }
 
+
+
+/* =========================================================
+   DENEXA V92 - BOTÓN PORTADA ESTABLE
+   Corrige exclusivamente la interacción de HACER MI PEDIDO.
+========================================================= */
+
+#enterStoreButton{
+  position:relative !important;
+  z-index:20 !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  -webkit-tap-highlight-color:transparent !important;
+  cursor:pointer !important;
+  user-select:none !important;
+  -webkit-user-select:none !important;
+  isolation:isolate;
+}
+
+#enterStoreButton > *{
+  pointer-events:none !important;
+}
+
+#enterStoreButton::before,
+#enterStoreButton::after{
+  pointer-events:none !important;
+}
+
+#enterStoreButton:disabled{
+  pointer-events:none !important;
+}
+
+@media(max-width:899px){
+  #enterStoreButton{
+    min-height:56px !important;
+  }
+}
+
