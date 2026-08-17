@@ -86,9 +86,220 @@
   }
 </style>
 
+
+<style>
+  body.auth-locked > .sidebar,
+  body.auth-locked > .main{
+    display:none !important;
+  }
+
+  .merchant-login-screen{
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    display:grid;
+    place-items:center;
+    padding:22px;
+    background:
+      radial-gradient(circle at 20% 20%,rgba(28,88,190,.20),transparent 30rem),
+      linear-gradient(145deg,#061a3b,#0b43a0 58%,#0e5bd8);
+  }
+
+  .merchant-login-screen[hidden]{
+    display:none !important;
+  }
+
+  .merchant-login-card{
+    width:min(430px,100%);
+    padding:28px;
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 28px 80px rgba(0,0,0,.28);
+  }
+
+  .merchant-login-brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:22px;
+  }
+
+  .merchant-login-mark{
+    width:52px;
+    height:52px;
+    display:grid;
+    place-items:center;
+    border-radius:16px;
+    background:linear-gradient(135deg,#0b43a0,#0e5bd8);
+    color:#fff;
+    font-size:1.35rem;
+    font-weight:950;
+  }
+
+  .merchant-login-brand strong{
+    display:block;
+    color:#0d1b33;
+    font-size:1.05rem;
+  }
+
+  .merchant-login-brand span{
+    display:block;
+    margin-top:2px;
+    color:#667085;
+    font-size:.78rem;
+    font-weight:700;
+  }
+
+  .merchant-login-card h1{
+    margin:0;
+    color:#0d1b33;
+    font-size:1.65rem;
+  }
+
+  .merchant-login-copy{
+    margin:7px 0 20px;
+    color:#667085;
+    font-size:.86rem;
+    line-height:1.5;
+  }
+
+  .merchant-login-form{
+    display:grid;
+    gap:13px;
+  }
+
+  .merchant-login-form label{
+    display:grid;
+    gap:6px;
+    color:#344054;
+    font-size:.78rem;
+    font-weight:850;
+  }
+
+  .merchant-login-form input{
+    width:100%;
+    min-height:50px;
+    padding:11px 13px;
+    border:1px solid #d0d9e7;
+    border-radius:12px;
+    background:#fff;
+    color:#0d1b33;
+    font:inherit;
+    box-sizing:border-box;
+  }
+
+  .merchant-login-form input:focus{
+    outline:none;
+    border-color:#6c9ee8;
+    box-shadow:0 0 0 4px rgba(14,91,216,.10);
+  }
+
+  .merchant-login-button{
+    min-height:52px;
+    margin-top:3px;
+    border:0;
+    border-radius:13px;
+    background:linear-gradient(135deg,#0b43a0,#0e5bd8);
+    color:#fff;
+    font:inherit;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+  .merchant-login-button:disabled{
+    opacity:.6;
+    cursor:wait;
+  }
+
+  .merchant-login-message{
+    min-height:20px;
+    margin:0;
+    color:#b42318;
+    font-size:.78rem;
+    font-weight:750;
+    line-height:1.4;
+  }
+
+  .merchant-login-foot{
+    margin-top:18px;
+    padding-top:15px;
+    border-top:1px solid #e5eaf1;
+    color:#667085;
+    font-size:.74rem;
+    line-height:1.45;
+  }
+
+  .merchant-logout-button{
+    width:100%;
+    margin-top:12px;
+    min-height:38px;
+    padding:8px 10px;
+    border:1px solid rgba(255,255,255,.22);
+    border-radius:10px;
+    background:rgba(255,255,255,.08);
+    color:inherit;
+    font:inherit;
+    font-size:.75rem;
+    font-weight:800;
+    cursor:pointer;
+  }
+
+  .merchant-user-caption{
+    display:block;
+    margin-top:10px;
+    max-width:190px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    opacity:.78;
+    font-size:.68rem;
+  }
+</style>
+
 </head>
 
-<body>
+<body class="auth-locked">
+
+  <section id="merchantLoginScreen" class="merchant-login-screen" aria-label="Acceso al panel">
+    <div class="merchant-login-card">
+      <div class="merchant-login-brand">
+        <div class="merchant-login-mark">D</div>
+        <div>
+          <strong>DENEXA</strong>
+          <span>Acceso seguro para comercios</span>
+        </div>
+      </div>
+
+      <h1>Ingresar al panel</h1>
+      <p class="merchant-login-copy">
+        Us&aacute; el correo y la contrase&ntilde;a asignados a tu comercio.
+      </p>
+
+      <form id="merchantLoginForm" class="merchant-login-form">
+        <label>
+          Correo
+          <input id="merchantLoginEmail" type="email" autocomplete="username" required>
+        </label>
+
+        <label>
+          Contrase&ntilde;a
+          <input id="merchantLoginPassword" type="password" autocomplete="current-password" minlength="6" required>
+        </label>
+
+        <button id="merchantLoginButton" class="merchant-login-button" type="submit">
+          Ingresar
+        </button>
+
+        <p id="merchantLoginMessage" class="merchant-login-message" aria-live="polite"></p>
+      </form>
+
+      <div class="merchant-login-foot">
+        Cada cuenta queda vinculada a un comercio de DENEXA.
+      </div>
+    </div>
+  </section>
+
 
   <aside class="sidebar">
 
@@ -102,6 +313,11 @@
         <span>Panel del comercio</span>
       </div>
     </div>
+
+    <span id="merchantUserCaption" class="merchant-user-caption"></span>
+    <button id="merchantLogoutButton" class="merchant-logout-button" type="button">
+      Cerrar sesi&oacute;n
+    </button>
 
     <nav class="nav" aria-label="Navegaci&oacute;n principal">
 
@@ -1570,7 +1786,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/comercio.js?v=80"></script>
+  <script src="js/comercio.js?v=81"></script>
 
 </body>
 </html>
