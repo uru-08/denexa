@@ -3281,7 +3281,14 @@ async function openModifierOptionModal(group, option = null) {
   }
 
   if (modifierOptionPrice) {
-    modifierOptionPrice.min = "0";
+    /*
+      V88:
+      Quitamos completamente el atributo min del campo.
+      Así el navegador no puede conservar/usar un mínimo viejo de $500.
+      La validación válida queda en JS: precio numérico y >= 0.
+    */
+    modifierOptionPrice.removeAttribute("min");
+    modifierOptionPrice.min = "";
   }
 
   saveModifierOptionButton.textContent =
