@@ -3281,10 +3281,7 @@ async function openModifierOptionModal(group, option = null) {
   }
 
   if (modifierOptionPrice) {
-    modifierOptionPrice.min =
-      sizeGroup
-        ? String(Number(selectedProduct?.price || 0))
-        : "0";
+    modifierOptionPrice.min = "0";
   }
 
   saveModifierOptionButton.textContent =
@@ -3962,17 +3959,8 @@ modifierOptionForm.addEventListener(
         selectedModifierGroup
       );
 
-    const basePrice =
-      Number(selectedProduct?.price || 0);
-
-    if (
-      sizeGroup &&
-      price < basePrice
-    ) {
-      modifierOptionFormMessage.textContent =
-        `El precio final del tama\u00f1o no puede ser menor al precio base (${basePrice}).`;
-      return;
-    }
+    // V87: el precio del tamaño es un precio final independiente.
+    // Puede ser menor que el precio base del producto.
 
     const payload = {
       group_id: selectedModifierGroup.id,
