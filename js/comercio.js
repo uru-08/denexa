@@ -1073,6 +1073,42 @@ async function insertTableRowReturning(
 }
 
 
+async function duplicateProductOptionRPC(
+  sourceOptionId,
+  newName
+) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/rpc/duplicate_product_option_tree`,
+      {
+        method:"POST",
+        headers:merchantHeaders({
+          Prefer:"return=representation"
+        }),
+        body:JSON.stringify({
+          p_source_option_id:
+            Number(sourceOptionId),
+          p_new_name:
+            String(newName).trim()
+        })
+      }
+    );
+
+  if (!responseText.trim()) {
+    throw new Error(
+      "Supabase no devolvió confirmación."
+    );
+  }
+
+  const data =
+    JSON.parse(responseText);
+
+  return Array.isArray(data)
+    ? data[0] || null
+    : data;
+}
+
+
 async function updateTableRow(tableName, id, payload) {
   await requestText(
     `${SUPABASE_REST}/${tableName}?id=eq.${encodeURIComponent(id)}`,
@@ -3602,78 +3638,34 @@ async function loadModifierGroups() {
 
             try {
               /*
-                Duplica primero la opción principal:
-                Ejemplo: Capresse -> Nueva especial.
+                V84:
+                La copia se hace en Supabase mediante una función
+                transaccional. Así no dependemos de que el navegador
+                pueda insertar y devolver IDs con las políticas RLS.
               */
-              const newParent =
-                await insertTableRowReturning(
-                  "product_options",
-                  {
-                    group_id:
-                      sourceOption.group_id,
-                    name:
-                      cleanName,
-                    price_delta:
-                      Number(
-                        sourceOption.price_delta || 0
-                      ),
-                    sort_order:
-                      Number(
-                        sourceOption.sort_order || 0
-                      ) + 1,
-                    active:
-                      sourceOption.active !== false,
-                    depends_on_option_id:
-                      sourceOption.depends_on_option_id
-                        ? Number(
-                            sourceOption.depends_on_option_id
-                          )
-                        : null
-                  }
+              const result =
+                await duplicateProductOptionRPC(
+                  sourceOption.id,
+                  cleanName
                 );
 
-              if (!newParent?.id) {
-                throw new Error(
-                  "No se pudo obtener el ID de la copia."
-                );
-              }
-
-              /*
-                Si la opción original tenía opciones dependientes
-                (por ejemplo tamaños específicos de Capresse),
-                las copiamos automáticamente y las vinculamos
-                con la nueva especialidad.
-              */
-              for (
-                const child
-                of dependentOptions
+              if (
+                !result ||
+                !result.new_option_id
               ) {
-                await insertTableRowReturning(
-                  "product_options",
-                  {
-                    group_id:
-                      child.group_id,
-                    name:
-                      child.name,
-                    price_delta:
-                      Number(
-                        child.price_delta || 0
-                      ),
-                    sort_order:
-                      Number(
-                        child.sort_order || 0
-                      ) + 1,
-                    active:
-                      child.active !== false,
-                    depends_on_option_id:
-                      Number(newParent.id)
-                  }
+                throw new Error(
+                  "No se pudo confirmar la nueva variante."
                 );
               }
+
+              const copiedChildren =
+                Number(
+                  result.copied_children || 0
+                );
 
               showToast(
-                dependentOptions.length
-                  ? `"${cleanName}" creada con sus opciones relacionadas. Ahora solo editá los precios que cambien.`
+                copiedChildren
+                  ? `"${cleanName}" creada y se copiaron ${copiedChildren} opción${copiedChildren === 1 ? "" : "es"} relacionada${copiedChildren === 1 ? "" : "s"}.`
                   : `"${cleanName}" duplicada correctamente.`,
                 "success"
               );
