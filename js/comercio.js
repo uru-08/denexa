@@ -177,7 +177,7 @@ const ordersLastUpdate = document.getElementById("ordersLastUpdate");
 const dashboardOrdersList = document.getElementById("dashboardOrdersList");
 const dashboardGoOrdersButton = document.getElementById("dashboardGoOrdersButton");
 
-const MERCHANT_BUSINESS_ID = 1;
+let MERCHANT_BUSINESS_ID = null;
 const merchantStoreStatusBadge = document.getElementById("merchantStoreStatusBadge");
 const merchantQuickStatusText = document.getElementById("merchantQuickStatusText");
 const merchantOpenButton = document.getElementById("merchantOpenButton");
@@ -221,6 +221,573 @@ let knownOrderIds = new Set();
 let ordersFirstLoad = true;
 let ordersLoading = false;
 let ordersPollTimer = null;
+
+
+let merchantAuthSession = null;
+let merchantAuthUser = null;
+
+const MERCHANT_AUTH_STORAGE_KEY =
+  "denexa_merchant_session_v1";
+
+const merchantLoginScreen =
+  document.getElementById(
+    "merchantLoginScreen"
+  );
+
+const merchantLoginForm =
+  document.getElementById(
+    "merchantLoginForm"
+  );
+
+const merchantLoginEmail =
+  document.getElementById(
+    "merchantLoginEmail"
+  );
+
+const merchantLoginPassword =
+  document.getElementById(
+    "merchantLoginPassword"
+  );
+
+const merchantLoginButton =
+  document.getElementById(
+    "merchantLoginButton"
+  );
+
+const merchantLoginMessage =
+  document.getElementById(
+    "merchantLoginMessage"
+  );
+
+const merchantLogoutButton =
+  document.getElementById(
+    "merchantLogoutButton"
+  );
+
+const merchantUserCaption =
+  document.getElementById(
+    "merchantUserCaption"
+  );
+
+/*
+  config.js sigue teniendo la clave PUBLICABLE de Supabase.
+  Después del login reemplazamos únicamente el Bearer por el
+  access_token real del usuario autenticado.
+*/
+function merchantHeaders(
+  extraHeaders = {}
+) {
+  const base =
+    supabaseHeaders(
+      extraHeaders
+    );
+
+  if (
+    merchantAuthSession?.access_token
+  ) {
+    base.Authorization =
+      `Bearer ${merchantAuthSession.access_token}`;
+  }
+
+  return base;
+}
+
+function authHeaders(
+  accessToken = null
+) {
+  return {
+    apikey:SUPABASE_KEY,
+    Authorization:
+      `Bearer ${accessToken || SUPABASE_KEY}`,
+    "Content-Type":"application/json"
+  };
+}
+
+function saveMerchantSession(
+  session
+) {
+  merchantAuthSession =
+    session || null;
+
+  if (!session) {
+    localStorage.removeItem(
+      MERCHANT_AUTH_STORAGE_KEY
+    );
+    return;
+  }
+
+  const normalized = {
+    access_token:
+      session.access_token,
+    refresh_token:
+      session.refresh_token,
+    expires_at:
+      session.expires_at ||
+      (
+        Math.floor(
+          Date.now() / 1000
+        ) +
+        Number(
+          session.expires_in || 3600
+        )
+      ),
+    user:
+      session.user || null
+  };
+
+  merchantAuthSession =
+    normalized;
+
+  localStorage.setItem(
+    MERCHANT_AUTH_STORAGE_KEY,
+    JSON.stringify(
+      normalized
+    )
+  );
+}
+
+function readSavedMerchantSession() {
+  try {
+    const raw =
+      localStorage.getItem(
+        MERCHANT_AUTH_STORAGE_KEY
+      );
+
+    return raw
+      ? JSON.parse(raw)
+      : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+async function authRequest(
+  path,
+  options = {}
+) {
+  const response =
+    await fetch(
+      `${SUPABASE_URL}/auth/v1/${path}`,
+      options
+    );
+
+  const text =
+    await response.text();
+
+  let data = null;
+
+  if (text.trim()) {
+    try {
+      data = JSON.parse(text);
+    } catch (error) {
+      data = null;
+    }
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      data?.msg ||
+      data?.message ||
+      data?.error_description ||
+      "No se pudo iniciar sesión."
+    );
+  }
+
+  return data;
+}
+
+async function loginMerchant(
+  email,
+  password
+) {
+  const data =
+    await authRequest(
+      "token?grant_type=password",
+      {
+        method:"POST",
+        headers:authHeaders(),
+        body:JSON.stringify({
+          email,
+          password
+        })
+      }
+    );
+
+  if (!data?.access_token) {
+    throw new Error(
+      "Supabase no devolvió una sesión válida."
+    );
+  }
+
+  data.expires_at =
+    Math.floor(
+      Date.now() / 1000
+    ) +
+    Number(
+      data.expires_in || 3600
+    );
+
+  saveMerchantSession(
+    data
+  );
+
+  merchantAuthUser =
+    data.user || null;
+
+  return data;
+}
+
+async function refreshMerchantSession(
+  session
+) {
+  if (!session?.refresh_token) {
+    return null;
+  }
+
+  const data =
+    await authRequest(
+      "token?grant_type=refresh_token",
+      {
+        method:"POST",
+        headers:authHeaders(),
+        body:JSON.stringify({
+          refresh_token:
+            session.refresh_token
+        })
+      }
+    );
+
+  if (!data?.access_token) {
+    return null;
+  }
+
+  data.expires_at =
+    Math.floor(
+      Date.now() / 1000
+    ) +
+    Number(
+      data.expires_in || 3600
+    );
+
+  saveMerchantSession(
+    data
+  );
+
+  merchantAuthUser =
+    data.user || null;
+
+  return data;
+}
+
+async function validateMerchantSession(
+  session
+) {
+  if (!session?.access_token) {
+    return null;
+  }
+
+  if (
+    Number(
+      session.expires_at || 0
+    ) <=
+    Math.floor(
+      Date.now() / 1000
+    ) + 30
+  ) {
+    try {
+      return await refreshMerchantSession(
+        session
+      );
+    } catch (error) {
+      return null;
+    }
+  }
+
+  try {
+    const user =
+      await authRequest(
+        "user",
+        {
+          method:"GET",
+          headers:
+            authHeaders(
+              session.access_token
+            )
+        }
+      );
+
+    session.user = user;
+
+    saveMerchantSession(
+      session
+    );
+
+    merchantAuthUser = user;
+
+    return session;
+  } catch (error) {
+    try {
+      return await refreshMerchantSession(
+        session
+      );
+    } catch (refreshError) {
+      return null;
+    }
+  }
+}
+
+async function resolveAuthorizedBusiness() {
+  if (
+    !merchantAuthUser?.id ||
+    !merchantAuthSession?.access_token
+  ) {
+    return null;
+  }
+
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/merchant_users?user_id=eq.${encodeURIComponent(merchantAuthUser.id)}&active=eq.true&select=business_id,role&limit=1`,
+      {
+        method:"GET",
+        headers:
+          merchantHeaders()
+      }
+    );
+
+  const rows =
+    responseText.trim()
+      ? JSON.parse(
+          responseText
+        )
+      : [];
+
+  const access =
+    Array.isArray(rows)
+      ? rows[0] || null
+      : null;
+
+  if (!access?.business_id) {
+    return null;
+  }
+
+  MERCHANT_BUSINESS_ID =
+    Number(
+      access.business_id
+    );
+
+  return access;
+}
+
+function showMerchantLogin(
+  message = ""
+) {
+  document.body.classList.add(
+    "auth-locked"
+  );
+
+  if (merchantLoginScreen) {
+    merchantLoginScreen.hidden =
+      false;
+  }
+
+  if (merchantLoginMessage) {
+    merchantLoginMessage.textContent =
+      message;
+  }
+}
+
+function showMerchantPanel() {
+  document.body.classList.remove(
+    "auth-locked"
+  );
+
+  if (merchantLoginScreen) {
+    merchantLoginScreen.hidden =
+      true;
+  }
+
+  if (merchantUserCaption) {
+    merchantUserCaption.textContent =
+      merchantAuthUser?.email ||
+      "";
+  }
+}
+
+async function logoutMerchant() {
+  try {
+    if (
+      merchantAuthSession?.access_token
+    ) {
+      await fetch(
+        `${SUPABASE_URL}/auth/v1/logout`,
+        {
+          method:"POST",
+          headers:
+            authHeaders(
+              merchantAuthSession.access_token
+            )
+        }
+      );
+    }
+  } catch (error) {
+    console.warn(
+      "No se pudo cerrar la sesión remota:",
+      error
+    );
+  }
+
+  if (ordersPollTimer) {
+    clearInterval(
+      ordersPollTimer
+    );
+
+    ordersPollTimer = null;
+  }
+
+  saveMerchantSession(
+    null
+  );
+
+  merchantAuthUser = null;
+  MERCHANT_BUSINESS_ID = null;
+  selectedBusiness = null;
+  businessesCache = [];
+  ordersCache = [];
+
+  if (merchantLoginPassword) {
+    merchantLoginPassword.value =
+      "";
+  }
+
+  showMerchantLogin();
+}
+
+merchantLoginForm?.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+
+    merchantLoginMessage.textContent =
+      "";
+
+    merchantLoginButton.disabled =
+      true;
+
+    merchantLoginButton.textContent =
+      "Ingresando...";
+
+    try {
+      await loginMerchant(
+        merchantLoginEmail.value.trim(),
+        merchantLoginPassword.value
+      );
+
+      const access =
+        await resolveAuthorizedBusiness();
+
+      if (!access) {
+        await logoutMerchant();
+
+        showMerchantLogin(
+          "Esta cuenta existe, pero todavía no tiene un comercio asignado en DENEXA."
+        );
+
+        return;
+      }
+
+      showMerchantPanel();
+
+      await initAdmin();
+    } catch (error) {
+      console.error(
+        "Error de acceso:",
+        error
+      );
+
+      showMerchantLogin(
+        error.message ===
+          "Invalid login credentials"
+          ? "Correo o contraseña incorrectos."
+          : (
+              error.message ||
+              "No se pudo iniciar sesión."
+            )
+      );
+    } finally {
+      merchantLoginButton.disabled =
+        false;
+
+      merchantLoginButton.textContent =
+        "Ingresar";
+    }
+  }
+);
+
+merchantLogoutButton?.addEventListener(
+  "click",
+  logoutMerchant
+);
+
+async function bootstrapMerchantAuth() {
+  showMerchantLogin();
+
+  const saved =
+    readSavedMerchantSession();
+
+  if (!saved) {
+    return;
+  }
+
+  const valid =
+    await validateMerchantSession(
+      saved
+    );
+
+  if (!valid) {
+    saveMerchantSession(
+      null
+    );
+
+    return;
+  }
+
+  merchantAuthSession =
+    valid;
+
+  merchantAuthUser =
+    valid.user || null;
+
+  try {
+    const access =
+      await resolveAuthorizedBusiness();
+
+    if (!access) {
+      await logoutMerchant();
+
+      showMerchantLogin(
+        "Tu usuario no tiene un comercio asignado."
+      );
+
+      return;
+    }
+
+    showMerchantPanel();
+
+    await initAdmin();
+  } catch (error) {
+    console.error(
+      "No se pudo validar el acceso al comercio:",
+      error
+    );
+
+    await logoutMerchant();
+
+    showMerchantLogin(
+      "No se pudo validar tu acceso. Volvé a ingresar."
+    );
+  }
+}
+
 
 
 
@@ -340,7 +907,7 @@ async function setBusinessOrderingStatusRPC(
       `${SUPABASE_REST}/rpc/set_business_ordering_status`,
       {
         method: "POST",
-        headers: supabaseHeaders({
+        headers: merchantHeaders({
           Prefer: "return=representation"
         }),
         body: JSON.stringify({
@@ -376,7 +943,7 @@ async function readBusinessOrderingStatus(
       `${SUPABASE_REST}/businesses?id=eq.${encodeURIComponent(businessId)}&select=id,name,ordering_status,sold_out_message`,
       {
         method: "GET",
-        headers: supabaseHeaders()
+        headers: merchantHeaders()
       }
     );
 
@@ -397,7 +964,7 @@ async function getTableData(tableName, select = "*") {
     `${SUPABASE_REST}/${tableName}?select=${encodeURIComponent(select)}`,
     {
       method: "GET",
-      headers: supabaseHeaders()
+      headers: merchantHeaders()
     }
   );
 
@@ -415,7 +982,7 @@ async function insertTableRow(tableName, payload) {
     `${SUPABASE_REST}/${tableName}`,
     {
       method: "POST",
-      headers: supabaseHeaders({
+      headers: merchantHeaders({
         Prefer: "return=minimal"
       }),
       body: JSON.stringify(payload)
@@ -430,7 +997,7 @@ async function updateTableRow(tableName, id, payload) {
     `${SUPABASE_REST}/${tableName}?id=eq.${encodeURIComponent(id)}`,
     {
       method: "PATCH",
-      headers: supabaseHeaders({
+      headers: merchantHeaders({
         Prefer: "return=minimal"
       }),
       body: JSON.stringify(payload)
@@ -445,7 +1012,7 @@ async function deleteTableRow(tableName, id) {
     `${SUPABASE_REST}/${tableName}?id=eq.${encodeURIComponent(id)}`,
     {
       method: "DELETE",
-      headers: supabaseHeaders({
+      headers: merchantHeaders({
         Prefer: "return=minimal"
       })
     }
@@ -460,7 +1027,7 @@ async function deleteTableRow(tableName, id) {
     `${SUPABASE_REST}/${tableName}?id=eq.${encodeURIComponent(id)}`,
     {
       method: "DELETE",
-      headers: supabaseHeaders({
+      headers: merchantHeaders({
         Prefer: "return=minimal"
       })
     }
@@ -669,7 +1236,7 @@ async function saveBusinessBrandingRPC(payload) {
       `${SUPABASE_REST}/rpc/set_business_branding`,
       {
         method:"POST",
-        headers:supabaseHeaders({
+        headers:merchantHeaders({
           Prefer:"return=representation"
         }),
         body:JSON.stringify({
@@ -934,7 +1501,7 @@ async function savePaymentSettingsRPC(payload) {
       `${SUPABASE_REST}/rpc/set_business_payment_settings`,
       {
         method:"POST",
-        headers:supabaseHeaders({
+        headers:merchantHeaders({
           Prefer:"return=representation"
         }),
         body:JSON.stringify({
@@ -1126,7 +1693,7 @@ async function saveCustomerNoticesRPC(payload) {
       `${SUPABASE_REST}/rpc/set_business_customer_notices`,
       {
         method:"POST",
-        headers:supabaseHeaders({
+        headers:merchantHeaders({
           Prefer:"return=representation"
         }),
         body:JSON.stringify({
@@ -1290,14 +1857,14 @@ async function loadPromoBuilderOptions() {
         `${SUPABASE_REST}/categories?business_id=eq.${businessId}&active=eq.true&select=id,name&order=name.asc`,
         {
           method:"GET",
-          headers:supabaseHeaders()
+          headers:merchantHeaders()
         }
       ),
       requestText(
         `${SUPABASE_REST}/products?business_id=eq.${businessId}&active=eq.true&select=id,category_id,name,available&order=name.asc`,
         {
           method:"GET",
-          headers:supabaseHeaders()
+          headers:merchantHeaders()
         }
       )
     ]);
@@ -1489,7 +2056,7 @@ async function saveDailyPromoRPC(payload) {
     `${SUPABASE_REST}/rpc/set_business_daily_promo`,
     {
       method:"POST",
-      headers:supabaseHeaders({Prefer:"return=representation"}),
+      headers:merchantHeaders({Prefer:"return=representation"}),
       body:JSON.stringify({
         p_business_id:Number(selectedBusiness.id),
         p_active:Boolean(payload.active),
@@ -1660,7 +2227,7 @@ async function getProductById(productId) {
       `${SUPABASE_REST}/products?id=eq.${encodeURIComponent(productId)}&select=id,image_url,name`,
       {
         method: "GET",
-        headers: supabaseHeaders()
+        headers: merchantHeaders()
       }
     );
 
@@ -1683,7 +2250,7 @@ async function updateProductAndVerify(
     `${SUPABASE_REST}/products?id=eq.${encodeURIComponent(productId)}`,
     {
       method: "PATCH",
-      headers: supabaseHeaders({
+      headers: merchantHeaders({
         Prefer: "return=minimal"
       }),
       body: JSON.stringify(payload)
@@ -1720,7 +2287,7 @@ async function insertProductAndVerify(payload) {
       `${SUPABASE_REST}/products?select=id`,
       {
         method: "POST",
-        headers: supabaseHeaders({
+        headers: merchantHeaders({
           Prefer: "return=representation"
         }),
         body: JSON.stringify(payload)
@@ -5750,7 +6317,6 @@ async function resolveMerchantBusiness() {
         String(business.id) ===
         String(MERCHANT_BUSINESS_ID)
     ) ||
-    businessesCache[0] ||
     null;
 
   if (fromCache) {
@@ -5775,7 +6341,7 @@ async function resolveMerchantBusiness() {
           `${SUPABASE_REST}/businesses?id=eq.${encodeURIComponent(MERCHANT_BUSINESS_ID)}&select=*`,
           {
             method:"GET",
-            headers:supabaseHeaders()
+            headers:merchantHeaders()
           }
         );
 
@@ -5890,4 +6456,4 @@ async function initAdmin() {
   startOrdersPolling();
 }
 
-initAdmin();
+bootstrapMerchantAuth();
