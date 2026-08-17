@@ -1073,13 +1073,13 @@ async function insertTableRowReturning(
 }
 
 
-async function duplicateProductOptionRPC(
+async function duplicateSpecialVariantRPC(
   sourceOptionId,
   newName
 ) {
   const responseText =
     await requestText(
-      `${SUPABASE_REST}/rpc/duplicate_product_option_tree`,
+      `${SUPABASE_REST}/rpc/duplicate_special_variant`,
       {
         method:"POST",
         headers:merchantHeaders({
@@ -3644,7 +3644,7 @@ async function loadModifierGroups() {
                 pueda insertar y devolver IDs con las políticas RLS.
               */
               const result =
-                await duplicateProductOptionRPC(
+                await duplicateSpecialVariantRPC(
                   sourceOption.id,
                   cleanName
                 );
@@ -3663,11 +3663,28 @@ async function loadModifierGroups() {
                   result.copied_children || 0
                 );
 
+              const copiedGroups =
+                Number(
+                  result.copied_groups || 0
+                );
+
+              const successMessage =
+                `"${cleanName}" creada correctamente. ` +
+                `Se copiaron ${copiedGroups} grupo${copiedGroups === 1 ? "" : "s"} ` +
+                `y ${copiedChildren} opción${copiedChildren === 1 ? "" : "es"}. ` +
+                `Ahora editá solamente los precios.`;
+
               showToast(
-                copiedChildren
-                  ? `"${cleanName}" creada y se copiaron ${copiedChildren} opción${copiedChildren === 1 ? "" : "es"} relacionada${copiedChildren === 1 ? "" : "s"}.`
-                  : `"${cleanName}" duplicada correctamente.`,
+                successMessage,
                 "success"
+              );
+
+              /*
+                Confirmación visible incluso si el toast queda fuera
+                de pantalla dentro del modal.
+              */
+              window.alert(
+                successMessage
               );
 
               await loadModifierGroups();
@@ -3677,9 +3694,16 @@ async function loadModifierGroups() {
                 error
               );
 
+              const errorMessage =
+                `No se pudo duplicar: ${error.message || "error desconocido"}`;
+
               showToast(
-                `No se pudo duplicar: ${error.message || "error desconocido"}`,
+                errorMessage,
                 "error"
+              );
+
+              window.alert(
+                errorMessage
               );
             } finally {
               button.disabled = false;
