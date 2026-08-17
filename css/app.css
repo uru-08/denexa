@@ -4695,3 +4695,278 @@ body{
   }
 }
 
+
+
+/* =========================================================
+   DENEXA V90 - MOBILE MÁS LEGIBLE
+   Solo modifica la portada en celular/tablet.
+   Mantiene intacta la composición de PC de V89.
+========================================================= */
+
+.welcome-mobile-note{
+  display:none;
+}
+
+@media(max-width:899px){
+
+  .welcome-screen{
+    align-items:flex-start;
+    justify-content:flex-start;
+    padding:
+      max(10px,env(safe-area-inset-top))
+      14px
+      max(18px,env(safe-area-inset-bottom));
+  }
+
+  .welcome-content{
+    width:min(560px,100%);
+    min-height:calc(
+      100dvh
+      - max(10px,env(safe-area-inset-top))
+      - max(18px,env(safe-area-inset-bottom))
+    );
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:0;
+  }
+
+  .welcome-status{
+    margin:0 0 9px;
+    padding:8px 13px;
+    font-size:.80rem;
+  }
+
+  .welcome-logo-wrap{
+    width:min(250px,69vw,31dvh);
+    margin:0 auto 7px;
+  }
+
+  .welcome-logo{
+    filter:
+      drop-shadow(0 15px 24px rgba(0,0,0,.30))
+      saturate(1.10)
+      contrast(1.04);
+  }
+
+  .welcome-kicker{
+    margin-bottom:3px;
+    font-size:.66rem;
+    letter-spacing:.18em;
+  }
+
+  .welcome-copy h1{
+    font-size:clamp(2.15rem,10.6vw,3rem);
+    line-height:.98;
+  }
+
+  .welcome-copy p:last-child{
+    max-width:440px;
+    margin-top:7px;
+    font-size:.88rem;
+    line-height:1.28;
+    font-weight:650;
+  }
+
+  .welcome-daily-promo{
+    width:min(560px,100%);
+    margin:11px auto 0;
+    padding:13px 14px 14px;
+    border-width:2px;
+    border-radius:18px;
+  }
+
+  .welcome-daily-promo > span{
+    padding:6px 12px;
+    font-size:.68rem;
+  }
+
+  .welcome-daily-promo strong{
+    margin:8px 0 4px;
+    font-size:clamp(1.12rem,5vw,1.42rem);
+    line-height:1.08;
+  }
+
+  .welcome-daily-promo p{
+    max-width:100%;
+    font-size:clamp(.88rem,3.7vw,1rem);
+    line-height:1.23;
+    font-weight:850;
+  }
+
+  .welcome-button{
+    width:min(560px,100%);
+    min-height:58px;
+    margin-top:12px;
+    border-radius:18px;
+    font-size:1.08rem;
+    position:relative;
+    z-index:3;
+    flex:0 0 auto;
+  }
+
+  .welcome-mobile-note{
+    display:block;
+    margin:7px 0 0;
+    color:rgba(255,255,255,.80);
+    font-size:.72rem;
+    font-weight:800;
+    letter-spacing:.01em;
+    text-align:center;
+  }
+
+  .welcome-mobile-note span{
+    margin:0 5px;
+    color:var(--accent);
+  }
+
+  .welcome-note{
+    display:none;
+  }
+}
+
+/* Celulares más angostos: mantener lectura sin volver a achicar de más. */
+@media(max-width:480px){
+
+  .welcome-screen{
+    padding-left:11px;
+    padding-right:11px;
+  }
+
+  .welcome-logo-wrap{
+    width:min(235px,68vw,30dvh);
+  }
+
+  .welcome-copy h1{
+    font-size:clamp(2.05rem,10vw,2.72rem);
+  }
+
+  .welcome-copy p:last-child{
+    font-size:.84rem;
+    line-height:1.26;
+  }
+
+  .welcome-daily-promo{
+    padding:12px 12px 13px;
+  }
+
+  .welcome-daily-promo > span{
+    font-size:.64rem;
+  }
+
+  .welcome-daily-promo strong{
+    font-size:clamp(1.06rem,5vw,1.28rem);
+  }
+
+  .welcome-daily-promo p{
+    font-size:clamp(.84rem,3.9vw,.96rem);
+  }
+
+  .welcome-button{
+    min-height:56px;
+    font-size:1.04rem;
+  }
+}
+
+/*
+  Celulares de poca altura:
+  preservamos logo y promo legibles, pero compactamos espacios.
+  El botón debe seguir visible.
+*/
+@media(max-width:899px) and (max-height:760px){
+
+  .welcome-content{
+    justify-content:flex-start;
+    padding-top:4px;
+  }
+
+  .welcome-status{
+    margin-bottom:5px;
+    padding:6px 10px;
+    font-size:.72rem;
+  }
+
+  .welcome-logo-wrap{
+    width:min(205px,58vw,26dvh);
+    margin-bottom:3px;
+  }
+
+  .welcome-kicker{
+    font-size:.58rem;
+  }
+
+  .welcome-copy h1{
+    font-size:clamp(1.92rem,8.8vw,2.45rem);
+  }
+
+  .welcome-copy p:last-child{
+    margin-top:4px;
+    font-size:.78rem;
+    line-height:1.20;
+  }
+
+  .welcome-daily-promo{
+    margin-top:7px;
+    padding:9px 10px 10px;
+  }
+
+  .welcome-daily-promo > span{
+    padding:4px 9px;
+    font-size:.57rem;
+  }
+
+  .welcome-daily-promo strong{
+    margin:5px 0 2px;
+    font-size:1rem;
+  }
+
+  .welcome-daily-promo p{
+    font-size:.78rem;
+    line-height:1.17;
+  }
+
+  .welcome-button{
+    margin-top:8px;
+    min-height:52px;
+    font-size:1rem;
+  }
+
+  .welcome-mobile-note{
+    margin-top:5px;
+    font-size:.66rem;
+  }
+}
+
+/* Muy baja altura: prioridad al CTA sin volver ilegible la promo. */
+@media(max-width:899px) and (max-height:640px){
+
+  .welcome-copy p:last-child{
+    display:none;
+  }
+
+  .welcome-logo-wrap{
+    width:min(180px,54vw,25dvh);
+  }
+
+  .welcome-daily-promo{
+    margin-top:5px;
+  }
+
+  .welcome-daily-promo strong{
+    font-size:.94rem;
+  }
+
+  .welcome-daily-promo p{
+    font-size:.74rem;
+  }
+
+  .welcome-button{
+    min-height:50px;
+  }
+
+  .welcome-mobile-note{
+    display:none;
+  }
+}
+
