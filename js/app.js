@@ -219,6 +219,23 @@ function applyOrderingStatus() {
         : status === "closed"
           ? "Pedidos cerrados"
           : "Tomando pedidos";
+
+    const welcomeStatus =
+      welcomeStatusText.closest(
+        ".welcome-status"
+      );
+
+    if (welcomeStatus) {
+      welcomeStatus.classList.toggle(
+        "closed",
+        status === "closed"
+      );
+
+      welcomeStatus.classList.toggle(
+        "sold-out",
+        status === "sold_out"
+      );
+    }
   }
 
   if (orderingStatusNotice) {
