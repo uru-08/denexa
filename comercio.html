@@ -319,6 +319,80 @@
   }
 </style>
 
+
+<style>
+  .fulfillment-settings-panel{
+    max-width:760px;
+    display:grid;
+    gap:14px;
+  }
+
+  .fulfillment-settings-intro p{
+    margin:7px 0 0;
+    color:#667085;
+    line-height:1.5;
+  }
+
+  .fulfillment-toggle-row{
+    display:flex;
+    align-items:flex-start;
+    gap:13px;
+    padding:15px;
+    border:1px solid #dbe4f0;
+    border-radius:15px;
+    background:#f8fbff;
+    cursor:pointer;
+  }
+
+  .fulfillment-toggle-row input{
+    width:22px;
+    height:22px;
+    flex:0 0 22px;
+    margin-top:1px;
+  }
+
+  .fulfillment-toggle-row strong,
+  .fulfillment-toggle-row small{
+    display:block;
+  }
+
+  .fulfillment-toggle-row small{
+    margin-top:4px;
+    color:#667085;
+    line-height:1.35;
+  }
+
+  .fulfillment-address-fields{
+    padding:15px;
+    border:1px solid #dbe4f0;
+    border-radius:15px;
+    background:#fff;
+  }
+
+  .fulfillment-address-fields label{
+    display:grid;
+    gap:7px;
+    font-weight:800;
+  }
+
+  .fulfillment-address-fields input{
+    width:100%;
+    min-height:44px;
+    box-sizing:border-box;
+  }
+
+  .fulfillment-address-fields p{
+    margin:8px 0 0;
+    color:#667085;
+    font-size:.78rem;
+    line-height:1.4;
+  }
+
+  .fulfillment-address-fields.is-disabled{
+    display:none;
+  }
+</style>
+
 </head>
 
 <body class="auth-locked">
@@ -433,6 +507,11 @@
       <button class="nav-item" data-section="dailyPromo" type="button">
         <span class="nav-icon">%</span>
         <span>Promo del d&iacute;a</span>
+      </button>
+
+      <button class="nav-item" data-section="fulfillment" type="button">
+        <span class="nav-icon">EN</span>
+        <span>Entrega y retiro</span>
       </button>
 
       <button class="nav-item" data-section="payments" type="button">
@@ -900,7 +979,74 @@
     </section>
 
 
-    <section id="payments" class="page-section">
+    
+    <section id="fulfillment" class="page-section">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">ENTREGA</p>
+          <h1>Delivery y retiro</h1>
+          <p class="subtitle">
+            Eleg&iacute; c&oacute;mo pueden recibir los pedidos tus clientes.
+          </p>
+        </div>
+      </header>
+
+      <form id="fulfillmentSettingsForm" class="panel fulfillment-settings-panel">
+
+        <div class="fulfillment-settings-intro">
+          <div>
+            <p class="eyebrow">MODALIDADES DISPONIBLES</p>
+            <h2>Formas de entrega</h2>
+            <p>
+              Pod&eacute;s ofrecer delivery, retiro en el local o ambas opciones.
+              Al menos una debe quedar activa.
+            </p>
+          </div>
+        </div>
+
+        <label class="fulfillment-toggle-row">
+          <input id="deliveryEnabled" type="checkbox">
+          <span>
+            <strong>Delivery</strong>
+            <small>El cliente completa su direcci&oacute;n de entrega.</small>
+          </span>
+        </label>
+
+        <label class="fulfillment-toggle-row">
+          <input id="pickupEnabled" type="checkbox">
+          <span>
+            <strong>Retiro en el local</strong>
+            <small>El cliente puede pasar a buscar el pedido.</small>
+          </span>
+        </label>
+
+        <div id="pickupAddressFields" class="fulfillment-address-fields">
+          <label>
+            Direcci&oacute;n para retiro
+            <input
+              id="pickupAddress"
+              type="text"
+              placeholder="Ejemplo: 19 de Abril 123, Carmelo"
+              autocomplete="street-address"
+            >
+          </label>
+
+          <p>
+            Esta direcci&oacute;n se mostrar&aacute; al cliente cuando elija
+            <strong>Retiro en el local</strong>.
+          </p>
+        </div>
+
+        <p id="fulfillmentSettingsMessage" class="form-message"></p>
+
+        <button id="saveFulfillmentSettingsButton" class="primary-button" type="submit">
+          Guardar modalidades
+        </button>
+      </form>
+    </section>
+
+
+<section id="payments" class="page-section">
       <header class="page-header">
         <div>
           <p class="eyebrow">COBROS</p>
@@ -1865,7 +2011,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/comercio.js?v=88"></script>
+  <script src="js/comercio.js?v=94"></script>
 
 </body>
 </html>
