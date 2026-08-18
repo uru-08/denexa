@@ -29,6 +29,14 @@ const dailyPromoPreview = document.getElementById("dailyPromoPreview");
 const dailyPromoPreviewBadge = document.getElementById("dailyPromoPreviewBadge");
 const dailyPromoPreviewTitle = document.getElementById("dailyPromoPreviewTitle");
 const dailyPromoPreviewText = document.getElementById("dailyPromoPreviewText");
+const fulfillmentSettingsForm = document.getElementById("fulfillmentSettingsForm");
+const deliveryEnabled = document.getElementById("deliveryEnabled");
+const pickupEnabled = document.getElementById("pickupEnabled");
+const pickupAddress = document.getElementById("pickupAddress");
+const pickupAddressFields = document.getElementById("pickupAddressFields");
+const fulfillmentSettingsMessage = document.getElementById("fulfillmentSettingsMessage");
+const saveFulfillmentSettingsButton = document.getElementById("saveFulfillmentSettingsButton");
+
 const paymentSettingsForm = document.getElementById("paymentSettingsForm");
 const paymentBankName = document.getElementById("paymentBankName");
 const paymentAccountHolder = document.getElementById("paymentAccountHolder");
@@ -887,6 +895,10 @@ navItems.forEach((button) => {
       await fillDailyPromoForm();
     }
 
+    if (sectionId === "fulfillment") {
+      fillFulfillmentSettingsForm();
+    }
+
     if (sectionId === "payments") {
       fillPaymentSettingsForm();
     }
@@ -1576,6 +1588,179 @@ storeDesignForm?.addEventListener(
 restoreStoreDesignButton?.addEventListener(
   "click",
   restoreStoreDesignDefaults
+);
+
+
+function syncPickupAddressVisibility() {
+  if (!pickupAddressFields) {
+    return;
+  }
+
+  pickupAddressFields.classList.toggle(
+    "is-disabled",
+    !pickupEnabled?.checked
+  );
+}
+
+function fillFulfillmentSettingsForm() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  deliveryEnabled.checked =
+    selectedBusiness.delivery_enabled !== false;
+
+  pickupEnabled.checked =
+    selectedBusiness.pickup_enabled !== false;
+
+  pickupAddress.value =
+    selectedBusiness.pickup_address ||
+    selectedBusiness.address ||
+    "";
+
+  fulfillmentSettingsMessage.textContent = "";
+
+  syncPickupAddressVisibility();
+}
+
+async function saveFulfillmentSettingsRPC(payload) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/rpc/set_business_fulfillment_settings`,
+      {
+        method:"POST",
+        headers:merchantHeaders({
+          Prefer:"return=representation"
+        }),
+        body:JSON.stringify({
+          p_business_id:
+            Number(selectedBusiness.id),
+          p_delivery_enabled:
+            payload.deliveryEnabled,
+          p_pickup_enabled:
+            payload.pickupEnabled,
+          p_pickup_address:
+            payload.pickupAddress || null
+        })
+      }
+    );
+
+  const data =
+    responseText.trim()
+      ? JSON.parse(responseText)
+      : null;
+
+  return Array.isArray(data)
+    ? data[0] || null
+    : data;
+}
+
+async function saveFulfillmentSettings() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  const payload = {
+    deliveryEnabled:
+      Boolean(deliveryEnabled.checked),
+    pickupEnabled:
+      Boolean(pickupEnabled.checked),
+    pickupAddress:
+      pickupAddress.value.trim()
+  };
+
+  if (
+    !payload.deliveryEnabled &&
+    !payload.pickupEnabled
+  ) {
+    fulfillmentSettingsMessage.textContent =
+      "Dejá activo al menos Delivery o Retiro en el local.";
+    return;
+  }
+
+  if (
+    payload.pickupEnabled &&
+    !payload.pickupAddress
+  ) {
+    fulfillmentSettingsMessage.textContent =
+      "Escribí la dirección del local para habilitar el retiro.";
+    pickupAddress.focus();
+    return;
+  }
+
+  saveFulfillmentSettingsButton.disabled = true;
+  saveFulfillmentSettingsButton.textContent =
+    "Guardando...";
+
+  fulfillmentSettingsMessage.textContent = "";
+
+  try {
+    const saved =
+      await saveFulfillmentSettingsRPC(
+        payload
+      );
+
+    if (!saved?.id) {
+      throw new Error(
+        "Supabase no devolvió la configuración guardada."
+      );
+    }
+
+    Object.assign(
+      selectedBusiness,
+      saved
+    );
+
+    fillFulfillmentSettingsForm();
+
+    fulfillmentSettingsMessage.textContent =
+      "Modalidades guardadas. La web del cliente ya usa esta configuración.";
+
+    showToast(
+      "Entrega y retiro actualizados.",
+      "success"
+    );
+  } catch (error) {
+    console.error(
+      "Error guardando entrega/retiro:",
+      error
+    );
+
+    fulfillmentSettingsMessage.textContent =
+      `No se pudo guardar: ${error.message || "error desconocido"}`;
+
+    showToast(
+      "No se pudo guardar la configuración.",
+      "error"
+    );
+  } finally {
+    saveFulfillmentSettingsButton.disabled = false;
+    saveFulfillmentSettingsButton.textContent =
+      "Guardar modalidades";
+  }
+}
+
+deliveryEnabled?.addEventListener(
+  "change",
+  () => {
+    fulfillmentSettingsMessage.textContent = "";
+  }
+);
+
+pickupEnabled?.addEventListener(
+  "change",
+  () => {
+    fulfillmentSettingsMessage.textContent = "";
+    syncPickupAddressVisibility();
+  }
+);
+
+fulfillmentSettingsForm?.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    await saveFulfillmentSettings();
+  }
 );
 
 
@@ -6716,6 +6901,7 @@ async function initAdmin() {
   syncMerchantStatusUI();
   renderMerchantPanelLogo();
   fillStoreDesignForm();
+  fillFulfillmentSettingsForm();
   fillPaymentSettingsForm();
   fillCustomerNoticesForm();
 
