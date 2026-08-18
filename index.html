@@ -9,7 +9,7 @@
     name="description"
     content="Hac&eacute; tu pedido online en Mamma Mia."
   >
-  <link rel="stylesheet" href="css/app.css?v=93">
+  <link rel="stylesheet" href="css/app.css?v=94">
 </head>
 
 <body>
@@ -233,13 +233,21 @@
 
         <div class="checkout-grid">
 
-          <label class="field full-width delivery-choice-field">
+          <label id="deliveryChoiceField" class="field full-width delivery-choice-field">
             <span>&iquest;C&oacute;mo quer&eacute;s recibir tu pedido?</span>
-            <select id="deliveryType" required>
-              <option value="delivery">Delivery - env&iacute;o a domicilio</option>
-              <option value="pickup">Retiro en el local</option>
-            </select>
+            <select id="deliveryType" required></select>
           </label>
+
+          <div id="fulfillmentModeNotice" class="fulfillment-mode-notice full-width" hidden></div>
+
+          <div id="pickupInfoCard" class="pickup-info-card full-width" hidden>
+            <div class="pickup-info-icon" aria-hidden="true">&#128205;</div>
+            <div>
+              <span>Retiro en el local</span>
+              <strong id="pickupAddressText">Direcci&oacute;n del local</strong>
+              <small>Presentate en esta direcci&oacute;n para retirar tu pedido.</small>
+            </div>
+          </div>
 
           <label class="field">
             <span>Nombre</span>
@@ -378,6 +386,6 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=32"></script>
-  <script src="js/app.js?v=93"></script>
+  <script src="js/app.js?v=94"></script>
 </body>
 </html>
