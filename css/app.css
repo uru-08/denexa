@@ -5338,3 +5338,77 @@ body{
     transform:none !important;
   }
 }
+
+
+/* =========================================================
+   DENEXA V94 - MODALIDADES DE ENTREGA / RETIRO
+========================================================= */
+
+.fulfillment-mode-notice{
+  padding:12px 14px;
+  border:1px solid #c9dcf8;
+  border-radius:14px;
+  background:#f3f7fd;
+  color:var(--primary-dark);
+  font-size:.82rem;
+  font-weight:850;
+  line-height:1.35;
+}
+
+.pickup-info-card[hidden],
+.fulfillment-mode-notice[hidden]{
+  display:none !important;
+}
+
+.pickup-info-card{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:14px;
+  border:2px solid var(--accent);
+  border-radius:16px;
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb,var(--accent) 10%,#ffffff),
+      #ffffff
+    );
+  box-shadow:0 10px 26px rgba(5,43,108,.08);
+}
+
+.pickup-info-icon{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:linear-gradient(135deg,var(--primary),var(--primary-2));
+  color:#fff;
+  font-size:1.1rem;
+}
+
+.pickup-info-card span{
+  display:block;
+  color:var(--muted);
+  font-size:.67rem;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.pickup-info-card strong{
+  display:block;
+  margin-top:3px;
+  color:var(--text);
+  font-size:.98rem;
+  line-height:1.3;
+}
+
+.pickup-info-card small{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:.74rem;
+  line-height:1.35;
+}
