@@ -47,6 +47,10 @@ const closeCheckoutButton = document.getElementById("closeCheckoutButton");
 const customerName = document.getElementById("customerName");
 const customerPhone = document.getElementById("customerPhone");
 const deliveryType = document.getElementById("deliveryType");
+const deliveryChoiceField = document.getElementById("deliveryChoiceField");
+const fulfillmentModeNotice = document.getElementById("fulfillmentModeNotice");
+const pickupInfoCard = document.getElementById("pickupInfoCard");
+const pickupAddressText = document.getElementById("pickupAddressText");
 const customerAddress = document.getElementById("customerAddress");
 const customerReference = document.getElementById("customerReference");
 const addressField = document.getElementById("addressField");
@@ -437,7 +441,7 @@ async function loadStore() {
 
   try {
     const businesses = await requestJSON(
-      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,active,ordering_status,sold_out_message"
+      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,delivery_enabled,pickup_enabled,pickup_address,active,ordering_status,sold_out_message"
     );
 
     business =
@@ -460,6 +464,7 @@ async function loadStore() {
     applyBusinessBranding();
     applyDailyPromo();
     applyOrderingStatus();
+    configureFulfillmentOptions();
 
     const [
       allCategories,
@@ -2814,9 +2819,141 @@ function closeCheckoutModal() {
   document.body.classList.remove("modal-open");
 }
 
+function fulfillmentSettings() {
+  const deliveryEnabled =
+    business?.delivery_enabled !== false;
+
+  const pickupEnabled =
+    business?.pickup_enabled !== false;
+
+  const pickupAddress =
+    String(
+      business?.pickup_address ||
+      business?.address ||
+      ""
+    ).trim();
+
+  return {
+    deliveryEnabled,
+    pickupEnabled,
+    pickupAddress
+  };
+}
+
+function setDefaultFulfillmentType() {
+  const settings =
+    fulfillmentSettings();
+
+  if (settings.deliveryEnabled) {
+    deliveryType.value = "delivery";
+  } else if (settings.pickupEnabled) {
+    deliveryType.value = "pickup";
+  }
+}
+
+function configureFulfillmentOptions() {
+  if (!deliveryType) {
+    return;
+  }
+
+  const settings =
+    fulfillmentSettings();
+
+  const options = [];
+
+  if (settings.deliveryEnabled) {
+    options.push(
+      '<option value="delivery">Delivery - env&iacute;o a domicilio</option>'
+    );
+  }
+
+  if (settings.pickupEnabled) {
+    options.push(
+      '<option value="pickup">Retiro en el local</option>'
+    );
+  }
+
+  /*
+    La RPC no permite guardar ambos métodos desactivados,
+    pero este fallback evita dejar el checkout inutilizable si
+    todavía hay datos antiguos en caché.
+  */
+  if (!options.length) {
+    options.push(
+      '<option value="delivery">Delivery - env&iacute;o a domicilio</option>'
+    );
+  }
+
+  const previous =
+    deliveryType.value;
+
+  deliveryType.innerHTML =
+    options.join("");
+
+  if (
+    previous &&
+    [...deliveryType.options].some(
+      (option) =>
+        option.value === previous
+    )
+  ) {
+    deliveryType.value = previous;
+  } else {
+    setDefaultFulfillmentType();
+  }
+
+  if (deliveryChoiceField) {
+    deliveryChoiceField.hidden =
+      options.length === 1;
+  }
+
+  if (fulfillmentModeNotice) {
+    if (
+      settings.deliveryEnabled &&
+      !settings.pickupEnabled
+    ) {
+      fulfillmentModeNotice.textContent =
+        "Este comercio realiza únicamente entregas por delivery.";
+      fulfillmentModeNotice.hidden = false;
+    } else if (
+      !settings.deliveryEnabled &&
+      settings.pickupEnabled
+    ) {
+      fulfillmentModeNotice.textContent =
+        "Este comercio trabaja únicamente con retiro en el local.";
+      fulfillmentModeNotice.hidden = false;
+    } else {
+      fulfillmentModeNotice.hidden = true;
+      fulfillmentModeNotice.textContent = "";
+    }
+  }
+
+  syncDeliveryFields();
+}
+
 function syncDeliveryFields() {
   const isDelivery =
     deliveryType.value === "delivery";
+
+  const isPickup =
+    deliveryType.value === "pickup";
+
+  if (pickupInfoCard) {
+    pickupInfoCard.hidden =
+      !isPickup;
+  }
+
+  if (
+    isPickup &&
+    pickupAddressText
+  ) {
+    const settings =
+      fulfillmentSettings();
+
+    pickupAddressText.textContent =
+      settings.pickupAddress ||
+      "Consultá al comercio por la dirección de retiro.";
+  }
 
   deliveryExtraFields.style.display =
     isDelivery ? "grid" : "none";
@@ -3200,6 +3337,15 @@ function whatsappOrderMessage() {
 
   if (deliveryType.value === "pickup") {
     lines.push("\ud83c\udfea *RETIRO EN EL LOCAL*");
+
+    const pickupAddress =
+      fulfillmentSettings().pickupAddress;
+
+    if (pickupAddress) {
+      lines.push(
+        `Dirección: ${pickupAddress}`
+      );
+    }
   } else {
     lines.push("\ud83d\udef5 *DELIVERY*");
     lines.push(
@@ -3270,6 +3416,31 @@ checkoutForm.addEventListener(
       return;
     }
 
+    const fulfillment =
+      fulfillmentSettings();
+
+    if (
+      deliveryType.value === "delivery" &&
+      !fulfillment.deliveryEnabled
+    ) {
+      showCheckoutError(
+        "El delivery no está disponible en este momento."
+      );
+      configureFulfillmentOptions();
+      return;
+    }
+
+    if (
+      deliveryType.value === "pickup" &&
+      !fulfillment.pickupEnabled
+    ) {
+      showCheckoutError(
+        "El retiro en el local no está disponible en este momento."
+      );
+      configureFulfillmentOptions();
+      return;
+    }
+
     if (
       deliveryType.value === "delivery" &&
       !customerAddress.value.trim()
@@ -3320,7 +3491,7 @@ checkoutForm.addEventListener(
       updateCartBar();
 
       checkoutForm.reset();
-      deliveryType.value = "delivery";
+      configureFulfillmentOptions();
       paymentMethod.value = "cash";
       syncDeliveryFields();
       syncPaymentFields();
