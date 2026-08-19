@@ -4335,6 +4335,13 @@ function compactActionLabel(order, status, label) {
   return label;
 }
 
+function noticeSettingEnabled(value) {
+  return !(
+    value === false ||
+    String(value).toLowerCase() === "false"
+  );
+}
+
 function noticeStatusAvailableForOrder(order) {
   if (!order || !selectedBusiness) {
     return "";
@@ -4342,7 +4349,9 @@ function noticeStatusAvailableForOrder(order) {
 
   if (
     order.status === "approved" &&
-    selectedBusiness.notice_approved_enabled !== false
+    noticeSettingEnabled(
+      selectedBusiness.notice_approved_enabled
+    )
   ) {
     return "approved";
   }
@@ -4350,7 +4359,9 @@ function noticeStatusAvailableForOrder(order) {
   if (
     order.status === "ready" &&
     order.delivery_type === "pickup" &&
-    selectedBusiness.notice_ready_enabled !== false
+    noticeSettingEnabled(
+      selectedBusiness.notice_ready_enabled
+    )
   ) {
     return "ready";
   }
@@ -4358,7 +4369,9 @@ function noticeStatusAvailableForOrder(order) {
   if (
     order.status === "on_the_way" &&
     order.delivery_type !== "pickup" &&
-    selectedBusiness.notice_delivery_enabled !== false
+    noticeSettingEnabled(
+      selectedBusiness.notice_delivery_enabled
+    )
   ) {
     return "on_the_way";
   }
@@ -4375,7 +4388,7 @@ function noticeButtonLabel(order) {
   }
 
   if (status === "ready") {
-    return "Avisar: listo";
+    return "Avisar: puede retirar";
   }
 
   if (status === "on_the_way") {
@@ -4858,12 +4871,66 @@ function detectNewOrders() {
   knownOrderIds = currentIds;
 }
 
+async function refreshSelectedBusinessSettings() {
+  if (!selectedBusiness?.id) {
+    return;
+  }
+
+  try {
+    const responseText =
+      await requestText(
+        `${SUPABASE_REST}/businesses?id=eq.${encodeURIComponent(selectedBusiness.id)}&select=*`,
+        {
+          method:"GET",
+          headers:merchantHeaders()
+        }
+      );
+
+    const rows =
+      responseText.trim()
+        ? JSON.parse(responseText)
+        : [];
+
+    const fresh =
+      Array.isArray(rows)
+        ? rows[0] || null
+        : null;
+
+    if (fresh) {
+      Object.assign(
+        selectedBusiness,
+        fresh
+      );
+
+      const cached =
+        businessesCache.find(
+          (item) =>
+            String(item.id) ===
+            String(fresh.id)
+        );
+
+      if (cached) {
+        Object.assign(
+          cached,
+          fresh
+        );
+      }
+    }
+  } catch (error) {
+    console.warn(
+      "No se pudieron refrescar los avisos del comercio:",
+      error
+    );
+  }
+}
+
 async function loadOrders() {
   if (ordersLoading) return;
 
   ordersLoading = true;
 
   try {
+    await refreshSelectedBusinessSettings();
     const [orders, items, options] = await Promise.all([
       getTableData(
         "orders",
@@ -5306,18 +5373,31 @@ async function updateOrderStatus(orderId, status) {
       { status }
     );
 
+    /*
+      V95:
+      Actualizamos el estado en memoria primero para que el botón
+      "Avisar..." aparezca inmediatamente después de Aceptar,
+      Listo o En camino.
+    */
+    order.status = status;
+
+    renderOrders();
+    renderDashboardOrders();
+    updateOrdersCounters();
+
     showToast(
       `Pedido #${orderId}: ${orderStatusLabel(status)}.`,
       "success"
     );
 
-    /*
-      V80:
-      Cambiar el estado NO abre WhatsApp automáticamente.
-      Si ese estado tiene un aviso habilitado, después aparece
-      un botón separado "Avisar..." y el comercio decide si lo usa.
-    */
-    await loadOrders();
+    try {
+      await loadOrders();
+    } catch (refreshError) {
+      console.warn(
+        "El estado se guardó, pero no se pudo refrescar la lista:",
+        refreshError
+      );
+    }
   } catch (error) {
     console.error(
       "Error actualizando pedido:",
