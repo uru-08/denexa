@@ -5412,3 +5412,150 @@ body{
   font-size:.74rem;
   line-height:1.35;
 }
+
+
+/* =========================================================
+   DENEXA V96 - BOTONES DE CATEGORÍAS CON ICONOS
+   Solo modifica visualmente la tira Pizzas / Empanadas /
+   Bebidas / Postres. No toca productos ni funcionamiento.
+========================================================= */
+
+.category-tabs{
+  gap:10px;
+  padding-top:11px;
+  padding-bottom:14px;
+}
+
+.category-tab{
+  min-height:58px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  padding:7px 15px 7px 8px;
+  border-radius:18px;
+  border-color:#D5DFEC;
+  background:
+    linear-gradient(180deg,#FFFFFF 0%,#FBFCFF 100%);
+  box-shadow:
+    0 6px 18px rgba(5,43,108,.07),
+    inset 0 1px 0 rgba(255,255,255,.95);
+  font-size:.83rem;
+  letter-spacing:-.01em;
+}
+
+.category-tab-visual{
+  width:44px;
+  height:44px;
+  flex:0 0 44px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border:1px solid #E2E8F1;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 25%,#FFFFFF 0%,#F6F8FC 62%,#E9EEF6 100%);
+  box-shadow:
+    0 4px 10px rgba(5,43,108,.10),
+    inset 0 1px 0 rgba(255,255,255,.95);
+  transition:
+    transform .18s ease,
+    background .18s ease,
+    border-color .18s ease;
+}
+
+.category-tab-visual svg{
+  width:37px;
+  height:37px;
+  display:block;
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.11));
+}
+
+.category-tab-label{
+  display:block;
+  line-height:1;
+}
+
+.category-tab.active{
+  border-color:
+    color-mix(in srgb,var(--accent) 88%,#FFFFFF);
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary) 0%,
+      var(--primary-2) 100%
+    );
+  color:#fff;
+  box-shadow:
+    0 10px 24px rgba(11,67,160,.25),
+    inset 0 -3px 0
+      color-mix(in srgb,var(--accent) 82%,transparent);
+}
+
+.category-tab.active .category-tab-visual{
+  border-color:
+    color-mix(in srgb,var(--accent) 85%,#FFFFFF);
+  background:
+    radial-gradient(
+      circle at 35% 25%,
+      #FFFFFF 0%,
+      #FFF9E9 58%,
+      color-mix(in srgb,var(--accent) 24%,#FFFFFF) 100%
+    );
+  transform:scale(1.04);
+  box-shadow:
+    0 5px 13px rgba(0,0,0,.17),
+    0 0 0 2px rgba(255,255,255,.12);
+}
+
+.category-tab:hover .category-tab-visual{
+  transform:translateY(-1px) scale(1.03);
+}
+
+.category-tab.active:hover .category-tab-visual{
+  transform:translateY(-1px) scale(1.06);
+}
+
+@media(max-width:560px){
+  .category-tabs{
+    gap:8px;
+  }
+
+  .category-tab{
+    min-height:54px;
+    gap:7px;
+    padding:6px 12px 6px 7px;
+    border-radius:17px;
+    font-size:.77rem;
+  }
+
+  .category-tab-visual{
+    width:40px;
+    height:40px;
+    flex-basis:40px;
+  }
+
+  .category-tab-visual svg{
+    width:34px;
+    height:34px;
+  }
+}
+
+@media(max-width:390px){
+  .category-tab{
+    min-height:51px;
+    padding-right:10px;
+    font-size:.73rem;
+  }
+
+  .category-tab-visual{
+    width:37px;
+    height:37px;
+    flex-basis:37px;
+  }
+
+  .category-tab-visual svg{
+    width:31px;
+    height:31px;
+  }
+}
