@@ -1,6 +1,18 @@
-const TARGET_BUSINESS_SLUG = "mamma-mia";
-const TARGET_BUSINESS_NAME = "mamma mia";
-const LOCAL_LOGO_URL = "assets/mamma-mia-logo.png";
+const BUSINESS_PARAMS = new URLSearchParams(window.location.search);
+
+const TARGET_BUSINESS_SLUG = (
+  BUSINESS_PARAMS.get("business") ||
+  BUSINESS_PARAMS.get("comercio") ||
+  "mamma-mia"
+).trim().toLowerCase();
+
+const TARGET_BUSINESS_NAME =
+  TARGET_BUSINESS_SLUG.replace(/-/g, " ");
+
+const LOCAL_LOGO_URL =
+  TARGET_BUSINESS_SLUG === "mamma-mia"
+    ? "assets/mamma-mia-logo.png"
+    : "";
 
 const welcomeScreen = document.getElementById("welcomeScreen");
 const enterStoreButton = document.getElementById("enterStoreButton");
@@ -447,18 +459,17 @@ async function loadStore() {
     business =
       businesses.find(
         (item) =>
-          normalizeText(item.slug) === TARGET_BUSINESS_SLUG
+          normalizeText(item.slug) === normalizeText(TARGET_BUSINESS_SLUG)
       ) ||
       businesses.find(
         (item) =>
-          normalizeText(item.name) === TARGET_BUSINESS_NAME
-      ) ||
-      businesses.find(
-        (item) => item.active !== false
+          normalizeText(item.name) === normalizeText(TARGET_BUSINESS_NAME)
       );
 
     if (!business) {
-      throw new Error("No se encontr\u00f3 Mamma Mia.");
+      throw new Error(
+        `No se encontr\u00f3 el comercio "${TARGET_BUSINESS_SLUG}".`
+      );
     }
 
     applyBusinessBranding();
@@ -729,18 +740,44 @@ function applyBusinessBranding() {
     business.logo_url ||
     LOCAL_LOGO_URL;
 
-  storeLogo.innerHTML = `
-    <img
-      src="${escapeHTML(logoUrl)}"
-      alt="${escapeHTML(name)}"
-    >
-  `;
+  if (logoUrl) {
+    storeLogo.innerHTML = `
+      <img
+        src="${escapeHTML(logoUrl)}"
+        alt="${escapeHTML(name)}"
+      >
+    `;
 
-  if (welcomeLogo) {
-    welcomeLogo.src =
-      logoUrl;
-    welcomeLogo.alt =
-      name;
+    if (welcomeLogo) {
+      welcomeLogo.hidden = false;
+      welcomeLogo.src = logoUrl;
+      welcomeLogo.alt = name;
+    }
+  } else {
+    storeLogo.textContent =
+      name.slice(0, 2).toUpperCase();
+
+    if (welcomeLogo) {
+      welcomeLogo.hidden = true;
+      welcomeLogo.removeAttribute("src");
+      welcomeLogo.alt = "";
+    }
+  }
+
+  document.title = `${name} | Pedidos`;
+
+  const welcomeSection = document.getElementById("welcomeScreen");
+  if (welcomeSection) {
+    welcomeSection.setAttribute(
+      "aria-label",
+      `Bienvenida a ${name}`
+    );
+  }
+
+  const successCopy = document.querySelector(".success-copy");
+  if (successCopy) {
+    successCopy.textContent =
+      `${name} recibió tu pedido correctamente. Ya podés volver al menú.`;
   }
 
   if (welcomeBusinessName) {
@@ -752,7 +789,7 @@ function applyBusinessBranding() {
   if (welcomeBusinessDescription) {
     welcomeBusinessDescription.textContent =
       business.hero_description ||
-      "Pizzas y empanadas preparadas para disfrutar. Elegí lo que más te guste y armá tu pedido.";
+      "Elegí lo que más te guste y armá tu pedido.";
   }
 
   if (welcomeButtonText) {
@@ -2935,7 +2972,7 @@ function updateCartBar() {
 function saveCart() {
   try {
     localStorage.setItem(
-      "proyecto-x-cart-mamma-mia",
+      `denexa-cart-${business?.slug || TARGET_BUSINESS_SLUG}`,
       JSON.stringify(cart)
     );
   } catch (error) {
@@ -2947,7 +2984,7 @@ function restoreCart() {
   try {
     const stored =
       localStorage.getItem(
-        "proyecto-x-cart-mamma-mia"
+        `denexa-cart-${business?.slug || TARGET_BUSINESS_SLUG}`
       );
 
     cart =
