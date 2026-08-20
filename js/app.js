@@ -1184,6 +1184,181 @@ function currentProductNewFreeUnits(
 }
 
 
+function normalizedCategoryName(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+function categoryVisualMarkup(categoryName) {
+  const name =
+    normalizedCategoryName(
+      categoryName
+    );
+
+  let type = "generic";
+
+  if (name.includes("pizza")) {
+    type = "pizza";
+  } else if (name.includes("empan")) {
+    type = "empanada";
+  } else if (
+    name.includes("bebida") ||
+    name.includes("refresco") ||
+    name.includes("drink")
+  ) {
+    type = "drink";
+  } else if (
+    name.includes("postre") ||
+    name.includes("dulce")
+  ) {
+    type = "dessert";
+  } else if (
+    name.includes("hamburg") ||
+    name.includes("burger")
+  ) {
+    type = "burger";
+  } else if (
+    name.includes("papa") ||
+    name.includes("frita")
+  ) {
+    type = "fries";
+  } else if (
+    name.includes("parrilla") ||
+    name.includes("carne")
+  ) {
+    type = "grill";
+  }
+
+  const art = {
+    pizza: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="pizzaCrust" x1="0" x2="1">
+            <stop stop-color="#F8C45E"/>
+            <stop offset="1" stop-color="#D98A24"/>
+          </linearGradient>
+          <linearGradient id="pizzaCheese" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#FFE37A"/>
+            <stop offset="1" stop-color="#F4B633"/>
+          </linearGradient>
+        </defs>
+        <path d="M12 48 28 12c1-3 5-4 8-2l17 12c3 2 3 7 0 9L12 48Z"
+          fill="url(#pizzaCheese)" stroke="#C66A18" stroke-width="2"/>
+        <path d="M27 12c4-5 11-6 17-2l10 7c5 3 6 9 3 14"
+          fill="none" stroke="url(#pizzaCrust)" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="32" cy="27" r="4" fill="#D94A33"/>
+        <circle cx="42" cy="31" r="4" fill="#D94A33"/>
+        <circle cx="27" cy="38" r="3.7" fill="#D94A33"/>
+        <path d="m37 20 3 3M22 31l3 2M37 39l3-2"
+          stroke="#3C9B4A" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    `,
+    empanada: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="empFill" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#FFD66B"/>
+            <stop offset=".55" stop-color="#EAA23A"/>
+            <stop offset="1" stop-color="#C8731E"/>
+          </linearGradient>
+        </defs>
+        <path d="M11 39c11-20 29-27 43-16-1 19-16 31-35 27-7-2-11-6-8-11Z"
+          fill="url(#empFill)" stroke="#B76418" stroke-width="2.2"/>
+        <path d="M15 40c7 4 21 5 35-11"
+          fill="none" stroke="#FFE5A0" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M17 43c2 2 3 3 5 4m2-7c2 2 3 3 5 4m2-7c2 2 3 2 5 3m2-7c2 1 3 2 5 2"
+          stroke="#9E5517" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    `,
+    drink: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="cola" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="#6E351F"/>
+            <stop offset=".55" stop-color="#3D1B12"/>
+            <stop offset="1" stop-color="#170C0A"/>
+          </linearGradient>
+        </defs>
+        <path d="M18 12h30l-4 40H22L18 12Z"
+          fill="#F7F9FC" stroke="#B9C3D2" stroke-width="2"/>
+        <path d="M21 24h24l-3 25H24L21 24Z" fill="url(#cola)"/>
+        <path d="M38 8c6 5 8 11 8 19" fill="none"
+          stroke="#E33E34" stroke-width="3" stroke-linecap="round"/>
+        <rect x="25" y="18" width="8" height="7" rx="2" fill="#D9EEF5" opacity=".9"/>
+        <rect x="35" y="20" width="7" height="6" rx="2" fill="#D9EEF5" opacity=".9"/>
+        <path d="M22 29h22" stroke="#F4C565" stroke-width="1.5" opacity=".7"/>
+      </svg>
+    `,
+    dessert: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="cake" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="#FFF1C6"/>
+            <stop offset="1" stop-color="#F0C981"/>
+          </linearGradient>
+        </defs>
+        <path d="M12 49 25 18h24l5 31H12Z"
+          fill="url(#cake)" stroke="#C9944E" stroke-width="2"/>
+        <path d="M25 18c6-8 15-8 24 0"
+          fill="#FFF" stroke="#E7D7C5" stroke-width="2"/>
+        <path d="M20 29h31" stroke="#C98649" stroke-width="4"/>
+        <path d="M25 19c6-5 11-5 16-1 3-4 7-4 11-1"
+          fill="none" stroke="#D82842" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="34" cy="14" r="4" fill="#D82842"/>
+        <circle cx="45" cy="15" r="4" fill="#C91E37"/>
+      </svg>
+    `,
+    burger: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M12 28c1-11 9-17 20-17s19 6 20 17H12Z"
+          fill="#E7A944" stroke="#B86C22" stroke-width="2"/>
+        <path d="M14 32h36" stroke="#4D9F48" stroke-width="5" stroke-linecap="round"/>
+        <path d="M16 39h32" stroke="#8E4026" stroke-width="8" stroke-linecap="round"/>
+        <path d="M18 35h28" stroke="#F6C84B" stroke-width="4" stroke-linecap="round"/>
+        <path d="M14 47c3 6 32 6 36 0H14Z" fill="#D89235" stroke="#A9611D" stroke-width="2"/>
+        <circle cx="25" cy="20" r="1.3" fill="#FFF0B5"/>
+        <circle cx="34" cy="18" r="1.3" fill="#FFF0B5"/>
+        <circle cx="41" cy="22" r="1.3" fill="#FFF0B5"/>
+      </svg>
+    `,
+    fries: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M18 14v24M27 10v28M36 12v25M45 8v30"
+          stroke="#F3C648" stroke-width="6" stroke-linecap="round"/>
+        <path d="M15 29h34l-4 25H20l-5-25Z"
+          fill="#D73A32" stroke="#A8211D" stroke-width="2"/>
+        <path d="M20 33h24" stroke="#F4C565" stroke-width="3"/>
+      </svg>
+    `,
+    grill: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M18 18c7-7 22-8 30 1 7 8 2 24-11 29-12 4-26-2-27-13-1-7 3-13 8-17Z"
+          fill="#A64B2B" stroke="#74301E" stroke-width="2"/>
+        <path d="M20 24 42 42M17 31l17 14M28 18l20 17M36 17l13 10"
+          stroke="#572616" stroke-width="3" stroke-linecap="round"/>
+        <path d="M17 23c7-6 21-7 30 0" stroke="#D97A49" stroke-width="2" opacity=".7"/>
+      </svg>
+    `,
+    generic: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="22" fill="#EEF4FF" stroke="#B9CCE8" stroke-width="2"/>
+        <path d="M22 39c3-10 7-15 10-15s7 5 10 15"
+          fill="none" stroke="#0B43A0" stroke-width="3" stroke-linecap="round"/>
+        <path d="M21 42h22" stroke="#D8A52A" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    `
+  };
+
+  return `
+    <span class="category-tab-visual category-tab-visual-${type}">
+      ${art[type]}
+    </span>
+  `;
+}
+
 function renderCatalog() {
   const visibleCategories = categories.filter(
     (category) =>
@@ -1207,7 +1382,10 @@ function renderCatalog() {
       class="category-tab ${index === 0 ? "active" : ""}"
       data-category-id="${escapeHTML(category.id)}"
     >
-      ${escapeHTML(category.name)}
+      ${categoryVisualMarkup(category.name)}
+      <span class="category-tab-label">
+        ${escapeHTML(category.name)}
+      </span>
     </button>
   `).join("");
 
