@@ -1,622 +1,1229 @@
-const BUSINESS_URL_PARAMS = new URLSearchParams(window.location.search);
-const REQUESTED_BUSINESS_RAW =
-  BUSINESS_URL_PARAMS.get("business") ||
-  BUSINESS_URL_PARAMS.get("comercio") ||
-  BUSINESS_URL_PARAMS.get("slug") ||
-  "";
-const HAS_EXPLICIT_BUSINESS = Boolean(String(REQUESTED_BUSINESS_RAW).trim());
-const TARGET_BUSINESS_SLUG = String(REQUESTED_BUSINESS_RAW || "mamma-mia")
-  .trim()
-  .toLowerCase();
-const TARGET_BUSINESS_NAME = TARGET_BUSINESS_SLUG.replace(/-/g, " ");
-const LOCAL_LOGO_URL =
-  TARGET_BUSINESS_SLUG === "mamma-mia"
-    ? "assets/mamma-mia-logo.png"
-    : "";
+const navItems = document.querySelectorAll(".nav-item");
+const merchantPanelLogo = document.getElementById("merchantPanelLogo");
+const storeDesignForm = document.getElementById("storeDesignForm");
+const designLogoFile = document.getElementById("designLogoFile");
+const designLogoUrl = document.getElementById("designLogoUrl");
+const designLogoPreview = document.getElementById("designLogoPreview");
+const designPrimaryColor = document.getElementById("designPrimaryColor");
+const designSecondaryColor = document.getElementById("designSecondaryColor");
+const designAccentColor = document.getElementById("designAccentColor");
+const designHeroTitle = document.getElementById("designHeroTitle");
+const designHeroDescription = document.getElementById("designHeroDescription");
+const designButtonText = document.getElementById("designButtonText");
+const designHeroImageFile = document.getElementById("designHeroImageFile");
+const designHeroImageUrl = document.getElementById("designHeroImageUrl");
+const storeDesignMessage = document.getElementById("storeDesignMessage");
+const saveStoreDesignButton = document.getElementById("saveStoreDesignButton");
+const restoreStoreDesignButton = document.getElementById("restoreStoreDesignButton");
+const dailyPromoForm = document.getElementById("dailyPromoForm");
+const dailyPromoActive = document.getElementById("dailyPromoActive");
+const dailyPromoActiveText = document.getElementById("dailyPromoActiveText");
+const dailyPromoBadge = document.getElementById("dailyPromoBadge");
+const dailyPromoTitle = document.getElementById("dailyPromoTitle");
+const dailyPromoText = document.getElementById("dailyPromoText");
+const dailyPromoMessage = document.getElementById("dailyPromoMessage");
+const saveDailyPromoButton = document.getElementById("saveDailyPromoButton");
+const disableDailyPromoButton = document.getElementById("disableDailyPromoButton");
+const dailyPromoStatusBadge = document.getElementById("dailyPromoStatusBadge");
+const dailyPromoPreview = document.getElementById("dailyPromoPreview");
+const dailyPromoPreviewBadge = document.getElementById("dailyPromoPreviewBadge");
+const dailyPromoPreviewTitle = document.getElementById("dailyPromoPreviewTitle");
+const dailyPromoPreviewText = document.getElementById("dailyPromoPreviewText");
+const fulfillmentSettingsForm = document.getElementById("fulfillmentSettingsForm");
+const deliveryEnabled = document.getElementById("deliveryEnabled");
+const pickupEnabled = document.getElementById("pickupEnabled");
+const pickupAddress = document.getElementById("pickupAddress");
+const pickupAddressFields = document.getElementById("pickupAddressFields");
+const fulfillmentSettingsMessage = document.getElementById("fulfillmentSettingsMessage");
+const saveFulfillmentSettingsButton = document.getElementById("saveFulfillmentSettingsButton");
 
-const welcomeScreen = document.getElementById("welcomeScreen");
-const enterStoreButton = document.getElementById("enterStoreButton");
-const orderingStatusNotice = document.getElementById("orderingStatusNotice");
-const welcomeStatusText = document.getElementById("welcomeStatusText");
+const paymentSettingsForm = document.getElementById("paymentSettingsForm");
+const paymentBankName = document.getElementById("paymentBankName");
+const paymentAccountHolder = document.getElementById("paymentAccountHolder");
+const paymentAccountNumber = document.getElementById("paymentAccountNumber");
+const paymentCurrency = document.getElementById("paymentCurrency");
+const paymentInstructions = document.getElementById("paymentInstructions");
+const paymentSettingsMessage = document.getElementById("paymentSettingsMessage");
+const savePaymentSettingsButton = document.getElementById("savePaymentSettingsButton");
+const customerNoticesForm = document.getElementById("customerNoticesForm");
+const noticeApprovedEnabled = document.getElementById("noticeApprovedEnabled");
+const noticeApprovedMessage = document.getElementById("noticeApprovedMessage");
+const noticeReadyEnabled = document.getElementById("noticeReadyEnabled");
+const noticeReadyMessage = document.getElementById("noticeReadyMessage");
+const noticeDeliveryEnabled = document.getElementById("noticeDeliveryEnabled");
+const noticeDeliveryMessage = document.getElementById("noticeDeliveryMessage");
+const customerNoticesMessage = document.getElementById("customerNoticesMessage");
+const saveCustomerNoticesButton = document.getElementById("saveCustomerNoticesButton");
+const customerNoticesOrdersState = document.getElementById("customerNoticesOrdersState");
 
-const storeName = document.getElementById("storeName");
-const storeNameSmall = document.getElementById("storeNameSmall");
-const storeSubtitle = document.getElementById("storeSubtitle");
-const storeLogo = document.getElementById("storeLogo");
-const welcomeLogo = document.getElementById("welcomeLogo");
-const welcomeBusinessName = document.getElementById("welcomeBusinessName");
-const welcomeBusinessDescription = document.getElementById("welcomeBusinessDescription");
-const welcomeButtonText = document.getElementById("welcomeButtonText");
-const dailyPromoBanner = document.getElementById("dailyPromoBanner");
-const dailyPromoBannerBadge = document.getElementById("dailyPromoBannerBadge");
-const dailyPromoBannerTitle = document.getElementById("dailyPromoBannerTitle");
-const dailyPromoBannerText = document.getElementById("dailyPromoBannerText");
 
+const dailyPromoRuleType = document.getElementById("dailyPromoRuleType");
+const promoAutomaticFields = document.getElementById("promoAutomaticFields");
+const promoTargetType = document.getElementById("promoTargetType");
+const promoTargetId = document.getElementById("promoTargetId");
+const promoPercentFields = document.getElementById("promoPercentFields");
+const promoDiscountPercent = document.getElementById("promoDiscountPercent");
+const promoGiftFields = document.getElementById("promoGiftFields");
+const promoTriggerQty = document.getElementById("promoTriggerQty");
+const promoRewardProductId = document.getElementById("promoRewardProductId");
+const promoRewardQty = document.getElementById("promoRewardQty");
+const promoRepeat = document.getElementById("promoRepeat");
 
-const storeStatus = document.getElementById("storeStatus");
+const designPreview = document.getElementById("designPreview");
+const designPreviewLogo = document.getElementById("designPreviewLogo");
+const designPreviewTitle = document.getElementById("designPreviewTitle");
+const designPreviewDescription = document.getElementById("designPreviewDescription");
+const designPreviewButton = document.getElementById("designPreviewButton");
 
-const categoryTabs = document.getElementById("categoryTabs");
-const catalogContent = document.getElementById("catalogContent");
+const sections = document.querySelectorAll(".page-section");
+
+const businessModal = document.getElementById("businessModal");
+const businessForm = document.getElementById("businessForm");
+const businessModalTitle = document.getElementById("businessModalTitle");
+const businessName = document.getElementById("businessName");
+const businessSlug = document.getElementById("businessSlug");
+const businessPhone = document.getElementById("businessPhone");
+const businessAddress = document.getElementById("businessAddress");
+const businessLogoUrl = document.getElementById("businessLogoUrl");
+const businessPrimaryColor = document.getElementById("businessPrimaryColor");
+const businessSecondaryColor = document.getElementById("businessSecondaryColor");
+const businessActive = document.getElementById("businessActive");
+const businessFormMessage = document.getElementById("businessFormMessage");
+const saveBusinessButton = document.getElementById("saveBusinessButton");
+const newBusinessButton = document.getElementById("newBusinessButton");
+const closeBusinessModalButton = document.getElementById("closeBusinessModal");
+const cancelBusinessButton = document.getElementById("cancelBusinessButton");
+
+const businessDetailModal = document.getElementById("businessDetailModal");
+const businessDetailTitle = document.getElementById("businessDetailTitle");
+const businessDetailContent = document.getElementById("businessDetailContent");
+const closeBusinessDetailButton = document.getElementById("closeBusinessDetailButton");
+const businessCategoriesButton = document.getElementById("businessCategoriesButton");
+const businessProductsButton = document.getElementById("businessProductsButton");
+const editBusinessButton = document.getElementById("editBusinessButton");
+const businessStoreButton = document.getElementById("businessStoreButton");
+
+const categoryModal = document.getElementById("categoryModal");
+const categoryForm = document.getElementById("categoryForm");
+const categoryName = document.getElementById("categoryName");
+const categoryActive = document.getElementById("categoryActive");
+const categoryFormMessage = document.getElementById("categoryFormMessage");
+const saveCategoryButton = document.getElementById("saveCategoryButton");
+const closeCategoryModalButton = document.getElementById("closeCategoryModalButton");
+const cancelCategoryButton = document.getElementById("cancelCategoryButton");
+
 
 const productModal = document.getElementById("productModal");
-const productModalContent = document.getElementById("productModalContent");
-const closeProductButton = document.getElementById("closeProductButton");
+const productForm = document.getElementById("productForm");
+const productName = document.getElementById("productName");
+const productCategory = document.getElementById("productCategory");
+const productPrice = document.getElementById("productPrice");
+const productOldPrice = document.getElementById("productOldPrice");
+const productSortOrder = document.getElementById("productSortOrder");
+const productFeatured = document.getElementById("productFeatured");
+const productDescription = document.getElementById("productDescription");
+const productActive = document.getElementById("productActive");
+const productFormMessage = document.getElementById("productFormMessage");
+const saveProductButton = document.getElementById("saveProductButton");
+const closeProductModalButton = document.getElementById("closeProductModalButton");
+const cancelProductButton = document.getElementById("cancelProductButton");
+const productImageInput = document.getElementById("productImageInput");
+const selectProductImageButton = document.getElementById("selectProductImageButton");
+const removeProductImageButton = document.getElementById("removeProductImageButton");
+const productImagePreview = document.getElementById("productImagePreview");
 
-const cartButton = document.getElementById("cartButton");
-const cartCount = document.getElementById("cartCount");
-const cartTotal = document.getElementById("cartTotal");
-
-const cartModal = document.getElementById("cartModal");
-const closeCartButton = document.getElementById("closeCartButton");
-const cartItems = document.getElementById("cartItems");
-const cartModalTotal = document.getElementById("cartModalTotal");
-const continueOrderButton = document.getElementById("continueOrderButton");
+const imageCropModal = document.getElementById("imageCropModal");
+const imageCropCanvas = document.getElementById("imageCropCanvas");
+const imageCropContext = imageCropCanvas.getContext("2d");
+const imageZoomRange = document.getElementById("imageZoomRange");
+const cancelImageCropButton = document.getElementById("cancelImageCropButton");
+const confirmImageCropButton = document.getElementById("confirmImageCropButton");
 
 
-const checkoutModal = document.getElementById("checkoutModal");
-const checkoutForm = document.getElementById("checkoutForm");
-const closeCheckoutButton = document.getElementById("closeCheckoutButton");
-const customerName = document.getElementById("customerName");
-const customerPhone = document.getElementById("customerPhone");
-const deliveryType = document.getElementById("deliveryType");
-const deliveryChoiceField = document.getElementById("deliveryChoiceField");
-const fulfillmentModeNotice = document.getElementById("fulfillmentModeNotice");
-const pickupInfoCard = document.getElementById("pickupInfoCard");
-const pickupAddressText = document.getElementById("pickupAddressText");
-const customerAddress = document.getElementById("customerAddress");
-const customerReference = document.getElementById("customerReference");
-const addressField = document.getElementById("addressField");
-const referenceField = document.getElementById("referenceField");
-const deliveryExtraFields = document.getElementById("deliveryExtraFields");
-const paymentMethod = document.getElementById("paymentMethod");
-const cashAmount = document.getElementById("cashAmount");
-const cashAmountField = document.getElementById("cashAmountField");
-const transferInfoCard = document.getElementById("transferInfoCard");
-const transferBankName = document.getElementById("transferBankName");
-const transferAccountHolder = document.getElementById("transferAccountHolder");
-const transferAccountNumber = document.getElementById("transferAccountNumber");
-const transferCurrency = document.getElementById("transferCurrency");
-const transferInstructions = document.getElementById("transferInstructions");
+const modifiersModal = document.getElementById("modifiersModal");
+const modifiersModalTitle = document.getElementById("modifiersModalTitle");
+const modifiersModalSubtitle = document.getElementById("modifiersModalSubtitle");
+const closeModifiersModalButton = document.getElementById("closeModifiersModalButton");
+const newModifierGroupButton = document.getElementById("newModifierGroupButton");
+const modifierGroupsList = document.getElementById("modifierGroupsList");
 
-const customerNotes = document.getElementById("customerNotes");
-const checkoutItemsCount = document.getElementById("checkoutItemsCount");
-const checkoutTotal = document.getElementById("checkoutTotal");
-const checkoutFormError = document.getElementById("checkoutFormError");
-const confirmOrderButton = document.getElementById("confirmOrderButton");
+const modifierGroupModal = document.getElementById("modifierGroupModal");
+const modifierGroupForm = document.getElementById("modifierGroupForm");
+const modifierGroupModalTitle = document.getElementById("modifierGroupModalTitle");
+const modifierGroupName = document.getElementById("modifierGroupName");
+const modifierGroupType = document.getElementById("modifierGroupType");
+const modifierGroupMax = document.getElementById("modifierGroupMax");
+const modifierGroupSortOrder = document.getElementById("modifierGroupSortOrder");
+const modifierGroupRequired = document.getElementById("modifierGroupRequired");
+const modifierGroupActive = document.getElementById("modifierGroupActive");
+const modifierGroupFormMessage = document.getElementById("modifierGroupFormMessage");
+const saveModifierGroupButton = document.getElementById("saveModifierGroupButton");
+const closeModifierGroupModalButton = document.getElementById("closeModifierGroupModalButton");
+const cancelModifierGroupButton = document.getElementById("cancelModifierGroupButton");
 
-const orderSuccessModal = document.getElementById("orderSuccessModal");
-const closeSuccessButton = document.getElementById("closeSuccessButton");
+const modifierOptionModal = document.getElementById("modifierOptionModal");
+const modifierOptionForm = document.getElementById("modifierOptionForm");
+const modifierOptionModalTitle = document.getElementById("modifierOptionModalTitle");
+const modifierOptionGroupName = document.getElementById("modifierOptionGroupName");
+const modifierOptionName = document.getElementById("modifierOptionName");
+const modifierOptionPrice = document.getElementById("modifierOptionPrice");
+const modifierOptionPriceLabel = document.getElementById("modifierOptionPriceLabel");
+const modifierOptionParent = document.getElementById("modifierOptionParent");
+const modifierOptionSortOrder = document.getElementById("modifierOptionSortOrder");
+const modifierOptionActive = document.getElementById("modifierOptionActive");
+const modifierOptionFormMessage = document.getElementById("modifierOptionFormMessage");
+const saveModifierOptionButton = document.getElementById("saveModifierOptionButton");
+const closeModifierOptionModalButton = document.getElementById("closeModifierOptionModalButton");
+const cancelModifierOptionButton = document.getElementById("cancelModifierOptionButton");
+
+const ordersList = document.getElementById("ordersList");
+const ordersBusinessFilter = document.getElementById("ordersBusinessFilter");
+const ordersStatusFilter = document.getElementById("ordersStatusFilter");
+const refreshOrdersButton = document.getElementById("refreshOrdersButton");
+const clearShiftOrdersButton = document.getElementById("clearShiftOrdersButton");
+const ordersLastUpdate = document.getElementById("ordersLastUpdate");
+const dashboardOrdersList = document.getElementById("dashboardOrdersList");
+const dashboardGoOrdersButton = document.getElementById("dashboardGoOrdersButton");
+
+let MERCHANT_BUSINESS_ID = null;
+const merchantStoreStatusBadge = document.getElementById("merchantStoreStatusBadge");
+const merchantQuickStatusText = document.getElementById("merchantQuickStatusText");
+const merchantOpenButton = document.getElementById("merchantOpenButton");
+const merchantCloseButton = document.getElementById("merchantCloseButton");
+const merchantSoldOutButton = document.getElementById("merchantSoldOutButton");
+const merchantStatusLarge = document.getElementById("merchantStatusLarge");
+const merchantStatusOpen = document.getElementById("merchantStatusOpen");
+const merchantStatusClosed = document.getElementById("merchantStatusClosed");
+const merchantStatusSoldOut = document.getElementById("merchantStatusSoldOut");
+const merchantSoldOutMessage = document.getElementById("merchantSoldOutMessage");
+const merchantSaveMessage = document.getElementById("merchantSaveMessage");
 
 const toast = document.getElementById("toast");
 
-let business = null;
-let categories = [];
-let products = [];
-let groups = [];
-let options = [];
+let businessesCache = [];
+let selectedBusiness = null;
+let editingBusinessId = null;
+let editingProductId = null;
+let existingProductImageUrl = "";
+let removeExistingProductImage = false;
+let croppedProductImageBlob = null;
+let croppedProductImageUrl = "";
+let cropImage = null;
+let cropBaseScale = 1;
+let cropZoom = 1;
+let cropOffsetX = 0;
+let cropOffsetY = 0;
+let cropDragging = false;
+let cropPointerX = 0;
+let cropPointerY = 0;
+let selectedProduct = null;
+let selectedModifierGroup = null;
+let editingModifierGroupId = null;
+let editingModifierOptionId = null;
+let currentModifierGroups = [];
+let currentModifierOptions = [];
+let ordersCache = [];
+let orderItemsCache = [];
+let orderItemOptionsCache = [];
+let knownOrderIds = new Set();
+let ordersFirstLoad = true;
+let ordersLoading = false;
+let ordersPollTimer = null;
 
-let currentProduct = null;
-let currentQuantity = 1;
-let selectedOptions = new Map();
-let empanadaFlavorCounts = new Map();
 
-let cart = [];
+let merchantAuthSession = null;
+let merchantAuthUser = null;
 
-function escapeHTML(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
+const MERCHANT_AUTH_STORAGE_KEY =
+  "denexa_merchant_session_v1";
 
-function normalizeText(value) {
-  return String(value || "")
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-}
-
-function money(value) {
-  const number = Number(value || 0);
-  return `$${Math.round(number).toLocaleString("es-UY")}`;
-}
-
-function showToast(message) {
-  toast.textContent = message;
-  toast.classList.add("show");
-
-  window.clearTimeout(showToast.timer);
-
-  showToast.timer = window.setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2600);
-}
-
-async function requestJSON(path) {
-  const response = await fetch(
-    `${SUPABASE_REST}/${path}`,
-    {
-      method: "GET",
-      headers: supabaseHeaders()
-    }
+const merchantLoginScreen =
+  document.getElementById(
+    "merchantLoginScreen"
   );
 
-  const text = await response.text();
-
-  if (!response.ok) {
-    throw new Error(
-      `Supabase ${response.status}: ${text || response.statusText}`
-    );
-  }
-
-  if (!text.trim()) {
-    return [];
-  }
-
-  return JSON.parse(text);
-}
-
-
-async function insertRow(tableName, payload, returnRepresentation = true) {
-  const response = await fetch(
-    `${SUPABASE_REST}/${tableName}`,
-    {
-      method:"POST",
-      headers:supabaseHeaders({
-        Prefer:returnRepresentation
-          ? "return=representation"
-          : "return=minimal"
-      }),
-      body:JSON.stringify(payload)
-    }
+const merchantLoginForm =
+  document.getElementById(
+    "merchantLoginForm"
   );
 
-  const text = await response.text();
+const merchantLoginEmail =
+  document.getElementById(
+    "merchantLoginEmail"
+  );
 
-  if (!response.ok) {
-    throw new Error(
-      `Supabase ${response.status}: ${text || response.statusText}`
+const merchantLoginPassword =
+  document.getElementById(
+    "merchantLoginPassword"
+  );
+
+const merchantTogglePassword =
+  document.getElementById(
+    "merchantTogglePassword"
+  );
+
+const merchantLoginButton =
+  document.getElementById(
+    "merchantLoginButton"
+  );
+
+const merchantLoginMessage =
+  document.getElementById(
+    "merchantLoginMessage"
+  );
+
+const merchantLogoutButton =
+  document.getElementById(
+    "merchantLogoutButton"
+  );
+
+const merchantUserCaption =
+  document.getElementById(
+    "merchantUserCaption"
+  );
+
+/*
+  config.js sigue teniendo la clave PUBLICABLE de Supabase.
+  Después del login reemplazamos únicamente el Bearer por el
+  access_token real del usuario autenticado.
+*/
+function merchantHeaders(
+  extraHeaders = {}
+) {
+  const base =
+    supabaseHeaders(
+      extraHeaders
     );
+
+  if (
+    merchantAuthSession?.access_token
+  ) {
+    base.Authorization =
+      `Bearer ${merchantAuthSession.access_token}`;
   }
 
-  if (!returnRepresentation || !text.trim()) {
-    return null;
-  }
-
-  const data = JSON.parse(text);
-
-  return Array.isArray(data)
-    ? data[0]
-    : data;
+  return base;
 }
 
+function authHeaders(
+  accessToken = null
+) {
+  return {
+    apikey:SUPABASE_KEY,
+    Authorization:
+      `Bearer ${accessToken || SUPABASE_KEY}`,
+    "Content-Type":"application/json"
+  };
+}
 
-function applyOrderingStatus() {
-  if (!business) {
+function saveMerchantSession(
+  session
+) {
+  merchantAuthSession =
+    session || null;
+
+  if (!session) {
+    localStorage.removeItem(
+      MERCHANT_AUTH_STORAGE_KEY
+    );
     return;
   }
 
-  const status =
-    business.ordering_status || "open";
+  const normalized = {
+    access_token:
+      session.access_token,
+    refresh_token:
+      session.refresh_token,
+    expires_at:
+      session.expires_at ||
+      (
+        Math.floor(
+          Date.now() / 1000
+        ) +
+        Number(
+          session.expires_in || 3600
+        )
+      ),
+    user:
+      session.user || null
+  };
 
-  const isOpen =
-    status === "open";
+  merchantAuthSession =
+    normalized;
 
-  if (enterStoreButton) {
-    enterStoreButton.disabled = !isOpen;
-    enterStoreButton.classList.toggle(
-      "disabled",
-      !isOpen
+  localStorage.setItem(
+    MERCHANT_AUTH_STORAGE_KEY,
+    JSON.stringify(
+      normalized
+    )
+  );
+}
+
+function readSavedMerchantSession() {
+  try {
+    const raw =
+      localStorage.getItem(
+        MERCHANT_AUTH_STORAGE_KEY
+      );
+
+    return raw
+      ? JSON.parse(raw)
+      : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+async function authRequest(
+  path,
+  options = {}
+) {
+  const response =
+    await fetch(
+      `${SUPABASE_URL}/auth/v1/${path}`,
+      options
     );
 
-    const label =
-      enterStoreButton.querySelector("span");
+  const text =
+    await response.text();
 
-    if (label) {
-      label.textContent =
-        status === "sold_out"
-          ? "Pedidos cerrados por hoy"
-          : status === "closed"
-            ? "Pedidos cerrados"
-            : "Hacer mi pedido";
+  let data = null;
+
+  if (text.trim()) {
+    try {
+      data = JSON.parse(text);
+    } catch (error) {
+      data = null;
     }
   }
 
-  const welcomeStatusText =
-    document.getElementById("welcomeStatusText");
-
-  if (welcomeStatusText) {
-    welcomeStatusText.textContent =
-      status === "sold_out"
-        ? "Stock agotado por hoy"
-        : status === "closed"
-          ? "Pedidos cerrados"
-          : "Tomando pedidos";
-
-    const welcomeStatus =
-      welcomeStatusText.closest(
-        ".welcome-status"
-      );
-
-    if (welcomeStatus) {
-      welcomeStatus.classList.toggle(
-        "closed",
-        status === "closed"
-      );
-
-      welcomeStatus.classList.toggle(
-        "sold-out",
-        status === "sold_out"
-      );
-    }
+  if (!response.ok) {
+    throw new Error(
+      data?.msg ||
+      data?.message ||
+      data?.error_description ||
+      "No se pudo iniciar sesión."
+    );
   }
 
-  if (orderingStatusNotice) {
-    if (status === "sold_out") {
-      orderingStatusNotice.hidden = false;
-      orderingStatusNotice.innerHTML = `
-        <strong>POR HOY AGOTAMOS NUESTRO STOCK</strong>
-        <span>
-          ${escapeHTML(
-            business.sold_out_message ||
-            "Muchas gracias a todos. Nos reencontramos manana."
-          )}
-        </span>
-      `;
-    } else if (status === "closed") {
-      orderingStatusNotice.hidden = false;
-      orderingStatusNotice.innerHTML = `
-        <strong>PEDIDOS CERRADOS</strong>
-        <span>
-          En este momento no estamos tomando nuevos pedidos.
-        </span>
-      `;
-    } else {
-      orderingStatusNotice.hidden = true;
-      orderingStatusNotice.innerHTML = "";
-    }
-  }
+  return data;
 }
 
+async function loginMerchant(
+  email,
+  password
+) {
+  const data =
+    await authRequest(
+      "token?grant_type=password",
+      {
+        method:"POST",
+        headers:authHeaders(),
+        body:JSON.stringify({
+          email,
+          password
+        })
+      }
+    );
 
-function orderingIsOpen() {
-  return (
-    business &&
-    (business.ordering_status || "open") === "open"
+  if (!data?.access_token) {
+    throw new Error(
+      "Supabase no devolvió una sesión válida."
+    );
+  }
+
+  data.expires_at =
+    Math.floor(
+      Date.now() / 1000
+    ) +
+    Number(
+      data.expires_in || 3600
+    );
+
+  saveMerchantSession(
+    data
   );
+
+  merchantAuthUser =
+    data.user || null;
+
+  return data;
 }
 
-function closeOrderingModals() {
-  if (productModal?.classList.contains("open")) {
-    closeProductModal();
+async function refreshMerchantSession(
+  session
+) {
+  if (!session?.refresh_token) {
+    return null;
   }
 
-  if (cartModal?.classList.contains("open")) {
-    closeCartModal();
+  const data =
+    await authRequest(
+      "token?grant_type=refresh_token",
+      {
+        method:"POST",
+        headers:authHeaders(),
+        body:JSON.stringify({
+          refresh_token:
+            session.refresh_token
+        })
+      }
+    );
+
+  if (!data?.access_token) {
+    return null;
   }
 
-  if (checkoutModal?.classList.contains("open")) {
-    closeCheckoutModal();
-  }
-}
+  data.expires_at =
+    Math.floor(
+      Date.now() / 1000
+    ) +
+    Number(
+      data.expires_in || 3600
+    );
 
-function showOrderingClosedMessage() {
-  const status =
-    business?.ordering_status || "closed";
-
-  showToast(
-    status === "sold_out"
-      ? "Por hoy agotamos nuestro stock. No estamos tomando mas pedidos."
-      : "En este momento no estamos tomando pedidos."
+  saveMerchantSession(
+    data
   );
+
+  merchantAuthUser =
+    data.user || null;
+
+  return data;
 }
 
-async function refreshOrderingStatusFromSupabase() {
-  if (!business?.id) {
-    return false;
+async function validateMerchantSession(
+  session
+) {
+  if (!session?.access_token) {
+    return null;
+  }
+
+  if (
+    Number(
+      session.expires_at || 0
+    ) <=
+    Math.floor(
+      Date.now() / 1000
+    ) + 30
+  ) {
+    try {
+      return await refreshMerchantSession(
+        session
+      );
+    } catch (error) {
+      return null;
+    }
   }
 
   try {
-    const rows =
-      await requestJSON(
-        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,active`
+    const user =
+      await authRequest(
+        "user",
+        {
+          method:"GET",
+          headers:
+            authHeaders(
+              session.access_token
+            )
+        }
       );
 
-    const fresh =
-      Array.isArray(rows)
-        ? rows[0]
-        : null;
+    session.user = user;
 
-    if (!fresh) {
-      return orderingIsOpen();
-    }
-
-    const previousStatus =
-      business.ordering_status || "open";
-
-    business.ordering_status =
-      fresh.ordering_status || "open";
-
-    business.sold_out_message =
-      fresh.sold_out_message ??
-      business.sold_out_message;
-
-    business.active =
-      fresh.active ?? business.active;
-
-    business.promo_active =
-      fresh.promo_active ?? false;
-
-    business.promo_badge =
-      fresh.promo_badge ??
-      business.promo_badge;
-
-    business.promo_title =
-      fresh.promo_title ??
-      business.promo_title;
-
-    business.promo_text =
-      fresh.promo_text ??
-      business.promo_text;
-    business.promo_rule_type = fresh.promo_rule_type ?? business.promo_rule_type;
-    business.promo_target_type = fresh.promo_target_type ?? business.promo_target_type;
-    business.promo_target_id = fresh.promo_target_id ?? business.promo_target_id;
-    business.promo_discount_percent = fresh.promo_discount_percent ?? business.promo_discount_percent;
-    business.promo_trigger_qty = fresh.promo_trigger_qty ?? business.promo_trigger_qty;
-    business.promo_reward_product_id = fresh.promo_reward_product_id ?? business.promo_reward_product_id;
-    business.promo_reward_qty = fresh.promo_reward_qty ?? business.promo_reward_qty;
-    business.promo_repeat = fresh.promo_repeat ?? business.promo_repeat;
-    business.payment_bank_name =
-      fresh.payment_bank_name ??
-      business.payment_bank_name;
-
-    business.payment_account_holder =
-      fresh.payment_account_holder ??
-      business.payment_account_holder;
-
-    business.payment_account_number =
-      fresh.payment_account_number ??
-      business.payment_account_number;
-
-    business.payment_currency =
-      fresh.payment_currency ??
-      business.payment_currency;
-
-    business.payment_instructions =
-      fresh.payment_instructions ??
-      business.payment_instructions;
-
-
-    applyDailyPromo();
-
-    applyOrderingStatus();
-
-    if (storeStatus) {
-      const status =
-        business.ordering_status || "open";
-
-      const label =
-        status === "sold_out"
-          ? "Stock agotado"
-          : status === "closed"
-            ? "Pedidos cerrados"
-            : "Tomando pedidos";
-
-      storeStatus.innerHTML = `
-        <span class="status-dot"></span>
-        <span>${label}</span>
-      `;
-
-      storeStatus.classList.toggle(
-        "closed",
-        status !== "open"
-      );
-    }
-
-    if (
-      previousStatus === "open" &&
-      business.ordering_status !== "open"
-    ) {
-      closeOrderingModals();
-      showOrderingClosedMessage();
-    }
-
-    return orderingIsOpen();
-  } catch (error) {
-    console.error(
-      "Error verificando estado de pedidos:",
-      error
+    saveMerchantSession(
+      session
     );
 
-    return orderingIsOpen();
+    merchantAuthUser = user;
+
+    return session;
+  } catch (error) {
+    try {
+      return await refreshMerchantSession(
+        session
+      );
+    } catch (refreshError) {
+      return null;
+    }
   }
 }
 
-async function requireOrderingOpen() {
-  const isOpen =
-    await refreshOrderingStatusFromSupabase();
-
-  if (!isOpen) {
-    showOrderingClosedMessage();
-    return false;
+async function resolveAuthorizedBusiness() {
+  if (
+    !merchantAuthUser?.id ||
+    !merchantAuthSession?.access_token
+  ) {
+    return null;
   }
+
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/merchant_users?user_id=eq.${encodeURIComponent(merchantAuthUser.id)}&active=eq.true&select=business_id,role&limit=1`,
+      {
+        method:"GET",
+        headers:
+          merchantHeaders()
+      }
+    );
+
+  const rows =
+    responseText.trim()
+      ? JSON.parse(
+          responseText
+        )
+      : [];
+
+  const access =
+    Array.isArray(rows)
+      ? rows[0] || null
+      : null;
+
+  if (!access?.business_id) {
+    return null;
+  }
+
+  MERCHANT_BUSINESS_ID =
+    Number(
+      access.business_id
+    );
+
+  return access;
+}
+
+function showMerchantLogin(
+  message = ""
+) {
+  document.body.classList.add(
+    "auth-locked"
+  );
+
+  if (merchantLoginScreen) {
+    merchantLoginScreen.hidden =
+      false;
+  }
+
+  if (merchantLoginMessage) {
+    merchantLoginMessage.textContent =
+      message;
+  }
+}
+
+function showMerchantPanel() {
+  document.body.classList.remove(
+    "auth-locked"
+  );
+
+  if (merchantLoginScreen) {
+    merchantLoginScreen.hidden =
+      true;
+  }
+
+  if (merchantUserCaption) {
+    merchantUserCaption.textContent =
+      merchantAuthUser?.email ||
+      "";
+  }
+}
+
+async function logoutMerchant() {
+  try {
+    if (
+      merchantAuthSession?.access_token
+    ) {
+      await fetch(
+        `${SUPABASE_URL}/auth/v1/logout`,
+        {
+          method:"POST",
+          headers:
+            authHeaders(
+              merchantAuthSession.access_token
+            )
+        }
+      );
+    }
+  } catch (error) {
+    console.warn(
+      "No se pudo cerrar la sesión remota:",
+      error
+    );
+  }
+
+  if (ordersPollTimer) {
+    clearInterval(
+      ordersPollTimer
+    );
+
+    ordersPollTimer = null;
+  }
+
+  saveMerchantSession(
+    null
+  );
+
+  merchantAuthUser = null;
+  MERCHANT_BUSINESS_ID = null;
+  selectedBusiness = null;
+  businessesCache = [];
+  ordersCache = [];
+
+  if (merchantLoginPassword) {
+    merchantLoginPassword.value =
+      "";
+    merchantLoginPassword.type =
+      "password";
+  }
+
+  if (merchantTogglePassword) {
+    merchantTogglePassword.textContent =
+      "Ver";
+
+    merchantTogglePassword.setAttribute(
+      "aria-pressed",
+      "false"
+    );
+  }
+
+  showMerchantLogin();
+}
+
+merchantTogglePassword?.addEventListener(
+  "click",
+  () => {
+    const showing =
+      merchantLoginPassword.type ===
+      "text";
+
+    merchantLoginPassword.type =
+      showing
+        ? "password"
+        : "text";
+
+    merchantTogglePassword.textContent =
+      showing
+        ? "Ver"
+        : "Ocultar";
+
+    merchantTogglePassword.setAttribute(
+      "aria-pressed",
+      showing
+        ? "false"
+        : "true"
+    );
+
+    merchantTogglePassword.setAttribute(
+      "aria-label",
+      showing
+        ? "Mostrar contraseña"
+        : "Ocultar contraseña"
+    );
+
+    merchantLoginPassword.focus({
+      preventScroll:true
+    });
+  }
+);
+
+merchantLoginForm?.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+
+    merchantLoginMessage.textContent =
+      "";
+
+    merchantLoginButton.disabled =
+      true;
+
+    merchantLoginButton.textContent =
+      "Ingresando...";
+
+    try {
+      await loginMerchant(
+        merchantLoginEmail.value.trim(),
+        merchantLoginPassword.value
+      );
+
+      const access =
+        await resolveAuthorizedBusiness();
+
+      if (!access) {
+        await logoutMerchant();
+
+        showMerchantLogin(
+          "Esta cuenta existe, pero todavía no tiene un comercio asignado en DENEXA."
+        );
+
+        return;
+      }
+
+      showMerchantPanel();
+
+      await initAdmin();
+    } catch (error) {
+      console.error(
+        "Error de acceso:",
+        error
+      );
+
+      showMerchantLogin(
+        error.message ===
+          "Invalid login credentials"
+          ? "Correo o contraseña incorrectos."
+          : (
+              error.message ||
+              "No se pudo iniciar sesión."
+            )
+      );
+    } finally {
+      merchantLoginButton.disabled =
+        false;
+
+      merchantLoginButton.textContent =
+        "Ingresar";
+    }
+  }
+);
+
+merchantLogoutButton?.addEventListener(
+  "click",
+  logoutMerchant
+);
+
+async function bootstrapMerchantAuth() {
+  showMerchantLogin();
+
+  const saved =
+    readSavedMerchantSession();
+
+  if (!saved) {
+    return;
+  }
+
+  const valid =
+    await validateMerchantSession(
+      saved
+    );
+
+  if (!valid) {
+    saveMerchantSession(
+      null
+    );
+
+    return;
+  }
+
+  merchantAuthSession =
+    valid;
+
+  merchantAuthUser =
+    valid.user || null;
+
+  try {
+    const access =
+      await resolveAuthorizedBusiness();
+
+    if (!access) {
+      await logoutMerchant();
+
+      showMerchantLogin(
+        "Tu usuario no tiene un comercio asignado."
+      );
+
+      return;
+    }
+
+    showMerchantPanel();
+
+    await initAdmin();
+  } catch (error) {
+    console.error(
+      "No se pudo validar el acceso al comercio:",
+      error
+    );
+
+    await logoutMerchant();
+
+    showMerchantLogin(
+      "No se pudo validar tu acceso. Volvé a ingresar."
+    );
+  }
+}
+
+
+
+
+function openSection(sectionId) {
+  navItems.forEach((item) => {
+    item.classList.toggle(
+      "active",
+      item.dataset.section === sectionId
+    );
+  });
+
+  sections.forEach((section) => {
+    section.classList.toggle(
+      "active",
+      section.id === sectionId
+    );
+  });
+}
+
+navItems.forEach((button) => {
+  button.addEventListener("click", async () => {
+    const sectionId = button.dataset.section;
+
+    openSection(sectionId);
+
+    if (sectionId === "categories") {
+      await loadCategories();
+    }
+
+    if (sectionId === "products") {
+      await loadProducts();
+    }
+
+    if (sectionId === "orders") {
+      await loadOrders();
+    }
+
+    if (sectionId === "storeDesign") {
+      fillStoreDesignForm();
+    }
+
+    if (sectionId === "dailyPromo") {
+      await fillDailyPromoForm();
+    }
+
+    if (sectionId === "fulfillment") {
+      fillFulfillmentSettingsForm();
+    }
+
+    if (sectionId === "payments") {
+      fillPaymentSettingsForm();
+    }
+
+    if (sectionId === "customerNotices") {
+      fillCustomerNoticesForm();
+    }
+  });
+});
+
+document
+  .querySelector(".go-businesses")
+  ?.addEventListener("click", () => {
+    openSection("businesses");
+  });
+
+function normalizeSlug(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+
+function normalizeText(value) {
+  return String(value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function showToast(message, type = "success") {
+  if (!toast) {
+    return;
+  }
+
+  toast.textContent = message;
+  toast.className = `toast show ${type}`;
+
+  clearTimeout(showToast.timer);
+
+  showToast.timer = setTimeout(() => {
+    toast.className = "toast";
+  }, 3200);
+}
+
+async function requestText(url, options = {}) {
+  const response = await fetch(url, options);
+  const responseText = await response.text();
+
+  if (!response.ok) {
+    throw new Error(
+      `Error ${response.status}: ${responseText || response.statusText}`
+    );
+  }
+
+  return responseText;
+}
+
+
+async function setBusinessOrderingStatusRPC(
+  businessId,
+  status,
+  soldOutMessage = null
+) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/rpc/set_business_ordering_status`,
+      {
+        method: "POST",
+        headers: merchantHeaders({
+          Prefer: "return=representation"
+        }),
+        body: JSON.stringify({
+          p_business_id:
+            Number(businessId),
+          p_status:
+            status,
+          p_message:
+            soldOutMessage
+        })
+      }
+    );
+
+  if (!responseText.trim()) {
+    return null;
+  }
+
+  const data =
+    JSON.parse(responseText);
+
+  if (Array.isArray(data)) {
+    return data[0] || null;
+  }
+
+  return data;
+}
+
+async function readBusinessOrderingStatus(
+  businessId
+) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/businesses?id=eq.${encodeURIComponent(businessId)}&select=id,name,ordering_status,sold_out_message`,
+      {
+        method: "GET",
+        headers: merchantHeaders()
+      }
+    );
+
+  if (!responseText.trim()) {
+    return null;
+  }
+
+  const rows =
+    JSON.parse(responseText);
+
+  return Array.isArray(rows)
+    ? rows[0] || null
+    : null;
+}
+
+async function getTableData(tableName, select = "*") {
+  const responseText = await requestText(
+    `${SUPABASE_REST}/${tableName}?select=${encodeURIComponent(select)}`,
+    {
+      method: "GET",
+      headers: merchantHeaders()
+    }
+  );
+
+  if (!responseText.trim()) {
+    return [];
+  }
+
+  const data = JSON.parse(responseText);
+
+  return Array.isArray(data) ? data : [];
+}
+
+
+async function getMerchantScopedTableData(tableName, select = "*") {
+  if (!MERCHANT_BUSINESS_ID) {
+    return [];
+  }
+
+  const responseText = await requestText(
+    `${SUPABASE_REST}/${tableName}?business_id=eq.${encodeURIComponent(MERCHANT_BUSINESS_ID)}&select=${encodeURIComponent(select)}`,
+    {
+      method: "GET",
+      headers: merchantHeaders()
+    }
+  );
+
+  if (!responseText.trim()) {
+    return [];
+  }
+
+  const data = JSON.parse(responseText);
+  return Array.isArray(data) ? data : [];
+}
+
+async function getRowsByForeignIds(tableName, foreignColumn, ids, select = "*") {
+  const normalizedIds = [...new Set((ids || []).map((id) => Number(id)).filter(Number.isFinite))];
+
+  if (!normalizedIds.length) {
+    return [];
+  }
+
+  const inFilter = `in.(${normalizedIds.join(",")})`;
+  const responseText = await requestText(
+    `${SUPABASE_REST}/${tableName}?${encodeURIComponent(foreignColumn)}=${encodeURIComponent(inFilter)}&select=${encodeURIComponent(select)}`,
+    {
+      method: "GET",
+      headers: merchantHeaders()
+    }
+  );
+
+  if (!responseText.trim()) {
+    return [];
+  }
+
+  const data = JSON.parse(responseText);
+  return Array.isArray(data) ? data : [];
+}
+
+async function insertTableRow(tableName, payload) {
+  await requestText(
+    `${SUPABASE_REST}/${tableName}`,
+    {
+      method: "POST",
+      headers: merchantHeaders({
+        Prefer: "return=minimal"
+      }),
+      body: JSON.stringify(payload)
+    }
+  );
 
   return true;
 }
 
-async function loadStore() {
-  catalogContent.innerHTML =
-    '<div class="loading-card">Cargando el men\u00fa...</div>';
-
-  try {
-    const businesses = await requestJSON(
-      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,delivery_enabled,pickup_enabled,pickup_address,active,ordering_status,sold_out_message"
-    );
-
-    const bySlug = businesses.find(
-      (item) =>
-        normalizeText(item.slug) === normalizeText(TARGET_BUSINESS_SLUG)
-    );
-
-    const byName = businesses.find(
-      (item) =>
-        normalizeText(item.name) === normalizeText(TARGET_BUSINESS_NAME)
-    );
-
-    business =
-      bySlug ||
-      (!HAS_EXPLICIT_BUSINESS ? byName : null) ||
-      (!HAS_EXPLICIT_BUSINESS
-        ? businesses.find((item) => item.active !== false)
-        : null);
-
-    if (!business) {
-      throw new Error(
-        `No se encontró el comercio solicitado: ${TARGET_BUSINESS_SLUG}`
-      );
-    }
-
-    applyBusinessBranding();
-    applyDailyPromo();
-    applyOrderingStatus();
-    configureFulfillmentOptions();
-
-    const [
-      allCategories,
-      allProducts,
-      allGroups,
-      allOptions
-    ] = await Promise.all([
-      requestJSON(
-        "categories?select=id,business_id,name,active,sort_order"
-      ),
-      requestJSON(
-        "products?select=id,business_id,category_id,name,description,price,image_url,featured,active,available,sort_order,old_price"
-      ),
-      requestJSON(
-        "product_option_groups?select=id,product_id,name,selection_type,required,max_select,sort_order,active"
-      ),
-      requestJSON(
-        "product_options?select=id,group_id,name,price_delta,sort_order,active,depends_on_option_id"
-      )
-    ]);
-
-    categories = allCategories
-      .filter(
-        (item) =>
-          String(item.business_id) === String(business.id) &&
-          item.active !== false
-      )
-      .sort(sortByOrderThenId);
-
-    products = allProducts
-      .filter(
-        (item) =>
-          String(item.business_id) === String(business.id) &&
-          item.active !== false
-      )
-      .sort(sortByOrderThenId);
-
-    const productIds = new Set(
-      products.map((item) => String(item.id))
-    );
-
-    groups = allGroups
-      .filter(
-        (item) =>
-          productIds.has(String(item.product_id)) &&
-          item.active !== false
-      )
-      .sort(sortByOrderThenId);
-
-    const groupIds = new Set(
-      groups.map((item) => String(item.id))
-    );
-
-    options = allOptions
-      .filter(
-        (item) =>
-          groupIds.has(String(item.group_id)) &&
-          item.active !== false
-      )
-      .sort(sortByOrderThenId);
-
-    renderCatalog();
-    restoreCart();
-
-  } catch (error) {
-    console.error("Error cargando tienda:", error);
-
-    catalogContent.innerHTML = `
-      <div class="error-card">
-        No se pudo cargar el men\u00fa de este comercio.
-        Revis\u00e1 la conexi\u00f3n con Supabase.
-      </div>
-    `;
-
-    storeStatus.textContent = "No disponible";
-    storeStatus.classList.add("closed");
-  }
-}
-
-function sortByOrderThenId(a, b) {
-  const orderDiff =
-    Number(a.sort_order || 0) -
-    Number(b.sort_order || 0);
-
-  if (orderDiff !== 0) {
-    return orderDiff;
-  }
-
-  return Number(a.id || 0) - Number(b.id || 0);
-}
-
-function hexToDark(hex, factor = 0.62) {
-  const value =
-    /^#[0-9a-f]{6}$/i.test(
-      String(hex || "")
-    )
-      ? String(hex).slice(1)
-      : "0B43A0";
-
-  const r =
-    Math.round(
-      parseInt(value.slice(0,2),16) *
-      factor
-    );
-
-  const g =
-    Math.round(
-      parseInt(value.slice(2,4),16) *
-      factor
-    );
-
-  const b =
-    Math.round(
-      parseInt(value.slice(4,6),16) *
-      factor
-    );
-
-  return (
-    "#" +
-    [r,g,b]
-      .map(
-        (n) =>
-          n
-            .toString(16)
-            .padStart(2,"0")
-      )
-      .join("")
-  );
-}
-
-function safeBrandColor(
-  value,
-  fallback
+async function insertTableRowReturning(
+  tableName,
+  payload
 ) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/${tableName}`,
+      {
+        method:"POST",
+        headers:merchantHeaders({
+          Prefer:"return=representation"
+        }),
+        body:JSON.stringify(payload)
+      }
+    );
+
+  const data =
+    responseText.trim()
+      ? JSON.parse(responseText)
+      : null;
+
+  return Array.isArray(data)
+    ? data[0] || null
+    : data;
+}
+
+
+async function duplicateSpecialVariantRPC(
+  sourceOptionId,
+  newName
+) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/rpc/duplicate_special_variant`,
+      {
+        method:"POST",
+        headers:merchantHeaders({
+          Prefer:"return=representation"
+        }),
+        body:JSON.stringify({
+          p_source_option_id:
+            Number(sourceOptionId),
+          p_new_name:
+            String(newName).trim()
+        })
+      }
+    );
+
+  if (!responseText.trim()) {
+    throw new Error(
+      "Supabase no devolvió confirmación."
+    );
+  }
+
+  const data =
+    JSON.parse(responseText);
+
+  return Array.isArray(data)
+    ? data[0] || null
+    : data;
+}
+
+
+async function updateTableRow(tableName, id, payload) {
+  await requestText(
+    `${SUPABASE_REST}/${tableName}?id=eq.${encodeURIComponent(id)}`,
+    {
+      method: "PATCH",
+      headers: merchantHeaders({
+        Prefer: "return=minimal"
+      }),
+      body: JSON.stringify(payload)
+    }
+  );
+
+  return true;
+}
+
+async function deleteTableRow(tableName, id) {
+  await requestText(
+    `${SUPABASE_REST}/${tableName}?id=eq.${encodeURIComponent(id)}`,
+    {
+      method: "DELETE",
+      headers: merchantHeaders({
+        Prefer: "return=minimal"
+      })
+    }
+  );
+
+  return true;
+}
+
+
+async function deleteTableRow(tableName, id) {
+  await requestText(
+    `${SUPABASE_REST}/${tableName}?id=eq.${encodeURIComponent(id)}`,
+    {
+      method: "DELETE",
+      headers: merchantHeaders({
+        Prefer: "return=minimal"
+      })
+    }
+  );
+
+  return true;
+}
+
+
+
+
+function safeThemeColor(value, fallback) {
   return /^#[0-9a-f]{6}$/i.test(
     String(value || "")
   )
@@ -624,2560 +1231,620 @@ function safeBrandColor(
     : fallback;
 }
 
-
-function applyDailyPromo() {
-  if (!dailyPromoBanner) {
-    return;
-  }
-
-  const active =
-    business?.promo_active === true;
-
-  const title =
-    String(
-      business?.promo_title || ""
-    ).trim();
-
-  const text =
-    String(
-      business?.promo_text || ""
-    ).trim();
-
-  if (
-    !active ||
-    !title ||
-    !text
-  ) {
-    dailyPromoBanner.hidden = true;
-    dailyPromoBanner.classList.remove(
-      "is-visible"
-    );
-    return;
-  }
-
-  dailyPromoBannerBadge.textContent =
-    String(
-      business?.promo_badge ||
-      "PROMO DEL DÍA"
-    ).trim();
-
-  dailyPromoBannerTitle.textContent =
-    title;
-
-  dailyPromoBannerText.textContent =
-    text;
-
-  dailyPromoBanner.hidden = false;
-
-  requestAnimationFrame(
-    () => {
-      dailyPromoBanner.classList.add(
-        "is-visible"
-      );
-    }
-  );
+function merchantBusinessInitials() {
+  const name = String(selectedBusiness?.name || "D").trim();
+  const parts = name.split(/\s+/).filter(Boolean);
+  if (!parts.length) return "D";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0] || ""}${parts[1][0] || ""}`.toUpperCase();
 }
 
-function applyBusinessBranding() {
-  const name =
-    business.name || "Comercio";
+function syncMerchantIdentityUI() {
+  if (!selectedBusiness) return;
+
+  const name = String(selectedBusiness.name || "Comercio").trim();
+  const upperName = name.toUpperCase();
+
+  document.title = `${name} | Panel del comercio`;
+
+  const sidebarName = document.querySelector(
+    ".sidebar .brand > div:last-child > strong"
+  );
+  if (sidebarName) sidebarName.textContent = upperName;
+
+  const dashboardEyebrow = document.querySelector(
+    "#dashboard .page-header .eyebrow"
+  );
+  if (dashboardEyebrow) dashboardEyebrow.textContent = upperName;
+
+  const dashboardSubtitle = document.querySelector(
+    "#dashboard .page-header .subtitle"
+  );
+  if (dashboardSubtitle) {
+    dashboardSubtitle.textContent = `Todo lo necesario para manejar ${name}.`;
+  }
+}
+
+function renderMerchantPanelLogo() {
+  if (!merchantPanelLogo) {
+    return;
+  }
+
+  const url =
+    selectedBusiness?.logo_url || "";
+
+  if (url) {
+    merchantPanelLogo.innerHTML = `
+      <img
+        src="${escapeHTML(url)}"
+        alt="${escapeHTML(selectedBusiness?.name || "Logo")}"
+      >
+    `;
+  } else {
+    merchantPanelLogo.innerHTML = `<span>${escapeHTML(merchantBusinessInitials())}</span>`;
+  }
+}
+
+function fillStoreDesignForm() {
+  if (!selectedBusiness) {
+    return;
+  }
 
   const primary =
-    safeBrandColor(
-      business.primary_color,
+    safeThemeColor(
+      selectedBusiness.primary_color,
       "#0B43A0"
     );
 
   const secondary =
-    safeBrandColor(
-      business.secondary_color,
+    safeThemeColor(
+      selectedBusiness.secondary_color,
       "#0E5BD8"
     );
 
   const accent =
-    safeBrandColor(
-      business.accent_color,
+    safeThemeColor(
+      selectedBusiness.accent_color,
       "#F4C565"
     );
 
-  const dark =
-    hexToDark(primary,.60);
+  designLogoUrl.value =
+    selectedBusiness.logo_url || "";
 
-  const deep =
-    hexToDark(primary,.42);
+  designPrimaryColor.value = primary;
+  designSecondaryColor.value = secondary;
+  designAccentColor.value = accent;
 
-  storeName.textContent = name;
-  storeNameSmall.textContent = name;
-  document.title =
-    `${name} | Pedidos`;
+  designHeroTitle.value =
+    selectedBusiness.hero_title ||
+    selectedBusiness.name ||
+    "Comercio";
 
-  document.documentElement.style.setProperty(
-    "--primary",
+  designHeroDescription.value =
+    selectedBusiness.hero_description ||
+    `Conocé el menú de ${selectedBusiness?.name || "este comercio"} y armá tu pedido.`;
+
+  designButtonText.value =
+    selectedBusiness.welcome_button_text ||
+    "Hacer mi pedido";
+
+  designHeroImageUrl.value =
+    selectedBusiness.hero_image_url || "";
+
+  updateStoreDesignPreview();
+  renderMerchantPanelLogo();
+}
+
+function updateStoreDesignPreview() {
+  if (!designPreview) {
+    return;
+  }
+
+  const primary =
+    designPrimaryColor?.value || "#0B43A0";
+
+  const secondary =
+    designSecondaryColor?.value || "#0E5BD8";
+
+  const accent =
+    designAccentColor?.value || "#F4C565";
+
+  designPreview.style.setProperty(
+    "--preview-primary",
     primary
   );
 
-  document.documentElement.style.setProperty(
-    "--primary-2",
+  designPreview.style.setProperty(
+    "--preview-secondary",
     secondary
   );
 
-  document.documentElement.style.setProperty(
-    "--primary-dark",
-    dark
-  );
-
-  document.documentElement.style.setProperty(
-    "--primary-deep",
-    deep
-  );
-
-  document.documentElement.style.setProperty(
-    "--accent",
+  designPreview.style.setProperty(
+    "--preview-accent",
     accent
   );
 
-  document
-    .querySelector('meta[name="theme-color"]')
-    ?.setAttribute(
-      "content",
-      primary
-    );
-
   const logoUrl =
-    business.logo_url ||
-    LOCAL_LOGO_URL;
+    designLogoUrl?.value.trim() || "";
 
-  storeLogo.innerHTML = `
-    <img
-      src="${escapeHTML(logoUrl)}"
-      alt="${escapeHTML(name)}"
-    >
-  `;
+  designLogoPreview.innerHTML =
+    logoUrl
+      ? `<img src="${escapeHTML(logoUrl)}" alt="Logo">`
+      : "<span>MM</span>";
 
-  if (welcomeLogo) {
-    welcomeLogo.src =
-      logoUrl;
-    welcomeLogo.alt =
-      name;
-  }
+  designPreviewLogo.innerHTML =
+    logoUrl
+      ? `<img src="${escapeHTML(logoUrl)}" alt="Logo">`
+      : "MM";
 
-  if (welcomeBusinessName) {
-    welcomeBusinessName.textContent =
-      business.hero_title ||
-      name;
-  }
+  designPreviewTitle.textContent =
+    designHeroTitle?.value.trim() ||
+    selectedBusiness?.name ||
+    "Comercio";
 
-  if (welcomeBusinessDescription) {
-    welcomeBusinessDescription.textContent =
-      business.hero_description ||
-      "Elegí lo que más te guste y armá tu pedido.";
-  }
+  designPreviewDescription.textContent =
+    designHeroDescription?.value.trim() ||
+    `Conocé el menú de ${selectedBusiness?.name || "este comercio"}.`;
 
-  if (welcomeButtonText) {
-    welcomeButtonText.textContent =
-      business.welcome_button_text ||
-      "Hacer mi pedido";
-  }
+  designPreviewButton.textContent =
+    designButtonText?.value.trim() ||
+    "Hacer mi pedido";
 
-  if (welcomeScreen) {
-    const heroImage =
-      business.hero_image_url || "";
+  const heroUrl =
+    designHeroImageUrl?.value.trim() || "";
 
-    welcomeScreen.classList.toggle(
-      "has-custom-hero",
-      Boolean(heroImage)
-    );
-
-    if (heroImage) {
-      welcomeScreen.style.setProperty(
-        "--custom-hero-image",
-        `url("${heroImage.replaceAll('"','%22')}")`
-      );
-    } else {
-      welcomeScreen.style.removeProperty(
-        "--custom-hero-image"
-      );
-    }
-  }
-
-  const isClosed =
-    business.active === false;
-
-  storeStatus.innerHTML = `
-    <span class="status-dot"></span>
-    <span>${isClosed ? "Cerrado" : "Tomando pedidos"}</span>
-  `;
-
-  storeStatus.classList.toggle(
-    "closed",
-    isClosed
-  );
-
-  welcomeStatusText.textContent =
-    isClosed
-      ? "Cerrado en este momento"
-      : "Tomando pedidos";
-
-  if (business.address) {
-    storeSubtitle.textContent =
-      `${business.address} · Elegí tus favoritos y armá tu pedido.`;
-  }
+  designPreview.style.backgroundImage =
+    heroUrl
+      ? `linear-gradient(155deg,${primary}e6,${secondary}e6),url("${heroUrl}")`
+      : `linear-gradient(155deg,${primary},${secondary})`;
 }
 
-
-function activePromoRuleType(){
-  return business?.promo_active===true ? (business.promo_rule_type||"announcement") : "announcement";
-}
-
-function productMatchesPromo(product){
-  if(!product || business?.promo_active!==true) return false;
-  const target=String(business?.promo_target_id??"");
-  if(!target) return false;
-  return business?.promo_target_type==="product"
-    ? String(product.id)===target
-    : String(product.category_id)===target;
-}
-
-function percentPromoForProduct(product){
-  if(activePromoRuleType()!=="percent" || !productMatchesPromo(product)) return 0;
-  return Math.min(100,Math.max(0,Number(business?.promo_discount_percent||0)));
-}
-
-function applyPercentDiscount(amount,product){
-  const value=Number(amount||0);
-  const percent=percentPromoForProduct(product);
-  return percent>0 ? Math.round(value*(1-percent/100)) : value;
-}
-
-function productById(id){
-  return products.find(x=>String(x.id)===String(id))||null;
-}
-
-function cartGiftItems(){
-  if(activePromoRuleType()!=="gift") return [];
-
-  /*
-    Si el regalo es el mismo producto/categoría de la promo,
-    se descuenta dentro de la cantidad comprada (v74).
-    Si es un producto diferente —por ejemplo 6 empanadas
-    => 1 Coca Cola 500 ml— se agrega aparte como GRATIS.
-  */
-  if (promoUsesIncludedFreeUnits()) {
-    return [];
-  }
-  const target=String(business?.promo_target_id??"");
-  const trigger=Math.max(1,Number(business?.promo_trigger_qty||1));
-  const rewardQty=Math.max(1,Number(business?.promo_reward_qty||1));
-  const reward=productById(business?.promo_reward_product_id);
-  if(!target || !reward) return [];
-
-  let matched=0;
-  cart.forEach(item=>{
-    const p=productById(item.productId);
-    if(!p) return;
-    const ok=business?.promo_target_type==="product"
-      ? String(p.id)===target
-      : String(p.category_id)===target;
-    if(ok) matched+=Number(item.quantity||0);
-  });
-
-  let times=Math.floor(matched/trigger);
-  if(business?.promo_repeat===false) times=Math.min(1,times);
-  const qty=times*rewardQty;
-  return qty>0 ? [{
-    type:"promo_gift",productId:reward.id,productName:reward.name,
-    quantity:qty,unitPrice:0,total:0,options:[],promoLabel:"REGALO PROMO"
-  }] : [];
-}
-
-function promoGiftRule() {
-  if (
-    activePromoRuleType() !== "gift"
-  ) {
+async function uploadBrandAsset(file, kind) {
+  if (!file) {
     return null;
   }
 
-  const triggerQty =
-    Math.max(
-      1,
-      Number(
-        business?.promo_trigger_qty ||
-        1
-      )
+  const ext =
+    String(file.name || "")
+      .split(".")
+      .pop()
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "") ||
+    "jpg";
+
+  const objectPath =
+    `${selectedBusiness.id}/branding/${kind}-${Date.now()}.${ext}`;
+
+  const uploadUrl =
+    `${SUPABASE_URL}/storage/v1/object/product-images/${objectPath}`;
+
+  const response = await fetch(
+    uploadUrl,
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization:
+          `Bearer ${SUPABASE_KEY}`,
+        "Content-Type":
+          file.type || "image/jpeg",
+        "x-upsert": "false"
+      },
+      body:file
+    }
+  );
+
+  const responseText =
+    await response.text();
+
+  if (!response.ok) {
+    throw new Error(
+      `No se pudo subir la imagen (${response.status}): ${responseText || response.statusText}`
     );
-
-  const rewardQty =
-    Math.max(
-      1,
-      Number(
-        business?.promo_reward_qty ||
-        1
-      )
-    );
-
-  const rewardProduct =
-    productById(
-      business?.promo_reward_product_id
-    );
-
-  if (!rewardProduct) {
-    return null;
-  }
-
-  return {
-    triggerQty,
-    rewardQty,
-    rewardProduct,
-    repeat:
-      business?.promo_repeat !== false
-  };
-}
-
-function productMatchesGiftTarget(product) {
-  if (!product) {
-    return false;
-  }
-
-  const target =
-    String(
-      business?.promo_target_id ?? ""
-    );
-
-  if (!target) {
-    return false;
   }
 
   return (
-    business?.promo_target_type ===
-    "product"
-      ? String(product.id) === target
-      : String(product.category_id) ===
-        target
+    `${SUPABASE_URL}/storage/v1/object/public/product-images/${objectPath}`
   );
 }
 
-function promoUsesIncludedFreeUnits() {
-  const rule =
-    promoGiftRule();
-
-  if (!rule) {
-    return false;
-  }
-
-  /*
-    Si el producto que se regala también pertenece al producto/categoría
-    que activa la promo, interpretamos la regla como:
-    "de la cantidad elegida, X unidades son gratis".
-
-    Ejemplo:
-    categoría Empanadas / cada 10 / 2 Empanadas gratis
-    El cliente elige 12 -> paga 10.
-  */
-  return productMatchesGiftTarget(
-    rule.rewardProduct
-  );
-}
-
-function totalGiftTargetQuantity() {
-  let total = 0;
-
-  cart.forEach((item) => {
-    const product =
-      productById(
-        item.productId
-      );
-
-    if (
-      productMatchesGiftTarget(
-        product
-      )
-    ) {
-      total +=
-        Number(
-          item.quantity || 0
-        );
-    }
-  });
-
-  return total;
-}
-
-function totalIncludedFreeQuantity() {
-  const rule =
-    promoGiftRule();
-
-  if (
-    !rule ||
-    !promoUsesIncludedFreeUnits()
-  ) {
-    return 0;
-  }
-
-  const matchingQty =
-    totalGiftTargetQuantity();
-
-  let times =
-    Math.floor(
-      matchingQty /
-      rule.triggerQty
-    );
-
-  if (!rule.repeat) {
-    times =
-      Math.min(
-        1,
-        times
-      );
-  }
-
-  return (
-    times *
-    rule.rewardQty
-  );
-}
-
-function includedGiftAllocation() {
-  const allocation =
-    new Map();
-
-  let remainingFree =
-    totalIncludedFreeQuantity();
-
-  if (remainingFree <= 0) {
-    return allocation;
-  }
-
-  const rewardProductId =
-    String(
-      business?.promo_reward_product_id ??
-      ""
-    );
-
-  /*
-    Descontamos las unidades gratis únicamente del producto configurado
-    como regalo. Recorremos de atrás hacia adelante para mantener estable
-    el cálculo si el mismo producto fue agregado más de una vez.
-  */
-  [...cart]
-    .reverse()
-    .forEach((item) => {
-      if (remainingFree <= 0) {
-        return;
-      }
-
-      if (
-        String(item.productId) !==
-        rewardProductId
-      ) {
-        return;
-      }
-
-      const qty =
-        Number(
-          item.quantity || 0
-        );
-
-      const freeQty =
-        Math.min(
-          qty,
-          remainingFree
-        );
-
-      if (freeQty > 0) {
-        allocation.set(
-          item.key,
-          freeQty
-        );
-
-        remainingFree -=
-          freeQty;
-      }
-    });
-
-  return allocation;
-}
-
-function includedFreeQtyForItem(item) {
-  return Number(
-    includedGiftAllocation().get(
-      item.key
-    ) || 0
-  );
-}
-
-function itemEffectiveTotal(item) {
-  const rawTotal =
-    Number(
-      item.total || 0
-    );
-
-  const freeQty =
-    includedFreeQtyForItem(
-      item
-    );
-
-  if (
-    freeQty <= 0 ||
-    Number(item.quantity || 0) <= 0
-  ) {
-    return rawTotal;
-  }
-
-  const unitValue =
-    rawTotal /
-    Number(item.quantity);
-
-  return Math.max(
-    0,
-    rawTotal -
-    unitValue * freeQty
-  );
-}
-
-function itemPromoSavings(item) {
-  return Math.max(
-    0,
-    Number(item.total || 0) -
-    itemEffectiveTotal(item)
-  );
-}
-
-function currentProductNewFreeUnits(
-  candidateQuantity
-) {
-  const rule =
-    promoGiftRule();
-
-  if (
-    !rule ||
-    !promoUsesIncludedFreeUnits() ||
-    !currentProduct ||
-    String(currentProduct.id) !==
-      String(rule.rewardProduct.id) ||
-    !productMatchesGiftTarget(
-      currentProduct
-    )
-  ) {
-    return 0;
-  }
-
-  const existingQty =
-    totalGiftTargetQuantity();
-
-  const beforeTimes =
-    Math.floor(
-      existingQty /
-      rule.triggerQty
-    );
-
-  const afterTimes =
-    Math.floor(
-      (
-        existingQty +
-        Number(
-          candidateQuantity || 0
-        )
-      ) /
-      rule.triggerQty
-    );
-
-  const safeBefore =
-    rule.repeat
-      ? beforeTimes
-      : Math.min(1,beforeTimes);
-
-  const safeAfter =
-    rule.repeat
-      ? afterTimes
-      : Math.min(1,afterTimes);
-
-  return Math.max(
-    0,
-    (
-      safeAfter -
-      safeBefore
-    ) *
-    rule.rewardQty
-  );
-}
-
-
-function normalizedCategoryName(value) {
-  return String(value || "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim()
-    .toLowerCase();
-}
-
-function categoryVisualMarkup(categoryName) {
-  const name =
-    normalizedCategoryName(
-      categoryName
-    );
-
-  let type = "generic";
-
-  if (name.includes("pizza")) {
-    type = "pizza";
-  } else if (name.includes("empan")) {
-    type = "empanada";
-  } else if (
-    name.includes("bebida") ||
-    name.includes("refresco") ||
-    name.includes("drink")
-  ) {
-    type = "drink";
-  } else if (
-    name.includes("postre") ||
-    name.includes("dulce")
-  ) {
-    type = "dessert";
-  } else if (
-    name.includes("hamburg") ||
-    name.includes("burger")
-  ) {
-    type = "burger";
-  } else if (
-    name.includes("papa") ||
-    name.includes("frita")
-  ) {
-    type = "fries";
-  } else if (
-    name.includes("parrilla") ||
-    name.includes("carne")
-  ) {
-    type = "grill";
-  }
-
-  const art = {
-    pizza: `
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <defs>
-          <linearGradient id="pizzaCrust" x1="0" x2="1">
-            <stop stop-color="#F8C45E"/>
-            <stop offset="1" stop-color="#D98A24"/>
-          </linearGradient>
-          <linearGradient id="pizzaCheese" x1="0" y1="0" x2="1" y2="1">
-            <stop stop-color="#FFE37A"/>
-            <stop offset="1" stop-color="#F4B633"/>
-          </linearGradient>
-        </defs>
-        <path d="M12 48 28 12c1-3 5-4 8-2l17 12c3 2 3 7 0 9L12 48Z"
-          fill="url(#pizzaCheese)" stroke="#C66A18" stroke-width="2"/>
-        <path d="M27 12c4-5 11-6 17-2l10 7c5 3 6 9 3 14"
-          fill="none" stroke="url(#pizzaCrust)" stroke-width="7" stroke-linecap="round"/>
-        <circle cx="32" cy="27" r="4" fill="#D94A33"/>
-        <circle cx="42" cy="31" r="4" fill="#D94A33"/>
-        <circle cx="27" cy="38" r="3.7" fill="#D94A33"/>
-        <path d="m37 20 3 3M22 31l3 2M37 39l3-2"
-          stroke="#3C9B4A" stroke-width="2.5" stroke-linecap="round"/>
-      </svg>
-    `,
-    empanada: `
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <defs>
-          <linearGradient id="empFill" x1="0" y1="0" x2="1" y2="1">
-            <stop stop-color="#FFD66B"/>
-            <stop offset=".55" stop-color="#EAA23A"/>
-            <stop offset="1" stop-color="#C8731E"/>
-          </linearGradient>
-        </defs>
-        <path d="M11 39c11-20 29-27 43-16-1 19-16 31-35 27-7-2-11-6-8-11Z"
-          fill="url(#empFill)" stroke="#B76418" stroke-width="2.2"/>
-        <path d="M15 40c7 4 21 5 35-11"
-          fill="none" stroke="#FFE5A0" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M17 43c2 2 3 3 5 4m2-7c2 2 3 3 5 4m2-7c2 2 3 2 5 3m2-7c2 1 3 2 5 2"
-          stroke="#9E5517" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-    `,
-    drink: `
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <defs>
-          <linearGradient id="cola" x1="0" y1="0" x2="0" y2="1">
-            <stop stop-color="#6E351F"/>
-            <stop offset=".55" stop-color="#3D1B12"/>
-            <stop offset="1" stop-color="#170C0A"/>
-          </linearGradient>
-        </defs>
-        <path d="M18 12h30l-4 40H22L18 12Z"
-          fill="#F7F9FC" stroke="#B9C3D2" stroke-width="2"/>
-        <path d="M21 24h24l-3 25H24L21 24Z" fill="url(#cola)"/>
-        <path d="M38 8c6 5 8 11 8 19" fill="none"
-          stroke="#E33E34" stroke-width="3" stroke-linecap="round"/>
-        <rect x="25" y="18" width="8" height="7" rx="2" fill="#D9EEF5" opacity=".9"/>
-        <rect x="35" y="20" width="7" height="6" rx="2" fill="#D9EEF5" opacity=".9"/>
-        <path d="M22 29h22" stroke="#F4C565" stroke-width="1.5" opacity=".7"/>
-      </svg>
-    `,
-    dessert: `
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <defs>
-          <linearGradient id="cake" x1="0" y1="0" x2="0" y2="1">
-            <stop stop-color="#FFF1C6"/>
-            <stop offset="1" stop-color="#F0C981"/>
-          </linearGradient>
-        </defs>
-        <path d="M12 49 25 18h24l5 31H12Z"
-          fill="url(#cake)" stroke="#C9944E" stroke-width="2"/>
-        <path d="M25 18c6-8 15-8 24 0"
-          fill="#FFF" stroke="#E7D7C5" stroke-width="2"/>
-        <path d="M20 29h31" stroke="#C98649" stroke-width="4"/>
-        <path d="M25 19c6-5 11-5 16-1 3-4 7-4 11-1"
-          fill="none" stroke="#D82842" stroke-width="6" stroke-linecap="round"/>
-        <circle cx="34" cy="14" r="4" fill="#D82842"/>
-        <circle cx="45" cy="15" r="4" fill="#C91E37"/>
-      </svg>
-    `,
-    burger: `
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <path d="M12 28c1-11 9-17 20-17s19 6 20 17H12Z"
-          fill="#E7A944" stroke="#B86C22" stroke-width="2"/>
-        <path d="M14 32h36" stroke="#4D9F48" stroke-width="5" stroke-linecap="round"/>
-        <path d="M16 39h32" stroke="#8E4026" stroke-width="8" stroke-linecap="round"/>
-        <path d="M18 35h28" stroke="#F6C84B" stroke-width="4" stroke-linecap="round"/>
-        <path d="M14 47c3 6 32 6 36 0H14Z" fill="#D89235" stroke="#A9611D" stroke-width="2"/>
-        <circle cx="25" cy="20" r="1.3" fill="#FFF0B5"/>
-        <circle cx="34" cy="18" r="1.3" fill="#FFF0B5"/>
-        <circle cx="41" cy="22" r="1.3" fill="#FFF0B5"/>
-      </svg>
-    `,
-    fries: `
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <path d="M18 14v24M27 10v28M36 12v25M45 8v30"
-          stroke="#F3C648" stroke-width="6" stroke-linecap="round"/>
-        <path d="M15 29h34l-4 25H20l-5-25Z"
-          fill="#D73A32" stroke="#A8211D" stroke-width="2"/>
-        <path d="M20 33h24" stroke="#F4C565" stroke-width="3"/>
-      </svg>
-    `,
-    grill: `
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <path d="M18 18c7-7 22-8 30 1 7 8 2 24-11 29-12 4-26-2-27-13-1-7 3-13 8-17Z"
-          fill="#A64B2B" stroke="#74301E" stroke-width="2"/>
-        <path d="M20 24 42 42M17 31l17 14M28 18l20 17M36 17l13 10"
-          stroke="#572616" stroke-width="3" stroke-linecap="round"/>
-        <path d="M17 23c7-6 21-7 30 0" stroke="#D97A49" stroke-width="2" opacity=".7"/>
-      </svg>
-    `,
-    generic: `
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <circle cx="32" cy="32" r="22" fill="#EEF4FF" stroke="#B9CCE8" stroke-width="2"/>
-        <path d="M22 39c3-10 7-15 10-15s7 5 10 15"
-          fill="none" stroke="#0B43A0" stroke-width="3" stroke-linecap="round"/>
-        <path d="M21 42h22" stroke="#D8A52A" stroke-width="3" stroke-linecap="round"/>
-      </svg>
-    `
-  };
-
-  return `
-    <span class="category-tab-visual category-tab-visual-${type}">
-      ${art[type]}
-    </span>
-  `;
-}
-
-function renderCatalog() {
-  const visibleCategories = categories.filter(
-    (category) =>
-      products.some(
-        (product) =>
-          String(product.category_id) ===
-          String(category.id)
-      )
-  );
-
-  if (!visibleCategories.length) {
-    categoryTabs.innerHTML = "";
-    catalogContent.innerHTML =
-      '<div class="empty-card">Todav\u00eda no hay productos disponibles.</div>';
-    return;
-  }
-
-  categoryTabs.innerHTML = visibleCategories.map((category, index) => `
-    <button
-      type="button"
-      class="category-tab ${index === 0 ? "active" : ""}"
-      data-category-id="${escapeHTML(category.id)}"
-    >
-      ${categoryVisualMarkup(category.name)}
-      <span class="category-tab-label">
-        ${escapeHTML(category.name)}
-      </span>
-    </button>
-  `).join("");
-
-  categoryTabs
-    .querySelectorAll(".category-tab")
-    .forEach((button) => {
-      button.addEventListener("click", () => {
-        categoryTabs
-          .querySelectorAll(".category-tab")
-          .forEach((item) => item.classList.remove("active"));
-
-        button.classList.add("active");
-
-        const target =
-          document.getElementById(
-            `category-${button.dataset.categoryId}`
-          );
-
-        target?.scrollIntoView({
-          behavior:"smooth",
-          block:"start"
-        });
-      });
-    });
-
-  catalogContent.innerHTML = visibleCategories.map((category) => {
-    const categoryProducts = products.filter(
-      (product) =>
-        String(product.category_id) === String(category.id)
-    );
-
-    return `
-      <section
-        id="category-${escapeHTML(category.id)}"
-        class="category-section"
-      >
-        <div class="category-section-title">
-          <h3>${escapeHTML(category.name)}</h3>
-          <span>
-            ${categoryProducts.length}
-            ${categoryProducts.length === 1 ? "producto" : "productos"}
-          </span>
-        </div>
-
-        <div class="products-grid">
-          ${categoryProducts.map(renderProductCard).join("")}
-        </div>
-      </section>
-    `;
-  }).join("");
-
-  catalogContent
-    .querySelectorAll(".product-card")
-    .forEach((card) => {
-      const openCardProduct = async () => {
-        if (!(await requireOrderingOpen())) {
-          return;
-        }
-
-        const product = products.find(
-          (item) =>
-            String(item.id) ===
-            String(card.dataset.productId)
-        );
-
-        if (product) {
-          if (product.available === false) {
-            showToast("Este producto esta agotado por el momento.");
-            return;
-          }
-
-          openProduct(product);
-        }
-      };
-
-      card.addEventListener(
-        "click",
-        openCardProduct
-      );
-
-      card.addEventListener(
-        "keydown",
-        (event) => {
-          if (
-            event.key === "Enter" ||
-            event.key === " "
-          ) {
-            event.preventDefault();
-            openCardProduct();
-          }
-        }
-      );
-    });
-}
-
-function renderProductCard(product) {
-  const productGroups = getProductGroups(product.id);
-  const hasOptions = productGroups.length > 0;
-
-  const productCategory =
-    categories.find(
-      (category) =>
-        String(category.id) ===
-        String(product.category_id)
-    );
-
-  const pizzaProduct =
-    normalizeText(
-      productCategory?.name || ""
-    ).includes("pizza");
-
-  const promoPercent =
-    percentPromoForProduct(product);
-
-  const discountedFixedPrice =
-    applyPercentDiscount(product.price,product);
-
-  const priceText =
-    pizzaProduct && hasOptions
-      ? promoPercent > 0
-        ? `<span class="promo-price-chip">-${promoPercent}% HOY</span> Elegí tamaño`
-        : "Elegí tamaño"
-      : Number(product.price || 0) > 0
-        ? promoPercent > 0
-          ? `<span class="promo-old-price">${money(product.price)}</span> <strong class="promo-new-price">${money(discountedFixedPrice)}</strong> <span class="promo-price-chip">-${promoPercent}%</span>`
-          : money(product.price)
-        : hasOptions
-          ? promoPercent > 0
-            ? `<span class="promo-price-chip">-${promoPercent}% HOY</span> Elegí opciones`
-            : "Elegí opciones"
-          : money(0);
-
-  return `
-    <div
-      class="product-card ${product.available === false ? "product-sold-out" : ""}"
-      role="button"
-      tabindex="${product.available === false ? "-1" : "0"}"
-      data-product-id="${escapeHTML(product.id)}"
-      aria-label="Abrir ${escapeHTML(product.name)}"
-    >
-      <div class="product-image">
-        ${
-          product.image_url
-            ? `
-              <img
-                src="${escapeHTML(product.image_url)}"
-                alt="${escapeHTML(product.name)}"
-                loading="lazy"
-              >
-            `
-            : `
-              <div class="product-image-placeholder">
-                <span class="product-placeholder-mark">
-                  ${escapeHTML(
-                    String(product.name || "MM")
-                      .trim()
-                      .split(/\s+/)
-                      .slice(0,2)
-                      .map((word) => word[0])
-                      .join("")
-                      .toUpperCase()
-                  )}
-                </span>
-              </div>
-            `
-        }
-
-        ${
-          product.available === false
-            ? '<span class="sold-out-badge">AGOTADO</span>'
-            : product.featured
-              ? '<span class="featured-badge">DESTACADO</span>'
-              : ""
-        }
-      </div>
-
-      <div class="product-info">
-        <h4>${escapeHTML(product.name)}</h4>
-
-        ${
-          product.description
-            ? `
-              <p class="product-description">
-                ${escapeHTML(product.description)}
-              </p>
-            `
-            : ""
-        }
-
-        <div class="product-price">
-          ${priceText}
-          ${
-            Number(product.old_price || 0) > Number(product.price || 0)
-              ? `<small><s>${money(product.old_price)}</s></small>`
-              : ""
-          }
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function getProductGroups(productId) {
-  return groups
-    .filter(
-      (group) =>
-        String(group.product_id) === String(productId)
-    )
-    .sort(sortByOrderThenId);
-}
-
-
-function currentProductIsPizza() {
-  const category =
-    categories.find(
-      (item) =>
-        String(item.id) ===
-        String(currentProduct?.category_id)
-    );
-
-  return normalizeText(
-    category?.name || ""
-  ).includes("pizza");
-}
-
-function isSizeGroup(group) {
-  const name =
-    normalizeText(group?.name || "");
-
-  if (
-    name.includes("tamano") ||
-    name.includes("medida") ||
-    name.includes("size")
-  ) {
-    return true;
-  }
-
-  const groupOptions =
-    options.filter(
-      (option) =>
-        String(option.group_id) ===
-        String(group?.id)
-    );
-
-  return groupOptions.some((option) => {
-    const optionName =
-      normalizeText(
-        option.name || ""
-      );
-
-    return (
-      optionName.includes("individual") ||
-      optionName.includes("1/2 metro") ||
-      optionName.includes("medio metro") ||
-      optionName.includes("1 metro")
-    );
-  });
-}
-
-
-function isPlainMuzzarellaOption(option) {
-  const name =
-    normalizeText(
-      option?.name || ""
-    );
-
-  const mentionsMuzzarella =
-    name.includes("muzzarella") ||
-    name.includes("mozzarella");
-
-  const saysSolo =
-    name.includes("solo");
-
-  return (
-    mentionsMuzzarella &&
-    saysSolo
-  );
-}
-
-function syncExclusivePlainOption(group) {
-  if (!group) {
-    return;
-  }
-
-  const groupOptions =
-    getGroupOptions(group.id);
-
-  const plainOption =
-    groupOptions.find(
-      isPlainMuzzarellaOption
-    );
-
-  if (!plainOption) {
-    return;
-  }
-
-  const groupElement =
-    productModalContent.querySelector(
-      `.option-group[data-group-id="${group.id}"]`
-    );
-
-  if (!groupElement) {
-    return;
-  }
-
-  const plainRow =
-    groupElement.querySelector(
-      `.option-row[data-option-id="${plainOption.id}"]`
-    );
-
-  const plainInput =
-    plainRow?.querySelector("input");
-
-  const extraRows =
-    Array.from(
-      groupElement.querySelectorAll(
-        ".option-row"
-      )
-    ).filter(
-      (row) =>
-        String(row.dataset.optionId) !==
-        String(plainOption.id)
-    );
-
-  if (!plainInput) {
-    return;
-  }
-
-  const selectedExtraRows =
-    extraRows.filter(
-      (row) =>
-        row.querySelector("input")?.checked
-    );
-
-  if (plainInput.checked) {
-    extraRows.forEach((row) => {
-      const input =
-        row.querySelector("input");
-
-      if (input) {
-        input.checked = false;
-      }
-
-      row.classList.add(
-        "pizza-exclusive-hidden"
-      );
-    });
-
-    plainRow?.classList.remove(
-      "pizza-exclusive-hidden"
-    );
-
-    selectedOptions.set(
-      String(group.id),
-      [String(plainOption.id)]
-    );
-
-    return;
-  }
-
-  if (selectedExtraRows.length) {
-    plainRow?.classList.add(
-      "pizza-exclusive-hidden"
-    );
-
-    extraRows.forEach((row) => {
-      row.classList.remove(
-        "pizza-exclusive-hidden"
-      );
-    });
-
-    return;
-  }
-
-  plainRow?.classList.remove(
-    "pizza-exclusive-hidden"
-  );
-
-  extraRows.forEach((row) => {
-    row.classList.remove(
-      "pizza-exclusive-hidden"
-    );
-  });
-}
-
-
-function currentProductIsEmpanadas() {
-  const category =
-    categories.find(
-      (item) =>
-        String(item.id) ===
-        String(currentProduct?.category_id)
-    );
-
-  const categoryName =
-    normalizeText(
-      category?.name || ""
-    );
-
-  const productName =
-    normalizeText(
-      currentProduct?.name || ""
-    );
-
-  return (
-    categoryName.includes("empanada") ||
-    productName.includes("empanada")
-  );
-}
-
-function empanadaFlavorCount(optionId) {
-  return Number(
-    empanadaFlavorCounts.get(
-      String(optionId)
-    ) || 0
-  );
-}
-
-function empanadaTotalQuantity() {
-  let total = 0;
-
-  empanadaFlavorCounts.forEach(
-    (quantity) => {
-      total += Number(quantity || 0);
-    }
-  );
-
-  return total;
-}
-
-function empanadaTotalPrice() {
-  let total = 0;
-
-  empanadaFlavorCounts.forEach(
-    (quantity, optionId) => {
-      const option =
-        options.find(
-          (item) =>
-            String(item.id) ===
-            String(optionId)
-        );
-
-      if (!option) {
-        return;
-      }
-
-      total +=
-        Number(quantity || 0) *
-        applyPercentDiscount(
-          Number(option.price_delta || 0),
-          currentProduct
-        );
-    }
-  );
-
-  return total;
-}
-
-function selectedEmpanadaFlavors() {
-  const result = [];
-
-  empanadaFlavorCounts.forEach(
-    (quantity, optionId) => {
-      const qty =
-        Number(quantity || 0);
-
-      if (qty <= 0) {
-        return;
-      }
-
-      const option =
-        options.find(
-          (item) =>
-            String(item.id) ===
-            String(optionId)
-        );
-
-      if (!option) {
-        return;
-      }
-
-      const group =
-        groups.find(
-          (item) =>
-            String(item.id) ===
-            String(option.group_id)
-        );
-
-      result.push({
-        optionId:option.id,
-        optionName:option.name,
-        groupId:group?.id ?? option.group_id,
-        groupName:group?.name || "Sabores",
-        quantity:qty,
-        unitPrice:Number(option.price_delta || 0),
-        total:
-          qty *
-          Number(option.price_delta || 0)
-      });
-    }
-  );
-
-  return result;
-}
-
-function getGroupOptions(groupId) {
-  return options
-    .filter(
-      (option) =>
-        String(option.group_id) === String(groupId)
-    )
-    .sort(sortByOrderThenId);
-}
-
-function openProduct(product) {
-  currentProduct = product;
-  currentQuantity = 1;
-  selectedOptions = new Map();
-  empanadaFlavorCounts = new Map();
-
-  productModalContent.innerHTML = `
-    ${
-      product.image_url
-        ? `
-          <img
-            class="product-modal-image"
-            src="${escapeHTML(product.image_url)}"
-            alt="${escapeHTML(product.name)}"
-          >
-        `
-        : ""
-    }
-
-    <div class="product-modal-layout">
-
-      <div class="product-modal-scroll">
-
-        <div class="product-modal-body">
-
-          <h2>${escapeHTML(product.name)}</h2>
-
-          ${
-            product.description
-              ? `
-                <p class="product-modal-description">
-                  ${escapeHTML(product.description)}
-                </p>
-              `
-              : ""
-          }
-
-          <div id="liveProductPrice" class="live-price">
-            ${money(product.price)}
-          </div>
-
-          <div id="productFormError" class="form-error"></div>
-
-          <div id="optionGroups" class="option-groups">
-            ${renderOptionGroups(product)}
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="product-actions">
-
-        <div class="quantity-control ${
-          currentProductIsEmpanadas()
-            ? "empanadas-main-quantity-hidden"
-            : ""
-        }">
-          <button id="decreaseQuantity" type="button" aria-label="Quitar uno">-</button>
-          <strong id="quantityValue">1</strong>
-          <button id="increaseQuantity" type="button" aria-label="Agregar uno">+</button>
-        </div>
-
-        <button id="addToCartButton" class="primary-action" type="button">
-          Agregar al pedido
-        </button>
-
-      </div>
-
-    </div>
-  `;
-
-  bindProductFormEvents();
-
-  productModal.classList.add("open");
-  productModal.setAttribute("aria-hidden","false");
-  document.body.classList.add("modal-open");
-
-  refreshDependentOptions();
-
-  getProductGroups(currentProduct.id)
-    .forEach(
-      syncExclusivePlainOption
-    );
-
-  refreshPrice();
-}
-
-function renderOptionGroups(product) {
-  const productGroups = getProductGroups(product.id);
-
-  if (!productGroups.length) {
-    return "";
-  }
-
-  return productGroups.map((group) => {
-    const groupOptions = getGroupOptions(group.id);
-
-    return `
-      <section
-        class="option-group"
-        data-group-id="${escapeHTML(group.id)}"
-        data-required="${group.required ? "true" : "false"}"
-        data-selection-type="${escapeHTML(group.selection_type)}"
-        data-max-select="${escapeHTML(group.max_select ?? "")}"
-      >
-        <div class="option-group-header">
-          <h3>${escapeHTML(group.name)}</h3>
-          <span>
-            ${
-              currentProductIsEmpanadas()
-                ? "ELEG&Iacute; CANTIDADES"
-                : group.required
-                  ? "OBLIGATORIO"
-                  : "OPCIONAL"
-            }
-          </span>
-        </div>
-
-        <div class="option-list">
-          ${groupOptions.map((option) => {
-            if (currentProductIsEmpanadas()) {
-              return `
-                <div
-                  class="option-row empanada-flavor-row"
-                  data-option-id="${escapeHTML(option.id)}"
-                >
-                  <span class="option-copy">
-                    <strong>${escapeHTML(option.name)}</strong>
-                    <small>${percentPromoForProduct(currentProduct)>0 ? `<s>${money(option.price_delta)}</s> ${money(applyPercentDiscount(option.price_delta,currentProduct))}` : money(option.price_delta)} c/u</small>
-                  </span>
-
-                  <div
-                    class="empanada-quantity-control"
-                    data-empanada-option-id="${escapeHTML(option.id)}"
-                  >
-                    <button type="button" class="empanada-minus">-</button>
-                    <strong class="empanada-flavor-count">0</strong>
-                    <button type="button" class="empanada-plus">+</button>
-                  </div>
-                </div>
-              `;
-            }
-
-            const inputType =
-              group.selection_type === "single"
-                ? "radio"
-                : "checkbox";
-
-            return `
-              <label
-                class="option-row"
-                data-option-id="${escapeHTML(option.id)}"
-                data-parent-option-id="${escapeHTML(option.depends_on_option_id ?? "")}"
-              >
-                <input
-                  type="${inputType}"
-                  name="group-${escapeHTML(group.id)}"
-                  value="${escapeHTML(option.id)}"
-                >
-
-                <span class="option-copy">
-                  <strong>${escapeHTML(option.name)}</strong>
-                  <small>
-                    ${
-                      isSizeGroup(group)
-                        ? (
-                            percentPromoForProduct(product) > 0
-                              ? `<s>${money(Number(option.price_delta || 0))}</s> ${money(applyPercentDiscount(Number(option.price_delta || 0),product))}`
-                              : money(Number(option.price_delta || 0))
-                          )
-                        : Number(option.price_delta || 0) > 0
-                          ? `+ ${money(option.price_delta)}`
-                          : "Sin costo adicional"
-                    }
-                  </small>
-                </span>
-              </label>
-            `;
-          }).join("")}
-        </div>
-      </section>
-    `;
-  }).join("");
-}
-
-function bindProductFormEvents() {
-  if (currentProductIsEmpanadas()) {
-    productModalContent
-      .querySelectorAll(".empanada-quantity-control")
-      .forEach((control) => {
-        const optionId =
-          String(control.dataset.empanadaOptionId);
-
-        const countElement =
-          control.querySelector(".empanada-flavor-count");
-
-        const syncCount = () => {
-          const count =
-            empanadaFlavorCount(optionId);
-
-          if (countElement) {
-            countElement.textContent =
-              String(count);
-          }
-
-          control
-            .closest(".empanada-flavor-row")
-            ?.classList.toggle(
-              "has-quantity",
-              count > 0
-            );
-
-          refreshPrice();
-          hideProductError();
-        };
-
-        control
-          .querySelector(".empanada-minus")
-          ?.addEventListener("click", () => {
-            empanadaFlavorCounts.set(
-              optionId,
-              Math.max(
-                0,
-                empanadaFlavorCount(optionId) - 1
-              )
-            );
-
-            syncCount();
-          });
-
-        control
-          .querySelector(".empanada-plus")
-          ?.addEventListener("click", () => {
-            empanadaFlavorCounts.set(
-              optionId,
-              empanadaFlavorCount(optionId) + 1
-            );
-
-            syncCount();
-          });
-      });
-  }
-
-  const optionInputs =
-    productModalContent.querySelectorAll(
-      '.option-row input'
-    );
-
-  optionInputs.forEach((input) => {
-    input.addEventListener("change", () => {
-      const groupElement =
-        input.closest(".option-group");
-
-      const groupId =
-        groupElement.dataset.groupId;
-
-      const group = groups.find(
-        (item) =>
-          String(item.id) === String(groupId)
-      );
-
-      if (!group) {
-        return;
-      }
-
-      const plainOption =
-        getGroupOptions(group.id)
-          .find(isPlainMuzzarellaOption);
-
-      if (plainOption) {
-        const currentOption =
-          options.find(
-            (option) =>
-              String(option.id) ===
-              String(input.value)
-          );
-
-        const plainInput =
-          groupElement.querySelector(
-            `input[value="${plainOption.id}"]`
-          );
-
-        if (
-          input.checked &&
-          isPlainMuzzarellaOption(
-            currentOption
-          )
-        ) {
-          groupElement
-            .querySelectorAll("input")
-            .forEach((otherInput) => {
-              if (otherInput !== input) {
-                otherInput.checked = false;
-              }
-            });
-        } else if (
-          input.checked &&
-          plainInput
-        ) {
-          plainInput.checked = false;
-        }
-      }
-
-      if (group.selection_type === "single") {
-        selectedOptions.set(
-          String(group.id),
-          input.checked
-            ? [String(input.value)]
-            : []
-        );
-      } else {
-        const checked =
-          Array.from(
-            groupElement.querySelectorAll(
-              'input:checked'
-            )
-          ).map((item) => String(item.value));
-
-        const maxSelect =
-          Number(group.max_select || 0);
-
-        if (
-          maxSelect > 0 &&
-          checked.length > maxSelect
-        ) {
-          input.checked = false;
-
-          showToast(
-            `Pod\u00e9s elegir hasta ${maxSelect} opciones en ${group.name}.`
-          );
-
-          return;
-        }
-
-        selectedOptions.set(
-          String(group.id),
-          Array.from(
-            groupElement.querySelectorAll(
-              'input:checked'
-            )
-          ).map((item) => String(item.value))
-        );
-      }
-
-      syncExclusivePlainOption(group);
-      clearInvalidSelections();
-      refreshDependentOptions();
-      syncExclusivePlainOption(group);
-      refreshPrice();
-      hideProductError();
-    });
-  });
-
-  document
-    .getElementById("decreaseQuantity")
-    ?.addEventListener("click", () => {
-      currentQuantity =
-        Math.max(1,currentQuantity - 1);
-
-      document.getElementById("quantityValue").textContent =
-        currentQuantity;
-
-      refreshPrice();
-    });
-
-  document
-    .getElementById("increaseQuantity")
-    ?.addEventListener("click", () => {
-      currentQuantity += 1;
-
-      document.getElementById("quantityValue").textContent =
-        currentQuantity;
-
-      refreshPrice();
-    });
-
-  document
-    .getElementById("addToCartButton")
-    ?.addEventListener(
-      "click",
-      addCurrentProductToCart
-    );
-}
-
-function getSelectedOptionIds() {
-  const result = new Set();
-
-  selectedOptions.forEach((ids) => {
-    ids.forEach((id) => result.add(String(id)));
-  });
-
-  return result;
-}
-
-function optionIsVisible(option, selectedIds) {
-  if (!option.depends_on_option_id) {
-    return true;
-  }
-
-  return selectedIds.has(
-    String(option.depends_on_option_id)
-  );
-}
-
-function refreshDependentOptions() {
-  const selectedIds = getSelectedOptionIds();
-
-  getProductGroups(currentProduct.id)
-    .forEach((group) => {
-      const groupElement =
-        productModalContent.querySelector(
-          `.option-group[data-group-id="${group.id}"]`
-        );
-
-      if (!groupElement) {
-        return;
-      }
-
-      let visibleCount = 0;
-
-      getGroupOptions(group.id)
-        .forEach((option) => {
-          const row =
-            groupElement.querySelector(
-              `.option-row[data-option-id="${option.id}"]`
-            );
-
-          if (!row) {
-            return;
-          }
-
-          const visible =
-            optionIsVisible(option,selectedIds);
-
-          row.style.display =
-            visible ? "flex" : "none";
-
-          if (visible) {
-            visibleCount += 1;
-          }
-        });
-
-      groupElement.classList.toggle(
-        "hidden",
-        visibleCount === 0
-      );
-    });
-}
-
-function clearInvalidSelections() {
-  const selectedIds = getSelectedOptionIds();
-
-  getProductGroups(currentProduct.id)
-    .forEach((group) => {
-      const visibleIds = new Set(
-        getGroupOptions(group.id)
-          .filter(
-            (option) =>
-              optionIsVisible(option,selectedIds)
-          )
-          .map((option) => String(option.id))
-      );
-
-      const current =
-        selectedOptions.get(String(group.id)) || [];
-
-      const filtered =
-        current.filter((id) => visibleIds.has(String(id)));
-
-      if (filtered.length !== current.length) {
-        selectedOptions.set(
-          String(group.id),
-          filtered
-        );
-
-        const groupElement =
-          productModalContent.querySelector(
-            `.option-group[data-group-id="${group.id}"]`
-          );
-
-        groupElement
-          ?.querySelectorAll("input")
-          .forEach((input) => {
-            if (!visibleIds.has(String(input.value))) {
-              input.checked = false;
-            }
-          });
-      }
-    });
-}
-
-function currentUnitPrice() {
-  if (currentProductIsEmpanadas()) {
-    return empanadaTotalPrice();
-  }
-
-  const pizzaProduct=currentProductIsPizza();
-  const selectedIds=getSelectedOptionIds();
-  let basePrice=pizzaProduct ? 0 : Number(currentProduct?.price||0);
-  let extrasTotal=0;
-
-  getProductGroups(currentProduct.id).forEach(group=>{
-    getGroupOptions(group.id).forEach(option=>{
-      if(!selectedIds.has(String(option.id))) return;
-      const price=Number(option.price_delta||0);
-      if(pizzaProduct && isSizeGroup(group)) basePrice=price;
-      else extrasTotal+=price;
-    });
-  });
-
-  return applyPercentDiscount(basePrice,currentProduct)+extrasTotal;
-}
-
-function refreshPrice() {
-  const target =
-    document.getElementById("liveProductPrice");
-
-  const button =
-    document.getElementById("addToCartButton");
-
-  if (!target || !button) {
-    return;
-  }
-
-  if (currentProductIsEmpanadas()) {
-    const quantity =
-      empanadaTotalQuantity();
-
-    const rawTotal =
-      empanadaTotalPrice();
-
-    const freeQty =
-      currentProductNewFreeUnits(
-        quantity
-      );
-
-    const unitValue =
-      quantity > 0
-        ? rawTotal / quantity
-        : 0;
-
-    const total =
-      Math.max(
-        0,
-        rawTotal -
-        unitValue * freeQty
-      );
-
-    target.textContent =
-      quantity > 0
-        ? freeQty > 0
-          ? `${quantity} empanadas · ${freeQty} GRATIS · Pagás ${money(total)}`
-          : `${quantity} empanada${quantity === 1 ? "" : "s"} - ${money(total)}`
-        : "Elegi los sabores y cantidades";
-
-    button.textContent =
-      quantity > 0
-        ? freeQty > 0
-          ? `Agregar ${quantity} · ${freeQty} GRATIS · ${money(total)}`
-          : `Agregar ${quantity} empanada${quantity === 1 ? "" : "s"} - ${money(total)}`
-        : "Elegi al menos 1 empanada";
-
-    button.disabled =
-      quantity === 0;
-
-    return;
-  }
-
-  button.disabled = false;
-
-  const unitPrice =
-    currentUnitPrice();
-
-  const total =
-    unitPrice * currentQuantity;
-
-  target.textContent =
-    `Total: ${money(total)}`;
-
-  button.textContent =
-    `Agregar - ${money(total)}`;
-}
-
-function visibleOptionsForGroup(group) {
-  const selectedIds = getSelectedOptionIds();
-
-  return getGroupOptions(group.id)
-    .filter(
-      (option) =>
-        optionIsVisible(option,selectedIds)
-    );
-}
-
-function validateProductSelection() {
-  if (currentProductIsEmpanadas()) {
-    return (
-      empanadaTotalQuantity() > 0
-        ? ""
-        : "Elegi al menos una empanada."
-    );
-  }
-
-  const productGroups =
-    getProductGroups(currentProduct.id);
-
-  const pizzaProduct =
-    currentProductIsPizza();
-
-  for (const group of productGroups) {
-    const visibleOptions =
-      visibleOptionsForGroup(group);
-
-    if (!visibleOptions.length) {
-      continue;
-    }
-
-    const chosen =
-      selectedOptions.get(
-        String(group.id)
-      ) || [];
-
-    if (
-      chosen.length > 1 &&
-      getGroupOptions(group.id)
-        .some(isPlainMuzzarellaOption)
-    ) {
-      const chosenOptions =
-        chosen
-          .map(
-            (id) =>
-              options.find(
-                (option) =>
-                  String(option.id) ===
-                  String(id)
-              )
-          )
-          .filter(Boolean);
-
-      if (
-        chosenOptions.some(
-          isPlainMuzzarellaOption
-        )
-      ) {
-        return "Elegi Solo Muzzarella o los extras, no ambas cosas.";
-      }
-    }
-
-    const requiredForThisProduct =
-      pizzaProduct
-        ? isSizeGroup(group)
-        : Boolean(group.required);
-
-    if (
-      requiredForThisProduct &&
-      chosen.length === 0
-    ) {
-      return pizzaProduct
-        ? "Eleg\u00ed el tama\u00f1o de la pizza."
-        : `Eleg\u00ed una opci\u00f3n en ${group.name}.`;
-    }
-
-    const maxSelect =
-      Number(group.max_select || 0);
-
-    if (
-      maxSelect > 0 &&
-      chosen.length > maxSelect
-    ) {
-      return `Pod\u00e9s elegir hasta ${maxSelect} opciones en ${group.name}.`;
-    }
-  }
-
-  return "";
-}
-
-async function addCurrentProductToCart() {
-  if (!(await requireOrderingOpen())) {
-    return;
-  }
-
-  const error =
-    validateProductSelection();
-
-  if (error) {
-    showProductError(error);
-    return;
-  }
-
-  if (currentProductIsEmpanadas()) {
-    const flavors =
-      selectedEmpanadaFlavors();
-
-    const quantity =
-      empanadaTotalQuantity();
-
-    const total =
-      empanadaTotalPrice();
-
-    cart.push({
-      key:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`,
-      type:"empanadas",
-      productId:currentProduct.id,
-      productName:currentProduct.name,
-      quantity,
-      unitPrice:
-        quantity > 0
-          ? total / quantity
-          : 0,
-      total,
-      promoPercent:percentPromoForProduct(currentProduct),
-      flavors,
-      options:flavors.map(
-        (flavor) => ({
-          groupId:flavor.groupId,
-          groupName:flavor.groupName,
-          optionId:flavor.optionId,
-          optionName:
-            `${flavor.quantity} ${flavor.optionName}`,
-          price:flavor.unitPrice
+async function saveBusinessBrandingRPC(payload) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/rpc/set_business_branding`,
+      {
+        method:"POST",
+        headers:merchantHeaders({
+          Prefer:"return=representation"
+        }),
+        body:JSON.stringify({
+          p_business_id:
+            Number(selectedBusiness.id),
+          p_logo_url:
+            payload.logo_url || null,
+          p_primary_color:
+            payload.primary_color,
+          p_secondary_color:
+            payload.secondary_color,
+          p_accent_color:
+            payload.accent_color,
+          p_hero_title:
+            payload.hero_title || null,
+          p_hero_description:
+            payload.hero_description || null,
+          p_hero_image_url:
+            payload.hero_image_url || null,
+          p_welcome_button_text:
+            payload.welcome_button_text || null
         })
-      )
-    });
+      }
+    );
 
-    saveCart();
-    updateCartBar();
-    closeProductModal();
+  const data =
+    responseText.trim()
+      ? JSON.parse(responseText)
+      : null;
+
+  return Array.isArray(data)
+    ? data[0] || null
+    : data;
+}
+
+async function saveStoreDesign() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  saveStoreDesignButton.disabled = true;
+  saveStoreDesignButton.textContent =
+    "Guardando...";
+
+  storeDesignMessage.textContent = "";
+
+  try {
+    let logoUrl =
+      designLogoUrl.value.trim();
+
+    let heroImageUrl =
+      designHeroImageUrl.value.trim();
+
+    if (designLogoFile.files?.[0]) {
+      logoUrl =
+        await uploadBrandAsset(
+          designLogoFile.files[0],
+          "logo"
+        );
+    }
+
+    if (designHeroImageFile.files?.[0]) {
+      heroImageUrl =
+        await uploadBrandAsset(
+          designHeroImageFile.files[0],
+          "hero"
+        );
+    }
+
+    const payload = {
+      logo_url:logoUrl,
+      primary_color:
+        designPrimaryColor.value,
+      secondary_color:
+        designSecondaryColor.value,
+      accent_color:
+        designAccentColor.value,
+      hero_title:
+        designHeroTitle.value.trim(),
+      hero_description:
+        designHeroDescription.value.trim(),
+      hero_image_url:heroImageUrl,
+      welcome_button_text:
+        designButtonText.value.trim()
+    };
+
+    const saved =
+      await saveBusinessBrandingRPC(
+        payload
+      );
+
+    if (!saved?.id) {
+      throw new Error(
+        "Supabase no devolvió el diseño guardado."
+      );
+    }
+
+    Object.assign(
+      selectedBusiness,
+      saved
+    );
+
+    designLogoUrl.value =
+      saved.logo_url || "";
+
+    designHeroImageUrl.value =
+      saved.hero_image_url || "";
+
+    designLogoFile.value = "";
+    designHeroImageFile.value = "";
+
+    updateStoreDesignPreview();
+    renderMerchantPanelLogo();
+
+    storeDesignMessage.textContent =
+      "Diseño guardado. La tienda ya puede mostrar los cambios.";
 
     showToast(
-      `${quantity} empanada${quantity === 1 ? "" : "s"} agregada${quantity === 1 ? "" : "s"} al pedido.`
-    );
-
-    return;
-  }
-
-  const selected = [];
-
-  getProductGroups(currentProduct.id)
-    .forEach((group) => {
-      const ids =
-        selectedOptions.get(String(group.id)) || [];
-
-      ids.forEach((id) => {
-        const option = options.find(
-          (item) =>
-            String(item.id) === String(id)
-        );
-
-        if (option) {
-          const rawOptionPrice =
-            Number(
-              option.price_delta || 0
-            );
-
-          const optionContribution =
-            rawOptionPrice;
-
-          selected.push({
-            groupId:group.id,
-            groupName:group.name,
-            optionId:option.id,
-            optionName:option.name,
-            price:optionContribution
-          });
-        }
-      });
-    });
-
-  const unitPrice =
-    currentUnitPrice();
-
-  cart.push({
-    key:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`,
-    productId:currentProduct.id,
-    productName:currentProduct.name,
-    quantity:currentQuantity,
-    unitPrice,
-    total:unitPrice * currentQuantity,
-    promoPercent:percentPromoForProduct(currentProduct),
-    options:selected
-  });
-
-  saveCart();
-  updateCartBar();
-  closeProductModal();
-
-  showToast(
-    `${currentProduct.name} agregado al pedido.`
-  );
-}
-
-function showProductError(message) {
-  const element =
-    document.getElementById("productFormError");
-
-  if (!element) {
-    return;
-  }
-
-  element.textContent = message;
-  element.classList.add("show");
-}
-
-function hideProductError() {
-  document
-    .getElementById("productFormError")
-    ?.classList.remove("show");
-}
-
-function closeProductModal() {
-  productModal.classList.remove("open");
-  productModal.setAttribute("aria-hidden","true");
-  document.body.classList.remove("modal-open");
-
-  currentProduct = null;
-  selectedOptions = new Map();
-  empanadaFlavorCounts = new Map();
-}
-
-function openCartModal() {
-  renderCart();
-
-  cartModal.classList.add("open");
-  cartModal.setAttribute("aria-hidden","false");
-  document.body.classList.add("modal-open");
-}
-
-function closeCartModal() {
-  cartModal.classList.remove("open");
-  cartModal.setAttribute("aria-hidden","true");
-  document.body.classList.remove("modal-open");
-}
-
-function renderCart() {
-  if (!cart.length) {
-    cartItems.innerHTML =
-      '<div class="empty-card">Tu pedido todav\u00eda est\u00e1 vac\u00edo.</div>';
-
-    cartModalTotal.textContent = "$0";
-    return;
-  }
-
-  cartItems.innerHTML =
-    cart.map((item) => {
-      if (
-        item.type === "empanadas" &&
-        Array.isArray(item.flavors)
-      ) {
-        return `
-          <article class="cart-item empanadas-cart-item">
-
-            <div class="cart-item-top">
-              <div>
-                <h3>
-                  ${item.quantity} EMPANADA${item.quantity === 1 ? "" : "S"}
-                </h3>
-
-                <p class="cart-item-options empanadas-cart-breakdown">
-                  ${item.flavors.map(
-                    (flavor) =>
-                      `<strong>${escapeHTML(flavor.quantity)}</strong> ${escapeHTML(flavor.optionName)}`
-                  ).join("<br>")}
-                </p>
-              </div>
-
-              <strong>
-                ${
-                  includedFreeQtyForItem(item) > 0
-                    ? money(itemEffectiveTotal(item))
-                    : money(item.total)
-                }
-              </strong>
-            </div>
-
-            ${
-              includedFreeQtyForItem(item) > 0
-                ? `
-                  <div class="included-promo-summary">
-                    🎁 ${includedFreeQtyForItem(item)} EMPANADA${includedFreeQtyForItem(item) === 1 ? "" : "S"} GRATIS
-                    <small>
-                      Ahorrás ${money(itemPromoSavings(item))}
-                    </small>
-                  </div>
-                `
-                : ""
-            }
-
-            <div class="cart-item-bottom">
-              <span>
-                ${item.flavors.length}
-                sabor${item.flavors.length === 1 ? "" : "es"}
-              </span>
-
-              <button
-                type="button"
-                class="cart-remove"
-                data-cart-key="${escapeHTML(item.key)}"
-              >
-                Eliminar
-              </button>
-            </div>
-
-          </article>
-        `;
-      }
-
-      return `
-        <article class="cart-item">
-
-          <div class="cart-item-top">
-            <div>
-              <h3>
-                ${item.quantity} x ${escapeHTML(item.productName)}
-              </h3>
-
-              ${
-                item.options.length
-                  ? `
-                    <p class="cart-item-options">
-                      ${item.options.map(
-                        (option) =>
-                          `${escapeHTML(option.groupName)}: ${escapeHTML(option.optionName)}`
-                      ).join("<br>")}
-                    </p>
-                  `
-                  : ""
-              }
-              ${
-                Number(item.promoPercent || 0) > 0
-                  ? `<p class="cart-promo-applied">PROMO -${Number(item.promoPercent)}% APLICADA</p>`
-                  : ""
-              }
-            </div>
-
-            <strong>
-              ${money(itemEffectiveTotal(item))}
-            </strong>
-          </div>
-
-          ${
-            includedFreeQtyForItem(item) > 0
-              ? `
-                <div class="included-promo-summary">
-                  🎁 ${includedFreeQtyForItem(item)} UNIDAD${includedFreeQtyForItem(item) === 1 ? "" : "ES"} GRATIS
-                  <small>
-                    Ahorrás ${money(itemPromoSavings(item))}
-                  </small>
-                </div>
-              `
-              : ""
-          }
-
-          <div class="cart-item-bottom">
-            <span>${money(item.unitPrice)} c/u</span>
-
-            <button
-              type="button"
-              class="cart-remove"
-              data-cart-key="${escapeHTML(item.key)}"
-            >
-              Eliminar
-            </button>
-          </div>
-
-        </article>
-      `;
-    }).join("");
-
-  const giftItems = cartGiftItems();
-
-  if (giftItems.length) {
-    cartItems.innerHTML += giftItems.map(gift => `
-      <article class="cart-item promo-gift-cart-item">
-        <div class="cart-item-top">
-          <div>
-            <h3>${gift.quantity} x ${escapeHTML(gift.productName)}</h3>
-            <p class="cart-item-options">🎁 REGALO PROMO</p>
-          </div>
-          <strong>GRATIS</strong>
-        </div>
-      </article>
-    `).join("");
-  }
-
-  cartItems
-    .querySelectorAll(".cart-remove")
-    .forEach((button) => {
-      button.addEventListener("click", () => {
-        cart = cart.filter(
-          (item) =>
-            item.key !== button.dataset.cartKey
-        );
-
-        saveCart();
-        updateCartBar();
-        renderCart();
-      });
-    });
-
-  cartModalTotal.textContent =
-    money(cartGrandTotal());
-}
-
-function cartGrandTotal() {
-  return cart.reduce(
-    (sum,item) =>
-      sum +
-      itemEffectiveTotal(item),
-    0
-  );
-}
-
-function updateCartBar() {
-  const quantity =
-    cart.reduce(
-      (sum,item) =>
-        sum + Number(item.quantity || 0),
-      0
-    );
-
-  cartCount.textContent =
-    quantity === 1
-      ? "1 producto"
-      : `${quantity} productos`;
-
-  cartTotal.textContent =
-    money(cartGrandTotal());
-
-  cartModalTotal.textContent =
-    money(cartGrandTotal());
-}
-
-function cartStorageKey() {
-  const identity =
-    business?.slug ||
-    business?.id ||
-    TARGET_BUSINESS_SLUG ||
-    "comercio";
-
-  return `denexa-cart-${String(identity).toLowerCase()}`;
-}
-
-function saveCart() {
-  try {
-    localStorage.setItem(
-      cartStorageKey(),
-      JSON.stringify(cart)
+      "Diseño de la tienda actualizado.",
+      "success"
     );
   } catch (error) {
-    console.warn("No se pudo guardar el carrito:", error);
+    console.error(
+      "Error guardando diseño:",
+      error
+    );
+
+    storeDesignMessage.textContent =
+      `No se pudo guardar: ${error.message || "error desconocido"}`;
+
+    showToast(
+      "No se pudo guardar el diseño.",
+      "error"
+    );
+  } finally {
+    saveStoreDesignButton.disabled = false;
+    saveStoreDesignButton.textContent =
+      "Guardar diseño";
   }
 }
 
-function restoreCart() {
+function restoreStoreDesignDefaults() {
+  designPrimaryColor.value = "#0B43A0";
+  designSecondaryColor.value = "#0E5BD8";
+  designAccentColor.value = "#F4C565";
+  designHeroTitle.value =
+    selectedBusiness?.name || "Comercio";
+  designHeroDescription.value =
+    `Conocé el menú de ${selectedBusiness?.name || "este comercio"} y armá tu pedido.`;
+  designButtonText.value =
+    "Hacer mi pedido";
+  designHeroImageUrl.value = "";
+  designHeroImageFile.value = "";
+  updateStoreDesignPreview();
+}
+
+[
+  designLogoUrl,
+  designPrimaryColor,
+  designSecondaryColor,
+  designAccentColor,
+  designHeroTitle,
+  designHeroDescription,
+  designButtonText,
+  designHeroImageUrl
+].filter(Boolean).forEach(
+  (field) => {
+    field.addEventListener(
+      "input",
+      updateStoreDesignPreview
+    );
+  }
+);
+
+designLogoFile?.addEventListener(
+  "change",
+  () => {
+    const file =
+      designLogoFile.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const reader =
+      new FileReader();
+
+    reader.onload = () => {
+      const url =
+        String(reader.result || "");
+
+      designLogoPreview.innerHTML =
+        `<img src="${url}" alt="Logo">`;
+
+      designPreviewLogo.innerHTML =
+        `<img src="${url}" alt="Logo">`;
+    };
+
+    reader.readAsDataURL(file);
+  }
+);
+
+storeDesignForm?.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    await saveStoreDesign();
+  }
+);
+
+restoreStoreDesignButton?.addEventListener(
+  "click",
+  restoreStoreDesignDefaults
+);
+
+
+function syncPickupAddressVisibility() {
+  if (!pickupAddressFields) {
+    return;
+  }
+
+  pickupAddressFields.classList.toggle(
+    "is-disabled",
+    !pickupEnabled?.checked
+  );
+}
+
+function fillFulfillmentSettingsForm() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  deliveryEnabled.checked =
+    selectedBusiness.delivery_enabled !== false;
+
+  pickupEnabled.checked =
+    selectedBusiness.pickup_enabled !== false;
+
+  pickupAddress.value =
+    selectedBusiness.pickup_address ||
+    selectedBusiness.address ||
+    "";
+
+  fulfillmentSettingsMessage.textContent = "";
+
+  syncPickupAddressVisibility();
+}
+
+async function saveFulfillmentSettingsRPC(payload) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/rpc/set_business_fulfillment_settings`,
+      {
+        method:"POST",
+        headers:merchantHeaders({
+          Prefer:"return=representation"
+        }),
+        body:JSON.stringify({
+          p_business_id:
+            Number(selectedBusiness.id),
+          p_delivery_enabled:
+            payload.deliveryEnabled,
+          p_pickup_enabled:
+            payload.pickupEnabled,
+          p_pickup_address:
+            payload.pickupAddress || null
+        })
+      }
+    );
+
+  const data =
+    responseText.trim()
+      ? JSON.parse(responseText)
+      : null;
+
+  return Array.isArray(data)
+    ? data[0] || null
+    : data;
+}
+
+async function saveFulfillmentSettings() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  const payload = {
+    deliveryEnabled:
+      Boolean(deliveryEnabled.checked),
+    pickupEnabled:
+      Boolean(pickupEnabled.checked),
+    pickupAddress:
+      pickupAddress.value.trim()
+  };
+
+  if (
+    !payload.deliveryEnabled &&
+    !payload.pickupEnabled
+  ) {
+    fulfillmentSettingsMessage.textContent =
+      "Dejá activo al menos Delivery o Retiro en el local.";
+    return;
+  }
+
+  if (
+    payload.pickupEnabled &&
+    !payload.pickupAddress
+  ) {
+    fulfillmentSettingsMessage.textContent =
+      "Escribí la dirección del local para habilitar el retiro.";
+    pickupAddress.focus();
+    return;
+  }
+
+  saveFulfillmentSettingsButton.disabled = true;
+  saveFulfillmentSettingsButton.textContent =
+    "Guardando...";
+
+  fulfillmentSettingsMessage.textContent = "";
+
   try {
-    const stored =
-      localStorage.getItem(
-        cartStorageKey()
+    const saved =
+      await saveFulfillmentSettingsRPC(
+        payload
       );
 
-    cart =
-      stored
-        ? JSON.parse(stored)
-        : [];
-
-    if (!Array.isArray(cart)) {
-      cart = [];
+    if (!saved?.id) {
+      throw new Error(
+        "Supabase no devolvió la configuración guardada."
+      );
     }
 
+    Object.assign(
+      selectedBusiness,
+      saved
+    );
+
+    fillFulfillmentSettingsForm();
+
+    fulfillmentSettingsMessage.textContent =
+      "Modalidades guardadas. La web del cliente ya usa esta configuración.";
+
+    showToast(
+      "Entrega y retiro actualizados.",
+      "success"
+    );
   } catch (error) {
-    cart = [];
-  }
-
-  updateCartBar();
-}
-
-
-function openCheckoutModal() {
-  checkoutFormError.classList.remove("show");
-  checkoutFormError.textContent = "";
-
-  checkoutItemsCount.textContent =
-    cart.reduce(
-      (sum,item) =>
-        sum + Number(item.quantity || 0),
-      0
+    console.error(
+      "Error guardando entrega/retiro:",
+      error
     );
 
-  checkoutTotal.textContent =
-    money(cartGrandTotal());
+    fulfillmentSettingsMessage.textContent =
+      `No se pudo guardar: ${error.message || "error desconocido"}`;
 
-  syncDeliveryFields();
-  syncPaymentFields();
-
-  checkoutModal.classList.add("open");
-  checkoutModal.setAttribute("aria-hidden","false");
-  document.body.classList.add("modal-open");
-
-  setTimeout(() => customerName.focus(),50);
-}
-
-function closeCheckoutModal() {
-  checkoutModal.classList.remove("open");
-  checkoutModal.setAttribute("aria-hidden","true");
-  document.body.classList.remove("modal-open");
-}
-
-function fulfillmentSettings() {
-  const deliveryEnabled =
-    business?.delivery_enabled !== false;
-
-  const pickupEnabled =
-    business?.pickup_enabled !== false;
-
-  const pickupAddress =
-    String(
-      business?.pickup_address ||
-      business?.address ||
-      ""
-    ).trim();
-
-  return {
-    deliveryEnabled,
-    pickupEnabled,
-    pickupAddress
-  };
-}
-
-function setDefaultFulfillmentType() {
-  const settings =
-    fulfillmentSettings();
-
-  if (settings.deliveryEnabled) {
-    deliveryType.value = "delivery";
-  } else if (settings.pickupEnabled) {
-    deliveryType.value = "pickup";
-  }
-}
-
-function configureFulfillmentOptions() {
-  if (!deliveryType) {
-    return;
-  }
-
-  const settings =
-    fulfillmentSettings();
-
-  const options = [];
-
-  if (settings.deliveryEnabled) {
-    options.push(
-      '<option value="delivery">Delivery - env&iacute;o a domicilio</option>'
+    showToast(
+      "No se pudo guardar la configuración.",
+      "error"
     );
+  } finally {
+    saveFulfillmentSettingsButton.disabled = false;
+    saveFulfillmentSettingsButton.textContent =
+      "Guardar modalidades";
   }
-
-  if (settings.pickupEnabled) {
-    options.push(
-      '<option value="pickup">Retiro en el local</option>'
-    );
-  }
-
-  /*
-    La RPC no permite guardar ambos métodos desactivados,
-    pero este fallback evita dejar el checkout inutilizable si
-    todavía hay datos antiguos en caché.
-  */
-  if (!options.length) {
-    options.push(
-      '<option value="delivery">Delivery - env&iacute;o a domicilio</option>'
-    );
-  }
-
-  const previous =
-    deliveryType.value;
-
-  deliveryType.innerHTML =
-    options.join("");
-
-  if (
-    previous &&
-    [...deliveryType.options].some(
-      (option) =>
-        option.value === previous
-    )
-  ) {
-    deliveryType.value = previous;
-  } else {
-    setDefaultFulfillmentType();
-  }
-
-  if (deliveryChoiceField) {
-    deliveryChoiceField.hidden =
-      options.length === 1;
-  }
-
-  if (fulfillmentModeNotice) {
-    if (
-      settings.deliveryEnabled &&
-      !settings.pickupEnabled
-    ) {
-      fulfillmentModeNotice.textContent =
-        "Este comercio realiza únicamente entregas por delivery.";
-      fulfillmentModeNotice.hidden = false;
-    } else if (
-      !settings.deliveryEnabled &&
-      settings.pickupEnabled
-    ) {
-      fulfillmentModeNotice.textContent =
-        "Este comercio trabaja únicamente con retiro en el local.";
-      fulfillmentModeNotice.hidden = false;
-    } else {
-      fulfillmentModeNotice.hidden = true;
-      fulfillmentModeNotice.textContent = "";
-    }
-  }
-
-  syncDeliveryFields();
 }
 
-function syncDeliveryFields() {
-  const isDelivery =
-    deliveryType.value === "delivery";
-
-  const isPickup =
-    deliveryType.value === "pickup";
-
-  if (pickupInfoCard) {
-    pickupInfoCard.hidden =
-      !isPickup;
+deliveryEnabled?.addEventListener(
+  "change",
+  () => {
+    fulfillmentSettingsMessage.textContent = "";
   }
+);
 
-  if (
-    isPickup &&
-    pickupAddressText
-  ) {
-    const settings =
-      fulfillmentSettings();
-
-    pickupAddressText.textContent =
-      settings.pickupAddress ||
-      "Consultá al comercio por la dirección de retiro.";
+pickupEnabled?.addEventListener(
+  "change",
+  () => {
+    fulfillmentSettingsMessage.textContent = "";
+    syncPickupAddressVisibility();
   }
+);
 
-  deliveryExtraFields.style.display =
-    isDelivery ? "grid" : "none";
-
-  customerAddress.required = isDelivery;
-  paymentMethod.required = isDelivery;
-
-  if (!isDelivery) {
-    customerAddress.value = "";
-    customerReference.value = "";
-    cashAmount.value = "";
-    paymentMethod.required = false;
+fulfillmentSettingsForm?.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    await saveFulfillmentSettings();
   }
+);
 
-  syncPaymentFields();
-}
 
-function paymentDisplayDefaults() {
+function paymentDefaults() {
   return {
     bank:"Banco / Institución",
     holder:"Nombre del titular",
@@ -3188,764 +1855,5476 @@ function paymentDisplayDefaults() {
   };
 }
 
-function renderTransferInfo() {
-  const defaults =
-    paymentDisplayDefaults();
-
-  if (!transferInfoCard) {
+function fillPaymentSettingsForm() {
+  if (!selectedBusiness) {
     return;
   }
 
-  transferBankName.textContent =
-    business?.payment_bank_name ||
+  const defaults =
+    paymentDefaults();
+
+  paymentBankName.value =
+    selectedBusiness.payment_bank_name ||
     defaults.bank;
 
-  transferAccountHolder.textContent =
-    business?.payment_account_holder ||
+  paymentAccountHolder.value =
+    selectedBusiness.payment_account_holder ||
     defaults.holder;
 
-  transferAccountNumber.textContent =
-    business?.payment_account_number ||
+  paymentAccountNumber.value =
+    selectedBusiness.payment_account_number ||
     defaults.account;
 
-  transferCurrency.textContent =
-    business?.payment_currency ||
+  paymentCurrency.value =
+    selectedBusiness.payment_currency ||
     defaults.currency;
 
-  transferInstructions.textContent =
-    business?.payment_instructions ||
+  paymentInstructions.value =
+    selectedBusiness.payment_instructions ||
     defaults.instructions;
+
+  paymentSettingsMessage.textContent = "";
 }
 
-function syncPaymentFields() {
-  const isDelivery =
-    deliveryType.value === "delivery";
-
-  const isCash =
-    paymentMethod.value === "cash";
-
-  const isTransfer =
-    paymentMethod.value === "transfer";
-
-  cashAmountField.style.display =
-    isDelivery && isCash
-      ? "grid"
-      : "none";
-
-  if (transferInfoCard) {
-    transferInfoCard.hidden =
-      !(isDelivery && isTransfer);
-  }
-
-  if (!isDelivery || !isCash) {
-    cashAmount.value = "";
-  }
-
-  if (isDelivery && isTransfer) {
-    renderTransferInfo();
-  }
-}
-
-function showCheckoutError(message) {
-  checkoutFormError.textContent = message;
-  checkoutFormError.classList.add("show");
-}
-
-function hideCheckoutError() {
-  checkoutFormError.classList.remove("show");
-}
-
-async function saveOrderToSupabase() {
-  const total = cartGrandTotal();
-
-  const order = await insertRow(
-    "orders",
-    {
-      business_id:business.id,
-      customer_name:customerName.value.trim(),
-      customer_phone:customerPhone.value.trim(),
-      delivery_type:deliveryType.value,
-      delivery_address:
-        deliveryType.value === "delivery"
-          ? customerAddress.value.trim()
-          : null,
-      delivery_reference:
-        deliveryType.value === "delivery"
-          ? customerReference.value.trim() || null
-          : null,
-      payment_method:
-        deliveryType.value === "delivery"
-          ? paymentMethod.value
-          : null,
-      cash_amount:
-        deliveryType.value === "delivery" &&
-        paymentMethod.value === "cash" &&
-        cashAmount.value
-          ? Number(cashAmount.value)
-          : null,
-      notes:
-        customerNotes.value.trim() || null,
-      status:"received",
-      total,
-      source:"web"
-    }
-  );
-
-  if (!order?.id) {
-    throw new Error(
-      "Supabase no devolvio el ID del pedido."
-    );
-  }
-
-  for (const item of cart) {
-    const orderItem = await insertRow(
-      "order_items",
+async function savePaymentSettingsRPC(payload) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/rpc/set_business_payment_settings`,
       {
-        order_id:order.id,
-        product_id:item.productId,
-        product_name:item.productName,
-        quantity:item.quantity,
-        unit_price:
-          Number(item.quantity || 0) > 0
-            ? itemEffectiveTotal(item) /
-              Number(item.quantity)
-            : 0,
-        total:
-          itemEffectiveTotal(item)
+        method:"POST",
+        headers:merchantHeaders({
+          Prefer:"return=representation"
+        }),
+        body:JSON.stringify({
+          p_business_id:
+            Number(selectedBusiness.id),
+          p_bank_name:
+            payload.bank,
+          p_account_holder:
+            payload.holder,
+          p_account_number:
+            payload.account,
+          p_currency:
+            payload.currency,
+          p_instructions:
+            payload.instructions
+        })
       }
     );
 
-    if (!orderItem?.id) {
-      continue;
-    }
+  const data =
+    responseText.trim()
+      ? JSON.parse(responseText)
+      : null;
 
-    const freeQty =
-      includedFreeQtyForItem(
-        item
-      );
+  return Array.isArray(data)
+    ? data[0] || null
+    : data;
+}
 
-    if (freeQty > 0) {
-      await insertRow(
-        "order_item_options",
-        {
-          order_item_id:orderItem.id,
-          group_name:"PROMO",
-          option_name:
-            `${freeQty} UNIDAD${freeQty === 1 ? "" : "ES"} GRATIS`,
-          price_delta:
-            -itemPromoSavings(item)
-        },
-        false
-      );
-    }
-
-    for (const option of item.options) {
-      await insertRow(
-        "order_item_options",
-        {
-          order_item_id:orderItem.id,
-          group_name:option.groupName,
-          option_name:option.optionName,
-          price_delta:option.price
-        },
-        false
-      );
-    }
+async function savePaymentSettings() {
+  if (!selectedBusiness) {
+    return;
   }
 
-  for (const gift of cartGiftItems()) {
-    const giftOrderItem=await insertRow(
-      "order_items",
-      {
-        order_id:order.id,
-        product_id:gift.productId,
-        product_name:gift.productName,
-        quantity:gift.quantity,
-        unit_price:0,
-        total:0
-      }
+  const payload = {
+    bank:
+      paymentBankName.value.trim(),
+    holder:
+      paymentAccountHolder.value.trim(),
+    account:
+      paymentAccountNumber.value.trim(),
+    currency:
+      paymentCurrency.value.trim(),
+    instructions:
+      paymentInstructions.value.trim()
+  };
+
+  if (
+    !payload.bank ||
+    !payload.holder ||
+    !payload.account
+  ) {
+    paymentSettingsMessage.textContent =
+      "Completá banco, titular y número de cuenta.";
+    return;
+  }
+
+  savePaymentSettingsButton.disabled = true;
+  savePaymentSettingsButton.textContent =
+    "Guardando...";
+
+  paymentSettingsMessage.textContent = "";
+
+  try {
+    const saved =
+      await savePaymentSettingsRPC(
+        payload
+      );
+
+    if (!saved?.id) {
+      throw new Error(
+        "Supabase no devolvió los datos guardados."
+      );
+    }
+
+    Object.assign(
+      selectedBusiness,
+      saved
     );
 
-    if(giftOrderItem?.id){
-      await insertRow(
-        "order_item_options",
-        {
-          order_item_id:giftOrderItem.id,
-          group_name:"PROMO",
-          option_name:"REGALO",
-          price_delta:0
-        },
-        false
-      );
-    }
-  }
+    fillPaymentSettingsForm();
 
-  return order;
-}
+    paymentSettingsMessage.textContent =
+      "Datos guardados. Ya están disponibles para los clientes.";
 
-
-const MAMMA_MIA_FALLBACK_PHONE = "59892569559";
-
-function businessWhatsappPhone() {
-  const configured = String(business?.phone || "").replace(/\D/g, "");
-  if (configured) {
-    return configured;
-  }
-
-  return business?.slug === "mamma-mia"
-    ? MAMMA_MIA_FALLBACK_PHONE
-    : "";
-}
-
-function whatsappOrderMessage() {
-  const businessName = String(business?.name || "COMERCIO").trim();
-  const lines = [
-    `🛒 *${businessName.toUpperCase()} - NUEVO PEDIDO*`,
-    "",
-    "\ud83e\uddfe *PEDIDO*",
-    ""
-  ];
-
-  cart.forEach((item) => {
-    if (
-      item.type === "empanadas" &&
-      Array.isArray(item.flavors)
-    ) {
-      const quantity =
-        Number(item.quantity || 0);
-
-      lines.push(
-        `*${quantity} EMPANADA${quantity === 1 ? "" : "S"}*`
-      );
-
-      item.flavors.forEach((flavor) => {
-        lines.push(
-          `${flavor.quantity} ${String(flavor.optionName || "").trim().toUpperCase()}`
-        );
-      });
-
-      const freeQty =
-        includedFreeQtyForItem(
-          item
-        );
-
-      if (freeQty > 0) {
-        lines.push(
-          `🎁 PROMO: ${freeQty} EMPANADA${freeQty === 1 ? "" : "S"} GRATIS`
-        );
-        lines.push(
-          `Ahorrás: ${money(itemPromoSavings(item))}`
-        );
-      }
-
-      lines.push(
-        `Subtotal: *${money(itemEffectiveTotal(item))}*`
-      );
-      lines.push("");
-      return;
-    }
-
-    const quantity = Number(item.quantity || 1);
-    const productName =
-      String(item.productName || "Producto")
-        .trim()
-        .toUpperCase();
-
-    const sizeOption = item.options.find((option) => {
-      const group =
-        String(option.groupName || "")
-          .trim()
-          .toUpperCase();
-
-      return (
-        group.includes("TAMANO") ||
-        group.includes("TAMA\u00d1O")
-      );
-    });
-
-    const sizeName =
-      sizeOption
-        ? String(sizeOption.optionName || "")
-            .trim()
-            .toUpperCase()
-        : "";
-
-    let title =
-      `${quantity} ${productName}`;
-
-    if (sizeName) {
-      title += ` - ${sizeName}`;
-    }
-
-    lines.push(`*${title}*`);
-
-    item.options.forEach((option) => {
-      if (option === sizeOption) {
-        return;
-      }
-
-      const optionName =
-        String(option.optionName || "").trim();
-
-      if (!optionName) {
-        return;
-      }
-
-      const extra =
-        Number(option.price || 0);
-
-      lines.push(
-        extra > 0
-          ? `+ ${optionName} - ${money(extra)}`
-          : `+ ${optionName}`
-      );
-    });
-
-    if (Number(item.promoPercent || 0) > 0) {
-      lines.push(`PROMO APLICADA: -${Number(item.promoPercent)}%`);
-    }
-
-    const includedFree =
-      includedFreeQtyForItem(
-        item
-      );
-
-    if (includedFree > 0) {
-      lines.push(
-        `🎁 PROMO: ${includedFree} UNIDAD${includedFree === 1 ? "" : "ES"} GRATIS`
-      );
-      lines.push(
-        `Ahorrás: ${money(itemPromoSavings(item))}`
-      );
-    }
-
-    lines.push(
-      `Subtotal: *${money(itemEffectiveTotal(item))}*`
+    showToast(
+      "Datos de cobro actualizados.",
+      "success"
     );
-    lines.push("");
-  });
-
-  const gifts=cartGiftItems();
-  if(gifts.length){
-    lines.push("🎁 *REGALO PROMO*");
-    gifts.forEach(gift=>{
-      lines.push(`${gift.quantity} ${String(gift.productName||"").trim().toUpperCase()} - GRATIS`);
-    });
-    lines.push("");
-  }
-
-  const notes =
-    customerNotes.value.trim();
-
-  if (notes) {
-    lines.push("\ud83d\udcdd *OBSERVACIONES*");
-    lines.push(`*${notes.toUpperCase()}*`);
-    lines.push("");
-  }
-
-  lines.push(
-    `\ud83d\udcb5 *TOTAL: ${money(cartGrandTotal())}*`
-  );
-  lines.push("");
-
-  lines.push("\ud83d\udc64 *CLIENTE*");
-  lines.push(customerName.value.trim());
-  lines.push(customerPhone.value.trim());
-  lines.push("");
-
-  if (deliveryType.value === "pickup") {
-    lines.push("\ud83c\udfea *RETIRO EN EL LOCAL*");
-
-    const pickupAddress =
-      fulfillmentSettings().pickupAddress;
-
-    if (pickupAddress) {
-      lines.push(
-        `Dirección: ${pickupAddress}`
-      );
-    }
-  } else {
-    lines.push("\ud83d\udef5 *DELIVERY*");
-    lines.push(
-      `Direccion: ${customerAddress.value.trim()}`
+  } catch (error) {
+    console.error(
+      "Error guardando datos de cobro:",
+      error
     );
 
-    const reference =
-      customerReference.value.trim();
+    paymentSettingsMessage.textContent =
+      `No se pudo guardar: ${error.message || "error desconocido"}`;
 
-    if (reference) {
-      lines.push(`Referencia: ${reference}`);
-    }
-
-    lines.push("");
-    lines.push("\ud83d\udcb3 *PAGO*");
-
-    if (paymentMethod.value === "cash") {
-      lines.push("Efectivo");
-
-      if (cashAmount.value) {
-        lines.push(
-          `Paga con: ${money(Number(cashAmount.value))}`
-        );
-      }
-    } else {
-      lines.push("Transferencia / Débito");
-    }
+    showToast(
+      "No se pudieron guardar los datos.",
+      "error"
+    );
+  } finally {
+    savePaymentSettingsButton.disabled = false;
+    savePaymentSettingsButton.textContent =
+      "Guardar datos de cobro";
   }
-
-  lines.push("");
-  lines.push("--------------------");
-  lines.push(`*Pedido realizado desde ${String(business?.name || "DENEXA").trim()}*`);
-
-  return lines.join("\n");
 }
 
-function whatsappOrderUrl() {
-  const phone = businessWhatsappPhone();
-  if (!phone) {
-    return "";
-  }
-
-  return (
-    `https://wa.me/${phone}` +
-    `?text=${encodeURIComponent(whatsappOrderMessage())}`
-  );
-}
-
-checkoutForm.addEventListener(
+paymentSettingsForm?.addEventListener(
   "submit",
   async (event) => {
     event.preventDefault();
-    hideCheckoutError();
-
-    if (!cart.length) {
-      showCheckoutError(
-        "El carrito est\u00e1 vac\u00edo."
-      );
-      return;
-    }
-
-    if (!customerName.value.trim()) {
-      showCheckoutError(
-        "Escrib\u00ed tu nombre."
-      );
-      return;
-    }
-
-    if (!customerPhone.value.trim()) {
-      showCheckoutError(
-        "Escrib\u00ed tu tel\u00e9fono."
-      );
-      return;
-    }
-
-    const fulfillment =
-      fulfillmentSettings();
-
-    if (
-      deliveryType.value === "delivery" &&
-      !fulfillment.deliveryEnabled
-    ) {
-      showCheckoutError(
-        "El delivery no está disponible en este momento."
-      );
-      configureFulfillmentOptions();
-      return;
-    }
-
-    if (
-      deliveryType.value === "pickup" &&
-      !fulfillment.pickupEnabled
-    ) {
-      showCheckoutError(
-        "El retiro en el local no está disponible en este momento."
-      );
-      configureFulfillmentOptions();
-      return;
-    }
-
-    if (
-      deliveryType.value === "delivery" &&
-      !customerAddress.value.trim()
-    ) {
-      showCheckoutError(
-        "Escrib\u00ed la direcci\u00f3n de entrega."
-      );
-      return;
-    }
-
-    if (
-      deliveryType.value === "delivery" &&
-      paymentMethod.value === "cash" &&
-      cashAmount.value &&
-      Number(cashAmount.value) < cartGrandTotal()
-    ) {
-      showCheckoutError(
-        "El monto en efectivo no puede ser menor al total."
-      );
-      return;
-    }
-
-    confirmOrderButton.disabled = true;
-    confirmOrderButton.textContent =
-      "Verificando disponibilidad...";
-
-    try {
-      if (!(await requireOrderingOpen())) {
-        confirmOrderButton.disabled = false;
-        confirmOrderButton.textContent =
-          "Confirmar pedido";
-        return;
-      }
-
-      confirmOrderButton.textContent =
-        "Enviando pedido...";
-
-      const order =
-        await saveOrderToSupabase();
-
-      const whatsappUrl =
-        whatsappOrderUrl();
-
-      if (!whatsappUrl) {
-        throw new Error(
-          "El comercio no tiene un teléfono de WhatsApp configurado."
-        );
-      }
-
-      closeCheckoutModal();
-
-      cart = [];
-      saveCart();
-      updateCartBar();
-
-      checkoutForm.reset();
-      configureFulfillmentOptions();
-      paymentMethod.value = "cash";
-      syncDeliveryFields();
-      syncPaymentFields();
-
-      window.location.href =
-        whatsappUrl;
-
-    } catch (error) {
-      console.error(
-        "Error confirmando pedido:",
-        error
-      );
-
-      showCheckoutError(
-        "No se pudo enviar el pedido. Revis\u00e1 la configuraci\u00f3n de Supabase."
-      );
-    } finally {
-      confirmOrderButton.disabled = false;
-      confirmOrderButton.textContent =
-        "Confirmar pedido";
-    }
+    await savePaymentSettings();
   }
 );
 
-deliveryType.addEventListener(
-  "change",
-  syncDeliveryFields
+
+function customerNoticeDefaults() {
+  return {
+    approvedEnabled:true,
+    readyEnabled:true,
+    deliveryEnabled:true,
+    approved:
+      "Hola {cliente}, tu pedido fue confirmado por {comercio}. Total: {total}.",
+    ready:
+      "Hola {cliente}, tu pedido ya está listo para retirar en {comercio}. ¡Te esperamos!",
+    delivery:
+      "Hola {cliente}, tu pedido de {comercio} ya está en camino hacia {direccion}."
+  };
+}
+
+function fillCustomerNoticesForm() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  const defaults =
+    customerNoticeDefaults();
+
+  noticeApprovedEnabled.checked =
+    selectedBusiness.notice_approved_enabled !== false;
+
+  noticeReadyEnabled.checked =
+    selectedBusiness.notice_ready_enabled !== false;
+
+  noticeDeliveryEnabled.checked =
+    selectedBusiness.notice_delivery_enabled !== false;
+
+  noticeApprovedMessage.value =
+    selectedBusiness.notice_approved_message ||
+    defaults.approved;
+
+  noticeReadyMessage.value =
+    selectedBusiness.notice_ready_message ||
+    defaults.ready;
+
+  noticeDeliveryMessage.value =
+    selectedBusiness.notice_delivery_message ||
+    defaults.delivery;
+
+  customerNoticesMessage.textContent = "";
+
+  updateCustomerNoticesOrdersState();
+}
+
+function updateCustomerNoticesOrdersState() {
+  if (!customerNoticesOrdersState || !selectedBusiness) {
+    return;
+  }
+
+  const enabled = [
+    selectedBusiness.notice_approved_enabled !== false,
+    selectedBusiness.notice_ready_enabled !== false,
+    selectedBusiness.notice_delivery_enabled !== false
+  ].filter(Boolean).length;
+
+  customerNoticesOrdersState.textContent =
+    enabled === 0
+      ? "Avisos desactivados."
+      : enabled === 3
+        ? "3 avisos disponibles. Vos elegís cuándo enviarlos."
+        : `${enabled} aviso${enabled === 1 ? "" : "s"} disponible${enabled === 1 ? "" : "s"}. Vos elegís cuándo enviarlo${enabled === 1 ? "" : "s"}.`;
+}
+
+async function saveCustomerNoticesRPC(payload) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/rpc/set_business_customer_notices`,
+      {
+        method:"POST",
+        headers:merchantHeaders({
+          Prefer:"return=representation"
+        }),
+        body:JSON.stringify({
+          p_business_id:
+            Number(selectedBusiness.id),
+          p_approved_enabled:
+            payload.approvedEnabled,
+          p_approved_message:
+            payload.approved,
+          p_ready_enabled:
+            payload.readyEnabled,
+          p_ready_message:
+            payload.ready,
+          p_delivery_enabled:
+            payload.deliveryEnabled,
+          p_delivery_message:
+            payload.delivery
+        })
+      }
+    );
+
+  const data =
+    responseText.trim()
+      ? JSON.parse(responseText)
+      : null;
+
+  return Array.isArray(data)
+    ? data[0] || null
+    : data;
+}
+
+async function saveCustomerNotices() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  const payload = {
+    approvedEnabled:
+      noticeApprovedEnabled.checked,
+    approved:
+      noticeApprovedMessage.value.trim(),
+    readyEnabled:
+      noticeReadyEnabled.checked,
+    ready:
+      noticeReadyMessage.value.trim(),
+    deliveryEnabled:
+      noticeDeliveryEnabled.checked,
+    delivery:
+      noticeDeliveryMessage.value.trim()
+  };
+
+  if (
+    (payload.approvedEnabled && !payload.approved) ||
+    (payload.readyEnabled && !payload.ready) ||
+    (payload.deliveryEnabled && !payload.delivery)
+  ) {
+    customerNoticesMessage.textContent =
+      "Todo aviso activado debe tener un mensaje.";
+    return;
+  }
+
+  saveCustomerNoticesButton.disabled = true;
+  saveCustomerNoticesButton.textContent =
+    "Guardando...";
+
+  customerNoticesMessage.textContent = "";
+
+  try {
+    const saved =
+      await saveCustomerNoticesRPC(
+        payload
+      );
+
+    if (!saved?.id) {
+      throw new Error(
+        "Supabase no devolvió la configuración guardada."
+      );
+    }
+
+    Object.assign(
+      selectedBusiness,
+      saved
+    );
+
+    fillCustomerNoticesForm();
+
+    customerNoticesMessage.textContent =
+      "Avisos guardados correctamente.";
+
+    showToast(
+      "Avisos al cliente actualizados.",
+      "success"
+    );
+
+    renderOrders();
+  } catch (error) {
+    console.error(
+      "Error guardando avisos:",
+      error
+    );
+
+    customerNoticesMessage.textContent =
+      `No se pudo guardar: ${error.message || "error desconocido"}`;
+
+    showToast(
+      "No se pudieron guardar los avisos.",
+      "error"
+    );
+  } finally {
+    saveCustomerNoticesButton.disabled = false;
+    saveCustomerNoticesButton.textContent =
+      "Guardar avisos";
+  }
+}
+
+customerNoticesForm?.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    await saveCustomerNotices();
+  }
 );
 
-paymentMethod.addEventListener(
-  "change",
-  syncPaymentFields
-);
 
-closeCheckoutButton.addEventListener(
+function promoDefaults() {
+  return {
+    badge:"PROMO DEL DÍA",
+    title:"¡No te la pierdas!",
+    text:"10% de descuento en pizzas de 1/2 metro."
+  };
+}
+
+async function loadPromoBuilderOptions() {
+  if (!selectedBusiness?.id) {
+    promoTargetId.innerHTML =
+      '<option value="">No hay comercio seleccionado</option>';
+
+    promoRewardProductId.innerHTML =
+      '<option value="">No hay comercio seleccionado</option>';
+
+    return;
+  }
+
+  const businessId =
+    encodeURIComponent(
+      selectedBusiness.id
+    );
+
+  try {
+    /*
+      V70:
+      Consultamos directamente los registros del comercio,
+      igual que hace el resto del panel. No cargamos toda la
+      tabla y luego filtramos en el navegador.
+    */
+    const [
+      categoriesText,
+      productsText
+    ] = await Promise.all([
+      requestText(
+        `${SUPABASE_REST}/categories?business_id=eq.${businessId}&active=eq.true&select=id,name&order=name.asc`,
+        {
+          method:"GET",
+          headers:merchantHeaders()
+        }
+      ),
+      requestText(
+        `${SUPABASE_REST}/products?business_id=eq.${businessId}&active=eq.true&select=id,category_id,name,available&order=name.asc`,
+        {
+          method:"GET",
+          headers:merchantHeaders()
+        }
+      )
+    ]);
+
+    const cats =
+      categoriesText.trim()
+        ? JSON.parse(categoriesText)
+        : [];
+
+    const prods =
+      productsText.trim()
+        ? JSON.parse(productsText)
+        : [];
+
+    const safeCats =
+      Array.isArray(cats)
+        ? cats
+        : [];
+
+    const safeProds =
+      Array.isArray(prods)
+        ? prods
+        : [];
+
+    promoTargetId.dataset.categories =
+      JSON.stringify(
+        safeCats.map(
+          (item) => ({
+            id:item.id,
+            name:item.name
+          })
+        )
+      );
+
+    promoTargetId.dataset.products =
+      JSON.stringify(
+        safeProds.map(
+          (item) => ({
+            id:item.id,
+            name:item.name
+          })
+        )
+      );
+
+    promoRewardProductId.innerHTML =
+      safeProds.length
+        ? safeProds
+            .map(
+              (item) => `
+                <option value="${escapeHTML(item.id)}">
+                  ${escapeHTML(item.name)}
+                </option>
+              `
+            )
+            .join("")
+        : '<option value="">No hay productos cargados</option>';
+
+    refreshPromoTargetOptions();
+
+    if (
+      selectedBusiness.promo_target_id
+    ) {
+      promoTargetId.value =
+        String(
+          selectedBusiness.promo_target_id
+        );
+    }
+
+    if (
+      selectedBusiness.promo_reward_product_id
+    ) {
+      promoRewardProductId.value =
+        String(
+          selectedBusiness.promo_reward_product_id
+        );
+    }
+
+    if (
+      !safeCats.length &&
+      !safeProds.length
+    ) {
+      dailyPromoMessage.textContent =
+        "No se encontraron categorías ni productos para este comercio.";
+    }
+  } catch (error) {
+    console.error(
+      "Error cargando categorías/productos para promociones:",
+      error
+    );
+
+    promoTargetId.innerHTML =
+      '<option value="">No se pudieron cargar las opciones</option>';
+
+    promoRewardProductId.innerHTML =
+      '<option value="">No se pudieron cargar los productos</option>';
+
+    dailyPromoMessage.textContent =
+      `No se pudieron cargar categorías y productos: ${error.message || "error desconocido"}`;
+  }
+}
+
+function refreshPromoTargetOptions() {
+  let items=[];
+  try {
+    items=JSON.parse(
+      promoTargetType.value === "product"
+        ? promoTargetId.dataset.products || "[]"
+        : promoTargetId.dataset.categories || "[]"
+    );
+  } catch(e) {}
+
+  promoTargetId.innerHTML =
+    items.length
+      ? items.map(x=>`<option value="${escapeHTML(x.id)}">${escapeHTML(x.name)}</option>`).join("")
+      : '<option value="">Sin opciones</option>';
+}
+
+function updatePromoRuleFields() {
+  const type=dailyPromoRuleType.value;
+  promoAutomaticFields.hidden =
+    type === "announcement";
+  promoPercentFields.hidden =
+    type !== "percent";
+  promoGiftFields.hidden =
+    type !== "gift";
+}
+
+function updateDailyPromoUI() {
+  if (!dailyPromoActive) return;
+
+  const defaults=promoDefaults();
+  const active=Boolean(dailyPromoActive.checked);
+
+  dailyPromoActiveText.textContent =
+    active ? "Activada" : "Desactivada";
+  dailyPromoStatusBadge.textContent =
+    active ? "Promo activa" : "Promo desactivada";
+  dailyPromoStatusBadge.classList.toggle("closed",!active);
+  dailyPromoPreview.classList.toggle("inactive",!active);
+
+  dailyPromoPreviewBadge.textContent =
+    dailyPromoBadge.value.trim() || defaults.badge;
+  dailyPromoPreviewTitle.textContent =
+    dailyPromoTitle.value.trim() || defaults.title;
+
+  let text=dailyPromoText.value.trim() || defaults.text;
+  if (dailyPromoRuleType.value === "percent") {
+    text += ` · ${Number(promoDiscountPercent.value||0)}% automático`;
+  }
+  if (dailyPromoRuleType.value === "gift") {
+    const gift=promoRewardProductId.selectedOptions?.[0]?.textContent?.trim() || "regalo";
+    text += ` · Cada ${Number(promoTriggerQty.value||1)} = ${Number(promoRewardQty.value||1)} ${gift} GRATIS`;
+  }
+  dailyPromoPreviewText.textContent=text;
+  updatePromoRuleFields();
+}
+
+async function fillDailyPromoForm() {
+  if (!selectedBusiness) return;
+
+  const defaults=promoDefaults();
+  dailyPromoActive.checked=selectedBusiness.promo_active === true;
+  dailyPromoBadge.value=selectedBusiness.promo_badge || defaults.badge;
+  dailyPromoTitle.value=selectedBusiness.promo_title || defaults.title;
+  dailyPromoText.value=selectedBusiness.promo_text || defaults.text;
+  dailyPromoRuleType.value=selectedBusiness.promo_rule_type || "announcement";
+  promoTargetType.value=selectedBusiness.promo_target_type || "category";
+  promoDiscountPercent.value=Number(selectedBusiness.promo_discount_percent || 15);
+  promoTriggerQty.value=Number(selectedBusiness.promo_trigger_qty || 2);
+  promoRewardQty.value=Number(selectedBusiness.promo_reward_qty || 1);
+  promoRepeat.checked=selectedBusiness.promo_repeat !== false;
+  dailyPromoMessage.textContent="";
+
+  await loadPromoBuilderOptions();
+  refreshPromoTargetOptions();
+
+  if (selectedBusiness.promo_target_id) {
+    promoTargetId.value=String(selectedBusiness.promo_target_id);
+  }
+  if (selectedBusiness.promo_reward_product_id) {
+    promoRewardProductId.value=String(selectedBusiness.promo_reward_product_id);
+  }
+
+  updateDailyPromoUI();
+}
+
+async function saveDailyPromoRPC(payload) {
+  const responseText=await requestText(
+    `${SUPABASE_REST}/rpc/set_business_daily_promo`,
+    {
+      method:"POST",
+      headers:merchantHeaders({Prefer:"return=representation"}),
+      body:JSON.stringify({
+        p_business_id:Number(selectedBusiness.id),
+        p_active:Boolean(payload.active),
+        p_badge:payload.badge || null,
+        p_title:payload.title || null,
+        p_text:payload.text || null,
+        p_rule_type:payload.ruleType,
+        p_target_type:payload.targetType,
+        p_target_id:payload.targetId,
+        p_discount_percent:payload.discountPercent,
+        p_trigger_qty:payload.triggerQty,
+        p_reward_product_id:payload.rewardProductId,
+        p_reward_qty:payload.rewardQty,
+        p_repeat:payload.repeat
+      })
+    }
+  );
+
+  const data=responseText.trim()?JSON.parse(responseText):null;
+  return Array.isArray(data)?data[0]||null:data;
+}
+
+async function saveDailyPromo() {
+  if (!selectedBusiness) return;
+
+  const ruleType=dailyPromoRuleType.value;
+  const payload={
+    active:dailyPromoActive.checked,
+    badge:dailyPromoBadge.value.trim(),
+    title:dailyPromoTitle.value.trim(),
+    text:dailyPromoText.value.trim(),
+    ruleType,
+    targetType:promoTargetType.value,
+    targetId:promoTargetId.value?Number(promoTargetId.value):null,
+    discountPercent:ruleType==="percent"?Number(promoDiscountPercent.value):null,
+    triggerQty:ruleType==="gift"?Math.max(1,Number(promoTriggerQty.value||1)):null,
+    rewardProductId:ruleType==="gift"&&promoRewardProductId.value?Number(promoRewardProductId.value):null,
+    rewardQty:ruleType==="gift"?Math.max(1,Number(promoRewardQty.value||1)):null,
+    repeat:Boolean(promoRepeat.checked)
+  };
+
+  if (payload.active && (!payload.title || !payload.text)) {
+    dailyPromoMessage.textContent="Para activar la promo, completá el título y la promoción.";
+    return;
+  }
+  if (payload.active && ruleType!=="announcement" && !payload.targetId) {
+    dailyPromoMessage.textContent="Elegí la categoría o producto que activa la promoción.";
+    return;
+  }
+  if (payload.active && ruleType==="percent" && (payload.discountPercent<1 || payload.discountPercent>100)) {
+    dailyPromoMessage.textContent="El descuento debe estar entre 1% y 100%.";
+    return;
+  }
+  if (payload.active && ruleType==="gift" && !payload.rewardProductId) {
+    dailyPromoMessage.textContent="Elegí el producto de regalo.";
+    return;
+  }
+
+  saveDailyPromoButton.disabled=true;
+  disableDailyPromoButton.disabled=true;
+  saveDailyPromoButton.textContent="Guardando...";
+  dailyPromoMessage.textContent="";
+
+  try {
+    const saved=await saveDailyPromoRPC(payload);
+    if (!saved?.id) throw new Error("Supabase no devolvió la promoción guardada.");
+    Object.assign(selectedBusiness,saved);
+    await fillDailyPromoForm();
+    dailyPromoMessage.textContent=saved.promo_active
+      ? "Promoción activa y aplicada automáticamente."
+      : "Promo guardada pero desactivada.";
+    showToast(saved.promo_active?"Promoción activada.":"Promo guardada.","success");
+  } catch(error) {
+    console.error("Error guardando promo:",error);
+    dailyPromoMessage.textContent=`No se pudo guardar: ${error.message||"error desconocido"}`;
+    showToast("No se pudo guardar la promo.","error");
+  } finally {
+    saveDailyPromoButton.disabled=false;
+    disableDailyPromoButton.disabled=false;
+    saveDailyPromoButton.textContent="Guardar promo";
+  }
+}
+
+[
+  dailyPromoBadge,dailyPromoTitle,dailyPromoText,dailyPromoRuleType,
+  promoDiscountPercent,promoTriggerQty,promoRewardQty,promoRewardProductId
+].filter(Boolean).forEach(field=>{
+  field.addEventListener("input",updateDailyPromoUI);
+  field.addEventListener("change",updateDailyPromoUI);
+});
+
+promoTargetType?.addEventListener("change",()=>{
+  refreshPromoTargetOptions();
+  updateDailyPromoUI();
+});
+
+dailyPromoActive?.addEventListener("change",updateDailyPromoUI);
+
+dailyPromoForm?.addEventListener("submit",async(event)=>{
+  event.preventDefault();
+  await saveDailyPromo();
+});
+
+disableDailyPromoButton?.addEventListener("click",async()=>{
+  dailyPromoActive.checked=false;
+  updateDailyPromoUI();
+  await saveDailyPromo();
+});
+
+async function uploadProductImage(blob) {
+  if (!blob) {
+    throw new Error(
+      "Storage: no hay una imagen preparada para subir."
+    );
+  }
+
+  const safeBusinessId =
+    String(selectedBusiness.id);
+
+  const fileName =
+    `${Date.now()}-${Math.random().toString(36).slice(2,10)}.jpg`;
+
+  const objectPath =
+    `${safeBusinessId}/${fileName}`;
+
+  const uploadUrl =
+    `${SUPABASE_URL}/storage/v1/object/product-images/${objectPath}`;
+
+  const response = await fetch(
+    uploadUrl,
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization:
+          `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "image/jpeg",
+        "x-upsert": "false"
+      },
+      body: blob
+    }
+  );
+
+  const responseText =
+    await response.text();
+
+  if (!response.ok) {
+    throw new Error(
+      `Storage ${response.status}: ${responseText || response.statusText}`
+    );
+  }
+
+  const publicUrl =
+    `${SUPABASE_URL}/storage/v1/object/public/product-images/${objectPath}`;
+
+  if (!publicUrl.startsWith("http")) {
+    throw new Error(
+      "Storage: no se pudo generar la URL publica."
+    );
+  }
+
+  return publicUrl;
+}
+
+async function getProductById(productId) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/products?id=eq.${encodeURIComponent(productId)}&select=id,image_url,name`,
+      {
+        method: "GET",
+        headers: merchantHeaders()
+      }
+    );
+
+  if (!responseText.trim()) {
+    return null;
+  }
+
+  const rows = JSON.parse(responseText);
+
+  return Array.isArray(rows)
+    ? rows[0] || null
+    : rows;
+}
+
+async function updateProductAndVerify(
+  productId,
+  payload
+) {
+  await requestText(
+    `${SUPABASE_REST}/products?id=eq.${encodeURIComponent(productId)}`,
+    {
+      method: "PATCH",
+      headers: merchantHeaders({
+        Prefer: "return=minimal"
+      }),
+      body: JSON.stringify(payload)
+    }
+  );
+
+  const updated =
+    await getProductById(productId);
+
+  if (!updated?.id) {
+    throw new Error(
+      "Producto: no se pudo volver a leer el producto despues de guardarlo."
+    );
+  }
+
+  const expectedImage =
+    payload.image_url || null;
+
+  const savedImage =
+    updated.image_url || null;
+
+  if (expectedImage !== savedImage) {
+    throw new Error(
+      "Producto: Supabase no guardo la URL de la imagen en image_url."
+    );
+  }
+
+  return updated;
+}
+
+async function insertProductAndVerify(payload) {
+  const responseText =
+    await requestText(
+      `${SUPABASE_REST}/products?select=id`,
+      {
+        method: "POST",
+        headers: merchantHeaders({
+          Prefer: "return=representation"
+        }),
+        body: JSON.stringify(payload)
+      }
+    );
+
+  let inserted = null;
+
+  if (responseText.trim()) {
+    const rows = JSON.parse(responseText);
+    inserted =
+      Array.isArray(rows)
+        ? rows[0] || null
+        : rows;
+  }
+
+  if (!inserted?.id) {
+    throw new Error(
+      "Producto: no se pudo obtener el ID del producto creado."
+    );
+  }
+
+  const saved =
+    await getProductById(inserted.id);
+
+  const expectedImage =
+    payload.image_url || null;
+
+  const savedImage =
+    saved?.image_url || null;
+
+  if (expectedImage !== savedImage) {
+    throw new Error(
+      "Producto: Supabase no guardo la URL de la imagen en image_url."
+    );
+  }
+
+  return saved;
+}
+
+async function getSelectedBusinessCategories() {
+  const categories = await getTableData(
+    "categories",
+    "id,name,business_id,active"
+  );
+
+  return categories.filter(
+    (category) =>
+      String(category.business_id) ===
+      String(selectedBusiness.id) &&
+      category.active !== false
+  );
+}
+
+async function openProductModal(product = null) {
+  if (!selectedBusiness) {
+    showToast(
+      "Primero seleccion\u00e1 un comercio.",
+      "error"
+    );
+    return;
+  }
+
+  editingProductId =
+    product?.id ?? null;
+
+  existingProductImageUrl =
+    product?.image_url || "";
+
+  removeExistingProductImage = false;
+
+  productForm.reset();
+  productFormMessage.textContent = "";
+  croppedProductImageBlob = null;
+
+  if (croppedProductImageUrl) {
+    URL.revokeObjectURL(croppedProductImageUrl);
+  }
+
+  croppedProductImageUrl = "";
+
+  productModalTitle.textContent =
+    editingProductId
+      ? "Editar producto"
+      : "Crear producto";
+
+  saveProductButton.textContent =
+    editingProductId
+      ? "Guardar cambios"
+      : "Guardar producto";
+
+  selectProductImageButton.textContent =
+    existingProductImageUrl
+      ? "Cambiar imagen"
+      : "Seleccionar imagen";
+
+  removeProductImageButton.hidden =
+    !existingProductImageUrl;
+
+  if (existingProductImageUrl) {
+    productImagePreview.innerHTML = `
+      <img
+        src="${escapeHTML(existingProductImageUrl)}"
+        alt="Imagen actual del producto"
+      >
+    `;
+  } else {
+    productImagePreview.innerHTML =
+      "<span>Sin imagen</span>";
+  }
+
+  try {
+    const categories =
+      await getSelectedBusinessCategories();
+
+    if (!categories.length) {
+      showToast(
+        "Primero cre\u00e1 una categor\u00eda para este comercio.",
+        "error"
+      );
+      return;
+    }
+
+    productCategory.innerHTML = categories
+      .map(
+        (category) => `
+          <option value="${escapeHTML(category.id)}">
+            ${escapeHTML(category.name)}
+          </option>
+        `
+      )
+      .join("");
+
+    if (product) {
+      productName.value =
+        product.name || "";
+
+      productCategory.value =
+        String(product.category_id || "");
+
+      productPrice.value =
+        Number(product.price || 0);
+
+      productOldPrice.value =
+        product.old_price ?? "";
+
+      productSortOrder.value =
+        Number(product.sort_order || 0);
+
+      productFeatured.checked =
+        product.featured === true;
+
+      productDescription.value =
+        product.description || "";
+
+      productActive.checked =
+        product.active !== false;
+    } else {
+      productSortOrder.value = "0";
+      productActive.checked = true;
+      productFeatured.checked = false;
+    }
+
+    productModal.classList.add("open");
+    productModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+
+    setTimeout(() => productName.focus(), 50);
+  } catch (error) {
+    console.error(
+      "Error cargando categorias para producto:",
+      error
+    );
+
+    showToast(
+      "No se pudieron cargar las categor\u00edas.",
+      "error"
+    );
+  }
+}
+
+function closeProductModal() {
+  productModal.classList.remove("open");
+  productModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+
+  editingProductId = null;
+  existingProductImageUrl = "";
+  removeExistingProductImage = false;
+  croppedProductImageBlob = null;
+
+  if (croppedProductImageUrl) {
+    URL.revokeObjectURL(croppedProductImageUrl);
+  }
+
+  croppedProductImageUrl = "";
+}
+
+function renderCropCanvas() {
+  if (!cropImage) {
+    return;
+  }
+
+  const canvasSize = imageCropCanvas.width;
+  const scale = cropBaseScale * cropZoom;
+  const drawWidth = cropImage.naturalWidth * scale;
+  const drawHeight = cropImage.naturalHeight * scale;
+
+  const minX = canvasSize - drawWidth;
+  const minY = canvasSize - drawHeight;
+
+  cropOffsetX = Math.min(0, Math.max(minX, cropOffsetX));
+  cropOffsetY = Math.min(0, Math.max(minY, cropOffsetY));
+
+  imageCropContext.clearRect(
+    0,
+    0,
+    canvasSize,
+    canvasSize
+  );
+
+  imageCropContext.drawImage(
+    cropImage,
+    cropOffsetX,
+    cropOffsetY,
+    drawWidth,
+    drawHeight
+  );
+}
+
+function openImageCropEditor(file) {
+  const image = new Image();
+  const objectUrl = URL.createObjectURL(file);
+
+  image.onload = () => {
+    URL.revokeObjectURL(objectUrl);
+
+    cropImage = image;
+    cropZoom = 1;
+    imageZoomRange.value = "1";
+
+    const canvasSize = imageCropCanvas.width;
+    cropBaseScale = Math.max(
+      canvasSize / image.naturalWidth,
+      canvasSize / image.naturalHeight
+    );
+
+    const drawWidth =
+      image.naturalWidth * cropBaseScale;
+    const drawHeight =
+      image.naturalHeight * cropBaseScale;
+
+    cropOffsetX =
+      (canvasSize - drawWidth) / 2;
+    cropOffsetY =
+      (canvasSize - drawHeight) / 2;
+
+    renderCropCanvas();
+
+    imageCropModal.classList.add("open");
+    imageCropModal.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+    document.body.classList.add("modal-open");
+  };
+
+  image.onerror = () => {
+    URL.revokeObjectURL(objectUrl);
+
+    showToast(
+      "No se pudo abrir esa imagen.",
+      "error"
+    );
+  };
+
+  image.src = objectUrl;
+}
+
+function closeImageCropEditor() {
+  imageCropModal.classList.remove("open");
+  imageCropModal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+  document.body.classList.remove("modal-open");
+  cropDragging = false;
+  imageCropCanvas.classList.remove("dragging");
+}
+
+function canvasPointFromEvent(event) {
+  const rect =
+    imageCropCanvas.getBoundingClientRect();
+
+  return {
+    x:
+      (event.clientX - rect.left) *
+      (imageCropCanvas.width / rect.width),
+    y:
+      (event.clientY - rect.top) *
+      (imageCropCanvas.height / rect.height)
+  };
+}
+
+function openBusinessModal(business = null) {
+  businessForm.reset();
+  editingBusinessId = business?.id ?? null;
+
+  businessModalTitle.textContent = business
+    ? "Editar comercio"
+    : "Crear comercio";
+
+  saveBusinessButton.textContent = business
+    ? "Guardar cambios"
+    : "Guardar comercio";
+
+  businessName.value = business?.name || "";
+  businessSlug.value = business?.slug || "";
+  businessPhone.value = business?.phone || "";
+  businessAddress.value = business?.address || "";
+  businessLogoUrl.value = business?.logo_url || "";
+  businessPrimaryColor.value =
+    business?.primary_color || "#6d28d9";
+  businessSecondaryColor.value =
+    business?.secondary_color || "#f5c518";
+  businessActive.checked =
+    business ? Boolean(business.active) : true;
+
+  businessSlug.dataset.manual =
+    business?.slug ? "true" : "";
+
+  businessFormMessage.textContent = "";
+  businessFormMessage.classList.remove("success");
+
+  businessModal.classList.add("open");
+  businessModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+
+  setTimeout(() => businessName.focus(), 50);
+}
+
+function closeBusinessModal() {
+  businessModal.classList.remove("open");
+  businessModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  editingBusinessId = null;
+}
+
+newBusinessButton.addEventListener("click", () => {
+  openBusinessModal();
+});
+
+closeBusinessModalButton.addEventListener(
   "click",
-  closeCheckoutModal
+  closeBusinessModal
+);
+
+cancelBusinessButton.addEventListener(
+  "click",
+  closeBusinessModal
 );
 
 document
-  .querySelector("[data-close-checkout]")
-  ?.addEventListener(
-    "click",
-    closeCheckoutModal
-  );
+  .querySelector("[data-close-business-modal]")
+  ?.addEventListener("click", closeBusinessModal);
 
-closeSuccessButton.addEventListener(
+businessName.addEventListener("input", () => {
+  if (!businessSlug.dataset.manual) {
+    businessSlug.value = normalizeSlug(
+      businessName.value
+    );
+  }
+});
+
+businessSlug.addEventListener("input", () => {
+  businessSlug.dataset.manual =
+    businessSlug.value.trim() ? "true" : "";
+
+  businessSlug.value = normalizeSlug(
+    businessSlug.value
+  );
+});
+
+function openBusinessDetailModal(business) {
+  selectedBusiness = business;
+
+  businessDetailTitle.textContent =
+    business.name || "Comercio";
+
+  businessDetailContent.innerHTML = `
+    <div class="detail-item">
+      <strong>Enlace</strong>
+      <span>${escapeHTML(business.slug || "-")}</span>
+    </div>
+
+    <div class="detail-item">
+      <strong>WhatsApp</strong>
+      <span>${escapeHTML(business.phone || "-")}</span>
+    </div>
+
+    <div class="detail-item">
+      <strong>Direcci\u00f3n</strong>
+      <span>${escapeHTML(business.address || "-")}</span>
+    </div>
+
+    <div class="detail-item">
+      <strong>Estado</strong>
+      <span>${business.active ? "Activo" : "Inactivo"}</span>
+    </div>
+  `;
+
+  businessDetailModal.classList.add("open");
+  businessDetailModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+}
+
+function closeBusinessDetailModal() {
+  businessDetailModal.classList.remove("open");
+  businessDetailModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+}
+
+closeBusinessDetailButton.addEventListener(
+  "click",
+  closeBusinessDetailModal
+);
+
+document
+  .querySelector("[data-close-business-detail]")
+  ?.addEventListener("click", closeBusinessDetailModal);
+
+businessCategoriesButton.addEventListener(
+  "click",
+  async () => {
+    if (!selectedBusiness) {
+      showToast(
+        "Primero seleccion\u00e1 un comercio.",
+        "error"
+      );
+      return;
+    }
+
+    closeBusinessDetailModal();
+    openSection("categories");
+    await loadCategories();
+  }
+);
+
+businessProductsButton.addEventListener(
+  "click",
+  async () => {
+    if (!selectedBusiness) {
+      showToast(
+        "Primero seleccion\u00e1 un comercio.",
+        "error"
+      );
+      return;
+    }
+
+    closeBusinessDetailModal();
+    openSection("products");
+    await loadProducts();
+  }
+);
+
+editBusinessButton.addEventListener(
   "click",
   () => {
-    orderSuccessModal.classList.remove("open");
-    orderSuccessModal.setAttribute(
-      "aria-hidden",
-      "true"
-    );
-    document.body.classList.remove("modal-open");
+    const business = selectedBusiness;
+
+    closeBusinessDetailModal();
+
+    if (business) {
+      openBusinessModal(business);
+    }
   }
 );
 
+businessStoreButton.addEventListener(
+  "click",
+  () => {
+    if (!selectedBusiness) {
+      return;
+    }
 
-function enterStore() {
-  if (!welcomeScreen) {
+    const url =
+      `index.html?business=${encodeURIComponent(
+        selectedBusiness.slug || ""
+      )}`;
+
+    window.open(url, "_blank");
+  }
+);
+
+function openCategoryModal() {
+  if (!selectedBusiness) {
+    showToast(
+      "Primero seleccion\u00e1 un comercio.",
+      "error"
+    );
     return;
   }
 
-  welcomeScreen.classList.add("is-leaving");
+  categoryForm.reset();
+  categoryActive.checked = true;
+  categoryFormMessage.textContent = "";
 
-  document.body.classList.remove("welcome-open");
+  categoryModal.classList.add("open");
+  categoryModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
 
-  window.setTimeout(() => {
-    welcomeScreen.style.display = "none";
-  }, 560);
+  setTimeout(() => categoryName.focus(), 50);
 }
 
-document.body.classList.add("welcome-open");
+function closeCategoryModal() {
+  categoryModal.classList.remove("open");
+  categoryModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+}
 
-/*
-  V92 - BOTÓN DE PORTADA
-  No esperamos una consulta de red antes de abrir el menú.
-  La portada ya tiene en memoria el estado del comercio y además
-  ese estado se refresca periódicamente.
+closeCategoryModalButton.addEventListener(
+  "click",
+  closeCategoryModal
+);
 
-  Esto evita que un toque parezca "no hacer nada" por una demora,
-  error de red o comportamiento táctil del navegador móvil.
-*/
-let enteringStore = false;
+cancelCategoryButton.addEventListener(
+  "click",
+  closeCategoryModal
+);
 
-async function handleEnterStore(event) {
-  event?.preventDefault?.();
-  event?.stopPropagation?.();
+document
+  .querySelector("[data-close-category-modal]")
+  ?.addEventListener("click", closeCategoryModal);
+
+
+selectProductImageButton.addEventListener(
+  "click",
+  () => {
+    productImageInput.click();
+  }
+);
+
+removeProductImageButton.addEventListener(
+  "click",
+  () => {
+    croppedProductImageBlob = null;
+
+    if (croppedProductImageUrl) {
+      URL.revokeObjectURL(
+        croppedProductImageUrl
+      );
+    }
+
+    croppedProductImageUrl = "";
+    existingProductImageUrl = "";
+    removeExistingProductImage = true;
+
+    productImagePreview.innerHTML =
+      "<span>Sin imagen</span>";
+
+    selectProductImageButton.textContent =
+      "Seleccionar imagen";
+
+    removeProductImageButton.hidden = true;
+  }
+);
+
+productImageInput.addEventListener(
+  "change",
+  () => {
+    const file =
+      productImageInput.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      showToast(
+        "Seleccion\u00e1 un archivo de imagen.",
+        "error"
+      );
+      return;
+    }
+
+    openImageCropEditor(file);
+    productImageInput.value = "";
+  }
+);
+
+imageZoomRange.addEventListener(
+  "input",
+  () => {
+    if (!cropImage) {
+      return;
+    }
+
+    const oldScale =
+      cropBaseScale * cropZoom;
+    const centerX =
+      imageCropCanvas.width / 2;
+    const centerY =
+      imageCropCanvas.height / 2;
+
+    const imagePointX =
+      (centerX - cropOffsetX) / oldScale;
+    const imagePointY =
+      (centerY - cropOffsetY) / oldScale;
+
+    cropZoom =
+      Number(imageZoomRange.value);
+
+    const newScale =
+      cropBaseScale * cropZoom;
+
+    cropOffsetX =
+      centerX - imagePointX * newScale;
+    cropOffsetY =
+      centerY - imagePointY * newScale;
+
+    renderCropCanvas();
+  }
+);
+
+imageCropCanvas.addEventListener(
+  "pointerdown",
+  (event) => {
+    if (!cropImage) {
+      return;
+    }
+
+    const point =
+      canvasPointFromEvent(event);
+
+    cropDragging = true;
+    cropPointerX = point.x;
+    cropPointerY = point.y;
+
+    imageCropCanvas.setPointerCapture(
+      event.pointerId
+    );
+    imageCropCanvas.classList.add(
+      "dragging"
+    );
+  }
+);
+
+imageCropCanvas.addEventListener(
+  "pointermove",
+  (event) => {
+    if (!cropDragging) {
+      return;
+    }
+
+    const point =
+      canvasPointFromEvent(event);
+
+    cropOffsetX +=
+      point.x - cropPointerX;
+    cropOffsetY +=
+      point.y - cropPointerY;
+
+    cropPointerX = point.x;
+    cropPointerY = point.y;
+
+    renderCropCanvas();
+  }
+);
+
+function stopCropDragging(event) {
+  cropDragging = false;
+  imageCropCanvas.classList.remove(
+    "dragging"
+  );
 
   if (
-    enteringStore ||
-    !enterStoreButton ||
-    enterStoreButton.disabled
+    event?.pointerId !== undefined &&
+    imageCropCanvas.hasPointerCapture(
+      event.pointerId
+    )
   ) {
-    return;
+    imageCropCanvas.releasePointerCapture(
+      event.pointerId
+    );
   }
-
-  if (!orderingIsOpen()) {
-    showOrderingClosedMessage();
-
-    // Actualizamos en segundo plano por si el estado cambió.
-    refreshOrderingStatusFromSupabase();
-    return;
-  }
-
-  enteringStore = true;
-  enterStoreButton.disabled = true;
-
-  // Abrimos de inmediato.
-  enterStore();
-
-  // Verificación no bloqueante del estado real.
-  refreshOrderingStatusFromSupabase()
-    .catch(() => {})
-    .finally(() => {
-      window.setTimeout(() => {
-        enteringStore = false;
-        enterStoreButton.disabled = false;
-      }, 700);
-    });
 }
 
-enterStoreButton?.addEventListener(
-  "click",
-  handleEnterStore
+imageCropCanvas.addEventListener(
+  "pointerup",
+  stopCropDragging
 );
 
+imageCropCanvas.addEventListener(
+  "pointercancel",
+  stopCropDragging
+);
 
-closeProductButton.addEventListener(
+cancelImageCropButton.addEventListener(
+  "click",
+  closeImageCropEditor
+);
+
+confirmImageCropButton.addEventListener(
+  "click",
+  () => {
+    imageCropCanvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          showToast(
+            "No se pudo preparar la imagen.",
+            "error"
+          );
+          return;
+        }
+
+        croppedProductImageBlob = blob;
+
+        if (croppedProductImageUrl) {
+          URL.revokeObjectURL(
+            croppedProductImageUrl
+          );
+        }
+
+        croppedProductImageUrl =
+          URL.createObjectURL(blob);
+
+        productImagePreview.innerHTML = `
+          <img
+            src="${croppedProductImageUrl}"
+            alt="Vista previa del producto"
+          >
+        `;
+
+        removeExistingProductImage = false;
+        removeProductImageButton.hidden = false;
+        selectProductImageButton.textContent =
+          "Cambiar imagen";
+
+        closeImageCropEditor();
+      },
+      "image/jpeg",
+      0.88
+    );
+  }
+);
+
+closeProductModalButton.addEventListener(
+  "click",
+  closeProductModal
+);
+
+cancelProductButton.addEventListener(
   "click",
   closeProductModal
 );
 
 document
-  .querySelector("[data-close-product]")
+  .querySelector("[data-close-product-modal]")
   ?.addEventListener(
     "click",
     closeProductModal
   );
 
-cartButton.addEventListener(
-  "click",
-  async () => {
-    if (!(await requireOrderingOpen())) {
+
+function closeModifiersModal() {
+  modifiersModal.classList.remove("open");
+  modifiersModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  selectedProduct = null;
+}
+
+async function openModifiersModal(product) {
+  selectedProduct = product;
+  modifiersModalTitle.textContent =
+    product.name || "Producto";
+  modifiersModalSubtitle.textContent =
+    "Configur\u00e1 sabores, tama\u00f1os, extras y otras opciones.";
+
+  modifiersModal.classList.add("open");
+  modifiersModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+
+  await loadModifierGroups();
+}
+
+function closeModifierGroupModal() {
+  modifierGroupModal.classList.remove("open");
+  modifierGroupModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  editingModifierGroupId = null;
+}
+
+function openModifierGroupModal(group = null) {
+  modifierGroupForm.reset();
+  editingModifierGroupId = group?.id ?? null;
+
+  modifierGroupModalTitle.textContent =
+    group ? "Editar grupo" : "Crear grupo";
+
+  saveModifierGroupButton.textContent =
+    group ? "Guardar cambios" : "Guardar grupo";
+
+  modifierGroupName.value = group?.name || "";
+  modifierGroupType.value =
+    group?.selection_type || "multiple";
+  modifierGroupMax.value =
+    group?.max_select ?? "";
+  modifierGroupSortOrder.value =
+    group?.sort_order ?? 0;
+  modifierGroupRequired.checked =
+    Boolean(group?.required);
+  modifierGroupActive.checked =
+    group ? Boolean(group.active) : true;
+  modifierGroupFormMessage.textContent = "";
+
+  modifierGroupModal.classList.add("open");
+  modifierGroupModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+
+  setTimeout(() => modifierGroupName.focus(), 50);
+}
+
+function closeModifierOptionModal() {
+  modifierOptionModal.classList.remove("open");
+  modifierOptionModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  editingModifierOptionId = null;
+}
+
+
+function isSizeModifierGroup(group) {
+  const name =
+    String(group?.name || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim()
+      .toLowerCase();
+
+  return (
+    name.includes("tamano") ||
+    name.includes("tamanos") ||
+    name.includes("size")
+  );
+}
+
+async function openModifierOptionModal(group, option = null) {
+  selectedModifierGroup = group;
+  modifierOptionForm.reset();
+  editingModifierOptionId = option?.id ?? null;
+
+  modifierOptionModalTitle.textContent =
+    option ? "Editar opci\u00f3n" : "Crear opci\u00f3n";
+
+  modifierOptionGroupName.textContent =
+    group.name || "";
+
+  const sizeGroup =
+    isSizeModifierGroup(group);
+
+  if (modifierOptionPriceLabel) {
+    modifierOptionPriceLabel.textContent =
+      sizeGroup
+        ? "Precio final del tama\u00f1o"
+        : "Precio adicional";
+  }
+
+  if (modifierOptionPrice) {
+    /*
+      V88:
+      Quitamos completamente el atributo min del campo.
+      Así el navegador no puede conservar/usar un mínimo viejo de $500.
+      La validación válida queda en JS: precio numérico y >= 0.
+    */
+    modifierOptionPrice.removeAttribute("min");
+    modifierOptionPrice.min = "";
+  }
+
+  saveModifierOptionButton.textContent =
+    option ? "Guardar cambios" : "Guardar opci\u00f3n";
+
+  modifierOptionName.value = option?.name || "";
+  modifierOptionPrice.value =
+    option?.price_delta ?? (
+      sizeGroup
+        ? Number(selectedProduct?.price || 0)
+        : 0
+    );
+  modifierOptionSortOrder.value =
+    option?.sort_order ?? 0;
+
+  const possibleParents = currentModifierOptions.filter(
+    (item) =>
+      String(item.group_id) !== String(group.id) &&
+      String(item.id) !== String(option?.id ?? "")
+  );
+
+  modifierOptionParent.innerHTML =
+    '<option value="">Siempre visible</option>' +
+    possibleParents.map((item) => {
+      const parentGroup = currentModifierGroups.find(
+        (groupItem) =>
+          String(groupItem.id) === String(item.group_id)
+      );
+
+      const label =
+        `${parentGroup?.name || "Grupo"}: ${item.name}`;
+
+      return `
+        <option value="${escapeHTML(item.id)}">
+          ${escapeHTML(label)}
+        </option>
+      `;
+    }).join("");
+
+  modifierOptionParent.value =
+    option?.depends_on_option_id
+      ? String(option.depends_on_option_id)
+      : "";
+  modifierOptionActive.checked =
+    option ? Boolean(option.active) : true;
+  modifierOptionFormMessage.textContent = "";
+
+  modifierOptionModal.classList.add("open");
+  modifierOptionModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+
+  setTimeout(() => modifierOptionName.focus(), 50);
+}
+
+async function loadModifierGroups() {
+  if (!selectedProduct) {
+    return;
+  }
+
+  modifierGroupsList.innerHTML =
+    '<div class="loading">Cargando opciones...</div>';
+
+  try {
+    const [groups, options] = await Promise.all([
+      getTableData(
+        "product_option_groups",
+        "id,product_id,name,selection_type,required,max_select,sort_order,active"
+      ),
+      getTableData(
+        "product_options",
+        "id,group_id,name,price_delta,sort_order,active,depends_on_option_id"
+      )
+    ]);
+
+    currentModifierGroups = groups.filter(
+      (group) =>
+        String(group.product_id) ===
+        String(selectedProduct.id)
+    );
+
+    const currentGroupIds = new Set(
+      currentModifierGroups.map((group) => String(group.id))
+    );
+
+    currentModifierOptions = options.filter(
+      (option) =>
+        currentGroupIds.has(String(option.group_id))
+    );
+
+    const productGroups = currentModifierGroups
+      .sort(
+        (a, b) =>
+          Number(a.sort_order || 0) -
+          Number(b.sort_order || 0)
+      );
+
+    if (!productGroups.length) {
+      modifierGroupsList.innerHTML = `
+        <div class="modifier-empty">
+          Este producto todav\u00eda no tiene grupos de opciones.
+        </div>
+      `;
       return;
     }
 
-    /*
-      V75:
-      requireOrderingOpen() también actualiza en este momento
-      toda la configuración de la promoción desde Supabase.
-      Así el carrito siempre calcula el beneficio vigente,
-      aunque el comercio haya cambiado la promo con la web
-      del cliente ya abierta.
-    */
-    openCartModal();
-  }
-);
+    modifierGroupsList.innerHTML =
+      productGroups.map((group) => {
+        const groupOptions = options
+          .filter(
+            (option) =>
+              String(option.group_id) ===
+              String(group.id)
+          )
+          .sort(
+            (a, b) =>
+              Number(a.sort_order || 0) -
+              Number(b.sort_order || 0)
+          );
 
-closeCartButton.addEventListener(
+        const typeText =
+          group.selection_type === "single"
+            ? "Una sola opci\u00f3n"
+            : "Varias opciones";
+
+        const maxText =
+          group.max_select
+            ? ` \u00b7 M\u00e1ximo ${group.max_select}`
+            : "";
+
+        return `
+          <article
+            class="modifier-group-card"
+            data-group-id="${escapeHTML(group.id)}"
+          >
+            <div class="modifier-group-header">
+
+              <div>
+                <h3>${escapeHTML(group.name)}</h3>
+
+                <div class="modifier-group-meta">
+                  ${typeText}
+                  ${group.required ? " \u00b7 Obligatorio" : ""}
+                  ${maxText}
+                  ${group.active ? "" : " \u00b7 Inactivo"}
+                </div>
+              </div>
+
+              <div class="modifier-actions">
+                <button
+                  type="button"
+                  class="secondary-button compact-button add-option-button"
+                  data-group-id="${escapeHTML(group.id)}"
+                >
+                  + Agregar opci\u00f3n
+                </button>
+
+                <button
+                  type="button"
+                  class="secondary-button compact-button edit-group-button"
+                  data-group-id="${escapeHTML(group.id)}"
+                >
+                  Editar
+                </button>
+
+                <button
+                  type="button"
+                  class="secondary-button compact-button danger-button delete-group-button"
+                  data-group-id="${escapeHTML(group.id)}"
+                >
+                  Eliminar
+                </button>
+              </div>
+
+            </div>
+
+            <div class="modifier-options-list">
+              ${
+                groupOptions.length
+                  ? groupOptions.map((option) => `
+                      <div class="modifier-option-row">
+
+                        <div class="modifier-option-info">
+                          <strong>${escapeHTML(option.name)}</strong>
+                          <small>
+                            +$${Number(option.price_delta || 0)}
+                            ${option.active ? "" : " \u00b7 Inactiva"}
+                          </small>
+
+                          ${
+                            option.depends_on_option_id
+                              ? `
+                                <span class="dependency-label">
+                                  Visible seg\u00fan otra opci\u00f3n
+                                </span>
+                              `
+                              : ""
+                          }
+                        </div>
+
+                        <div class="modifier-actions">
+                          <button
+                            type="button"
+                            class="secondary-button compact-button duplicate-option-button"
+                            data-group-id="${escapeHTML(group.id)}"
+                            data-option-id="${escapeHTML(option.id)}"
+                          >
+                            Duplicar
+                          </button>
+
+                          <button
+                            type="button"
+                            class="secondary-button compact-button edit-option-button"
+                            data-group-id="${escapeHTML(group.id)}"
+                            data-option-id="${escapeHTML(option.id)}"
+                          >
+                            Editar
+                          </button>
+
+                          <button
+                            type="button"
+                            class="secondary-button compact-button danger-button delete-option-button"
+                            data-option-id="${escapeHTML(option.id)}"
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+
+                      </div>
+                    `).join("")
+                  : `
+                    <div class="modifier-empty">
+                      No hay opciones en este grupo.
+                    </div>
+                  `
+              }
+            </div>
+          </article>
+        `;
+      }).join("");
+
+    modifierGroupsList
+      .querySelectorAll(".add-option-button")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          const group = productGroups.find(
+            (item) =>
+              String(item.id) ===
+              String(button.dataset.groupId)
+          );
+
+          if (group) {
+            await openModifierOptionModal(group);
+          }
+        });
+      });
+
+    modifierGroupsList
+      .querySelectorAll(".edit-group-button")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const group = productGroups.find(
+            (item) =>
+              String(item.id) ===
+              String(button.dataset.groupId)
+          );
+
+          if (group) {
+            openModifierGroupModal(group);
+          }
+        });
+      });
+
+    modifierGroupsList
+      .querySelectorAll(".duplicate-option-button")
+      .forEach((button) => {
+        button.addEventListener(
+          "click",
+          async () => {
+            const sourceOption =
+              currentModifierOptions.find(
+                (item) =>
+                  String(item.id) ===
+                  String(
+                    button.dataset.optionId
+                  )
+              );
+
+            if (!sourceOption) {
+              showToast(
+                "No se encontró la opción a duplicar.",
+                "error"
+              );
+              return;
+            }
+
+            const sourceGroup =
+              currentModifierGroups.find(
+                (item) =>
+                  String(item.id) ===
+                  String(sourceOption.group_id)
+              );
+
+            const dependentOptions =
+              currentModifierOptions.filter(
+                (item) =>
+                  String(
+                    item.depends_on_option_id || ""
+                  ) ===
+                  String(sourceOption.id)
+              );
+
+            const defaultName =
+              `${sourceOption.name} copia`;
+
+            const newName =
+              window.prompt(
+                dependentOptions.length
+                  ? `Vas a duplicar "${sourceOption.name}" y también ${dependentOptions.length} opción${dependentOptions.length === 1 ? "" : "es"} relacionada${dependentOptions.length === 1 ? "" : "s"} (por ejemplo tamaños).\n\nEscribí el nombre de la nueva variante:`
+                  : `Escribí el nombre de la copia de "${sourceOption.name}":`,
+                defaultName
+              );
+
+            if (
+              newName === null
+            ) {
+              return;
+            }
+
+            const cleanName =
+              String(newName).trim();
+
+            if (!cleanName) {
+              showToast(
+                "Escribí un nombre para la nueva variante.",
+                "error"
+              );
+              return;
+            }
+
+            const duplicateExists =
+              currentModifierOptions.some(
+                (item) =>
+                  String(item.group_id) ===
+                    String(sourceOption.group_id) &&
+                  normalizeText(item.name) ===
+                    normalizeText(cleanName)
+              );
+
+            if (duplicateExists) {
+              showToast(
+                "Ya existe una opción con ese nombre en este grupo.",
+                "error"
+              );
+              return;
+            }
+
+            button.disabled = true;
+            button.textContent =
+              "Duplicando...";
+
+            try {
+              /*
+                V84:
+                La copia se hace en Supabase mediante una función
+                transaccional. Así no dependemos de que el navegador
+                pueda insertar y devolver IDs con las políticas RLS.
+              */
+              const result =
+                await duplicateSpecialVariantRPC(
+                  sourceOption.id,
+                  cleanName
+                );
+
+              if (
+                !result ||
+                !result.new_option_id
+              ) {
+                throw new Error(
+                  "No se pudo confirmar la nueva variante."
+                );
+              }
+
+              const copiedChildren =
+                Number(
+                  result.copied_children || 0
+                );
+
+              const copiedGroups =
+                Number(
+                  result.copied_groups || 0
+                );
+
+              const successMessage =
+                `"${cleanName}" creada correctamente. ` +
+                `Se copiaron ${copiedGroups} grupo${copiedGroups === 1 ? "" : "s"} ` +
+                `y ${copiedChildren} opción${copiedChildren === 1 ? "" : "es"}. ` +
+                `Ahora editá solamente los precios.`;
+
+              showToast(
+                successMessage,
+                "success"
+              );
+
+              /*
+                Confirmación visible incluso si el toast queda fuera
+                de pantalla dentro del modal.
+              */
+              window.alert(
+                successMessage
+              );
+
+              await loadModifierGroups();
+            } catch (error) {
+              console.error(
+                "Error duplicando opción:",
+                error
+              );
+
+              const errorMessage =
+                `No se pudo duplicar: ${error.message || "error desconocido"}`;
+
+              showToast(
+                errorMessage,
+                "error"
+              );
+
+              window.alert(
+                errorMessage
+              );
+            } finally {
+              button.disabled = false;
+              button.textContent =
+                "Duplicar";
+            }
+          }
+        );
+      });
+
+    modifierGroupsList
+      .querySelectorAll(".edit-option-button")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          const group = productGroups.find(
+            (item) =>
+              String(item.id) ===
+              String(button.dataset.groupId)
+          );
+
+          const option = options.find(
+            (item) =>
+              String(item.id) ===
+              String(button.dataset.optionId)
+          );
+
+          if (group && option) {
+            await openModifierOptionModal(group, option);
+          }
+        });
+      });
+
+    modifierGroupsList
+      .querySelectorAll(".delete-group-button")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          const confirmed = window.confirm(
+            "Se eliminar\u00e1 el grupo y todas sus opciones. \u00bfContinuar?"
+          );
+
+          if (!confirmed) {
+            return;
+          }
+
+          try {
+            await deleteTableRow(
+              "product_option_groups",
+              button.dataset.groupId
+            );
+
+            showToast(
+              "Grupo eliminado correctamente.",
+              "success"
+            );
+
+            await loadModifierGroups();
+          } catch (error) {
+            console.error("Error eliminando grupo:", error);
+            showToast(
+              "No se pudo eliminar el grupo.",
+              "error"
+            );
+          }
+        });
+      });
+
+    modifierGroupsList
+      .querySelectorAll(".delete-option-button")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          const confirmed = window.confirm(
+            "\u00bfEliminar esta opci\u00f3n?"
+          );
+
+          if (!confirmed) {
+            return;
+          }
+
+          try {
+            await deleteTableRow(
+              "product_options",
+              button.dataset.optionId
+            );
+
+            showToast(
+              "Opci\u00f3n eliminada correctamente.",
+              "success"
+            );
+
+            await loadModifierGroups();
+          } catch (error) {
+            console.error("Error eliminando opcion:", error);
+            showToast(
+              "No se pudo eliminar la opci\u00f3n.",
+              "error"
+            );
+          }
+        });
+      });
+
+  } catch (error) {
+    console.error("Error cargando modificadores:", error);
+
+    modifierGroupsList.innerHTML = `
+      <div class="error">
+        No se pudieron cargar las opciones y extras.
+        Verific\u00e1 que las tablas del archivo SQL est\u00e9n creadas.
+      </div>
+    `;
+  }
+}
+
+closeModifiersModalButton.addEventListener(
   "click",
-  closeCartModal
+  closeModifiersModal
 );
 
 document
-  .querySelector("[data-close-cart]")
-  ?.addEventListener(
-    "click",
-    closeCartModal
-  );
+  .querySelector("[data-close-modifiers-modal]")
+  ?.addEventListener("click", closeModifiersModal);
 
-continueOrderButton.addEventListener(
+newModifierGroupButton.addEventListener(
   "click",
-  async () => {
-    if (!(await requireOrderingOpen())) {
+  () => openModifierGroupModal()
+);
+
+closeModifierGroupModalButton.addEventListener(
+  "click",
+  closeModifierGroupModal
+);
+
+cancelModifierGroupButton.addEventListener(
+  "click",
+  closeModifierGroupModal
+);
+
+document
+  .querySelector("[data-close-modifier-group-modal]")
+  ?.addEventListener("click", closeModifierGroupModal);
+
+closeModifierOptionModalButton.addEventListener(
+  "click",
+  closeModifierOptionModal
+);
+
+cancelModifierOptionButton.addEventListener(
+  "click",
+  closeModifierOptionModal
+);
+
+document
+  .querySelector("[data-close-modifier-option-modal]")
+  ?.addEventListener("click", closeModifierOptionModal);
+
+modifierGroupForm.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+
+    const name = modifierGroupName.value.trim();
+
+    if (!name) {
+      modifierGroupFormMessage.textContent =
+        "Escrib\u00ed el nombre del grupo.";
       return;
     }
 
-    if (!cart.length) {
+    const maxValue =
+      modifierGroupMax.value
+        ? Number(modifierGroupMax.value)
+        : null;
+
+    const payload = {
+      product_id: selectedProduct.id,
+      name,
+      selection_type: modifierGroupType.value,
+      required: modifierGroupRequired.checked,
+      max_select: maxValue,
+      sort_order:
+        Number(modifierGroupSortOrder.value || 0),
+      active: modifierGroupActive.checked
+    };
+
+    saveModifierGroupButton.disabled = true;
+    saveModifierGroupButton.textContent = "Guardando...";
+    modifierGroupFormMessage.textContent = "";
+
+    try {
+      if (editingModifierGroupId) {
+        await updateTableRow(
+          "product_option_groups",
+          editingModifierGroupId,
+          payload
+        );
+      } else {
+        await insertTableRow(
+          "product_option_groups",
+          payload
+        );
+      }
+
       showToast(
-        "Agregá al menos un producto antes de continuar."
+        editingModifierGroupId
+          ? "Grupo actualizado correctamente."
+          : "Grupo creado correctamente.",
+        "success"
+      );
+
+      closeModifierGroupModal();
+      await loadModifierGroups();
+    } catch (error) {
+      console.error("Error guardando grupo:", error);
+      modifierGroupFormMessage.textContent =
+        "No se pudo guardar el grupo.";
+    } finally {
+      saveModifierGroupButton.disabled = false;
+      saveModifierGroupButton.textContent =
+        editingModifierGroupId
+          ? "Guardar cambios"
+          : "Guardar grupo";
+    }
+  }
+);
+
+modifierOptionForm.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+
+    const name = modifierOptionName.value.trim();
+    const price = Number(modifierOptionPrice.value || 0);
+
+    if (!name) {
+      modifierOptionFormMessage.textContent =
+        "Escrib\u00ed el nombre de la opci\u00f3n.";
+      return;
+    }
+
+    if (!Number.isFinite(price) || price < 0) {
+      modifierOptionFormMessage.textContent =
+        "Escrib\u00ed un precio v\u00e1lido.";
+      return;
+    }
+
+    const sizeGroup =
+      isSizeModifierGroup(
+        selectedModifierGroup
+      );
+
+    // V87: el precio del tamaño es un precio final independiente.
+    // Puede ser menor que el precio base del producto.
+
+    const payload = {
+      group_id: selectedModifierGroup.id,
+      name,
+      price_delta: price,
+      depends_on_option_id:
+        modifierOptionParent.value
+          ? Number(modifierOptionParent.value)
+          : null,
+      sort_order:
+        Number(modifierOptionSortOrder.value || 0),
+      active: modifierOptionActive.checked
+    };
+
+    saveModifierOptionButton.disabled = true;
+    saveModifierOptionButton.textContent = "Guardando...";
+    modifierOptionFormMessage.textContent = "";
+
+    try {
+      if (editingModifierOptionId) {
+        await updateTableRow(
+          "product_options",
+          editingModifierOptionId,
+          payload
+        );
+      } else {
+        await insertTableRow(
+          "product_options",
+          payload
+        );
+      }
+
+      showToast(
+        editingModifierOptionId
+          ? "Opci\u00f3n actualizada correctamente."
+          : "Opci\u00f3n creada correctamente.",
+        "success"
+      );
+
+      closeModifierOptionModal();
+      await loadModifierGroups();
+    } catch (error) {
+      console.error("Error guardando opcion:", error);
+      modifierOptionFormMessage.textContent =
+        "No se pudo guardar la opci\u00f3n.";
+    } finally {
+      saveModifierOptionButton.disabled = false;
+      saveModifierOptionButton.textContent =
+        editingModifierOptionId
+          ? "Guardar cambios"
+          : "Guardar opci\u00f3n";
+    }
+  }
+);
+
+
+
+function currentMerchantBusinessId() {
+  return (
+    selectedBusiness?.id ??
+    MERCHANT_BUSINESS_ID
+  );
+}
+
+function orderMoney(value) {
+  return `$${Number(value || 0).toLocaleString("es-UY")}`;
+}
+
+function orderStatusLabel(status) {
+  const labels = {
+    received: "NUEVO",
+    approved: "ACEPTADO",
+    preparing: "EN PREPARACION",
+    ready: "LISTO",
+    on_the_way: "EN CAMINO",
+    delivered: "ENTREGADO",
+    cancelled: "CANCELADO"
+  };
+  return labels[status] || String(status || "").toUpperCase();
+}
+
+function orderDeliveryLabel(type) {
+  return type === "pickup"
+    ? "RETIRO EN EL LOCAL"
+    : "DELIVERY";
+}
+
+function formatOrderDate(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return new Intl.DateTimeFormat(
+    "es-UY",
+    { day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" }
+  ).format(date);
+}
+
+function isToday(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return false;
+  const now = new Date();
+  return (
+    date.getFullYear() === now.getFullYear() &&
+    date.getMonth() === now.getMonth() &&
+    date.getDate() === now.getDate()
+  );
+}
+
+function getBusinessNameById(id) {
+  return (
+    businessesCache.find(
+      (business) =>
+        String(business.id) === String(id)
+    )?.name ||
+    `Comercio #${id}`
+  );
+}
+
+function getOrderItems(orderId) {
+  return orderItemsCache.filter(
+    (item) =>
+      String(item.order_id) === String(orderId)
+  );
+}
+
+function getOrderItemOptions(itemId) {
+  return orderItemOptionsCache.filter(
+    (option) =>
+      String(option.order_item_id) === String(itemId)
+  );
+}
+
+function customerNoticeEnabledFor(order, nextStatus) {
+  if (!selectedBusiness) {
+    return false;
+  }
+
+  if (nextStatus === "approved") {
+    return selectedBusiness.notice_approved_enabled !== false;
+  }
+
+  if (
+    nextStatus === "ready" &&
+    order.delivery_type === "pickup"
+  ) {
+    return selectedBusiness.notice_ready_enabled !== false;
+  }
+
+  if (
+    nextStatus === "on_the_way" &&
+    order.delivery_type !== "pickup"
+  ) {
+    return selectedBusiness.notice_delivery_enabled !== false;
+  }
+
+  return false;
+}
+
+function compactActionLabel(order, status, label) {
+  if (status === "approved") {
+    return "Aceptar";
+  }
+
+  if (status === "preparing") {
+    return "Preparar";
+  }
+
+  if (status === "ready") {
+    return "Listo";
+  }
+
+  if (status === "on_the_way") {
+    return "En camino";
+  }
+
+  if (status === "delivered") {
+    return "Entregado";
+  }
+
+  return label;
+}
+
+function noticeSettingEnabled(value) {
+  return !(
+    value === false ||
+    String(value).toLowerCase() === "false"
+  );
+}
+
+function noticeStatusAvailableForOrder(order) {
+  if (!order || !selectedBusiness) {
+    return "";
+  }
+
+  if (
+    order.status === "approved" &&
+    noticeSettingEnabled(
+      selectedBusiness.notice_approved_enabled
+    )
+  ) {
+    return "approved";
+  }
+
+  if (
+    order.status === "ready" &&
+    order.delivery_type === "pickup" &&
+    noticeSettingEnabled(
+      selectedBusiness.notice_ready_enabled
+    )
+  ) {
+    return "ready";
+  }
+
+  if (
+    order.status === "on_the_way" &&
+    order.delivery_type !== "pickup" &&
+    noticeSettingEnabled(
+      selectedBusiness.notice_delivery_enabled
+    )
+  ) {
+    return "on_the_way";
+  }
+
+  return "";
+}
+
+function noticeButtonLabel(order) {
+  const status =
+    noticeStatusAvailableForOrder(order);
+
+  if (status === "approved") {
+    return "Avisar: aceptado";
+  }
+
+  if (status === "ready") {
+    return "Avisar: puede retirar";
+  }
+
+  if (status === "on_the_way") {
+    return "Avisar: en camino";
+  }
+
+  return "";
+}
+
+function orderNextActions(order) {
+  if (order.status === "received") {
+    return [
+      ["approved", "Aceptar", "primary"],
+      ["cancelled", "Cancelar", "danger"]
+    ];
+  }
+
+  if (order.status === "approved") {
+    return [
+      ["preparing", "Preparar", "primary"]
+    ];
+  }
+
+  if (order.status === "preparing") {
+    return [
+      ["ready", "Listo", "primary"]
+    ];
+  }
+
+  if (order.status === "ready") {
+    return [
+      [
+        order.delivery_type === "pickup"
+          ? "delivered"
+          : "on_the_way",
+        order.delivery_type === "pickup"
+          ? "Entregado"
+          : "En camino",
+        "primary"
+      ]
+    ];
+  }
+
+  if (order.status === "on_the_way") {
+    return [
+      ["delivered", "Entregado", "primary"]
+    ];
+  }
+
+  return [];
+}
+
+function renderOrderItems(order) {
+  const items = getOrderItems(order.id);
+
+  if (!items.length) {
+    return '<div class="order-empty-items">Sin detalle de productos.</div>';
+  }
+
+  return items.map((item) => {
+    const options = getOrderItemOptions(item.id);
+
+    return `
+      <div class="order-product-line">
+        <div class="order-product-title">
+          <strong>
+            ${escapeHTML(item.quantity || 1)} x
+            ${escapeHTML(item.product_name || "Producto")}
+          </strong>
+          <span>${orderMoney(item.total)}</span>
+        </div>
+
+        ${
+          options.length
+            ? `
+              <div class="order-options-list">
+                ${options.map((option) => `
+                  <span>
+                    ${escapeHTML(option.group_name || "Opcion")}:
+                    <strong>${escapeHTML(option.option_name || "")}</strong>
+                    ${
+                      Number(option.price_delta || 0) > 0
+                        ? ` (+${orderMoney(option.price_delta)})`
+                        : ""
+                    }
+                  </span>
+                `).join("")}
+              </div>
+            `
+            : ""
+        }
+      </div>
+    `;
+  }).join("");
+}
+
+function renderOrderCard(order) {
+  const actions = orderNextActions(order);
+
+  const deliveryBlock =
+    order.delivery_type === "pickup"
+      ? `
+        <span class="order-delivery-mode pickup">
+          RETIRO EN EL LOCAL
+        </span>
+      `
+      : `
+        <span class="order-delivery-mode delivery">
+          DELIVERY
+        </span>
+        <span>
+          <strong>Direccion:</strong>
+          ${escapeHTML(order.delivery_address || "Sin direccion")}
+        </span>
+        ${
+          order.delivery_reference
+            ? `
+              <span>
+                <strong>Referencia:</strong>
+                ${escapeHTML(order.delivery_reference)}
+              </span>
+            `
+            : ""
+        }
+      `;
+
+  const paymentBlock =
+    order.delivery_type === "pickup"
+      ? ""
+      : `
+        <div class="order-payment">
+          <strong>Pago:</strong>
+          <span>
+            ${
+              order.payment_method === "cash"
+                ? "Efectivo"
+                : order.payment_method === "transfer"
+                  ? "Transferencia"
+                  : "Sin especificar"
+            }
+          </span>
+          ${
+            order.payment_method === "cash" && order.cash_amount
+              ? `<span>Paga con ${orderMoney(order.cash_amount)}</span>`
+              : ""
+          }
+        </div>
+      `;
+
+  return `
+    <article class="order-card status-${escapeHTML(order.status || "received")}">
+      <div class="order-card-top">
+        <div>
+          <div class="order-number-line">
+            <strong>Pedido #${escapeHTML(order.id)}</strong>
+            <span>${escapeHTML(formatOrderDate(order.created_at))}</span>
+          </div>
+          <div class="order-business-name">
+            ${escapeHTML(getBusinessNameById(order.business_id))}
+          </div>
+        </div>
+
+        <span class="order-status-badge status-${escapeHTML(order.status || "received")}">
+          ${escapeHTML(orderStatusLabel(order.status))}
+        </span>
+      </div>
+
+      <div class="order-customer-grid">
+        <div>
+          <small>CLIENTE</small>
+          <strong>${escapeHTML(order.customer_name || "Sin nombre")}</strong>
+          <span>${escapeHTML(order.customer_phone || "")}</span>
+        </div>
+
+        <div class="order-delivery-box">
+          ${deliveryBlock}
+        </div>
+      </div>
+
+      <div class="order-products-box">
+        <div class="order-section-label">PEDIDO</div>
+        ${renderOrderItems(order)}
+      </div>
+
+      ${
+        order.notes
+          ? `
+            <div class="order-notes-box">
+              <strong>OBSERVACIONES</strong>
+              <span>${escapeHTML(order.notes)}</span>
+            </div>
+          `
+          : ""
+      }
+
+      <div class="order-total-row">
+        <span>TOTAL</span>
+        <strong>${orderMoney(order.total)}</strong>
+      </div>
+
+      ${paymentBlock}
+
+      <div class="order-actions">
+        ${actions.map(([status, label, kind]) => `
+          <button
+            type="button"
+            class="order-action-button ${kind}"
+            data-order-action
+            data-order-id="${escapeHTML(order.id)}"
+            data-next-status="${escapeHTML(status)}"
+          >
+            ${escapeHTML(compactActionLabel(order,status,label))}
+          </button>
+        `).join("")}
+
+        ${
+          noticeStatusAvailableForOrder(order)
+            ? `
+              <button
+                type="button"
+                class="order-action-button secondary"
+                data-send-customer-notice
+                data-order-id="${escapeHTML(order.id)}"
+              >
+                ${escapeHTML(noticeButtonLabel(order))}
+              </button>
+            `
+            : ""
+        }
+
+        <button
+          type="button"
+          class="order-action-button remove"
+          data-remove-order
+          data-order-id="${escapeHTML(order.id)}"
+        >
+          Quitar pedido
+        </button>
+      </div>
+    </article>
+  `;
+}
+
+function updateOrdersCounters() {
+  const merchantBusinessId =
+    currentMerchantBusinessId();
+
+  const merchantOrders =
+    ordersCache.filter(
+      (order) =>
+        String(order.business_id) ===
+        String(merchantBusinessId)
+    );
+
+  const today = merchantOrders.filter(
+    (order) => isToday(order.created_at)
+  );
+
+  const active = merchantOrders.filter(
+    (order) =>
+      !["delivered", "cancelled"].includes(order.status)
+  );
+
+  const setText = (id, value) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
+  };
+
+  setText(
+    "ordersNewCount",
+    merchantOrders.filter((order) => order.status === "received").length
+  );
+
+  setText(
+    "ordersPreparingCount",
+    merchantOrders.filter(
+      (order) =>
+        order.status === "approved" ||
+        order.status === "preparing"
+    ).length
+  );
+
+  setText(
+    "ordersReadyCount",
+    merchantOrders.filter(
+      (order) =>
+        order.status === "ready" ||
+        order.status === "on_the_way"
+    ).length
+  );
+
+  setText(
+    "ordersDeliveredCount",
+    today.filter((order) => order.status === "delivered").length
+  );
+
+  setText("ordersTodayCount", today.length);
+  setText("pendingOrdersCount", active.length);
+
+  const salesToday =
+    today
+      .filter(
+        (order) =>
+          order.status !== "cancelled"
+      )
+      .reduce(
+        (sum, order) =>
+          sum + Number(order.total || 0),
+        0
+      );
+
+  setText(
+    "salesTodayTotal",
+    orderMoney(salesToday)
+  );
+}
+
+function populateOrdersBusinessFilter() {
+  if (!ordersBusinessFilter) return;
+
+  const business =
+    selectedBusiness ||
+    businessesCache.find(
+      (item) => String(item.id) === String(MERCHANT_BUSINESS_ID)
+    );
+
+  if (!business) {
+    ordersBusinessFilter.innerHTML = "";
+    return;
+  }
+
+  ordersBusinessFilter.innerHTML = `
+    <option value="${escapeHTML(business.id)}">
+      ${escapeHTML(business.name)}
+    </option>
+  `;
+  ordersBusinessFilter.value = String(business.id);
+}
+
+function filteredOrders() {
+  const business = ordersBusinessFilter?.value || "all";
+  const status = ordersStatusFilter?.value || "active";
+
+  return ordersCache.filter((order) => {
+    const businessOk =
+      business === "all" ||
+      String(order.business_id) === String(business);
+
+    let statusOk = true;
+
+    if (status === "active") {
+      statusOk =
+        !["delivered", "cancelled"].includes(order.status);
+    } else if (status !== "all") {
+      statusOk = order.status === status;
+    }
+
+    return businessOk && statusOk;
+  });
+}
+
+function renderOrders() {
+  if (!ordersList) return;
+
+  const orders = filteredOrders();
+
+  ordersList.innerHTML =
+    orders.length
+      ? orders.map(renderOrderCard).join("")
+      : '<div class="panel empty-state">No hay pedidos para estos filtros.</div>';
+}
+
+function renderDashboardOrders() {
+  if (!dashboardOrdersList) return;
+
+  const merchantBusinessId =
+    currentMerchantBusinessId();
+
+  const latest =
+    ordersCache
+      .filter(
+        (order) =>
+          String(order.business_id) ===
+          String(merchantBusinessId)
+      )
+      .slice(0, 5);
+
+  dashboardOrdersList.innerHTML =
+    latest.length
+      ? latest.map((order) => `
+          <div class="dashboard-order-row">
+            <div>
+              <strong>
+                #${escapeHTML(order.id)}
+                - ${escapeHTML(order.customer_name || "Cliente")}
+              </strong>
+              <small>
+                ${escapeHTML(getBusinessNameById(order.business_id))}
+                \u00b7
+                ${escapeHTML(orderDeliveryLabel(order.delivery_type))}
+              </small>
+            </div>
+
+            <div class="dashboard-order-right">
+              <span class="order-status-badge status-${escapeHTML(order.status)}">
+                ${escapeHTML(orderStatusLabel(order.status))}
+              </span>
+              <strong>${orderMoney(order.total)}</strong>
+            </div>
+          </div>
+        `).join("")
+      : '<div class="empty-state">Todavia no hay pedidos.</div>';
+}
+
+function playNewOrderSound() {
+  try {
+    const AudioContextClass =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if (!AudioContextClass) return;
+
+    const context = new AudioContextClass();
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+
+    oscillator.frequency.value = 880;
+
+    gain.gain.setValueAtTime(
+      0.001,
+      context.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.12,
+      context.currentTime + 0.02
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      context.currentTime + 0.30
+    );
+
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+    oscillator.start();
+    oscillator.stop(context.currentTime + 0.32);
+  } catch (error) {
+    console.warn("Sonido no disponible:", error);
+  }
+}
+
+function detectNewOrders() {
+  const currentIds = new Set(
+    ordersCache.map((order) => String(order.id))
+  );
+
+  if (ordersFirstLoad) {
+    knownOrderIds = currentIds;
+    ordersFirstLoad = false;
+    return;
+  }
+
+  const newOrders = ordersCache.filter(
+    (order) =>
+      !knownOrderIds.has(String(order.id))
+  );
+
+  if (newOrders.length) {
+    playNewOrderSound();
+
+    showToast(
+      newOrders.length === 1
+        ? "Ingreso un nuevo pedido."
+        : `Ingresaron ${newOrders.length} pedidos nuevos.`,
+      "success"
+    );
+  }
+
+  knownOrderIds = currentIds;
+}
+
+async function refreshSelectedBusinessSettings() {
+  if (!selectedBusiness?.id) {
+    return;
+  }
+
+  try {
+    const responseText =
+      await requestText(
+        `${SUPABASE_REST}/businesses?id=eq.${encodeURIComponent(selectedBusiness.id)}&select=*`,
+        {
+          method:"GET",
+          headers:merchantHeaders()
+        }
+      );
+
+    const rows =
+      responseText.trim()
+        ? JSON.parse(responseText)
+        : [];
+
+    const fresh =
+      Array.isArray(rows)
+        ? rows[0] || null
+        : null;
+
+    if (fresh) {
+      Object.assign(
+        selectedBusiness,
+        fresh
+      );
+
+      const cached =
+        businessesCache.find(
+          (item) =>
+            String(item.id) ===
+            String(fresh.id)
+        );
+
+      if (cached) {
+        Object.assign(
+          cached,
+          fresh
+        );
+      }
+    }
+  } catch (error) {
+    console.warn(
+      "No se pudieron refrescar los avisos del comercio:",
+      error
+    );
+  }
+}
+
+async function loadOrders() {
+  if (ordersLoading) return;
+
+  ordersLoading = true;
+  try {
+    await refreshSelectedBusinessSettings();
+
+    const orders = await getMerchantScopedTableData(
+      "orders",
+      "id,business_id,customer_name,customer_phone,delivery_type,delivery_address,delivery_reference,payment_method,cash_amount,notes,status,total,source,archived,created_at"
+    );
+
+    const orderIds = orders.map((order) => order.id);
+    const items = await getRowsByForeignIds(
+      "order_items",
+      "order_id",
+      orderIds,
+      "id,order_id,product_id,product_name,quantity,unit_price,total"
+    );
+
+    const itemIds = items.map((item) => item.id);
+    const options = await getRowsByForeignIds(
+      "order_item_options",
+      "order_item_id",
+      itemIds,
+      "id,order_item_id,group_name,option_name,price_delta"
+    );
+
+    ordersCache = orders
+      .filter((order) => order.archived !== true)
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    orderItemsCache = items;
+    orderItemOptionsCache = options;
+
+    detectNewOrders();
+    populateOrdersBusinessFilter();
+    updateOrdersCounters();
+    renderOrders();
+    renderDashboardOrders();
+
+    if (ordersLastUpdate) {
+      ordersLastUpdate.textContent =
+        `Ultima actualizacion: ${
+          new Intl.DateTimeFormat(
+            "es-UY",
+            { hour:"2-digit", minute:"2-digit", second:"2-digit" }
+          ).format(new Date())
+        }`;
+    }
+  } catch (error) {
+    console.error("Error cargando pedidos:", error);
+    if (ordersList) {
+      ordersList.innerHTML =
+        '<div class="panel error">No se pudieron cargar los pedidos. Revisa las tablas orders, order_items y order_item_options.</div>';
+    }
+  } finally {
+    ordersLoading = false;
+  }
+}
+
+
+function normalizeCustomerWhatsAppPhone(phone) {
+  let digits =
+    String(phone || "")
+      .replace(/\D/g, "");
+
+  if (!digits) {
+    return "";
+  }
+
+  if (
+    digits.length === 9 &&
+    digits.startsWith("09")
+  ) {
+    digits =
+      `598${digits.slice(1)}`;
+  }
+
+  if (
+    digits.length === 8 &&
+    digits.startsWith("9")
+  ) {
+    digits =
+      `598${digits}`;
+  }
+
+  return digits;
+}
+
+function applyNoticeTemplate(template, order) {
+  const businessName =
+    getBusinessNameById(
+      order.business_id
+    );
+
+  return String(template || "")
+    .replaceAll(
+      "{cliente}",
+      String(order.customer_name || "")
+    )
+    .replaceAll(
+      "{comercio}",
+      String(businessName || "")
+    )
+    .replaceAll(
+      "{total}",
+      orderMoney(order.total)
+    )
+    .replaceAll(
+      "{direccion}",
+      String(order.delivery_address || "")
+    )
+    .trim();
+}
+
+function customerWhatsAppNotification(order, nextStatus) {
+  const defaults =
+    customerNoticeDefaults();
+
+  if (
+    nextStatus === "approved"
+  ) {
+    if (
+      selectedBusiness?.notice_approved_enabled === false
+    ) {
+      return "";
+    }
+
+    return applyNoticeTemplate(
+      selectedBusiness?.notice_approved_message ||
+      defaults.approved,
+      order
+    );
+  }
+
+  if (
+    nextStatus === "ready" &&
+    order.delivery_type === "pickup"
+  ) {
+    if (
+      selectedBusiness?.notice_ready_enabled === false
+    ) {
+      return "";
+    }
+
+    return applyNoticeTemplate(
+      selectedBusiness?.notice_ready_message ||
+      defaults.ready,
+      order
+    );
+  }
+
+  if (
+    nextStatus === "on_the_way" &&
+    order.delivery_type !== "pickup"
+  ) {
+    if (
+      selectedBusiness?.notice_delivery_enabled === false
+    ) {
+      return "";
+    }
+
+    return applyNoticeTemplate(
+      selectedBusiness?.notice_delivery_message ||
+      defaults.delivery,
+      order
+    );
+  }
+
+  return "";
+}
+
+function getCustomerWhatsAppUrl(order, nextStatus) {
+  const phone =
+    normalizeCustomerWhatsAppPhone(
+      order.customer_phone
+    );
+
+  const message =
+    customerWhatsAppNotification(
+      order,
+      nextStatus
+    );
+
+  if (!phone || !message) {
+    return "";
+  }
+
+  return (
+    `https://wa.me/${phone}` +
+    `?text=${encodeURIComponent(message)}`
+  );
+}
+
+function openCustomerWhatsApp(url, reservedWindow = null) {
+  if (!url) {
+    if (reservedWindow && !reservedWindow.closed) {
+      reservedWindow.close();
+    }
+    return;
+  }
+
+  try {
+    if (reservedWindow && !reservedWindow.closed) {
+      reservedWindow.location.href = url;
+      return;
+    }
+  } catch (error) {
+    console.warn(
+      "No se pudo reutilizar la ventana de WhatsApp:",
+      error
+    );
+  }
+
+  const opened =
+    window.open(
+      url,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+  if (!opened) {
+    window.location.href = url;
+  }
+}
+
+
+async function archiveSingleOrder(orderId) {
+  const order =
+    ordersCache.find(
+      (item) =>
+        String(item.id) ===
+        String(orderId)
+    );
+
+  if (!order) {
+    return;
+  }
+
+  const confirmed =
+    window.confirm(
+      `Quitar el pedido #${order.id} del panel?\n\n` +
+      "Dejara de aparecer en Pedidos y en el resumen del turno."
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    await updateTableRow(
+      "orders",
+      order.id,
+      { archived: true }
+    );
+
+    showToast(
+      `Pedido #${order.id} quitado del turno.`,
+      "success"
+    );
+
+    await loadOrders();
+  } catch (error) {
+    console.error(
+      "Error quitando pedido:",
+      error
+    );
+
+    showToast(
+      "No se pudo quitar el pedido.",
+      "error"
+    );
+  }
+}
+
+async function clearMerchantShiftOrders() {
+  if (clearShiftOrdersButton) {
+    clearShiftOrdersButton.disabled = true;
+    clearShiftOrdersButton.textContent =
+      "Buscando pedidos...";
+  }
+
+  try {
+    /*
+      IMPORTANTE:
+      No usamos ordersCache para decidir qu\u00e9 borrar.
+      Hacemos una lectura NUEVA de Supabase al tocar el bot\u00f3n.
+      As\u00ed evitamos cualquier desincronizaci\u00f3n del panel.
+    */
+    const freshOrders =
+      await getTableData(
+        "orders",
+        "id,business_id,status,archived,created_at"
+      );
+
+    const merchantBusinessId =
+      currentMerchantBusinessId();
+
+    let ordersToClear =
+      freshOrders.filter(
+        (order) =>
+          order.archived !== true &&
+          String(order.business_id) ===
+          String(merchantBusinessId)
+      );
+
+    /*
+      Respaldo adicional:
+      Si por una migraci\u00f3n vieja hay pedidos visibles cuyo business_id
+      no coincide, tomamos exactamente los IDs que el panel est\u00e1 mostrando.
+    */
+    if (!ordersToClear.length) {
+      const visibleOrderIds =
+        [
+          ...document.querySelectorAll(
+            "#ordersList [data-remove-order]"
+          )
+        ]
+          .map(
+            (button) =>
+              String(button.dataset.orderId || "")
+          )
+          .filter(Boolean);
+
+      ordersToClear =
+        freshOrders.filter(
+          (order) =>
+            order.archived !== true &&
+            visibleOrderIds.includes(
+              String(order.id)
+            )
+        );
+    }
+
+    /*
+      Tercer respaldo:
+      Si el DOM todav\u00eda no se actualiz\u00f3, usamos los pedidos
+      no archivados que ya tiene el panel en memoria.
+    */
+    if (!ordersToClear.length) {
+      const cachedIds =
+        ordersCache
+          .filter(
+            (order) =>
+              order.archived !== true
+          )
+          .map(
+            (order) =>
+              String(order.id)
+          );
+
+      ordersToClear =
+        freshOrders.filter(
+          (order) =>
+            order.archived !== true &&
+            cachedIds.includes(
+              String(order.id)
+            )
+        );
+    }
+
+    if (!ordersToClear.length) {
+      showToast(
+        "No hay pedidos para limpiar.",
+        "success"
       );
       return;
     }
 
-    closeCartModal();
-    openCheckoutModal();
+    const confirmed =
+      window.confirm(
+        `Vas a limpiar ${ordersToClear.length} pedido${ordersToClear.length === 1 ? "" : "s"} del turno.\n\n` +
+        "Se quitaran del panel los pedidos activos, entregados y cancelados.\n" +
+        "El proximo turno comenzara desde cero.\n\n" +
+        "Queres continuar?"
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    if (clearShiftOrdersButton) {
+      clearShiftOrdersButton.textContent =
+        "Limpiando...";
+    }
+
+    for (const order of ordersToClear) {
+      await updateTableRow(
+        "orders",
+        order.id,
+        { archived: true }
+      );
+    }
+
+    /*
+      Refrescamos desde Supabase, no solo la vista.
+    */
+    await loadOrders();
+
+    showToast(
+      `Turno limpiado: ${ordersToClear.length} pedido${ordersToClear.length === 1 ? "" : "s"} quitado${ordersToClear.length === 1 ? "" : "s"}.`,
+      "success"
+    );
+  } catch (error) {
+    console.error(
+      "Error limpiando turno:",
+      error
+    );
+
+    showToast(
+      "No se pudo limpiar el turno. Revisa la consola para ver el error.",
+      "error"
+    );
+  } finally {
+    if (clearShiftOrdersButton) {
+      clearShiftOrdersButton.disabled = false;
+      clearShiftOrdersButton.textContent =
+        "Limpiar turno";
+    }
   }
+}
+
+async function updateOrderStatus(orderId, status) {
+  const order =
+    ordersCache.find(
+      (item) =>
+        String(item.id) ===
+        String(orderId)
+    );
+
+  if (!order) {
+    showToast(
+      "No se encontro el pedido.",
+      "error"
+    );
+    return;
+  }
+
+  try {
+    await updateTableRow(
+      "orders",
+      orderId,
+      { status }
+    );
+
+    /*
+      V95:
+      Actualizamos el estado en memoria primero para que el botón
+      "Avisar..." aparezca inmediatamente después de Aceptar,
+      Listo o En camino.
+    */
+    order.status = status;
+
+    renderOrders();
+    renderDashboardOrders();
+    updateOrdersCounters();
+
+    showToast(
+      `Pedido #${orderId}: ${orderStatusLabel(status)}.`,
+      "success"
+    );
+
+    try {
+      await loadOrders();
+    } catch (refreshError) {
+      console.warn(
+        "El estado se guardó, pero no se pudo refrescar la lista:",
+        refreshError
+      );
+    }
+  } catch (error) {
+    console.error(
+      "Error actualizando pedido:",
+      error
+    );
+
+    showToast(
+      "No se pudo cambiar el estado del pedido.",
+      "error"
+    );
+  }
+}
+
+function sendCustomerNoticeForOrder(orderId) {
+  const order =
+    ordersCache.find(
+      (item) =>
+        String(item.id) ===
+        String(orderId)
+    );
+
+  if (!order) {
+    showToast(
+      "No se encontro el pedido.",
+      "error"
+    );
+    return;
+  }
+
+  const noticeStatus =
+    noticeStatusAvailableForOrder(order);
+
+  if (!noticeStatus) {
+    showToast(
+      "No hay un aviso activo para este estado.",
+      "error"
+    );
+    return;
+  }
+
+  const url =
+    getCustomerWhatsAppUrl(
+      order,
+      noticeStatus
+    );
+
+  if (!url) {
+    showToast(
+      "No se pudo preparar el aviso. Revisá el teléfono del cliente y el mensaje configurado.",
+      "error"
+    );
+    return;
+  }
+
+  openCustomerWhatsApp(url);
+}
+
+
+ordersBusinessFilter?.addEventListener(
+  "change",
+  renderOrders
 );
 
-document.addEventListener(
-  "keydown",
+ordersStatusFilter?.addEventListener(
+  "change",
+  renderOrders
+);
+
+refreshOrdersButton?.addEventListener(
+  "click",
+  loadOrders
+);
+
+clearShiftOrdersButton?.addEventListener(
+  "click",
+  clearMerchantShiftOrders
+);
+
+ordersList?.addEventListener(
+  "click",
   (event) => {
-    if (event.key !== "Escape") {
+    const removeButton =
+      event.target.closest(
+        "[data-remove-order]"
+      );
+
+    if (removeButton) {
+      archiveSingleOrder(
+        removeButton.dataset.orderId
+      );
       return;
     }
 
-    if (orderSuccessModal.classList.contains("open")) {
+    const noticeButton =
+      event.target.closest(
+        "[data-send-customer-notice]"
+      );
+
+    if (noticeButton) {
+      sendCustomerNoticeForOrder(
+        noticeButton.dataset.orderId
+      );
       return;
     }
 
-    if (checkoutModal.classList.contains("open")) {
-      closeCheckoutModal();
+    const button =
+      event.target.closest(
+        "[data-order-action]"
+      );
+
+    if (!button) {
       return;
     }
 
-    if (productModal.classList.contains("open")) {
-      closeProductModal();
+    button.disabled = true;
+
+    updateOrderStatus(
+      button.dataset.orderId,
+      button.dataset.nextStatus
+    );
+  }
+);
+
+dashboardGoOrdersButton?.addEventListener(
+  "click",
+  async () => {
+    openSection("orders");
+    await loadOrders();
+  }
+);
+
+function startOrdersPolling() {
+  if (ordersPollTimer) return;
+
+  ordersPollTimer = setInterval(
+    () => loadOrders(),
+    10000
+  );
+}
+
+
+function merchantStatusLabel(status) {
+  const labels = {
+    open: "ABIERTO - TOMANDO PEDIDOS",
+    closed: "PEDIDOS CERRADOS",
+    sold_out: "STOCK AGOTADO POR HOY"
+  };
+
+  return labels[status] || "ABIERTO - TOMANDO PEDIDOS";
+}
+
+function syncMerchantStatusUI() {
+  if (!selectedBusiness) {
+    return;
+  }
+
+  const status =
+    selectedBusiness.ordering_status || "open";
+
+  const label =
+    merchantStatusLabel(status);
+
+  if (merchantStoreStatusBadge) {
+    merchantStoreStatusBadge.textContent = label;
+    merchantStoreStatusBadge.className =
+      `status-badge merchant-status-${status}`;
+  }
+
+  if (merchantStatusLarge) {
+    merchantStatusLarge.textContent = label;
+  }
+
+  if (merchantQuickStatusText) {
+    merchantQuickStatusText.textContent =
+      status === "open"
+        ? "El local esta tomando pedidos normalmente."
+        : status === "closed"
+          ? "Los pedidos estan cerrados hasta que vuelvas a abrirlos."
+          : "El stock general esta agotado y la web no permite nuevos pedidos.";
+  }
+
+  if (merchantSoldOutMessage) {
+    merchantSoldOutMessage.value =
+      selectedBusiness.sold_out_message ||
+      "POR HOY AGOTAMOS NUESTRO STOCK. MUCHAS GRACIAS A TODOS. NOS REENCONTRAMOS MANANA.";
+  }
+}
+
+async function setMerchantOrderingStatus(status) {
+  if (!selectedBusiness) {
+    showToast(
+      "No se encontro el comercio.",
+      "error"
+    );
+    return;
+  }
+
+  const message =
+    status === "sold_out" &&
+    merchantSoldOutMessage
+      ? merchantSoldOutMessage.value.trim()
+      : selectedBusiness.sold_out_message || null;
+
+  const buttons = [
+    merchantOpenButton,
+    merchantCloseButton,
+    merchantSoldOutButton,
+    merchantStatusOpen,
+    merchantStatusClosed,
+    merchantStatusSoldOut
+  ].filter(Boolean);
+
+  buttons.forEach(
+    (button) => {
+      button.disabled = true;
+    }
+  );
+
+  try {
+    await setBusinessOrderingStatusRPC(
+      selectedBusiness.id,
+      status,
+      message
+    );
+
+    /*
+      Lectura inmediata de Supabase.
+      No damos por hecho que se guardo:
+      verificamos el valor real de la base.
+    */
+    const verified =
+      await readBusinessOrderingStatus(
+        selectedBusiness.id
+      );
+
+    if (!verified) {
+      throw new Error(
+        "Supabase no devolvio el comercio al verificar el estado."
+      );
+    }
+
+    if (
+      String(
+        verified.ordering_status || ""
+      ) !== String(status)
+    ) {
+      throw new Error(
+        `Supabase no guardo el estado solicitado. Estado real: ${verified.ordering_status || "sin valor"}`
+      );
+    }
+
+    selectedBusiness.ordering_status =
+      verified.ordering_status;
+
+    selectedBusiness.sold_out_message =
+      verified.sold_out_message ??
+      message;
+
+    syncMerchantStatusUI();
+
+    showToast(
+      status === "open"
+        ? "Pedidos abiertos correctamente."
+        : status === "closed"
+          ? "Pedidos cerrados correctamente."
+          : "Stock agotado activado correctamente.",
+      "success"
+    );
+  } catch (error) {
+    console.error(
+      "Error actualizando estado real del local:",
+      error
+    );
+
+    showToast(
+      `No se pudo guardar el estado en Supabase: ${error.message || "error desconocido"}`,
+      "error"
+    );
+  } finally {
+    buttons.forEach(
+      (button) => {
+        button.disabled = false;
+      }
+    );
+  }
+}
+
+async function saveMerchantSoldOutMessage() {
+  if (
+    !selectedBusiness ||
+    !merchantSoldOutMessage
+  ) {
+    return;
+  }
+
+  try {
+    const message =
+      merchantSoldOutMessage.value.trim();
+
+    const currentStatus =
+      selectedBusiness.ordering_status ||
+      "open";
+
+    await setBusinessOrderingStatusRPC(
+      selectedBusiness.id,
+      currentStatus,
+      message
+    );
+
+    const verified =
+      await readBusinessOrderingStatus(
+        selectedBusiness.id
+      );
+
+    if (!verified) {
+      throw new Error(
+        "No se pudo verificar el mensaje."
+      );
+    }
+
+    selectedBusiness.sold_out_message =
+      verified.sold_out_message || "";
+
+    showToast(
+      "Mensaje guardado correctamente.",
+      "success"
+    );
+  } catch (error) {
+    console.error(
+      "Error guardando mensaje:",
+      error
+    );
+
+    showToast(
+      `No se pudo guardar el mensaje: ${error.message || "error desconocido"}`,
+      "error"
+    );
+  }
+}
+
+[
+  [merchantOpenButton, "open"],
+  [merchantCloseButton, "closed"],
+  [merchantSoldOutButton, "sold_out"],
+  [merchantStatusOpen, "open"],
+  [merchantStatusClosed, "closed"],
+  [merchantStatusSoldOut, "sold_out"]
+].forEach(([button, status]) => {
+  button?.addEventListener(
+    "click",
+    () => setMerchantOrderingStatus(status)
+  );
+});
+
+merchantSaveMessage?.addEventListener(
+  "click",
+  saveMerchantSoldOutMessage
+);
+
+async function loadDashboard() {
+  try {
+    const [categories, products] = await Promise.all([
+      getMerchantScopedTableData("categories", "id,business_id"),
+      getMerchantScopedTableData("products", "id,business_id")
+    ]);
+
+    const setCount = (id, value) => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.textContent = String(value);
+      }
+    };
+
+    // El panel del comercio solo muestra datos del negocio autenticado.
+    setCount("businessesCount", selectedBusiness ? 1 : 0);
+    setCount("categoriesCount", categories.length);
+    setCount("productsCount", products.length);
+    setCount("usersCount", merchantAuthUser ? 1 : 0);
+  } catch (error) {
+    console.error("Error cargando dashboard:", error);
+  }
+}
+
+async function loadBusinesses() {
+  const container = document.getElementById("businessesList");
+
+  try {
+    if (!MERCHANT_BUSINESS_ID) {
+      businessesCache = [];
+      if (container) {
+        container.className = "panel empty-state";
+        container.textContent = "No hay un comercio autorizado para esta cuenta.";
+      }
       return;
     }
 
-    if (cartModal.classList.contains("open")) {
-      closeCartModal();
+    const responseText = await requestText(
+      `${SUPABASE_REST}/businesses?id=eq.${encodeURIComponent(MERCHANT_BUSINESS_ID)}&select=*`,
+      {
+        method: "GET",
+        headers: merchantHeaders()
+      }
+    );
+
+    const rows = responseText.trim() ? JSON.parse(responseText) : [];
+    const businesses = Array.isArray(rows) ? rows : [];
+    businessesCache = businesses;
+
+    if (!container) {
+      return;
+    }
+
+    if (!businesses.length) {
+      container.className = "panel empty-state";
+      container.textContent = "No se pudo cargar tu comercio.";
+      return;
+    }
+
+    container.className = "panel";
+    container.innerHTML = businesses.map((business) => `
+      <div class="list-item">
+        <div>
+          <strong>${escapeHTML(business.name || "Sin nombre")}</strong>
+          <small>
+            ${escapeHTML(business.slug || "Sin enlace")}
+            ${business.phone ? ` · ${escapeHTML(business.phone)}` : ""}
+          </small>
+        </div>
+        <div class="business-actions" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span class="status-pill ${business.active ? "" : "inactive"}">
+            ${business.active ? "Activo" : "Inactivo"}
+          </span>
+          <button
+            type="button"
+            class="secondary-button business-manage-button"
+            data-business-id="${escapeHTML(business.id)}"
+          >
+            Administrar
+          </button>
+        </div>
+      </div>
+    `).join("");
+  } catch (error) {
+    console.error("Error cargando comercio:", error);
+
+    if (container) {
+      container.className = "panel error";
+      container.textContent = "No se pudo cargar tu comercio.";
+    }
+  }
+}
+
+document
+  .getElementById("businessesList")
+  ?.addEventListener("click", (event) => {
+    const button = event.target.closest(
+      ".business-manage-button"
+    );
+
+    if (!button) {
+      return;
+    }
+
+    const business = businessesCache.find(
+      (item) =>
+        String(item.id) ===
+        String(button.dataset.businessId)
+    );
+
+    if (business) {
+      openBusinessDetailModal(business);
+    }
+  });
+
+async function loadCategories() {
+  const container =
+    document.getElementById("categoriesList");
+
+  const subtitle =
+    document.getElementById("categoriesSubtitle");
+
+  if (!selectedBusiness) {
+    subtitle.textContent =
+      "Seleccion\u00e1 un comercio para administrar sus categor\u00edas.";
+
+    container.className = "panel empty-state";
+    container.textContent =
+      "Entr\u00e1 en Comercios, toc\u00e1 Administrar y luego Categor\u00edas.";
+
+    return;
+  }
+
+  subtitle.textContent =
+    `Categor\u00edas de ${selectedBusiness.name}.`;
+
+  try {
+    const filtered = await getMerchantScopedTableData(
+      "categories",
+      "id,name,business_id,active"
+    );
+
+    const header = `
+      <div class="section-toolbar">
+
+        <div>
+          <strong>
+            ${escapeHTML(selectedBusiness.name)}
+          </strong>
+
+          <small>
+            Categor\u00edas de este comercio
+          </small>
+        </div>
+
+        <button
+          type="button"
+          class="primary-button"
+          id="newCategoryButton"
+        >
+          + Nueva categor\u00eda
+        </button>
+
+      </div>
+    `;
+
+    container.className = "panel";
+
+    if (!filtered.length) {
+      container.innerHTML =
+        header +
+        `<div class="empty-state">
+          Todav\u00eda no hay categor\u00edas para este comercio.
+        </div>`;
+    } else {
+      container.innerHTML =
+        header +
+        filtered.map((category) => `
+          <div class="list-item">
+
+            <div>
+              <strong>
+                ${escapeHTML(category.name || "Sin nombre")}
+              </strong>
+            </div>
+
+            <span class="status-pill ${category.active ? "" : "inactive"}">
+              ${category.active ? "Activa" : "Inactiva"}
+            </span>
+
+          </div>
+        `).join("");
+    }
+
+    document
+      .getElementById("newCategoryButton")
+      ?.addEventListener("click", openCategoryModal);
+  } catch (error) {
+    console.error("Error cargando categorias:", error);
+
+    container.className = "panel error";
+    container.textContent =
+      "No se pudieron cargar las categor\u00edas.";
+  }
+}
+
+async function loadProducts() {
+  const container =
+    document.getElementById("productsList");
+
+  const subtitle =
+    document.getElementById("productsSubtitle");
+
+  if (!selectedBusiness) {
+    subtitle.textContent =
+      "No se encontro el comercio.";
+
+    container.className = "panel empty-state";
+    container.textContent =
+      "No hay un comercio seleccionado.";
+    return;
+  }
+
+  subtitle.textContent =
+    `Productos de ${selectedBusiness.name}.`;
+
+  try {
+    const [products, categories] =
+      await Promise.all([
+        getMerchantScopedTableData(
+          "products",
+          "id,business_id,category_id,name,description,price,image_url,featured,active,available,sort_order,old_price"
+        ),
+        getMerchantScopedTableData(
+          "categories",
+          "id,name,business_id,active"
+        )
+      ]);
+
+    const merchantCategories =
+      categories
+        .filter(
+          (category) =>
+            String(category.business_id) ===
+            String(selectedBusiness.id)
+        )
+        .sort(
+          (a, b) =>
+            String(a.name || "")
+              .localeCompare(
+                String(b.name || ""),
+                "es"
+              )
+        );
+
+    const categoryMap = new Map(
+      merchantCategories.map(
+        (category) => [
+          String(category.id),
+          category.name
+        ]
+      )
+    );
+
+    const filtered = products
+      .filter(
+        (product) =>
+          String(product.business_id) ===
+          String(selectedBusiness.id)
+      )
+      .sort(
+        (a, b) =>
+          Number(a.sort_order || 0) -
+          Number(b.sort_order || 0)
+      );
+
+    const header = `
+      <div class="section-toolbar products-main-toolbar">
+        <div>
+          <strong>
+            ${escapeHTML(selectedBusiness.name)}
+          </strong>
+          <small>
+            ${filtered.length} producto${filtered.length === 1 ? "" : "s"}
+          </small>
+        </div>
+
+        <button
+          type="button"
+          class="primary-button"
+          id="newProductButton"
+        >
+          + Nuevo producto
+        </button>
+      </div>
+    `;
+
+    container.className = "panel products-panel";
+
+    if (!filtered.length) {
+      container.innerHTML =
+        header +
+        `<div class="empty-state">
+          Todav\u00eda no hay productos para este comercio.
+        </div>`;
+    } else {
+      const categoryGroups = [];
+
+      merchantCategories.forEach((category) => {
+        const categoryProducts =
+          filtered.filter(
+            (product) =>
+              String(product.category_id) ===
+              String(category.id)
+          );
+
+        if (categoryProducts.length) {
+          categoryGroups.push({
+            id: category.id,
+            name: category.name,
+            products: categoryProducts
+          });
+        }
+      });
+
+      const uncategorized =
+        filtered.filter(
+          (product) =>
+            !categoryMap.has(
+              String(product.category_id)
+            )
+        );
+
+      if (uncategorized.length) {
+        categoryGroups.push({
+          id: "uncategorized",
+          name: "SIN CATEGORIA",
+          products: uncategorized
+        });
+      }
+
+      const productCard = (product) => `
+        <div class="merchant-product-card">
+
+          <div class="merchant-product-main">
+            <div class="product-thumb">
+              ${
+                product.image_url
+                  ? `
+                    <img
+                      src="${escapeHTML(product.image_url)}"
+                      alt="${escapeHTML(product.name || "Producto")}"
+                    >
+                  `
+                  : `
+                    <div class="product-thumb-placeholder">
+                      Sin imagen
+                    </div>
+                  `
+              }
+            </div>
+
+            <div class="merchant-product-copy">
+              <strong class="merchant-product-name">
+                ${escapeHTML(product.name || "Sin nombre")}
+              </strong>
+
+              <small class="merchant-product-category">
+                ${escapeHTML(
+                  categoryMap.get(
+                    String(product.category_id)
+                  ) || "Sin categor\u00eda"
+                )}
+              </small>
+
+              <div class="merchant-product-price-row">
+                <span class="merchant-product-price-label">
+                  Precio base
+                </span>
+
+                <strong class="product-price">
+                  $${Number(product.price || 0)}
+                </strong>
+
+                ${
+                  product.old_price
+                    ? `
+                      <span class="product-old-price">
+                        $${Number(product.old_price)}
+                      </span>
+                    `
+                    : ""
+                }
+              </div>
+
+              <div class="merchant-product-badges">
+                <span class="status-pill ${product.active ? "" : "inactive"}">
+                  ${product.active ? "Activo" : "Inactivo"}
+                </span>
+
+                ${
+                  product.available === false
+                    ? `
+                      <span class="merchant-stock-badge sold-out">
+                        Agotado
+                      </span>
+                    `
+                    : `
+                      <span class="merchant-stock-badge available">
+                        Con stock
+                      </span>
+                    `
+                }
+
+                ${
+                  product.featured
+                    ? `
+                      <span class="product-badge">
+                        Destacado
+                      </span>
+                    `
+                    : ""
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="product-management-actions merchant-product-actions">
+            <button
+              type="button"
+              class="compact-button product-stock-button ${product.available === false ? "stock-off" : "stock-on"}"
+              data-product-id="${escapeHTML(product.id)}"
+              data-next-available="${product.available === false ? "true" : "false"}"
+            >
+              ${product.available === false ? "Reactivar stock" : "Agotar producto"}
+            </button>
+
+            <button
+              type="button"
+              class="secondary-button compact-button edit-product-button"
+              data-product-id="${escapeHTML(product.id)}"
+            >
+              Editar
+            </button>
+
+            <button
+              type="button"
+              class="secondary-button compact-button modifiers-button"
+              data-product-id="${escapeHTML(product.id)}"
+            >
+              Opciones y extras
+            </button>
+
+            <button
+              type="button"
+              class="compact-button delete-product-button"
+              data-product-id="${escapeHTML(product.id)}"
+            >
+              Eliminar
+            </button>
+          </div>
+
+        </div>
+      `;
+
+      container.innerHTML =
+        header +
+        categoryGroups.map((group) => `
+          <section
+            class="merchant-product-category-group"
+            data-category-id="${escapeHTML(group.id)}"
+          >
+            <div class="merchant-category-heading">
+              <div>
+                <span class="merchant-category-kicker">
+                  CATEGORIA
+                </span>
+                <h3>
+                  ${escapeHTML(group.name)}
+                </h3>
+              </div>
+
+              <span class="merchant-category-count">
+                ${group.products.length}
+                producto${group.products.length === 1 ? "" : "s"}
+              </span>
+            </div>
+
+            <div class="merchant-category-products">
+              ${group.products.map(productCard).join("")}
+            </div>
+          </section>
+        `).join("");
+    }
+
+    document
+      .getElementById("newProductButton")
+      ?.addEventListener(
+        "click",
+        () => openProductModal()
+      );
+
+    container
+      .querySelectorAll(".product-stock-button")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          const productId = button.dataset.productId;
+          const nextAvailable =
+            button.dataset.nextAvailable === "true";
+
+          button.disabled = true;
+          button.textContent = "Actualizando...";
+
+          try {
+            await updateTableRow(
+              "products",
+              productId,
+              { available: nextAvailable }
+            );
+
+            showToast(
+              nextAvailable
+                ? "Producto nuevamente disponible."
+                : "Producto marcado como agotado.",
+              "success"
+            );
+
+            await loadProducts();
+          } catch (error) {
+            console.error(
+              "Error actualizando stock:",
+              error
+            );
+
+            showToast(
+              "No se pudo actualizar el stock.",
+              "error"
+            );
+
+            button.disabled = false;
+          }
+        });
+      });
+
+    container
+      .querySelectorAll(".edit-product-button")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const product = filtered.find(
+            (item) =>
+              String(item.id) ===
+              String(button.dataset.productId)
+          );
+
+          if (product) {
+            openProductModal(product);
+          }
+        });
+      });
+
+    container
+      .querySelectorAll(".modifiers-button")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const product = filtered.find(
+            (item) =>
+              String(item.id) ===
+              String(button.dataset.productId)
+          );
+
+          if (product) {
+            openModifiersModal(product);
+          }
+        });
+      });
+
+    container
+      .querySelectorAll(".delete-product-button")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          const product =
+            filtered.find(
+              (item) =>
+                String(item.id) ===
+                String(button.dataset.productId)
+            );
+
+          if (!product) {
+            return;
+          }
+
+          const confirmed =
+            window.confirm(
+              `Vas a eliminar "${product.name}".\n\n` +
+              "Esta accion es definitiva. Si solo se termino el stock, usa Agotar producto.\n\n" +
+              "Queres eliminarlo?"
+            );
+
+          if (!confirmed) {
+            return;
+          }
+
+          button.disabled = true;
+          button.textContent = "Eliminando...";
+
+          try {
+            const allGroups =
+              await getTableData(
+                "product_option_groups",
+                "id,product_id"
+              );
+
+            const groupIds =
+              allGroups
+                .filter(
+                  (group) =>
+                    String(group.product_id) ===
+                    String(product.id)
+                )
+                .map(
+                  (group) =>
+                    String(group.id)
+                );
+
+            if (groupIds.length) {
+              const allOptions =
+                await getTableData(
+                  "product_options",
+                  "id,group_id"
+                );
+
+              const optionIds =
+                allOptions
+                  .filter(
+                    (option) =>
+                      groupIds.includes(
+                        String(option.group_id)
+                      )
+                  )
+                  .map(
+                    (option) =>
+                      option.id
+                  );
+
+              for (const optionId of optionIds) {
+                await deleteTableRow(
+                  "product_options",
+                  optionId
+                );
+              }
+
+              for (const groupId of groupIds) {
+                await deleteTableRow(
+                  "product_option_groups",
+                  groupId
+                );
+              }
+            }
+
+            await deleteTableRow(
+              "products",
+              product.id
+            );
+
+            showToast(
+              "Producto eliminado correctamente.",
+              "success"
+            );
+
+            await Promise.all([
+              loadDashboard(),
+              loadProducts()
+            ]);
+          } catch (error) {
+            console.error(
+              "Error eliminando producto:",
+              error
+            );
+
+            showToast(
+              "No se pudo eliminar el producto.",
+              "error"
+            );
+
+            button.disabled = false;
+            button.textContent = "Eliminar";
+          }
+        });
+      });
+  } catch (error) {
+    console.error(
+      "Error cargando productos:",
+      error
+    );
+
+    container.className = "panel error";
+    container.textContent =
+      "No se pudieron cargar los productos.";
+  }
+}
+
+async function loadUsers() {
+  const container =
+    document.getElementById("usersList");
+
+  try {
+    const users = await getTableData(
+      "users",
+      "id,email,full_name,role,active"
+    );
+
+    if (!users.length) {
+      container.className = "panel empty-state";
+      container.textContent =
+        "Todav\u00eda no hay usuarios registrados.";
+      return;
+    }
+
+    container.className = "panel";
+
+    container.innerHTML = users.map((user) => `
+      <div class="list-item">
+
+        <div>
+          <strong>
+            ${escapeHTML(
+              user.full_name ||
+              user.email ||
+              "Sin nombre"
+            )}
+          </strong>
+
+          <small>
+            ${escapeHTML(user.role || "Sin rol")}
+          </small>
+        </div>
+
+        <span class="status-pill ${user.active ? "" : "inactive"}">
+          ${user.active ? "Activo" : "Inactivo"}
+        </span>
+
+      </div>
+    `).join("");
+  } catch (error) {
+    console.error("Error cargando usuarios:", error);
+
+    container.className = "panel error";
+    container.textContent =
+      "No se pudieron cargar los usuarios.";
+  }
+}
+
+businessForm.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+
+    const name = businessName.value.trim();
+    const slug = normalizeSlug(
+      businessSlug.value || name
+    );
+
+    if (!name) {
+      businessFormMessage.textContent =
+        "Escrib\u00ed el nombre del comercio.";
+      return;
+    }
+
+    if (!slug) {
+      businessFormMessage.textContent =
+        "Escrib\u00ed un enlace v\u00e1lido.";
+      return;
+    }
+
+    saveBusinessButton.disabled = true;
+    saveBusinessButton.textContent = "Guardando...";
+    businessFormMessage.textContent = "";
+
+    const payload = {
+      name,
+      slug,
+      phone: businessPhone.value.trim() || null,
+      address: businessAddress.value.trim() || null,
+      logo_url: businessLogoUrl.value.trim() || null,
+      primary_color: businessPrimaryColor.value,
+      secondary_color: businessSecondaryColor.value,
+      active: businessActive.checked
+    };
+
+    try {
+      if (editingBusinessId) {
+        await updateTableRow(
+          "businesses",
+          editingBusinessId,
+          payload
+        );
+      } else {
+        await insertTableRow(
+          "businesses",
+          payload
+        );
+      }
+
+      showToast(
+        editingBusinessId
+          ? "Comercio actualizado correctamente."
+          : "Comercio creado correctamente.",
+        "success"
+      );
+
+      closeBusinessModal();
+
+      await Promise.all([
+        loadDashboard(),
+        loadBusinesses()
+      ]);
+
+      openSection("businesses");
+    } catch (error) {
+      console.error("Error guardando comercio:", error);
+
+      businessFormMessage.textContent =
+        "No se pudo guardar el comercio.";
+    } finally {
+      saveBusinessButton.disabled = false;
+      saveBusinessButton.textContent =
+        editingBusinessId
+          ? "Guardar cambios"
+          : "Guardar comercio";
     }
   }
 );
 
-loadStore();
 
-window.setInterval(
-  () => {
-    if (business?.id) {
-      refreshOrderingStatusFromSupabase();
+productForm.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+
+    const name = productName.value.trim();
+    const categoryId = productCategory.value;
+    const price = Number(productPrice.value);
+
+    if (!name) {
+      productFormMessage.textContent =
+        "Escrib\u00ed el nombre del producto.";
+      return;
     }
-  },
-  10000
+
+    if (!categoryId) {
+      productFormMessage.textContent =
+        "Eleg\u00ed una categor\u00eda.";
+      return;
+    }
+
+    if (
+      !Number.isFinite(price) ||
+      price < 0
+    ) {
+      productFormMessage.textContent =
+        "Escrib\u00ed un precio v\u00e1lido.";
+      return;
+    }
+
+    const selectedCategoryName =
+      productCategory
+        .options[
+          productCategory.selectedIndex
+        ]?.textContent
+        ?.trim()
+        ?.toUpperCase() || "";
+
+    if (
+      selectedCategoryName.includes("PIZZA") &&
+      price <= 0
+    ) {
+      productFormMessage.textContent =
+        "En pizzas, el precio base debe ser mayor a $0. Coloc\u00e1 el precio de la muzzarella y despu\u00e9s sum\u00e1 los gustos desde Opciones y extras.";
+      return;
+    }
+
+    saveProductButton.disabled = true;
+    saveProductButton.textContent =
+      "Guardando...";
+    productFormMessage.textContent = "";
+
+    try {
+      let imageUrl =
+        removeExistingProductImage
+          ? null
+          : existingProductImageUrl || null;
+
+      if (croppedProductImageBlob) {
+        saveProductButton.textContent =
+          "Subiendo imagen...";
+
+        imageUrl =
+          await uploadProductImage(
+            croppedProductImageBlob
+          );
+
+        saveProductButton.textContent =
+          editingProductId
+            ? "Guardando cambios..."
+            : "Guardando producto...";
+      }
+
+      const payload = {
+        business_id: selectedBusiness.id,
+        category_id: Number(categoryId),
+        name,
+        description:
+          productDescription.value.trim() ||
+          null,
+        price,
+        image_url: imageUrl,
+        featured:
+          productFeatured.checked,
+        active:
+          productActive.checked,
+        sort_order:
+          Number(productSortOrder.value || 0),
+        old_price:
+          productOldPrice.value
+            ? Number(productOldPrice.value)
+            : null
+      };
+
+      if (
+        croppedProductImageBlob &&
+        !imageUrl
+      ) {
+        throw new Error(
+          "Imagen: no se genero una URL para guardar."
+        );
+      }
+
+      if (editingProductId) {
+        await updateProductAndVerify(
+          editingProductId,
+          payload
+        );
+      } else {
+        await insertProductAndVerify(
+          payload
+        );
+      }
+
+      showToast(
+        editingProductId
+          ? "Producto actualizado correctamente."
+          : "Producto creado correctamente.",
+        "success"
+      );
+
+      closeProductModal();
+
+      await Promise.all([
+        loadDashboard(),
+        loadProducts()
+      ]);
+    } catch (error) {
+      console.error(
+        "Error guardando producto:",
+        error
+      );
+
+      const message =
+        String(error.message);
+
+      if (
+        message.includes("Storage") ||
+        message.includes("storage")
+      ) {
+        productFormMessage.textContent =
+          "La foto no pudo subirse a Supabase Storage. Ejecuta el archivo SQL de la v29 una sola vez y volve a probar.";
+      } else if (
+        message.includes("imagen") ||
+        message.includes("Imagen") ||
+        message.includes("Producto:")
+      ) {
+        productFormMessage.textContent =
+          message;
+      } else {
+        productFormMessage.textContent =
+          editingProductId
+            ? "No se pudo actualizar el producto."
+            : "No se pudo crear el producto.";
+      }
+    } finally {
+      saveProductButton.disabled = false;
+
+      saveProductButton.textContent =
+        editingProductId
+          ? "Guardar cambios"
+          : "Guardar producto";
+    }
+  }
 );
+
+categoryForm.addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+
+    const name = categoryName.value.trim();
+
+    if (!name) {
+      categoryFormMessage.textContent =
+        "Escrib\u00ed el nombre de la categor\u00eda.";
+      return;
+    }
+
+    saveCategoryButton.disabled = true;
+    saveCategoryButton.textContent = "Guardando...";
+    categoryFormMessage.textContent = "";
+
+    try {
+      await insertTableRow(
+        "categories",
+        {
+          business_id: selectedBusiness.id,
+          name,
+          active: categoryActive.checked
+        }
+      );
+
+      showToast(
+        "Categor\u00eda creada correctamente.",
+        "success"
+      );
+
+      closeCategoryModal();
+
+      await Promise.all([
+        loadDashboard(),
+        loadCategories()
+      ]);
+    } catch (error) {
+      console.error("Error creando categoria:", error);
+
+      categoryFormMessage.textContent =
+        "No se pudo crear la categor\u00eda.";
+    } finally {
+      saveCategoryButton.disabled = false;
+      saveCategoryButton.textContent =
+        "Guardar categor\u00eda";
+    }
+  }
+);
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") {
+    return;
+  }
+
+  if (modifierOptionModal.classList.contains("open")) {
+    closeModifierOptionModal();
+    return;
+  }
+
+  if (modifierGroupModal.classList.contains("open")) {
+    closeModifierGroupModal();
+    return;
+  }
+
+  if (modifiersModal.classList.contains("open")) {
+    closeModifiersModal();
+    return;
+  }
+
+  if (imageCropModal.classList.contains("open")) {
+    closeImageCropEditor();
+    return;
+  }
+
+  if (productModal.classList.contains("open")) {
+    closeProductModal();
+    return;
+  }
+
+  if (categoryModal.classList.contains("open")) {
+    closeCategoryModal();
+    return;
+  }
+
+  if (businessModal.classList.contains("open")) {
+    closeBusinessModal();
+    return;
+  }
+
+  if (businessDetailModal.classList.contains("open")) {
+    closeBusinessDetailModal();
+  }
+});
+
+async function resolveMerchantBusiness() {
+  const fromCache =
+    businessesCache.find(
+      (business) =>
+        String(business.id) ===
+        String(MERCHANT_BUSINESS_ID)
+    ) ||
+    null;
+
+  if (fromCache) {
+    return fromCache;
+  }
+
+  /*
+    En algunos celulares, al recargar, la consulta general de comercios
+    puede tardar unas décimas más que el resto del panel. V70 mostraba
+    un error aunque segundos después todo quedara funcionando.
+
+    Antes de mostrar un error, consultamos directamente el comercio asignado al usuario.
+  */
+  for (
+    let attempt = 0;
+    attempt < 3;
+    attempt += 1
+  ) {
+    try {
+      const responseText =
+        await requestText(
+          `${SUPABASE_REST}/businesses?id=eq.${encodeURIComponent(MERCHANT_BUSINESS_ID)}&select=*`,
+          {
+            method:"GET",
+            headers:merchantHeaders()
+          }
+        );
+
+      const rows =
+        responseText.trim()
+          ? JSON.parse(responseText)
+          : [];
+
+      const merchant =
+        Array.isArray(rows)
+          ? rows[0] || null
+          : null;
+
+      if (merchant) {
+        const exists =
+          businessesCache.some(
+            (item) =>
+              String(item.id) ===
+              String(merchant.id)
+          );
+
+        if (!exists) {
+          businessesCache.push(
+            merchant
+          );
+        }
+
+        return merchant;
+      }
+    } catch (error) {
+      console.warn(
+        `Reintento ${attempt + 1} cargando comercio:`,
+        error
+      );
+    }
+
+    await new Promise(
+      (resolve) =>
+        setTimeout(
+          resolve,
+          350 * (attempt + 1)
+        )
+    );
+  }
+
+  return null;
+}
+
+
+function applyMerchantVisualTheme() {
+  const slug = String(selectedBusiness?.slug || "").toLowerCase();
+
+  document.documentElement.dataset.merchantTheme = slug;
+
+  const oldTheme = document.getElementById("denexa-merchant-theme");
+  if (oldTheme) oldTheme.remove();
+
+  if (slug !== "carro-kechu-carmelo") return;
+
+  const style = document.createElement("style");
+  style.id = "denexa-merchant-theme";
+  style.textContent = `
+    :root{
+      --primary:#f6c900 !important;
+      --primary-2:#ffdd22 !important;
+      --primary-dark:#080808 !important;
+      --accent:#f6c900 !important;
+      --bg:#0a0a0a !important;
+      --surface:#111 !important;
+      --surface-soft:#171717 !important;
+      --text:#fff !important;
+      --muted:#bdbdbd !important;
+      --line:#343434 !important;
+      --success:#25cf78 !important;
+      --danger:#ff5f59 !important;
+    }
+
+    html,body{
+      background:#0a0a0a !important;
+      color:#fff !important;
+    }
+    body{
+      background:
+        radial-gradient(circle at 100% 0%,rgba(246,201,0,.08),transparent 30rem),
+        #0a0a0a !important;
+    }
+
+    .sidebar{
+      background:
+        radial-gradient(circle at 30% 0%,rgba(246,201,0,.09),transparent 18rem),
+        #080808 !important;
+      border-right:1px solid #4c4100 !important;
+      color:#fff !important;
+    }
+    .brand{
+      border-bottom-color:#302900 !important;
+    }
+    .brand strong{color:#f6c900 !important;}
+    .brand span{color:#d1d1d1 !important;}
+    .brand-mark,.merchant-logo-mark{
+      background:#101010 !important;
+      border:1px solid #6c5900 !important;
+      box-shadow:0 0 20px rgba(246,201,0,.10) !important;
+      color:#f6c900 !important;
+    }
+    .merchant-user-caption{color:#cfcfcf !important;}
+    .merchant-logout-button{
+      border-color:#4f4300 !important;
+      background:#111 !important;
+      color:#fff !important;
+    }
+
+    .nav{
+      background:transparent !important;
+    }
+    .nav-item{
+      color:#d5d5d5 !important;
+      border-color:transparent !important;
+      background:transparent !important;
+    }
+    .nav-item:hover{
+      background:#141414 !important;
+      color:#fff !important;
+    }
+    .nav-item.active{
+      border-color:#f6c900 !important;
+      background:#181500 !important;
+      color:#f6c900 !important;
+      box-shadow:inset 4px 0 0 #f6c900 !important;
+    }
+    .nav-icon{
+      background:#171717 !important;
+      color:#f6c900 !important;
+      border:1px solid #4d4100 !important;
+    }
+
+    main,.main,.content{
+      background:transparent !important;
+      color:#fff !important;
+    }
+
+    .page-header h1,
+    .page-header h2,
+    .panel h1,
+    .panel h2,
+    .panel h3{
+      color:#fff !important;
+    }
+    .eyebrow{
+      color:#f6c900 !important;
+    }
+    .subtitle,
+    .design-help,
+    .panel p{
+      color:#bdbdbd !important;
+    }
+
+    .panel{
+      border-color:#343434 !important;
+      background:#111 !important;
+      color:#fff !important;
+      box-shadow:0 12px 32px rgba(0,0,0,.32) !important;
+    }
+
+    .stats-grid > *,
+    .stat-card,
+    .dashboard-stat,
+    .merchant-stat{
+      border-color:#383838 !important;
+      background:#111 !important;
+      color:#fff !important;
+      box-shadow:none !important;
+    }
+
+    .merchant-quick-panel,
+    .merchant-status-panel,
+    .dashboard-orders-panel{
+      border-top-color:#f6c900 !important;
+    }
+
+    .primary-button,
+    .merchant-login-button{
+      border-color:#f6c900 !important;
+      background:#f6c900 !important;
+      color:#080808 !important;
+      box-shadow:none !important;
+    }
+    .primary-button:hover,
+    .merchant-login-button:hover{
+      filter:brightness(1.05);
+    }
+    .secondary-button{
+      border-color:#5b4e00 !important;
+      background:#151515 !important;
+      color:#f6c900 !important;
+    }
+    .danger-button{
+      border-color:#6b2c29 !important;
+      background:#1b1010 !important;
+      color:#ff8d87 !important;
+    }
+
+    input,select,textarea{
+      border-color:#3a3a3a !important;
+      background:#0d0d0d !important;
+      color:#fff !important;
+    }
+    input:focus,select:focus,textarea:focus{
+      border-color:#f6c900 !important;
+      box-shadow:0 0 0 3px rgba(246,201,0,.10) !important;
+      outline:none !important;
+    }
+    label{color:#ddd !important;}
+
+    .merchant-login-screen{
+      background:
+        radial-gradient(circle at 50% 20%,rgba(246,201,0,.12),transparent 26rem),
+        #080808 !important;
+    }
+    .merchant-login-card{
+      border-color:#4e4200 !important;
+      background:#101010 !important;
+      color:#fff !important;
+      box-shadow:0 24px 70px rgba(0,0,0,.58) !important;
+    }
+    .merchant-login-mark{
+      background:#f6c900 !important;
+      color:#080808 !important;
+    }
+    .merchant-login-brand strong{color:#f6c900 !important;}
+    .merchant-login-copy,
+    .merchant-login-foot{color:#bdbdbd !important;}
+
+    .product-admin-card,
+    .category-admin-card,
+    .order-card,
+    .business-card{
+      border-color:#343434 !important;
+      background:#101010 !important;
+      color:#fff !important;
+      box-shadow:none !important;
+    }
+
+    .product-admin-card h3,
+    .category-admin-card h3,
+    .order-card h3{
+      color:#f6c900 !important;
+    }
+
+    .badge,
+    .status-badge,
+    .product-count,
+    .category-count{
+      border-color:#4f4300 !important;
+      background:#171400 !important;
+      color:#f6c900 !important;
+    }
+
+    .modal-card{
+      border-color:#4d4100 !important;
+      background:#101010 !important;
+      color:#fff !important;
+    }
+    .modal-backdrop{background:rgba(0,0,0,.78) !important;}
+    .close-button{
+      border-color:#4d4100 !important;
+      background:#171717 !important;
+      color:#f6c900 !important;
+    }
+
+    .design-preview{
+      border-color:#5b4c00 !important;
+      background:#090909 !important;
+      color:#fff !important;
+    }
+    .design-preview-copy strong{color:#f6c900 !important;}
+
+    @media (max-width:900px){
+      .sidebar{
+        border-right:0 !important;
+        border-bottom:1px solid #4c4100 !important;
+      }
+      .nav{
+        background:#080808 !important;
+      }
+      .nav-item.active{
+        box-shadow:inset 0 -3px 0 #f6c900 !important;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+}
+
+
+async function initAdmin() {
+  /*
+    Primero cargamos la lista de comercios.
+    El resto del panel depende de selectedBusiness.
+  */
+  await loadBusinesses();
+
+  selectedBusiness =
+    await resolveMerchantBusiness();
+
+  if (!selectedBusiness) {
+    console.error(
+      "No se pudo cargar el comercio asignado al usuario."
+    );
+
+    showToast(
+      "No se pudo conectar con el comercio. Recargá la página.",
+      "error"
+    );
+
+    return;
+  }
+
+  applyMerchantVisualTheme();
+
+  /*
+    Apenas tenemos el comercio real, sincronizamos todos los textos
+    que en HTML arrancan como "Cargando estado...".
+  */
+  syncMerchantIdentityUI();
+  syncMerchantStatusUI();
+  renderMerchantPanelLogo();
+  fillStoreDesignForm();
+  fillFulfillmentSettingsForm();
+  fillPaymentSettingsForm();
+  fillCustomerNoticesForm();
+
+  /*
+    El dashboard y usuarios ya pueden cargar en paralelo sin bloquear
+    la conexión principal del comercio.
+  */
+  await Promise.all([
+    loadDashboard(),
+    loadUsers()
+  ]);
+
+  /*
+    Las secciones comerciales se cargan recién después de tener
+    selectedBusiness confirmado.
+  */
+  await loadCategories();
+  await loadProducts();
+  await fillDailyPromoForm();
+  await loadOrders();
+
+  /*
+    Volvemos a sincronizar por seguridad después de todas las lecturas.
+  */
+  syncMerchantStatusUI();
+
+  if (ordersBusinessFilter) {
+    ordersBusinessFilter.value =
+      String(selectedBusiness.id);
+
+    renderOrders();
+  }
+
+  startOrdersPolling();
+}
+
+bootstrapMerchantAuth();
