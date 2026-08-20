@@ -1185,6 +1185,40 @@ function safeThemeColor(value, fallback) {
     : fallback;
 }
 
+function merchantBusinessInitials() {
+  const name = String(selectedBusiness?.name || "D").trim();
+  const parts = name.split(/\s+/).filter(Boolean);
+  if (!parts.length) return "D";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0] || ""}${parts[1][0] || ""}`.toUpperCase();
+}
+
+function syncMerchantIdentityUI() {
+  if (!selectedBusiness) return;
+
+  const name = String(selectedBusiness.name || "Comercio").trim();
+  const upperName = name.toUpperCase();
+
+  document.title = `${name} | Panel del comercio`;
+
+  const sidebarName = document.querySelector(
+    ".sidebar .brand > div:last-child > strong"
+  );
+  if (sidebarName) sidebarName.textContent = upperName;
+
+  const dashboardEyebrow = document.querySelector(
+    "#dashboard .page-header .eyebrow"
+  );
+  if (dashboardEyebrow) dashboardEyebrow.textContent = upperName;
+
+  const dashboardSubtitle = document.querySelector(
+    "#dashboard .page-header .subtitle"
+  );
+  if (dashboardSubtitle) {
+    dashboardSubtitle.textContent = `Todo lo necesario para manejar ${name}.`;
+  }
+}
+
 function renderMerchantPanelLogo() {
   if (!merchantPanelLogo) {
     return;
@@ -1201,7 +1235,7 @@ function renderMerchantPanelLogo() {
       >
     `;
   } else {
-    merchantPanelLogo.innerHTML = "<span>MM</span>";
+    merchantPanelLogo.innerHTML = `<span>${escapeHTML(merchantBusinessInitials())}</span>`;
   }
 }
 
@@ -1238,11 +1272,11 @@ function fillStoreDesignForm() {
   designHeroTitle.value =
     selectedBusiness.hero_title ||
     selectedBusiness.name ||
-    "Mamma Mia";
+    "Comercio";
 
   designHeroDescription.value =
     selectedBusiness.hero_description ||
-    "Pizzas y empanadas preparadas para disfrutar. Elegí lo que más te guste y armá tu pedido.";
+    `Conocé el menú de ${selectedBusiness?.name || "este comercio"} y armá tu pedido.`;
 
   designButtonText.value =
     selectedBusiness.welcome_button_text ||
@@ -1300,11 +1334,11 @@ function updateStoreDesignPreview() {
   designPreviewTitle.textContent =
     designHeroTitle?.value.trim() ||
     selectedBusiness?.name ||
-    "Mamma Mia";
+    "Comercio";
 
   designPreviewDescription.textContent =
     designHeroDescription?.value.trim() ||
-    "Pizzas y empanadas preparadas para disfrutar.";
+    `Conocé el menú de ${selectedBusiness?.name || "este comercio"}.`;
 
   designPreviewButton.textContent =
     designButtonText?.value.trim() ||
@@ -1521,9 +1555,9 @@ function restoreStoreDesignDefaults() {
   designSecondaryColor.value = "#0E5BD8";
   designAccentColor.value = "#F4C565";
   designHeroTitle.value =
-    selectedBusiness?.name || "Mamma Mia";
+    selectedBusiness?.name || "Comercio";
   designHeroDescription.value =
-    "Pizzas y empanadas preparadas para disfrutar. Elegí lo que más te guste y armá tu pedido.";
+    `Conocé el menú de ${selectedBusiness?.name || "este comercio"} y armá tu pedido.`;
   designButtonText.value =
     "Hacer mi pedido";
   designHeroImageUrl.value = "";
@@ -6889,7 +6923,7 @@ async function resolveMerchantBusiness() {
     puede tardar unas décimas más que el resto del panel. V70 mostraba
     un error aunque segundos después todo quedara funcionando.
 
-    Antes de mostrar un error, V71 consulta directamente Mamma Mia.
+    Antes de mostrar un error, consultamos directamente el comercio asignado al usuario.
   */
   for (
     let attempt = 0;
@@ -6963,7 +6997,7 @@ async function initAdmin() {
 
   if (!selectedBusiness) {
     console.error(
-      "No se pudo cargar el comercio Mamma Mia."
+      "No se pudo cargar el comercio asignado al usuario."
     );
 
     showToast(
@@ -6978,6 +7012,7 @@ async function initAdmin() {
     Apenas tenemos el comercio real, sincronizamos todos los textos
     que en HTML arrancan como "Cargando estado...".
   */
+  syncMerchantIdentityUI();
   syncMerchantStatusUI();
   renderMerchantPanelLogo();
   fillStoreDesignForm();
