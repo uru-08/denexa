@@ -3324,36 +3324,633 @@ body{
   box-shadow:0 8px 20px rgba(180,35,24,.22);
 }
 
+
 /* =========================================================
-   DENEXA / CARRO KECHU — REDISEÑO NEGRO + AMARILLO V72
-   Capa visual final: no modifica la lógica ni Supabase.
-========================================================= */
-:root{--kechu-black:#050505;--kechu-panel:#0c0c0c;--kechu-panel2:#121212;--kechu-yellow:#ffc800;--kechu-gold:#d7a900;--kechu-white:#fff;--kechu-muted:#c7c7c7}
-html,body{background:#050505!important;color:#fff!important}
-body{background:radial-gradient(circle at 50% -10%,rgba(255,200,0,.08),transparent 25%),#050505!important}
-.app-shell,.main-content{background:#050505!important}
-.store-header{background:linear-gradient(180deg,#050505,#0a0a06)!important;border-bottom:1px solid rgba(255,200,0,.38)!important;box-shadow:none!important}
-.store-header-inner{max-width:1100px!important}.store-logo{border:1px solid rgba(255,200,0,.55)!important;background:#0b0b0b!important;box-shadow:0 0 22px rgba(255,200,0,.09)!important}
-.store-kicker{color:#fff!important;letter-spacing:.13em!important}.store-heading h1,#storeName{color:var(--kechu-yellow)!important;text-transform:uppercase!important;font-family:Impact,"Arial Black",sans-serif!important;font-weight:900!important;line-height:.88!important;letter-spacing:.01em!important;text-shadow:0 2px 0 #5b4600!important}
-.store-subtitle{color:#ddd!important}.store-status{background:#090909!important;border:1px solid rgba(255,200,0,.6)!important;color:#fff!important}
-.service-strip{background:#090909!important;border:1px solid rgba(255,200,0,.55)!important;color:#fff!important;box-shadow:none!important}.service-strip-item{color:#fff!important}.service-divider{background:#777!important}
-.menu-intro,.menu-intro h2,.menu-intro p{color:#fff!important}.menu-intro .eyebrow,.eyebrow{color:var(--kechu-yellow)!important}
-.category-nav,.categories-strip{background:transparent!important}.category-chip,.category-button{background:#0b0b0b!important;border:1px solid rgba(255,200,0,.5)!important;color:#fff!important;box-shadow:none!important}.category-chip.active,.category-button.active{border:2px solid var(--kechu-yellow)!important;color:var(--kechu-yellow)!important;box-shadow:0 0 18px rgba(255,200,0,.16)!important}
-.category-section{background:#0a0a0a!important;border:1px solid #292929!important;box-shadow:none!important}.category-section-title{border-bottom:0!important}.category-section-title::after{width:100%!important;height:4px!important;background:var(--kechu-yellow)!important}.category-section-title h3{color:#fff!important;font-family:Impact,"Arial Black",sans-serif!important;letter-spacing:.02em!important}.category-section-title span{background:#0c0c0c!important;border:1px solid #514300!important;color:var(--kechu-yellow)!important}
-.product-card{background:#0d0d0d!important;border:1px solid #333!important;box-shadow:none!important;color:#fff!important}.product-image{border-bottom:2px solid var(--kechu-yellow)!important}.product-info{background:#0d0d0d!important}.product-info h4{color:var(--kechu-yellow)!important;font-family:Impact,"Arial Black",sans-serif!important;font-size:1.45rem!important;letter-spacing:.025em!important}.product-description{color:#f1f1f1!important;font-weight:700!important}.featured-badge{background:var(--kechu-yellow)!important;color:#111!important;border:0!important}.product-price{background:#0b0b0b!important;border:1px solid var(--kechu-yellow)!important;color:var(--kechu-yellow)!important;box-shadow:none!important;font-size:1.25rem!important}.product-price::after{content:"+"!important;display:grid!important;place-items:center!important;width:42px!important;height:42px!important;margin-left:auto!important;border-radius:50%!important;background:var(--kechu-yellow)!important;color:#050505!important;font-size:2rem!important;line-height:1!important}
-.floating-cart{background:#080808!important;border:1px solid var(--kechu-yellow)!important;box-shadow:0 12px 30px rgba(0,0,0,.6)!important}.cart-copy strong{color:#fff!important}.cart-copy small{color:var(--kechu-yellow)!important}.cart-price{background:var(--kechu-yellow)!important;color:#080808!important;border-radius:14px!important;padding:12px 20px!important}
-.modal-backdrop,.modal-overlay{background:rgba(0,0,0,.84)!important;backdrop-filter:blur(5px)}.product-modal-card,.modal-card{background:#0c0c0c!important;border:1px solid rgba(255,200,0,.55)!important;color:#fff!important}.product-modal-body{background:#0c0c0c!important}.product-modal-body h2,.modal-title-row h2{color:var(--kechu-yellow)!important;font-family:Impact,"Arial Black",sans-serif!important}.product-modal-description{color:#fff!important}.option-group{background:#0c0c0c!important;border-top:1px solid #333!important}.option-group-header h3{color:#fff!important}.option-group-header span{background:#fff!important;color:#16345f!important}.option-item,.option-row,.option-card{background:#fff!important;color:#101828!important;border:1px solid #ddd!important}.option-copy strong{color:#10213d!important}.option-copy small{color:#53657f!important}.modal-close,.close-modal{background:#111!important;color:var(--kechu-yellow)!important;border:1px solid #3c3300!important}.product-total,.modal-total{color:var(--kechu-yellow)!important}.quantity-control{background:#fff!important;color:#111!important;border:1px solid #d9b900!important}.quantity-control button{color:var(--kechu-yellow)!important}.product-actions{background:#fff!important;border-top:1px solid #ddd!important}.product-actions button,#addToCartButton,#continueOrderButton{background:var(--kechu-yellow)!important;color:#080808!important;border:0!important;box-shadow:none!important}
-@media(max-width:700px){.store-header-inner{padding:24px 20px!important}.store-heading h1,#storeName{font-size:2.15rem!important}.store-logo{width:112px!important;height:112px!important}.main-content{padding-left:18px!important;padding-right:18px!important}.service-strip{padding:13px 12px!important}.category-section{padding:20px!important}.product-card{border-radius:20px!important}.product-info{padding:17px!important}.product-description{font-size:.95rem!important;line-height:1.35!important}.floating-cart{left:16px!important;right:16px!important;bottom:14px!important}.product-modal-card{border-radius:24px 24px 0 0!important}}
+   DENEXA v101 — CARRO KECHU CARMELO
+   Estilo inspirado en la simulación aprobada.
+   Se aplica SOLO a este comercio.
+   ========================================================= */
 
+html[data-store-theme="carro-kechu-carmelo"]{
+  --kechu-black:#050505;
+  --kechu-black-2:#0B0B0B;
+  --kechu-card:#111111;
+  --kechu-card-2:#171717;
+  --kechu-yellow:#FFD400;
+  --kechu-yellow-2:#F4C400;
+  --kechu-white:#FFFFFF;
+  --kechu-muted:#C8C8C8;
+  --kechu-line:#303030;
 
-/* DENEXA — firma de plataforma */
-.denexa-signature{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-  max-width:1100px;margin:8px auto 104px;padding:25px 18px 8px;text-align:center;
-  color:#8f8f8f;border-top:1px solid rgba(255,255,255,.07);
+  --primary:#FFD400 !important;
+  --primary-2:#F4C400 !important;
+  --primary-dark:#050505 !important;
+  --primary-deep:#000000 !important;
+  --accent:#FFD400 !important;
+  --bg:#050505 !important;
+  --surface:#111111 !important;
+  --surface-soft:#171717 !important;
+  --surface-blue:#111111 !important;
+  --text:#FFFFFF !important;
+  --muted:#C8C8C8 !important;
+  --line:#303030 !important;
 }
-.denexa-signature-kicker{font-size:.58rem;font-weight:900;letter-spacing:.22em;color:#777}
-.denexa-signature-brand{display:flex;align-items:center;gap:7px;font-size:.92rem;font-weight:950;letter-spacing:.12em;color:#d8d8d8}
-.denexa-signature-mark{display:grid;place-items:center;width:23px;height:23px;border-radius:7px;background:#ffc800;color:#050505;font-size:.72rem;font-weight:1000;box-shadow:0 0 14px rgba(255,200,0,.10)}
-.denexa-signature-copy{font-size:.64rem;font-weight:650;color:#777}
-@media(max-width:700px){.denexa-signature{margin-bottom:98px;padding-top:22px}.denexa-signature-brand{font-size:.86rem}}
+
+html[data-store-theme="carro-kechu-carmelo"],
+html[data-store-theme="carro-kechu-carmelo"] body{
+  background:#050505 !important;
+  color:#fff !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] body{
+  background:
+    radial-gradient(circle at 50% -120px, rgba(255,212,0,.11), transparent 330px),
+    #050505 !important;
+}
+
+/* Portada */
+html[data-store-theme="carro-kechu-carmelo"] .welcome-screen{
+  background:
+    radial-gradient(circle at 50% 23%, rgba(255,212,0,.13), transparent 290px),
+    linear-gradient(180deg,#020202 0%,#080808 100%) !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .welcome-grid{opacity:.025 !important;}
+html[data-store-theme="carro-kechu-carmelo"] .welcome-logo-wrap{
+  width:min(240px,64vw) !important;
+  margin-bottom:12px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .welcome-logo-ring{
+  border-color:rgba(255,212,0,.5) !important;
+  background:#050505 !important;
+  box-shadow:0 0 0 8px rgba(255,212,0,.025),0 22px 55px rgba(0,0,0,.72) !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .welcome-status{
+  background:#0B0B0B !important;
+  border-color:#383000 !important;
+  color:#fff !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .welcome-kicker{
+  color:#FFD400 !important;
+  letter-spacing:.19em !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .welcome-copy h1{
+  color:#fff !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  font-weight:900 !important;
+  font-stretch:condensed;
+  letter-spacing:.025em !important;
+  text-transform:uppercase !important;
+  line-height:.92 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .welcome-copy p:last-child{
+  color:#d5d5d5 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .welcome-button{
+  background:#FFD400 !important;
+  color:#050505 !important;
+  border:1px solid #FFE55A !important;
+  box-shadow:0 13px 30px rgba(255,212,0,.17) !important;
+}
+
+/* Cabecera del menú */
+html[data-store-theme="carro-kechu-carmelo"] .app-shell{
+  background:#050505 !important;
+  color:#fff !important;
+  padding-bottom:96px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .store-header{
+  background:#050505 !important;
+  border-bottom:1px solid #403600 !important;
+  padding:16px 14px 17px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .store-header::after{display:none !important;}
+html[data-store-theme="carro-kechu-carmelo"] .store-header-inner{
+  max-width:900px !important;
+  gap:12px !important;
+  align-items:center !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .store-brand{
+  min-width:0 !important;
+  gap:12px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .store-logo{
+  width:78px !important;
+  height:78px !important;
+  flex:0 0 78px !important;
+  border-radius:18px !important;
+  border:1px solid #5C4D00 !important;
+  background:#070707 !important;
+  box-shadow:none !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .store-logo img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .store-kicker{
+  color:#bfbfbf !important;
+  font-size:.64rem !important;
+  letter-spacing:.2em !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .store-heading h1{
+  margin-top:2px !important;
+  color:#FFD400 !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  font-size:clamp(1.6rem,7vw,2.35rem) !important;
+  font-weight:900 !important;
+  letter-spacing:.035em !important;
+  line-height:.93 !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  text-transform:uppercase !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .store-subtitle{
+  color:#ededed !important;
+  font-size:.76rem !important;
+  line-height:1.25 !important;
+  white-space:normal !important;
+  overflow:visible !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .store-status{
+  flex:0 0 auto !important;
+  padding:8px 10px !important;
+  border:1px solid #4A4000 !important;
+  background:#0E0E0E !important;
+  color:#fff !important;
+  white-space:nowrap !important;
+  box-shadow:none !important;
+}
+
+/* Delivery / retiro / horario */
+html[data-store-theme="carro-kechu-carmelo"] .main-content{
+  max-width:900px !important;
+  padding:13px 12px 38px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .store-info-card{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  border:1px solid #403600 !important;
+  border-radius:16px !important;
+  background:#0C0C0C !important;
+  box-shadow:none !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .info-item{
+  justify-content:center !important;
+  gap:5px !important;
+  min-width:0 !important;
+  padding:12px 5px !important;
+  border-radius:0 !important;
+  border-right:1px solid #2B2B2B !important;
+  background:transparent !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .info-item:last-child{border-right:0 !important;}
+html[data-store-theme="carro-kechu-carmelo"] .info-icon{
+  width:26px !important;
+  height:26px !important;
+  flex:0 0 26px !important;
+  border-radius:50% !important;
+  background:transparent !important;
+  color:#FFD400 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .info-label{display:none !important;}
+html[data-store-theme="carro-kechu-carmelo"] .info-item strong{
+  color:#fff !important;
+  font-size:.75rem !important;
+  text-align:center !important;
+}
+
+/* Categorías */
+html[data-store-theme="carro-kechu-carmelo"] .catalog-section{padding-top:15px !important;}
+html[data-store-theme="carro-kechu-carmelo"] .section-heading{
+  margin-bottom:10px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .section-heading h2{
+  color:#fff !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  letter-spacing:.04em !important;
+  text-transform:uppercase !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .section-heading p{
+  color:#bdbdbd !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .category-tabs{
+  position:static !important;
+  margin:0 -12px !important;
+  padding:6px 12px 14px !important;
+  gap:8px !important;
+  background:#050505 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .category-tab{
+  min-width:122px !important;
+  min-height:58px !important;
+  padding:10px 12px !important;
+  border:1px solid #363636 !important;
+  border-radius:14px !important;
+  background:#101010 !important;
+  color:#fff !important;
+  box-shadow:none !important;
+  text-transform:uppercase !important;
+  font-size:.76rem !important;
+  font-weight:900 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.active{
+  border-color:#FFD400 !important;
+  background:#161300 !important;
+  color:#FFD400 !important;
+  box-shadow:inset 0 -3px 0 #FFD400 !important;
+}
+
+/* Secciones y tarjetas de producto */
+html[data-store-theme="carro-kechu-carmelo"] .catalog-content{
+  gap:16px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .category-section{
+  gap:9px !important;
+  padding:14px 10px 11px !important;
+  border:1px solid #242424 !important;
+  border-radius:17px !important;
+  background:#0B0B0B !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .category-section-title{
+  padding-bottom:8px !important;
+  border-bottom:3px solid #FFD400 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .category-section-title::after{display:none !important;}
+html[data-store-theme="carro-kechu-carmelo"] .category-section-title h3{
+  color:#fff !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  font-size:1.24rem !important;
+  letter-spacing:.035em !important;
+  text-transform:uppercase !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .category-section-title span{
+  background:#151515 !important;
+  border:1px solid #373737 !important;
+  color:#FFD400 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .products-grid{
+  grid-template-columns:1fr !important;
+  gap:8px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-card{
+  display:grid !important;
+  grid-template-columns:108px minmax(0,1fr) !important;
+  min-height:126px !important;
+  overflow:hidden !important;
+  border:1px solid #303030 !important;
+  border-radius:15px !important;
+  background:#111 !important;
+  color:#fff !important;
+  box-shadow:none !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-card:hover{transform:none !important;}
+html[data-store-theme="carro-kechu-carmelo"] .product-image{
+  height:100% !important;
+  min-height:126px !important;
+  border:0 !important;
+  background:#171717 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-image img{
+  width:100% !important;
+  height:100% !important;
+  min-height:126px !important;
+  object-fit:cover !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .featured-badge{
+  top:7px !important;
+  left:7px !important;
+  background:#FFD400 !important;
+  color:#050505 !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-info{
+  position:relative !important;
+  min-height:126px !important;
+  padding:12px 12px 11px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-info h4{
+  padding-right:34px !important;
+  color:#FFD400 !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  font-size:1.05rem !important;
+  letter-spacing:.025em !important;
+  text-transform:uppercase !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-description{
+  margin:5px 0 7px !important;
+  color:#e2e2e2 !important;
+  font-size:.74rem !important;
+  line-height:1.35 !important;
+  -webkit-line-clamp:3 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-price{
+  position:static !important;
+  width:auto !important;
+  min-height:0 !important;
+  justify-content:flex-start !important;
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  color:#FFD400 !important;
+  box-shadow:none !important;
+  font-size:1.06rem !important;
+  font-weight:950 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-price::after{
+  content:"+";
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  margin:0 !important;
+  border-radius:50%;
+  background:#FFD400;
+  color:#050505;
+  font-size:1.5rem;
+  line-height:1;
+  font-family:Arial,sans-serif;
+  font-weight:950;
+}
+
+/* MODAL: contraste total, sin botones/textos invisibles */
+html[data-store-theme="carro-kechu-carmelo"] .modal-backdrop{
+  background:rgba(0,0,0,.82) !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .modal-card,
+html[data-store-theme="carro-kechu-carmelo"] .product-modal-card,
+html[data-store-theme="carro-kechu-carmelo"] .cart-modal-card,
+html[data-store-theme="carro-kechu-carmelo"] .checkout-modal-card{
+  border:1px solid #3A3A3A !important;
+  background:#0D0D0D !important;
+  color:#fff !important;
+  box-shadow:0 -26px 70px rgba(0,0,0,.72) !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .modal-close,
+html[data-store-theme="carro-kechu-carmelo"] .inline-close{
+  border:1px solid #4B4B4B !important;
+  background:#171717 !important;
+  color:#FFD400 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-modal-image{
+  background:#151515 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-modal-body{
+  background:#0D0D0D !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-modal-body h2,
+html[data-store-theme="carro-kechu-carmelo"] .modal-title-row h2,
+html[data-store-theme="carro-kechu-carmelo"] .cart-item h3{
+  color:#FFD400 !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  letter-spacing:.025em !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-modal-description{
+  color:#E7E7E7 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .live-price{
+  background:#171300 !important;
+  color:#FFD400 !important;
+  border:1px solid #423800 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .option-group{
+  border-top-color:#363636 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .option-group-header h3{
+  color:#fff !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .option-group-header span{
+  background:#171717 !important;
+  color:#FFD400 !important;
+  border:1px solid #393939 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .option-row{
+  border:1px solid #363636 !important;
+  background:#151515 !important;
+  color:#fff !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .option-row:has(input:checked){
+  border-color:#FFD400 !important;
+  background:#1B1800 !important;
+  box-shadow:0 0 0 1px #FFD400 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .option-row input{
+  accent-color:#FFD400 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .option-copy strong{
+  color:#fff !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .option-copy small{
+  color:#D0D0D0 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-actions{
+  border-top:1px solid #353535 !important;
+  background:rgba(10,10,10,.98) !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .quantity-control{
+  border-color:#424242 !important;
+  background:#151515 !important;
+  color:#fff !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .quantity-control button{
+  background:#151515 !important;
+  color:#FFD400 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .quantity-value,
+html[data-store-theme="carro-kechu-carmelo"] #productQuantity{
+  color:#fff !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .primary-action,
+html[data-store-theme="carro-kechu-carmelo"] .add-to-cart-button,
+html[data-store-theme="carro-kechu-carmelo"] #addProductButton{
+  background:#FFD400 !important;
+  color:#050505 !important;
+  border:1px solid #FFE45A !important;
+  font-weight:950 !important;
+  box-shadow:none !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .secondary-action{
+  background:#171717 !important;
+  color:#fff !important;
+  border:1px solid #3E3E3E !important;
+}
+
+/* Carrito inferior */
+html[data-store-theme="carro-kechu-carmelo"] .floating-cart{
+  width:min(620px,calc(100% - 18px)) !important;
+  min-height:62px !important;
+  padding:8px 9px !important;
+  border:1px solid #FFD400 !important;
+  border-radius:16px !important;
+  background:#070707 !important;
+  color:#fff !important;
+  box-shadow:0 14px 36px rgba(0,0,0,.65) !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .cart-icon{
+  background:transparent !important;
+  color:#FFD400 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .cart-copy strong{color:#fff !important;}
+html[data-store-theme="carro-kechu-carmelo"] .cart-copy small{color:#cfcfcf !important;}
+html[data-store-theme="carro-kechu-carmelo"] .cart-price{
+  min-width:92px !important;
+  padding:10px 12px !important;
+  border-radius:12px !important;
+  background:#FFD400 !important;
+  color:#050505 !important;
+}
+
+/* Powered by DENEXA */
+.denexa-powered-footer{
+  width:100%;
+  padding:26px 16px 112px;
+  background:transparent;
+}
+.denexa-powered-inner{
+  width:min(380px,100%);
+  margin:0 auto;
+  display:grid;
+  justify-items:center;
+  gap:4px;
+  text-align:center;
+  opacity:.68;
+}
+.denexa-powered-label{
+  color:#8d8d8d;
+  font-size:.54rem;
+  font-weight:900;
+  letter-spacing:.22em;
+}
+.denexa-powered-brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+}
+.denexa-powered-logo{
+  width:44px;
+  height:44px;
+  display:block;
+  object-fit:contain;
+  border-radius:50%;
+}
+.denexa-powered-text{
+  display:grid;
+  gap:1px;
+  text-align:left;
+}
+.denexa-powered-brand strong{
+  color:#e9e9e9;
+  font-size:.78rem;
+  letter-spacing:.14em;
+}
+.denexa-powered-copy{
+  color:#777;
+  font-size:.57rem;
+  font-weight:700;
+}
+
+@media(max-width:620px){
+  html[data-store-theme="carro-kechu-carmelo"] .store-header-inner{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    align-items:start !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] .store-brand{
+    grid-column:1 / -1 !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] .store-status{
+    grid-column:2 !important;
+    grid-row:1 !important;
+    align-self:start !important;
+    font-size:.64rem !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] .store-logo{
+    width:70px !important;
+    height:70px !important;
+    flex-basis:70px !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading h1{
+    font-size:1.72rem !important;
+    max-width:14ch !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] .info-item{
+    flex-direction:column !important;
+    gap:2px !important;
+  }
+}
+
+@media(max-width:380px){
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading h1{
+    font-size:1.52rem !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] .product-card{
+    grid-template-columns:96px minmax(0,1fr) !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] .product-image,
+  html[data-store-theme="carro-kechu-carmelo"] .product-image img{
+    min-height:120px !important;
+  }
+}
+
+
+/* DENEXA v103: legibilidad y móvil */
+html[data-store-theme="carro-kechu-carmelo"] .section-heading h2,
+html[data-store-theme="carro-kechu-carmelo"] .section-heading p,
+html[data-store-theme="carro-kechu-carmelo"] .category-section-title h3,
+html[data-store-theme="carro-kechu-carmelo"] .product-info h4,
+html[data-store-theme="carro-kechu-carmelo"] .product-description,
+html[data-store-theme="carro-kechu-carmelo"] .product-modal-body h2,
+html[data-store-theme="carro-kechu-carmelo"] .product-modal-description,
+html[data-store-theme="carro-kechu-carmelo"] .option-group-header h3,
+html[data-store-theme="carro-kechu-carmelo"] .option-copy strong,
+html[data-store-theme="carro-kechu-carmelo"] .option-copy small{
+  opacity:1 !important;
+  visibility:visible !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .section-heading h2{color:#fff !important;}
+html[data-store-theme="carro-kechu-carmelo"] .section-heading p{color:#d0d0d0 !important;}
+html[data-store-theme="carro-kechu-carmelo"] #addToCartButton,
+html[data-store-theme="carro-kechu-carmelo"] .primary-action{
+  min-height:54px !important;
+  font-size:1rem !important;
+  background:#FFD400 !important;
+  color:#050505 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .quantity-control strong{color:#fff !important;}
+html[data-store-theme="carro-kechu-carmelo"] .option-row{min-height:72px !important;}
+html[data-store-theme="carro-kechu-carmelo"] .floating-cart{z-index:150 !important;}
+html[data-store-theme="carro-kechu-carmelo"] .cart-price{
+  display:grid !important;
+  place-items:center !important;
+  color:#050505 !important;
+}
+@media(max-width:620px){
+  html[data-store-theme="carro-kechu-carmelo"] .store-header-inner{
+    position:relative !important;
+    display:block !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] .store-status{
+    position:static !important;
+    display:inline-flex !important;
+    margin:10px 0 0 82px !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] .product-card{
+    grid-template-columns:104px minmax(0,1fr) !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] .product-modal-card{
+    width:100% !important;
+    max-height:94vh !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] .product-actions{
+    gap:10px !important;
+    padding:12px !important;
+  }
+}
