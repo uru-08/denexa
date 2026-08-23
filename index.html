@@ -5,8 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#073B94">
   <title>DENEXA | Pedidos</title>
-  <meta name="description" content="Pedidos online con DENEXA.">
-  <link rel="stylesheet" href="css/app.css?v=103">
+  <meta
+    name="description"
+    content="Hac&eacute; tu pedido online con DENEXA."
+  >
+  <link rel="stylesheet" href="css/app.css?v=104">
 </head>
 
 <body>
@@ -25,6 +28,7 @@
       <div class="welcome-logo-wrap">
         <div class="welcome-logo-ring"></div>
         <img
+          id="welcomeLogo"
           class="welcome-logo"
           src=""
           alt=""
@@ -34,20 +38,27 @@
 
       <div class="welcome-copy">
         <p class="welcome-kicker">BIENVENIDOS A</p>
-        <h1>Mamma Mia</h1>
-        <p>
-          Pizzas y empanadas preparadas para disfrutar.
-          Eleg&iacute; lo que m&aacute;s te guste y arm&aacute; tu pedido.
+        <h1 id="welcomeBusinessName">Cargando...</h1>
+        <p id="welcomeBusinessDescription">
+          Preparando la tienda...
         </p>
       </div>
 
+
+      <aside id="dailyPromoBanner" class="welcome-daily-promo" hidden>
+        <span id="dailyPromoBannerBadge">PROMO DEL D&Iacute;A</span>
+        <strong id="dailyPromoBannerTitle">&iexcl;No te la pierdas!</strong>
+        <p id="dailyPromoBannerText"></p>
+      </aside>
+
       <button id="enterStoreButton" class="welcome-button" type="button">
-        <span>Hacer mi pedido</span>
+        <span id="welcomeButtonText">Hacer mi pedido</span>
         <span class="welcome-arrow" aria-hidden="true">&rarr;</span>
       </button>
 
       <div id="orderingStatusNotice" class="ordering-status-notice" hidden></div>
 
+      <p class="welcome-mobile-note">R&aacute;pido <span>&bull;</span> F&aacute;cil <span>&bull;</span> En tu casa</p>
       <p class="welcome-note">Delivery y retiro en el local</p>
     </div>
   </section>
@@ -124,7 +135,7 @@
             <p class="eyebrow">NUESTRO MEN&Uacute;</p>
             <h2>Eleg&iacute; qu&eacute; quer&eacute;s pedir</h2>
             <p class="section-subtitle">
-              Toc&aacute; un producto para elegir tama&ntilde;o y adicionales.
+              Toc&aacute; un producto para ver sus opciones y agregarlo a tu pedido.
             </p>
           </div>
         </div>
@@ -223,13 +234,21 @@
 
         <div class="checkout-grid">
 
-          <label class="field full-width delivery-choice-field">
+          <label id="deliveryChoiceField" class="field full-width delivery-choice-field">
             <span>&iquest;C&oacute;mo quer&eacute;s recibir tu pedido?</span>
-            <select id="deliveryType" required>
-              <option value="delivery">Delivery - env&iacute;o a domicilio</option>
-              <option value="pickup">Retiro en el local</option>
-            </select>
+            <select id="deliveryType" required></select>
           </label>
+
+          <div id="fulfillmentModeNotice" class="fulfillment-mode-notice full-width" hidden></div>
+
+          <div id="pickupInfoCard" class="pickup-info-card full-width" hidden>
+            <div class="pickup-info-icon" aria-hidden="true">&#128205;</div>
+            <div>
+              <span>Retiro en el local</span>
+              <strong id="pickupAddressText">Direcci&oacute;n del local</strong>
+              <small>Presentate en esta direcci&oacute;n para retirar tu pedido.</small>
+            </div>
+          </div>
 
           <label class="field">
             <span>Nombre</span>
@@ -257,7 +276,7 @@
               <span>Forma de pago</span>
               <select id="paymentMethod">
                 <option value="cash">Efectivo</option>
-                <option value="transfer">Transferencia</option>
+                <option value="transfer">Transferencia / D&eacute;bito</option>
               </select>
             </label>
 
@@ -265,6 +284,42 @@
               <span>&iquest;Con cu&aacute;nto paga?</span>
               <input id="cashAmount" type="number" min="0" step="1" inputmode="numeric">
             </label>
+
+            <div id="transferInfoCard" class="transfer-info-card full-width" hidden>
+              <div class="transfer-info-head">
+                <span class="transfer-info-icon">$</span>
+                <div>
+                  <strong>Datos para transferir</strong>
+                  <small>Us&aacute; estos datos para realizar el pago.</small>
+                </div>
+              </div>
+
+              <div class="transfer-info-grid">
+                <div>
+                  <span>Banco / instituci&oacute;n</span>
+                  <strong id="transferBankName">Banco / Instituci&oacute;n</strong>
+                </div>
+
+                <div>
+                  <span>Titular</span>
+                  <strong id="transferAccountHolder">Nombre del titular</strong>
+                </div>
+
+                <div>
+                  <span>N&uacute;mero de cuenta</span>
+                  <strong id="transferAccountNumber">0000000000</strong>
+                </div>
+
+                <div>
+                  <span>Moneda</span>
+                  <strong id="transferCurrency">Pesos uruguayos</strong>
+                </div>
+              </div>
+
+              <p id="transferInstructions" class="transfer-instructions">
+                Realiz&aacute; la transferencia por el total del pedido. Conserv&aacute; el comprobante.
+              </p>
+            </div>
 
           </div>
 
@@ -315,7 +370,7 @@
       <h2>&iexcl;Gracias por tu pedido!</h2>
 
       <p class="success-copy">
-        Tu pedido fue recibido correctamente.
+        Mamma Mia recibi&oacute; tu pedido correctamente.
         Ya pod&eacute;s volver al men&uacute;.
       </p>
 
@@ -332,6 +387,6 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=32"></script>
-  <script src="js/app.js?v=103"></script>
+  <script src="js/app.js?v=104"></script>
 </body>
 </html>
