@@ -448,38 +448,40 @@ async function requireOrderingOpen() {
 }
 
 
-function ensureDenexaPoweredBranding() {
-  let footer =
-    document.getElementById("denexaPoweredFooter");
+function ensureDenexaPoweredFooter() {
+  if (document.getElementById("denexaPoweredFooter")) {
+    return;
+  }
 
-  if (!footer) {
-    footer = document.createElement("footer");
-    footer.id = "denexaPoweredFooter";
-    footer.className = "denexa-powered-footer";
-    footer.innerHTML = `
-      <div class="denexa-powered-inner" aria-label="Tecnología DENEXA">
-        <span class="denexa-powered-label">POWERED BY</span>
-        <div class="denexa-powered-brand">
-          <img
-            class="denexa-powered-logo"
-            src="assets/denexa-logo.png"
-            alt="DENEXA Pedidos Online"
-          >
-          <div class="denexa-powered-text">
-            <strong>DENEXA</strong>
-            <span class="denexa-powered-copy">Tecnología para pedidos online</span>
-          </div>
+  const footer = document.createElement("footer");
+  footer.id = "denexaPoweredFooter";
+  footer.className = "denexa-powered-footer";
+  footer.innerHTML = `
+    <div class="denexa-powered-inner">
+      <span class="denexa-powered-label">POWERED BY</span>
+
+      <div class="denexa-powered-row">
+        <img
+          class="denexa-powered-logo"
+          src="assets/denexa-logo.png"
+          alt="DENEXA Pedidos Online"
+        >
+
+        <div class="denexa-powered-copy">
+          <strong>DENEXA</strong>
+          <span>Tecnología para pedidos online</span>
         </div>
       </div>
-    `;
+    </div>
+  `;
 
-    const appShell =
-      document.querySelector(".app-shell") ||
-      document.body;
+  const shell =
+    document.getElementById("appShell") ||
+    document.body;
 
-    appShell.appendChild(footer);
-  }
+  shell.appendChild(footer);
 }
+
 
 async function loadStore() {
   catalogContent.innerHTML =
@@ -507,11 +509,12 @@ async function loadStore() {
     }
 
     document.documentElement.dataset.storeTheme =
-      String(business.slug || "").trim().toLowerCase();
-
-    ensureDenexaPoweredBranding();
+      String(business?.slug || "")
+        .trim()
+        .toLowerCase();
 
     applyBusinessBranding();
+    ensureDenexaPoweredFooter();
     applyDailyPromo();
     applyOrderingStatus();
     configureFulfillmentOptions();
@@ -584,7 +587,7 @@ async function loadStore() {
 
     catalogContent.innerHTML = `
       <div class="error-card">
-        No se pudo cargar el men\u00fa del comercio.
+        No se pudo cargar el men\u00fa de Mamma Mia.
         Revis\u00e1 la conexi\u00f3n con Supabase.
       </div>
     `;
@@ -3011,7 +3014,7 @@ function updateCartBar() {
 function saveCart() {
   try {
     localStorage.setItem(
-      `denexa-cart-${business?.slug || TARGET_BUSINESS_SLUG}`,
+      `denexa-v104-cart-${business?.slug || TARGET_BUSINESS_SLUG}`,
       JSON.stringify(cart)
     );
   } catch (error) {
@@ -3023,7 +3026,7 @@ function restoreCart() {
   try {
     const stored =
       localStorage.getItem(
-        `denexa-cart-${business?.slug || TARGET_BUSINESS_SLUG}`
+        `denexa-v104-cart-${business?.slug || TARGET_BUSINESS_SLUG}`
       );
 
     cart =
