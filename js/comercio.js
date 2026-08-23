@@ -1052,52 +1052,6 @@ async function getTableData(tableName, select = "*") {
   return Array.isArray(data) ? data : [];
 }
 
-
-async function getMerchantScopedTableData(tableName, select = "*") {
-  if (!MERCHANT_BUSINESS_ID) {
-    return [];
-  }
-
-  const responseText = await requestText(
-    `${SUPABASE_REST}/${tableName}?business_id=eq.${encodeURIComponent(MERCHANT_BUSINESS_ID)}&select=${encodeURIComponent(select)}`,
-    {
-      method: "GET",
-      headers: merchantHeaders()
-    }
-  );
-
-  if (!responseText.trim()) {
-    return [];
-  }
-
-  const data = JSON.parse(responseText);
-  return Array.isArray(data) ? data : [];
-}
-
-async function getRowsByForeignIds(tableName, foreignColumn, ids, select = "*") {
-  const normalizedIds = [...new Set((ids || []).map((id) => Number(id)).filter(Number.isFinite))];
-
-  if (!normalizedIds.length) {
-    return [];
-  }
-
-  const inFilter = `in.(${normalizedIds.join(",")})`;
-  const responseText = await requestText(
-    `${SUPABASE_REST}/${tableName}?${encodeURIComponent(foreignColumn)}=${encodeURIComponent(inFilter)}&select=${encodeURIComponent(select)}`,
-    {
-      method: "GET",
-      headers: merchantHeaders()
-    }
-  );
-
-  if (!responseText.trim()) {
-    return [];
-  }
-
-  const data = JSON.parse(responseText);
-  return Array.isArray(data) ? data : [];
-}
-
 async function insertTableRow(tableName, payload) {
   await requestText(
     `${SUPABASE_REST}/${tableName}`,
@@ -4789,23 +4743,23 @@ function updateOrdersCounters() {
 function populateOrdersBusinessFilter() {
   if (!ordersBusinessFilter) return;
 
-  const business =
-    selectedBusiness ||
-    businessesCache.find(
-      (item) => String(item.id) === String(MERCHANT_BUSINESS_ID)
-    );
-
-  if (!business) {
-    ordersBusinessFilter.innerHTML = "";
-    return;
-  }
+  const current = ordersBusinessFilter.value || "all";
 
   ordersBusinessFilter.innerHTML = `
-    <option value="${escapeHTML(business.id)}">
-      ${escapeHTML(business.name)}
-    </option>
+    <option value="all">Todos los comercios</option>
+    ${businessesCache.map((business) => `
+      <option value="${escapeHTML(business.id)}">
+        ${escapeHTML(business.name)}
+      </option>
+    `).join("")}
   `;
-  ordersBusinessFilter.value = String(business.id);
+
+  if (
+    [...ordersBusinessFilter.options]
+      .some((option) => option.value === current)
+  ) {
+    ordersBusinessFilter.value = current;
+  }
 }
 
 function filteredOrders() {
@@ -5008,33 +4962,35 @@ async function loadOrders() {
   if (ordersLoading) return;
 
   ordersLoading = true;
+
   try {
     await refreshSelectedBusinessSettings();
+    const [orders, items, options] = await Promise.all([
+      getTableData(
+        "orders",
+        "id,business_id,customer_name,customer_phone,delivery_type,delivery_address,delivery_reference,payment_method,cash_amount,notes,status,total,source,archived,created_at"
+      ),
+      getTableData(
+        "order_items",
+        "id,order_id,product_id,product_name,quantity,unit_price,total"
+      ),
+      getTableData(
+        "order_item_options",
+        "id,order_item_id,group_name,option_name,price_delta"
+      )
+    ]);
 
-    const orders = await getMerchantScopedTableData(
-      "orders",
-      "id,business_id,customer_name,customer_phone,delivery_type,delivery_address,delivery_reference,payment_method,cash_amount,notes,status,total,source,archived,created_at"
-    );
-
-    const orderIds = orders.map((order) => order.id);
-    const items = await getRowsByForeignIds(
-      "order_items",
-      "order_id",
-      orderIds,
-      "id,order_id,product_id,product_name,quantity,unit_price,total"
-    );
-
-    const itemIds = items.map((item) => item.id);
-    const options = await getRowsByForeignIds(
-      "order_item_options",
-      "order_item_id",
-      itemIds,
-      "id,order_item_id,group_name,option_name,price_delta"
-    );
-
-    ordersCache = orders
-      .filter((order) => order.archived !== true)
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    ordersCache =
+      orders
+        .filter(
+          (order) =>
+            order.archived !== true
+        )
+        .sort(
+          (a, b) =>
+            new Date(b.created_at) -
+            new Date(a.created_at)
+        );
 
     orderItemsCache = items;
     orderItemOptionsCache = options;
@@ -5056,6 +5012,7 @@ async function loadOrders() {
     }
   } catch (error) {
     console.error("Error cargando pedidos:", error);
+
     if (ordersList) {
       ordersList.innerHTML =
         '<div class="panel error">No se pudieron cargar los pedidos. Revisa las tablas orders, order_items y order_item_options.</div>';
@@ -5836,77 +5793,88 @@ merchantSaveMessage?.addEventListener(
 
 async function loadDashboard() {
   try {
-    const [categories, products] = await Promise.all([
-      getMerchantScopedTableData("categories", "id,business_id"),
-      getMerchantScopedTableData("products", "id,business_id")
+    const [
+      businesses,
+      categories,
+      products,
+      users
+    ] = await Promise.all([
+      getTableData("businesses", "id"),
+      getTableData("categories", "id"),
+      getTableData("products", "id"),
+      getTableData("users", "id")
     ]);
 
-    const setCount = (id, value) => {
-      const element = document.getElementById(id);
-      if (element) {
-        element.textContent = String(value);
-      }
-    };
+    document.getElementById("businessesCount").textContent =
+      businesses.length;
 
-    // El panel del comercio solo muestra datos del negocio autenticado.
-    setCount("businessesCount", selectedBusiness ? 1 : 0);
-    setCount("categoriesCount", categories.length);
-    setCount("productsCount", products.length);
-    setCount("usersCount", merchantAuthUser ? 1 : 0);
+    document.getElementById("categoriesCount").textContent =
+      categories.length;
+
+    document.getElementById("productsCount").textContent =
+      products.length;
+
+    document.getElementById("usersCount").textContent =
+      users.length;
   } catch (error) {
     console.error("Error cargando dashboard:", error);
   }
 }
 
 async function loadBusinesses() {
-  const container = document.getElementById("businessesList");
+  const container =
+    document.getElementById("businessesList");
 
   try {
-    if (!MERCHANT_BUSINESS_ID) {
-      businessesCache = [];
-      if (container) {
-        container.className = "panel empty-state";
-        container.textContent = "No hay un comercio autorizado para esta cuenta.";
-      }
-      return;
-    }
+    /*
+      V72:
+      Cargamos businesses con select=*.
+      Así, si Supabase todavía no tiene alguna columna opcional nueva
+      (branding/promos), el panel NO pierde la conexión completa.
+    */
+    const businesses =
+      await getTableData(
+        "businesses",
+        "*"
+      );
 
-    const responseText = await requestText(
-      `${SUPABASE_REST}/businesses?id=eq.${encodeURIComponent(MERCHANT_BUSINESS_ID)}&select=*`,
-      {
-        method: "GET",
-        headers: merchantHeaders()
-      }
-    );
-
-    const rows = responseText.trim() ? JSON.parse(responseText) : [];
-    const businesses = Array.isArray(rows) ? rows : [];
-    businessesCache = businesses;
-
-    if (!container) {
-      return;
+    if (businesses.length) {
+      businessesCache = businesses;
     }
 
     if (!businesses.length) {
       container.className = "panel empty-state";
-      container.textContent = "No se pudo cargar tu comercio.";
+      container.textContent =
+        "Todav\u00eda no hay comercios registrados.";
       return;
     }
 
     container.className = "panel";
+
     container.innerHTML = businesses.map((business) => `
       <div class="list-item">
+
         <div>
-          <strong>${escapeHTML(business.name || "Sin nombre")}</strong>
+          <strong>
+            ${escapeHTML(business.name || "Sin nombre")}
+          </strong>
+
           <small>
             ${escapeHTML(business.slug || "Sin enlace")}
-            ${business.phone ? ` · ${escapeHTML(business.phone)}` : ""}
+            ${
+              business.phone
+                ? ` \u00b7 ${escapeHTML(business.phone)}`
+                : ""
+            }
           </small>
         </div>
+
         <div class="business-actions" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+
           <span class="status-pill ${business.active ? "" : "inactive"}">
             ${business.active ? "Activo" : "Inactivo"}
           </span>
+
           <button
             type="button"
             class="secondary-button business-manage-button"
@@ -5914,16 +5882,17 @@ async function loadBusinesses() {
           >
             Administrar
           </button>
+
         </div>
+
       </div>
     `).join("");
   } catch (error) {
-    console.error("Error cargando comercio:", error);
+    console.error("Error cargando comercios:", error);
 
-    if (container) {
-      container.className = "panel error";
-      container.textContent = "No se pudo cargar tu comercio.";
-    }
+    container.className = "panel error";
+    container.textContent =
+      "No se pudieron cargar los comercios.";
   }
 }
 
@@ -5971,9 +5940,15 @@ async function loadCategories() {
     `Categor\u00edas de ${selectedBusiness.name}.`;
 
   try {
-    const filtered = await getMerchantScopedTableData(
+    const categories = await getTableData(
       "categories",
       "id,name,business_id,active"
+    );
+
+    const filtered = categories.filter(
+      (category) =>
+        String(category.business_id) ===
+        String(selectedBusiness.id)
     );
 
     const header = `
@@ -6063,11 +6038,11 @@ async function loadProducts() {
   try {
     const [products, categories] =
       await Promise.all([
-        getMerchantScopedTableData(
+        getTableData(
           "products",
           "id,business_id,category_id,name,description,price,image_url,featured,active,available,sort_order,old_price"
         ),
-        getMerchantScopedTableData(
+        getTableData(
           "categories",
           "id,name,business_id,active"
         )
@@ -7033,13 +7008,15 @@ async function initAdmin() {
     return;
   }
 
+  document.documentElement.dataset.merchantTheme =
+    String(selectedBusiness?.slug || "")
+      .trim()
+      .toLowerCase();
+
   /*
     Apenas tenemos el comercio real, sincronizamos todos los textos
     que en HTML arrancan como "Cargando estado...".
   */
-  document.documentElement.dataset.merchantTheme =
-    String(selectedBusiness?.slug || "").trim().toLowerCase();
-
   syncMerchantIdentityUI();
   syncMerchantStatusUI();
   renderMerchantPanelLogo();
