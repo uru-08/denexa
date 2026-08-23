@@ -6,21 +6,471 @@
 
   <title>DENEXA | Panel del comercio</title>
 
-  <link rel="stylesheet" href="css/comercio.css?v=103">
+  <link rel="stylesheet" href="css/comercio.css?v=104">
+
+<style>
+  .compact-notice{
+    padding:10px 13px !important;
+    gap:4px !important;
+  }
+
+  .compact-notice span{
+    font-size:.78rem !important;
+  }
+
+  .notice-settings-intro{
+    padding-bottom:16px;
+    border-bottom:1px solid #e4e8ef;
+  }
+
+  .notice-settings-intro p{
+    margin:6px 0 0;
+    color:#667085;
+    line-height:1.5;
+  }
+
+  .notice-settings-list{
+    display:grid;
+    gap:14px;
+    margin-top:16px;
+  }
+
+  .notice-setting-card{
+    display:grid;
+    gap:12px;
+    padding:15px;
+    border:1px solid #e0e6ef;
+    border-radius:14px;
+    background:#fff;
+  }
+
+  .notice-setting-card .checkbox-label{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+  }
+
+  .notice-setting-card .checkbox-label span{
+    display:grid;
+    gap:2px;
+  }
+
+  .notice-setting-card small{
+    color:#667085;
+    font-weight:600;
+  }
+
+  .notice-setting-card textarea{
+    width:100%;
+    resize:vertical;
+  }
+
+  .notice-placeholders{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:7px;
+    margin-top:15px;
+    padding:12px;
+    border-radius:12px;
+    background:#f7f9fc;
+  }
+
+  .notice-placeholders span{
+    padding:5px 8px;
+    border-radius:8px;
+    background:#fff;
+    border:1px solid #dde4ee;
+    font-size:.78rem;
+    font-weight:800;
+  }
+</style>
+
+
+<style>
+  body.auth-locked > .sidebar,
+  body.auth-locked > .main{
+    display:none !important;
+  }
+
+  .merchant-login-screen{
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    display:grid;
+    place-items:center;
+    padding:22px;
+    background:
+      radial-gradient(circle at 20% 20%,rgba(28,88,190,.20),transparent 30rem),
+      linear-gradient(145deg,#061a3b,#0b43a0 58%,#0e5bd8);
+  }
+
+  .merchant-login-screen[hidden]{
+    display:none !important;
+  }
+
+  .merchant-login-card{
+    width:min(430px,100%);
+    padding:28px;
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 28px 80px rgba(0,0,0,.28);
+  }
+
+  .merchant-login-brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:22px;
+  }
+
+  .merchant-login-mark{
+    width:52px;
+    height:52px;
+    display:grid;
+    place-items:center;
+    border-radius:16px;
+    background:linear-gradient(135deg,#0b43a0,#0e5bd8);
+    color:#fff;
+    font-size:1.35rem;
+    font-weight:950;
+  }
+
+  .merchant-login-brand strong{
+    display:block;
+    color:#0d1b33;
+    font-size:1.05rem;
+  }
+
+  .merchant-login-brand span{
+    display:block;
+    margin-top:2px;
+    color:#667085;
+    font-size:.78rem;
+    font-weight:700;
+  }
+
+  .merchant-login-card h1{
+    margin:0;
+    color:#0d1b33;
+    font-size:1.65rem;
+  }
+
+  .merchant-login-copy{
+    margin:7px 0 20px;
+    color:#667085;
+    font-size:.86rem;
+    line-height:1.5;
+  }
+
+  .merchant-login-form{
+    display:grid;
+    gap:13px;
+  }
+
+  .merchant-login-form label{
+    display:grid;
+    gap:6px;
+    color:#344054;
+    font-size:.78rem;
+    font-weight:850;
+  }
+
+  .merchant-login-form input{
+    width:100%;
+    min-height:50px;
+    padding:11px 13px;
+    border:1px solid #d0d9e7;
+    border-radius:12px;
+    background:#fff;
+    color:#0d1b33;
+    font:inherit;
+    box-sizing:border-box;
+  }
+
+  .merchant-login-form input:focus{
+    outline:none;
+    border-color:#6c9ee8;
+    box-shadow:0 0 0 4px rgba(14,91,216,.10);
+  }
+
+  .merchant-login-button{
+    min-height:52px;
+    margin-top:3px;
+    border:0;
+    border-radius:13px;
+    background:linear-gradient(135deg,#0b43a0,#0e5bd8);
+    color:#fff;
+    font:inherit;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+  .merchant-login-button:disabled{
+    opacity:.6;
+    cursor:wait;
+  }
+
+  .merchant-login-message{
+    min-height:20px;
+    margin:0;
+    color:#b42318;
+    font-size:.78rem;
+    font-weight:750;
+    line-height:1.4;
+  }
+
+  .merchant-login-foot{
+    margin-top:18px;
+    padding-top:15px;
+    border-top:1px solid #e5eaf1;
+    color:#667085;
+    font-size:.74rem;
+    line-height:1.45;
+  }
+
+  .merchant-logout-button{
+    width:100%;
+    margin-top:12px;
+    min-height:38px;
+    padding:8px 10px;
+    border:1px solid rgba(255,255,255,.22);
+    border-radius:10px;
+    background:rgba(255,255,255,.08);
+    color:inherit;
+    font:inherit;
+    font-size:.75rem;
+    font-weight:800;
+    cursor:pointer;
+  }
+
+  .merchant-user-caption{
+    display:block;
+    margin-top:10px;
+    max-width:190px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    opacity:.78;
+    font-size:.68rem;
+  }
+
+  .merchant-password-wrap{
+    position:relative;
+    display:flex;
+    align-items:center;
+  }
+
+  .merchant-password-wrap input{
+    padding-right:74px !important;
+  }
+
+  .merchant-password-toggle{
+    position:absolute;
+    right:7px;
+    top:50%;
+    transform:translateY(-50%);
+    min-width:54px;
+    height:36px;
+    padding:0 10px;
+    border:1px solid #d0d9e7;
+    border-radius:9px;
+    background:#f7f9fc;
+    color:#344054;
+    font:inherit;
+    font-size:.75rem;
+    font-weight:850;
+    cursor:pointer;
+  }
+
+  .merchant-password-toggle:hover{
+    background:#edf3fb;
+  }
+
+  /*
+    V82 - PC:
+    el menÃº lateral puede crecer con nuevas funciones.
+    En escritorio la barra lateral queda fija, pero ahora tiene
+    desplazamiento vertical propio para que nunca queden opciones
+    fuera de pantalla.
+  */
+  @media (min-width:901px){
+    .sidebar{
+      height:100vh !important;
+      max-height:100vh !important;
+      overflow-y:auto !important;
+      overflow-x:hidden !important;
+      overscroll-behavior:contain;
+      scrollbar-gutter:stable;
+      padding-bottom:24px !important;
+      box-sizing:border-box !important;
+    }
+
+    .sidebar .nav{
+      flex:0 0 auto !important;
+      overflow:visible !important;
+      padding-bottom:30px !important;
+    }
+
+    .sidebar .nav-item{
+      flex-shrink:0 !important;
+    }
+  }
+</style>
+
+
+<style>
+  .fulfillment-settings-panel{
+    max-width:760px;
+    display:grid;
+    gap:14px;
+  }
+
+  .fulfillment-settings-intro p{
+    margin:7px 0 0;
+    color:#667085;
+    line-height:1.5;
+  }
+
+  .fulfillment-toggle-row{
+    display:flex;
+    align-items:flex-start;
+    gap:13px;
+    padding:15px;
+    border:1px solid #dbe4f0;
+    border-radius:15px;
+    background:#f8fbff;
+    cursor:pointer;
+  }
+
+  .fulfillment-toggle-row input{
+    width:22px;
+    height:22px;
+    flex:0 0 22px;
+    margin-top:1px;
+  }
+
+  .fulfillment-toggle-row strong,
+  .fulfillment-toggle-row small{
+    display:block;
+  }
+
+  .fulfillment-toggle-row small{
+    margin-top:4px;
+    color:#667085;
+    line-height:1.35;
+  }
+
+  .fulfillment-address-fields{
+    padding:15px;
+    border:1px solid #dbe4f0;
+    border-radius:15px;
+    background:#fff;
+  }
+
+  .fulfillment-address-fields label{
+    display:grid;
+    gap:7px;
+    font-weight:800;
+  }
+
+  .fulfillment-address-fields input{
+    width:100%;
+    min-height:44px;
+    box-sizing:border-box;
+  }
+
+  .fulfillment-address-fields p{
+    margin:8px 0 0;
+    color:#667085;
+    font-size:.78rem;
+    line-height:1.4;
+  }
+
+  .fulfillment-address-fields.is-disabled{
+    display:none;
+  }
+</style>
+
 </head>
 
-<body>
+<body class="auth-locked">
+
+  <section id="merchantLoginScreen" class="merchant-login-screen" aria-label="Acceso al panel">
+    <div class="merchant-login-card">
+      <div class="merchant-login-brand">
+        <div class="merchant-login-mark">D</div>
+        <div>
+          <strong>DENEXA</strong>
+          <span>Acceso seguro para comercios</span>
+        </div>
+      </div>
+
+      <h1>Ingresar al panel</h1>
+      <p class="merchant-login-copy">
+        Us&aacute; el correo y la contrase&ntilde;a asignados a tu comercio.
+      </p>
+
+      <form id="merchantLoginForm" class="merchant-login-form">
+        <label>
+          Correo
+          <input id="merchantLoginEmail" type="email" autocomplete="username" required>
+        </label>
+
+        <label>
+          Contrase&ntilde;a
+          <div class="merchant-password-wrap">
+            <input
+              id="merchantLoginPassword"
+              type="password"
+              autocomplete="current-password"
+              minlength="6"
+              required
+            >
+            <button
+              id="merchantTogglePassword"
+              class="merchant-password-toggle"
+              type="button"
+              aria-label="Mostrar contrase&ntilde;a"
+              aria-pressed="false"
+            >
+              Ver
+            </button>
+          </div>
+        </label>
+
+        <button id="merchantLoginButton" class="merchant-login-button" type="submit">
+          Ingresar
+        </button>
+
+        <p id="merchantLoginMessage" class="merchant-login-message" aria-live="polite"></p>
+      </form>
+
+      <div class="merchant-login-foot">
+        Cada cuenta queda vinculada a un comercio de DENEXA.
+      </div>
+    </div>
+  </section>
+
 
   <aside class="sidebar">
 
     <div class="brand">
-      <div class="brand-mark merchant-logo-mark">MM</div>
+      <div class="brand-mark merchant-logo-mark" id="merchantPanelLogo">
+        <span>MM</span>
+      </div>
 
       <div>
-        <strong>MAMMA MIA</strong>
+        <strong>COMERCIO</strong>
         <span>Panel del comercio</span>
       </div>
     </div>
+
+    <span id="merchantUserCaption" class="merchant-user-caption"></span>
+    <button id="merchantLogoutButton" class="merchant-logout-button" type="button">
+      Cerrar sesi&oacute;n
+    </button>
 
     <nav class="nav" aria-label="Navegaci&oacute;n principal">
 
@@ -49,6 +499,31 @@
         <span>Estado del local</span>
       </button>
 
+      <button class="nav-item" data-section="storeDesign" type="button">
+        <span class="nav-icon">DI</span>
+        <span>Dise&ntilde;o</span>
+      </button>
+
+      <button class="nav-item" data-section="dailyPromo" type="button">
+        <span class="nav-icon">%</span>
+        <span>Promo del d&iacute;a</span>
+      </button>
+
+      <button class="nav-item" data-section="fulfillment" type="button">
+        <span class="nav-icon">EN</span>
+        <span>Entrega y retiro</span>
+      </button>
+
+      <button class="nav-item" data-section="payments" type="button">
+        <span class="nav-icon">$</span>
+        <span>Cobros</span>
+      </button>
+
+      <button class="nav-item" data-section="customerNotices" type="button">
+        <span class="nav-icon">WA</span>
+        <span>Avisos al cliente</span>
+      </button>
+
     </nav>
 
   </aside>
@@ -59,7 +534,7 @@
 
       <header class="page-header">
         <div>
-          <p class="eyebrow">MAMMA MIA</p>
+          <p class="eyebrow">COMERCIO</p>
           <h1>Panel del comercio</h1>
           <p class="subtitle">Todo lo necesario para manejar tu comercio.</p>
         </div>
@@ -114,6 +589,14 @@
           <div>
             <small>Pendientes</small>
             <strong id="pendingOrdersCount">0</strong>
+          </div>
+        </article>
+
+        <article class="metric-card order-metric sales">
+          <span class="metric-icon">$</span>
+          <div>
+            <small>Ventas hoy</small>
+            <strong id="salesTodayTotal">$0</strong>
           </div>
         </article>
 
@@ -196,6 +679,559 @@
       </div>
     </section>
 
+
+    <section id="storeDesign" class="page-section">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">MI MARCA</p>
+          <h1>Dise&ntilde;o de mi tienda</h1>
+          <p class="subtitle">
+            Cambi&aacute; logo, colores y textos de la web de pedidos sin tocar c&oacute;digo.
+          </p>
+        </div>
+      </header>
+
+      <div class="design-layout">
+        <form id="storeDesignForm" class="panel design-form">
+
+          <div class="design-block">
+            <div>
+              <p class="eyebrow">IDENTIDAD</p>
+              <h2>Logo del comercio</h2>
+              <p class="design-help">Pod&eacute;s subir una imagen nueva o pegar una URL.</p>
+            </div>
+
+            <div class="design-logo-row">
+              <div id="designLogoPreview" class="design-logo-preview">
+                <span>MM</span>
+              </div>
+
+              <div class="design-logo-fields">
+                <label>
+                  Subir nuevo logo
+                  <input id="designLogoFile" type="file" accept="image/*">
+                </label>
+
+                <label>
+                  URL del logo
+                  <input id="designLogoUrl" type="url" placeholder="https://...">
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="design-block">
+            <div>
+              <p class="eyebrow">COLORES</p>
+              <h2>Paleta de la tienda</h2>
+              <p class="design-help">Los cambios se aplican a la web del cliente.</p>
+            </div>
+
+            <div class="design-colors">
+              <label>
+                Color principal
+                <input id="designPrimaryColor" type="color" value="#0B43A0">
+              </label>
+
+              <label>
+                Color secundario
+                <input id="designSecondaryColor" type="color" value="#0E5BD8">
+              </label>
+
+              <label>
+                Color de detalle
+                <input id="designAccentColor" type="color" value="#F4C565">
+              </label>
+            </div>
+          </div>
+
+          <div class="design-block">
+            <div>
+              <p class="eyebrow">PORTADA</p>
+              <h2>Textos de bienvenida</h2>
+            </div>
+
+            <div class="form-grid">
+              <label>
+                T&iacute;tulo
+                <input id="designHeroTitle" type="text" maxlength="80" placeholder="Mamma Mia">
+              </label>
+
+              <label class="full-width">
+                Descripci&oacute;n
+                <textarea id="designHeroDescription" rows="3" maxlength="240" placeholder="Pizzas y empanadas preparadas para disfrutar."></textarea>
+              </label>
+
+              <label>
+                Texto del bot&oacute;n
+                <input id="designButtonText" type="text" maxlength="40" placeholder="Hacer mi pedido">
+              </label>
+
+              <label>
+                Imagen de fondo opcional
+                <input id="designHeroImageFile" type="file" accept="image/*">
+              </label>
+
+              <label class="full-width">
+                URL imagen de fondo
+                <input id="designHeroImageUrl" type="url" placeholder="https://...">
+              </label>
+            </div>
+          </div>
+
+          <div id="storeDesignMessage" class="form-message"></div>
+
+          <div class="design-actions">
+            <button id="saveStoreDesignButton" class="primary-button" type="submit">
+              Guardar dise&ntilde;o
+            </button>
+
+            <button id="restoreStoreDesignButton" class="secondary-button" type="button">
+              Restaurar estilo Mamma Mia
+            </button>
+          </div>
+        </form>
+
+        <aside class="panel design-preview-card">
+          <p class="eyebrow">VISTA PREVIA</p>
+          <div id="designPreview" class="design-preview">
+            <div class="design-preview-top">
+              <div id="designPreviewLogo" class="design-preview-logo">MM</div>
+              <span>Tomando pedidos</span>
+            </div>
+            <div class="design-preview-copy">
+              <small>BIENVENIDOS A</small>
+              <strong id="designPreviewTitle">Mamma Mia</strong>
+              <p id="designPreviewDescription">Pizzas y empanadas preparadas para disfrutar.</p>
+              <button id="designPreviewButton" type="button">Hacer mi pedido</button>
+            </div>
+          </div>
+          <p class="design-preview-note">
+            Esta vista es orientativa. La web del cliente se actualiza al guardar.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+
+    <section id="dailyPromo" class="page-section">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">PROMOCIONES</p>
+          <h1>Promo del d&iacute;a</h1>
+          <p class="subtitle">
+            Cre&aacute; una promo y mostrala autom&aacute;ticamente en la pantalla de bienvenida.
+          </p>
+        </div>
+
+        <span id="dailyPromoStatusBadge" class="status-badge closed">
+          Promo desactivada
+        </span>
+      </header>
+
+      <div class="promo-admin-layout">
+
+        <form id="dailyPromoForm" class="panel promo-admin-form">
+
+          <div class="promo-switch-card">
+            <div>
+              <p class="eyebrow">VISIBILIDAD</p>
+              <h2>Mostrar promo en la tienda</h2>
+              <p>
+                Cuando est&aacute; activada, todos los clientes la ven al entrar.
+              </p>
+            </div>
+
+            <label class="promo-toggle">
+              <input id="dailyPromoActive" type="checkbox">
+              <span class="promo-toggle-track">
+                <span class="promo-toggle-knob"></span>
+              </span>
+              <strong id="dailyPromoActiveText">Desactivada</strong>
+            </label>
+          </div>
+
+          <div class="promo-fields">
+            <label>
+              Etiqueta
+              <input
+                id="dailyPromoBadge"
+                type="text"
+                maxlength="40"
+                placeholder="PROMO DEL D&Iacute;A"
+              >
+              <small>Ejemplo: PROMO DEL D&Iacute;A, SOLO HOY, OFERTA ESPECIAL.</small>
+            </label>
+
+            <label>
+              T&iacute;tulo
+              <input
+                id="dailyPromoTitle"
+                type="text"
+                maxlength="90"
+                placeholder="&iexcl;No te la pierdas!"
+              >
+            </label>
+
+            <label class="full-width">
+              Promoci&oacute;n
+              <textarea
+                id="dailyPromoText"
+                rows="4"
+                maxlength="260"
+                placeholder="10% de descuento en pizzas de 1/2 metro."
+              ></textarea>
+            </label>
+            <label class="full-width promo-rule-divider">
+              Tipo de promoci&oacute;n
+              <select id="dailyPromoRuleType">
+                <option value="announcement">Solo anuncio</option>
+                <option value="percent">Descuento autom&aacute;tico (%)</option>
+                <option value="gift">Producto de regalo</option>
+              </select>
+              <small>Las promociones autom&aacute;ticas modifican el precio o agregan el regalo al carrito.</small>
+            </label>
+
+            <div id="promoAutomaticFields" class="full-width promo-rule-box" hidden>
+              <div class="promo-rule-grid">
+                <label>
+                  Se activa con
+                  <select id="promoTargetType">
+                    <option value="category">Una categor&iacute;a completa</option>
+                    <option value="product">Un producto</option>
+                  </select>
+                </label>
+
+                <label>
+                  Elegir categor&iacute;a / producto
+                  <select id="promoTargetId"></select>
+                </label>
+              </div>
+
+              <div id="promoPercentFields" class="promo-rule-grid" hidden>
+                <label>
+                  Descuento %
+                  <input id="promoDiscountPercent" type="number" min="1" max="100" step="1" value="15">
+                </label>
+                <div class="promo-rule-example">
+                  En pizzas se descuenta el tama&ntilde;o/base. Los extras conservan su precio.
+                </div>
+              </div>
+
+              <div id="promoGiftFields" class="promo-rule-grid" hidden>
+                <label>
+                  Cantidad necesaria
+                  <input id="promoTriggerQty" type="number" min="1" step="1" value="2">
+                </label>
+
+                <label>
+                  Producto de regalo
+                  <select id="promoRewardProductId"></select>
+                </label>
+
+                <label>
+                  Cantidad de regalo
+                  <input id="promoRewardQty" type="number" min="1" step="1" value="1">
+                </label>
+
+                <label class="promo-repeat-label">
+                  <input id="promoRepeat" type="checkbox" checked>
+                  <span>
+                    Repetir por m&uacute;ltiplos
+                    <small>Ej.: cada 2 hamburguesas = 1 papas. Con 4, entrega 2 papas.</small>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div id="dailyPromoMessage" class="form-message"></div>
+
+          <div class="promo-admin-actions">
+            <button id="saveDailyPromoButton" class="primary-button" type="submit">
+              Guardar promo
+            </button>
+
+            <button id="disableDailyPromoButton" class="secondary-button" type="button">
+              Desactivar promo
+            </button>
+          </div>
+
+        </form>
+
+        <aside class="panel promo-preview-panel">
+          <p class="eyebrow">VISTA PREVIA</p>
+
+          <div id="dailyPromoPreview" class="daily-promo-preview">
+            <span id="dailyPromoPreviewBadge">PROMO DEL D&Iacute;A</span>
+            <strong id="dailyPromoPreviewTitle">&iexcl;No te la pierdas!</strong>
+            <p id="dailyPromoPreviewText">
+              10% de descuento en pizzas de 1/2 metro.
+            </p>
+          </div>
+
+          <p class="promo-preview-help">
+            As&iacute; se destacar&aacute; la promoci&oacute;n en la bienvenida de la tienda.
+          </p>
+        </aside>
+
+      </div>
+    </section>
+
+
+    
+    <section id="fulfillment" class="page-section">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">ENTREGA</p>
+          <h1>Delivery y retiro</h1>
+          <p class="subtitle">
+            Eleg&iacute; c&oacute;mo pueden recibir los pedidos tus clientes.
+          </p>
+        </div>
+      </header>
+
+      <form id="fulfillmentSettingsForm" class="panel fulfillment-settings-panel">
+
+        <div class="fulfillment-settings-intro">
+          <div>
+            <p class="eyebrow">MODALIDADES DISPONIBLES</p>
+            <h2>Formas de entrega</h2>
+            <p>
+              Pod&eacute;s ofrecer delivery, retiro en el local o ambas opciones.
+              Al menos una debe quedar activa.
+            </p>
+          </div>
+        </div>
+
+        <label class="fulfillment-toggle-row">
+          <input id="deliveryEnabled" type="checkbox">
+          <span>
+            <strong>Delivery</strong>
+            <small>El cliente completa su direcci&oacute;n de entrega.</small>
+          </span>
+        </label>
+
+        <label class="fulfillment-toggle-row">
+          <input id="pickupEnabled" type="checkbox">
+          <span>
+            <strong>Retiro en el local</strong>
+            <small>El cliente puede pasar a buscar el pedido.</small>
+          </span>
+        </label>
+
+        <div id="pickupAddressFields" class="fulfillment-address-fields">
+          <label>
+            Direcci&oacute;n para retiro
+            <input
+              id="pickupAddress"
+              type="text"
+              placeholder="Ejemplo: 19 de Abril 123, Carmelo"
+              autocomplete="street-address"
+            >
+          </label>
+
+          <p>
+            Esta direcci&oacute;n se mostrar&aacute; al cliente cuando elija
+            <strong>Retiro en el local</strong>.
+          </p>
+        </div>
+
+        <p id="fulfillmentSettingsMessage" class="form-message"></p>
+
+        <button id="saveFulfillmentSettingsButton" class="primary-button" type="submit">
+          Guardar modalidades
+        </button>
+      </form>
+    </section>
+
+
+<section id="payments" class="page-section">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">COBROS</p>
+          <h1>Datos para transferencias</h1>
+          <p class="subtitle">
+            Complet&aacute; los datos que ver&aacute; el cliente cuando elija pagar por transferencia o d&eacute;bito.
+          </p>
+        </div>
+      </header>
+
+      <form id="paymentSettingsForm" class="panel">
+        <div class="form-grid">
+
+          <label>
+            Banco / instituci&oacute;n
+            <input
+              id="paymentBankName"
+              type="text"
+              maxlength="80"
+              placeholder="Ejemplo: Banco / InstituciÃ³n"
+            >
+          </label>
+
+          <label>
+            Titular de la cuenta
+            <input
+              id="paymentAccountHolder"
+              type="text"
+              maxlength="100"
+              placeholder="Ejemplo: Nombre del titular"
+            >
+          </label>
+
+          <label>
+            N&uacute;mero de cuenta
+            <input
+              id="paymentAccountNumber"
+              type="text"
+              maxlength="100"
+              placeholder="Ejemplo: 0000000000"
+            >
+          </label>
+
+          <label>
+            Moneda
+            <input
+              id="paymentCurrency"
+              type="text"
+              maxlength="30"
+              placeholder="Ejemplo: Pesos uruguayos"
+            >
+          </label>
+
+          <label class="full-width">
+            Instrucciones para el cliente
+            <textarea
+              id="paymentInstructions"
+              rows="4"
+              maxlength="300"
+              placeholder="Ejemplo: RealizÃ¡ la transferencia por el total del pedido. ConservÃ¡ el comprobante."
+            ></textarea>
+          </label>
+
+        </div>
+
+        <p class="subtitle" style="margin-top:14px;">
+          Estos datos son propios de cada comercio. Pod&eacute;s cambiarlos cuando quieras sin tocar GitHub.
+        </p>
+
+        <div id="paymentSettingsMessage" class="form-message"></div>
+
+        <div class="modal-actions" style="justify-content:flex-start;">
+          <button id="savePaymentSettingsButton" class="primary-button" type="submit">
+            Guardar datos de cobro
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section id="customerNotices" class="page-section">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">WHATSAPP</p>
+          <h1>Avisos al cliente</h1>
+          <p class="subtitle">
+            Eleg&iacute; qu&eacute; avisos quer&eacute;s usar y edit&aacute; el texto que recibe el cliente.
+          </p>
+        </div>
+      </header>
+
+      <form id="customerNoticesForm" class="panel">
+
+        <div class="notice-settings-intro">
+          <strong>Mensajes autom&aacute;ticos preparados por DENEXA</strong>
+          <p>
+            Al cambiar el estado de un pedido, el panel puede abrir WhatsApp con el mensaje listo.
+            El comercio decide qu&eacute; avisos deja disponibles y, en cada pedido, si quiere enviarlos o no.
+          </p>
+        </div>
+
+        <div class="notice-settings-list">
+
+          <article class="notice-setting-card">
+            <label class="checkbox-label">
+              <input id="noticeApprovedEnabled" type="checkbox">
+              <span>
+                <strong>Pedido aceptado</strong>
+                <small>Al tocar Aceptar.</small>
+              </span>
+            </label>
+
+            <label class="full-width">
+              Mensaje
+              <textarea
+                id="noticeApprovedMessage"
+                rows="4"
+                maxlength="500"
+              ></textarea>
+            </label>
+          </article>
+
+          <article class="notice-setting-card">
+            <label class="checkbox-label">
+              <input id="noticeReadyEnabled" type="checkbox">
+              <span>
+                <strong>Pedido listo para retirar</strong>
+                <small>Solo para pedidos con retiro en el local.</small>
+              </span>
+            </label>
+
+            <label class="full-width">
+              Mensaje
+              <textarea
+                id="noticeReadyMessage"
+                rows="4"
+                maxlength="500"
+              ></textarea>
+            </label>
+          </article>
+
+          <article class="notice-setting-card">
+            <label class="checkbox-label">
+              <input id="noticeDeliveryEnabled" type="checkbox">
+              <span>
+                <strong>Pedido en camino</strong>
+                <small>Solo para pedidos con delivery.</small>
+              </span>
+            </label>
+
+            <label class="full-width">
+              Mensaje
+              <textarea
+                id="noticeDeliveryMessage"
+                rows="4"
+                maxlength="500"
+              ></textarea>
+            </label>
+          </article>
+
+        </div>
+
+        <div class="notice-placeholders">
+          <strong>Pod&eacute;s usar estas palabras:</strong>
+          <span>{cliente}</span>
+          <span>{comercio}</span>
+          <span>{total}</span>
+          <span>{direccion}</span>
+        </div>
+
+        <p id="customerNoticesMessage" class="form-message"></p>
+
+        <div class="modal-actions" style="justify-content:flex-start;">
+          <button
+            id="saveCustomerNoticesButton"
+            class="primary-button"
+            type="submit"
+          >
+            Guardar avisos
+          </button>
+        </div>
+
+      </form>
+    </section>
+
+
     <section id="businesses" class="page-section merchant-master-section">
 
       <header class="page-header">
@@ -234,13 +1270,9 @@
         </span>
       </header>
 
-      <div class="orders-whatsapp-note">
-        <strong>WhatsApp al cliente</strong>
-        <span>
-          Se prepara un aviso al aceptar el pedido,
-          cuando un retiro queda listo y cuando un delivery sale en camino.
-          El comercio solo debe tocar Enviar en WhatsApp.
-        </span>
+      <div class="orders-whatsapp-note compact-notice">
+        <strong>Avisos por WhatsApp</strong>
+        <span id="customerNoticesOrdersState">Configurables desde â€œAvisos al clienteâ€.</span>
       </div>
 
       <div class="orders-summary-grid">
@@ -286,11 +1318,25 @@
             </select>
           </label>
 
-          <button id="refreshOrdersButton" class="secondary-button" type="button">
-            Actualizar
-          </button>
+          <div class="orders-toolbar-actions">
+            <button id="refreshOrdersButton" class="secondary-button" type="button">
+              Actualizar
+            </button>
+
+            <button id="clearShiftOrdersButton" class="danger-button" type="button">
+              Limpiar turno
+            </button>
+          </div>
         </div>
         <div id="ordersLastUpdate" class="orders-last-update">Esperando datos...</div>
+
+        <div class="orders-cleanup-hint">
+          <strong>Limpiar turno</strong>
+          <span>
+            Quita del panel todos los pedidos de Mamma Mia, activos y finalizados,
+            para comenzar el pr&oacute;ximo turno desde cero.
+          </span>
+        </div>
       </div>
 
       <div id="ordersList" class="orders-board">
@@ -646,8 +1692,12 @@
           </label>
 
           <label>
-            Precio
+            Precio base
             <input id="productPrice" type="number" min="0" step="0.01" required>
+            <small class="field-help">
+              En pizzas, coloc&aacute; aqu&iacute; el precio de la muzzarella.
+              Los gustos y extras se suman desde Opciones y extras.
+            </small>
           </label>
 
           <label>
@@ -760,6 +1810,7 @@
           <strong>Grupos de opciones</strong>
           <small>
             Ejemplos: Tama&ntilde;o, Sabores, Extras o Tipo de masa.
+            Pod&eacute;s usar <strong>Duplicar</strong> para copiar una variante con sus opciones dependientes.
           </small>
         </div>
 
@@ -906,11 +1957,10 @@
           </label>
 
           <label>
-            Precio adicional
+            <span id="modifierOptionPriceLabel">Precio adicional</span>
             <input
               id="modifierOptionPrice"
               type="number"
-              min="0"
               step="0.01"
               value="0"
               required
@@ -961,7 +2011,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/comercio.js?v=103"></script>
+  <script src="js/comercio.js?v=104"></script>
 
 </body>
 </html>
