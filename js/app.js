@@ -469,9 +469,19 @@ function ensureDenexaPoweredFooter() {
 
         <div class="denexa-powered-copy">
           <strong>DENEXA</strong>
-          <span>Tecnología para pedidos online</span>
+          <span>Plataforma de pedidos para comercios</span>
         </div>
       </div>
+
+      <div class="denexa-powered-meta">
+        <span>Simple</span>
+        <i aria-hidden="true">•</i>
+        <span>Rápido</span>
+        <i aria-hidden="true">•</i>
+        <span>Seguro</span>
+      </div>
+
+      <div class="denexa-powered-country">Hecho en Uruguay 🇺🇾</div>
     </div>
   `;
 
