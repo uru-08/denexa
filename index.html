@@ -9,7 +9,7 @@
     name="description"
     content="Hac&eacute; tu pedido online con DENEXA."
   >
-  <link rel="stylesheet" href="css/app.css?v=106">
+  <link rel="stylesheet" href="css/app.css?v=107">
 </head>
 
 <body>
@@ -151,15 +151,21 @@
 
     </main>
 
-    <button id="cartButton" class="floating-cart" type="button" aria-label="Abrir carrito">
-      <span class="cart-icon" aria-hidden="true">&#128722;</span>
-
-      <span class="cart-copy">
-        <strong>Ver pedido</strong>
-        <small id="cartCount">0 productos</small>
+    <button id="cartButton" class="floating-cart kechu-cart-bar" type="button" aria-label="Abrir carrito">
+      <span class="cart-icon-wrap" aria-hidden="true">
+        <span class="cart-icon">&#128722;</span>
+        <span id="cartCount" class="cart-count-badge">0</span>
       </span>
 
-      <strong id="cartTotal" class="cart-price">$0</strong>
+      <span class="cart-copy">
+        <strong>Tu pedido</strong>
+        <strong id="cartTotal" class="cart-summary-total">$0</strong>
+      </span>
+
+      <span class="cart-action-label">
+        VER PEDIDO
+        <span aria-hidden="true">â€º</span>
+      </span>
     </button>
 
   </div>
@@ -387,6 +393,6 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=32"></script>
-  <script src="js/app.js?v=106"></script>
+  <script src="js/app.js?v=107"></script>
 </body>
 </html>
