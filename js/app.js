@@ -832,9 +832,15 @@ function applyBusinessBranding() {
   }
 
   if (welcomeBusinessName) {
-    welcomeBusinessName.textContent =
-      business.hero_title ||
-      name;
+    if (String(business?.slug || "").toLowerCase() === "carro-kechu-carmelo") {
+      welcomeBusinessName.innerHTML = `
+        <span class="welcome-kechu-carro">CARRO</span>
+        <span class="welcome-kechu-main">KECHU</span>
+        <span class="welcome-kechu-carmelo">CARMELO</span>
+      `;
+    } else {
+      welcomeBusinessName.textContent = business.hero_title || name;
+    }
   }
 
   if (welcomeBusinessDescription) {
@@ -1541,6 +1547,27 @@ function renderCatalog() {
       </section>
     `;
   }).join("");
+
+  if ("IntersectionObserver" in window) {
+    window.__denexaCategoryObserver?.disconnect?.();
+    window.__denexaCategoryObserver = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting)
+          .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        const id = visible.target.id.replace("category-","");
+        categoryTabs.querySelectorAll(".category-tab").forEach((tab) => {
+          const active = String(tab.dataset.categoryId) === String(id);
+          tab.classList.toggle("active", active);
+          if (active) tab.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
+        });
+      },
+      {rootMargin:"-22% 0px -58% 0px",threshold:[0,.1,.25,.5]}
+    );
+    catalogContent.querySelectorAll(".category-section").forEach(
+      (section) => window.__denexaCategoryObserver.observe(section)
+    );
+  }
 
   catalogContent
     .querySelectorAll(".product-card")
@@ -3033,6 +3060,11 @@ function updateCartBar() {
 
   cartModalTotal.textContent =
     money(cartGrandTotal());
+
+  if (cartButton) {
+    cartButton.classList.toggle("has-items", quantity > 0);
+    cartButton.setAttribute("aria-hidden", quantity > 0 ? "false" : "true");
+  }
 }
 
 function saveCart() {
