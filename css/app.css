@@ -7142,3 +7142,347 @@ html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-footer{
     font-size:.73rem !important;
   }
 }
+
+
+/* ==========================================================
+   DENEXA v108 — CARRO KECHU MÓVIL
+   Corrección visual después de comparar con la simulación.
+   ========================================================== */
+
+html[data-store-theme="carro-kechu-carmelo"] .main-content{
+  padding-top:12px !important;
+}
+
+/* CABECERA: logo + marca compacta y tradición visible */
+html[data-store-theme="carro-kechu-carmelo"] .store-header{
+  padding:14px 18px 15px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-header-inner{
+  position:relative !important;
+  display:block !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-brand{
+  display:grid !important;
+  grid-template-columns:96px minmax(0,1fr) !important;
+  align-items:start !important;
+  gap:14px !important;
+  width:100% !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-logo{
+  width:96px !important;
+  height:96px !important;
+  flex-basis:96px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-heading{
+  min-width:0 !important;
+  padding-top:2px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-heading h1{
+  display:grid !important;
+  justify-items:start !important;
+  gap:0 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carro{
+  font-size:1.18rem !important;
+  color:#fff !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-kechu{
+  margin:0 !important;
+  font-size:2.75rem !important;
+  color:#FFD000 !important;
+  line-height:.82 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carmelo{
+  margin-top:2px !important;
+  font-size:1.28rem !important;
+  color:#fff !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-subtitle{
+  display:none !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-heading::after{
+  content:"\2605  TRADICIÓN DE FAMILIA DESDE 23 AGOSTO 1986";
+  display:block !important;
+  margin-top:9px !important;
+  color:#F2F2F2 !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+  font-size:.61rem !important;
+  line-height:1.28 !important;
+  font-weight:850 !important;
+  letter-spacing:.015em !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-status{
+  display:inline-flex !important;
+  margin:12px 0 0 110px !important;
+  min-height:38px !important;
+}
+
+/* BARRA SERVICIOS: acercar a referencia */
+html[data-store-theme="carro-kechu-carmelo"] .service-strip{
+  margin-top:4px !important;
+  min-height:58px !important;
+  justify-content:center !important;
+  gap:10px !important;
+  padding:9px 13px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .service-strip-item{
+  font-size:.74rem !important;
+}
+
+/* La referencia NO usa un gran bloque "Elegí qué querés pedir".
+   Para Kechu, mostramos directamente las categorías. */
+html[data-store-theme="carro-kechu-carmelo"] .section-heading{
+  display:none !important;
+}
+
+/* CATEGORÍAS: tarjetas verticales reales, sin texto cortado */
+html[data-store-theme="carro-kechu-carmelo"] .category-tabs{
+  display:flex !important;
+  align-items:stretch !important;
+  gap:9px !important;
+  margin:14px -12px 16px !important;
+  padding:3px 12px 8px !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  scroll-snap-type:x proximity !important;
+  scrollbar-width:none !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .category-tabs::-webkit-scrollbar{
+  display:none !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .category-tab{
+  flex:0 0 132px !important;
+  width:132px !important;
+  min-width:132px !important;
+  height:156px !important;
+  min-height:156px !important;
+  display:grid !important;
+  grid-template-rows:1fr auto !important;
+  align-items:center !important;
+  justify-items:center !important;
+  gap:6px !important;
+  padding:11px 9px 9px !important;
+  border-radius:18px !important;
+  scroll-snap-align:start !important;
+  overflow:hidden !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .category-tab-visual{
+  width:86px !important;
+  height:86px !important;
+  display:grid !important;
+  place-items:center !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .category-tab-visual svg{
+  width:80px !important;
+  height:80px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .category-tab-label{
+  position:static !important;
+  width:100% !important;
+  max-width:none !important;
+  min-height:34px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:6px 5px !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  white-space:normal !important;
+  text-align:center !important;
+  font-size:.68rem !important;
+  line-height:1.05 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.active .category-tab-label{
+  color:#050505 !important;
+  background:#FFD000 !important;
+}
+
+/* PRODUCTOS: proporciones más parecidas a la simulación */
+html[data-store-theme="carro-kechu-carmelo"] .category-section{
+  margin-top:0 !important;
+  padding:13px 10px 10px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .category-section-title h3{
+  font-size:1.48rem !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .product-card{
+  grid-template-columns:42% minmax(0,1fr) !important;
+  min-height:154px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .product-image,
+html[data-store-theme="carro-kechu-carmelo"] .product-image img{
+  min-height:154px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .product-info{
+  min-height:154px !important;
+  padding:13px 49px 12px 14px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .product-info h4{
+  font-size:1.20rem !important;
+  line-height:.98 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .product-description{
+  font-size:.73rem !important;
+  line-height:1.34 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .product-price{
+  font-size:1.18rem !important;
+}
+
+/* CARRITO: igual concepto de la simulación */
+html[data-store-theme="carro-kechu-carmelo"] .floating-cart.kechu-cart-bar{
+  grid-template-columns:auto minmax(0,1fr) 150px !important;
+  min-height:78px !important;
+  padding:8px 9px 8px 12px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .cart-icon-wrap{
+  width:54px !important;
+  height:54px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .cart-icon{
+  font-size:1.78rem !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .floating-cart .cart-copy strong:first-child{
+  font-size:.91rem !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .cart-summary-total{
+  font-size:1.13rem !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .cart-action-label{
+  min-width:150px !important;
+  min-height:54px !important;
+  position:relative !important;
+  padding:8px 34px 8px 14px !important;
+  font-size:.87rem !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .cart-action-label::after{
+  content:"\203A";
+  position:absolute;
+  right:15px;
+  top:50%;
+  transform:translateY(-52%);
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:1.65rem;
+  font-weight:900;
+  line-height:1;
+}
+
+/* Eliminar cualquier regla anterior que tratara de mostrar un símbolo hijo */
+html[data-store-theme="carro-kechu-carmelo"] .cart-action-label > span{
+  display:none !important;
+}
+
+@media(max-width:430px){
+  html[data-store-theme="carro-kechu-carmelo"] .store-brand{
+    grid-template-columns:86px minmax(0,1fr) !important;
+    gap:12px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-logo{
+    width:86px !important;
+    height:86px !important;
+    flex-basis:86px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carro{
+    font-size:1.02rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-kechu{
+    font-size:2.28rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carmelo{
+    font-size:1.08rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading::after{
+    font-size:.56rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-status{
+    margin-left:98px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab{
+    flex-basis:122px !important;
+    width:122px !important;
+    min-width:122px !important;
+    height:148px !important;
+    min-height:148px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab-visual{
+    width:78px !important;
+    height:78px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab-visual svg{
+    width:72px !important;
+    height:72px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card{
+    grid-template-columns:40% minmax(0,1fr) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .floating-cart.kechu-cart-bar{
+    grid-template-columns:46px minmax(0,1fr) 136px !important;
+    gap:7px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .cart-icon-wrap{
+    width:46px !important;
+    height:46px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .cart-action-label{
+    min-width:136px !important;
+    min-height:50px !important;
+    font-size:.78rem !important;
+  }
+}
+
+@media(max-width:365px){
+  html[data-store-theme="carro-kechu-carmelo"] .floating-cart.kechu-cart-bar{
+    grid-template-columns:42px minmax(0,1fr) 118px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .cart-action-label{
+    min-width:118px !important;
+    font-size:.70rem !important;
+    padding-left:9px !important;
+    padding-right:28px !important;
+  }
+}
