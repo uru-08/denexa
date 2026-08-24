@@ -1447,6 +1447,22 @@ function categoryVisualMarkup(categoryName) {
   `;
 }
 
+function kechuCategoryKey(name) {
+  const value = String(name || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+
+  if (value.includes("hamburg")) return "hamburguesas";
+  if (value.includes("milan")) return "milanesas";
+  if (value.includes("chivit")) return "chivitos";
+  if (value.includes("papa")) return "papas-fritas";
+  if (value.includes("postre") || value.includes("dulce")) return "postres";
+  if (value.includes("bebida") || value.includes("refresco")) return "bebidas";
+  return "generic";
+}
+
 function renderCatalog() {
   const visibleCategories = categories.filter(
     (category) =>
@@ -1467,7 +1483,8 @@ function renderCatalog() {
   categoryTabs.innerHTML = visibleCategories.map((category, index) => `
     <button
       type="button"
-      class="category-tab ${index === 0 ? "active" : ""}"
+      class="category-tab category-${kechuCategoryKey(category.name)} ${index === 0 ? "active" : ""}"
+      data-category-key="${kechuCategoryKey(category.name)}"
       data-category-id="${escapeHTML(category.id)}"
     >
       ${categoryVisualMarkup(category.name)}
@@ -1651,7 +1668,7 @@ function renderProductCard(product) {
       </div>
 
       <div class="product-info">
-        <h4>${escapeHTML(product.name)}</h4>
+        <h4 class="${String(product.name || "").length > 12 ? "product-name-long" : ""}">${escapeHTML(product.name)}</h4>
 
         ${
           product.description
