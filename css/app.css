@@ -6151,3 +6151,285 @@ html[data-store-theme="carro-kechu-carmelo"] #continueOrderButton{
     font-size:1.45rem !important;
   }
 }
+
+
+/* ==========================================================
+   DENEXA v105 — AJUSTE VISUAL KECHU
+   SOLO CSS. NO TOCA SUPABASE NI LÓGICA.
+   ========================================================== */
+
+/* Menú: compactar título y categorías */
+html[data-store-theme="carro-kechu-carmelo"] .section-heading{
+  margin-bottom:10px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .section-heading h2{
+  font-size:clamp(1.72rem,7vw,2.45rem) !important;
+  line-height:.94 !important;
+  max-width:14ch !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .section-subtitle{
+  margin-top:7px !important;
+  font-size:.76rem !important;
+  line-height:1.35 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .category-tabs{
+  margin:0 -12px 14px !important;
+  padding:2px 12px 6px !important;
+  align-items:stretch !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .category-tab{
+  display:flex !important;
+  align-items:center !important;
+  gap:9px !important;
+  min-width:auto !important;
+  min-height:54px !important;
+  padding:8px 12px !important;
+  border-radius:14px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .category-tab-visual{
+  width:38px !important;
+  height:38px !important;
+  flex:0 0 38px !important;
+  display:grid !important;
+  place-items:center !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .category-tab-visual svg{
+  width:34px !important;
+  height:34px !important;
+  display:block !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .category-tab-label{
+  position:static !important;
+  display:block !important;
+  max-width:130px !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+  color:inherit !important;
+  font-size:.74rem !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .catalog-content{
+  gap:14px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .category-section{
+  scroll-margin-top:12px !important;
+}
+
+/* Reservar espacio real para el carrito fijo */
+html[data-store-theme="carro-kechu-carmelo"] .main-content{
+  padding-bottom:118px !important;
+}
+
+.denexa-powered-footer{
+  padding-bottom:122px !important;
+}
+
+/* Modal producto: asegurar título y jerarquía */
+html[data-store-theme="carro-kechu-carmelo"] .product-modal-body h2{
+  display:block !important;
+  margin:0 0 8px !important;
+  color:#FFD400 !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  font-size:1.55rem !important;
+  line-height:1 !important;
+  letter-spacing:.025em !important;
+  text-transform:uppercase !important;
+  opacity:1 !important;
+  visibility:visible !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .product-modal-description{
+  margin:0 0 14px !important;
+  color:#F0F0F0 !important;
+  font-size:.80rem !important;
+  line-height:1.42 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .live-price{
+  display:inline-flex !important;
+  width:auto !important;
+  margin:0 0 18px !important;
+  padding:9px 12px !important;
+  border-radius:12px !important;
+  font-size:1.05rem !important;
+}
+
+/* Carrito modal: eliminar blanco sobre blanco */
+html[data-store-theme="carro-kechu-carmelo"] .cart-modal-card{
+  background:#0D0D0D !important;
+  color:#fff !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .cart-item{
+  border:1px solid #353535 !important;
+  background:#151515 !important;
+  color:#fff !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .cart-item h3{
+  color:#FFD400 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .cart-item-options{
+  color:#D6D6D6 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .cart-item-bottom{
+  color:#fff !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .cart-remove{
+  color:#FF786F !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .cart-summary{
+  border-top:1px solid #353535 !important;
+  background:#0D0D0D !important;
+  color:#fff !important;
+}
+
+/* Checkout: todo legible en fondo oscuro */
+html[data-store-theme="carro-kechu-carmelo"] .checkout-modal-card{
+  background:#0D0D0D !important;
+  color:#fff !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .checkout-modal-card .eyebrow{
+  color:#FFD400 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .checkout-modal-card .modal-title-row h2{
+  color:#fff !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .delivery-choice-field{
+  border:1px solid #403600 !important;
+  background:#151300 !important;
+  box-shadow:none !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .delivery-choice-field > span,
+html[data-store-theme="carro-kechu-carmelo"] .field span{
+  color:#EDEDED !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .field input,
+html[data-store-theme="carro-kechu-carmelo"] .field select,
+html[data-store-theme="carro-kechu-carmelo"] .field textarea{
+  border:1px solid #3C3C3C !important;
+  background:#171717 !important;
+  color:#FFFFFF !important;
+  -webkit-text-fill-color:#FFFFFF !important;
+  caret-color:#FFD400 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .field select option{
+  background:#171717 !important;
+  color:#FFFFFF !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .field input::placeholder,
+html[data-store-theme="carro-kechu-carmelo"] .field textarea::placeholder{
+  color:#8F8F8F !important;
+  opacity:1 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .field input:focus,
+html[data-store-theme="carro-kechu-carmelo"] .field select:focus,
+html[data-store-theme="carro-kechu-carmelo"] .field textarea:focus{
+  border-color:#FFD400 !important;
+  box-shadow:0 0 0 3px rgba(255,212,0,.10) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .checkout-summary-card{
+  border:1px solid #363636 !important;
+  background:#151515 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .checkout-summary-line{
+  color:#D0D0D0 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .checkout-summary-line.total-line{
+  color:#fff !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .checkout-summary-line.total-line strong{
+  color:#FFD400 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .fulfillment-mode-notice,
+html[data-store-theme="carro-kechu-carmelo"] .pickup-info-card,
+html[data-store-theme="carro-kechu-carmelo"] .transfer-info-card{
+  border-color:#3B3B3B !important;
+  background:#151515 !important;
+  color:#fff !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .transfer-info-card span,
+html[data-store-theme="carro-kechu-carmelo"] .transfer-info-card small,
+html[data-store-theme="carro-kechu-carmelo"] .pickup-info-card small{
+  color:#BDBDBD !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .transfer-info-card strong,
+html[data-store-theme="carro-kechu-carmelo"] .pickup-info-card strong{
+  color:#fff !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .transfer-instructions{
+  background:#171300 !important;
+  color:#E8E8E8 !important;
+}
+
+/* Botón confirmar visible y coherente */
+html[data-store-theme="carro-kechu-carmelo"] #confirmOrderButton{
+  background:#FFD400 !important;
+  color:#050505 !important;
+  border:1px solid #FFE45A !important;
+  box-shadow:none !important;
+}
+
+/* Mobile */
+@media(max-width:620px){
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab{
+    min-height:50px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab-visual{
+    width:34px !important;
+    height:34px !important;
+    flex-basis:34px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab-visual svg{
+    width:30px !important;
+    height:30px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-modal-image{
+    max-height:42dvh !important;
+    object-fit:cover !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-modal-body{
+    padding-top:16px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .checkout-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .field.full-width{
+    grid-column:auto !important;
+  }
+}
