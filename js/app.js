@@ -459,29 +459,17 @@ function ensureDenexaPoweredFooter() {
   footer.innerHTML = `
     <div class="denexa-powered-inner">
       <span class="denexa-powered-label">POWERED BY</span>
-
       <div class="denexa-powered-row">
-        <img
-          class="denexa-powered-logo"
-          src="assets/denexa-logo.png"
-          alt="DENEXA Pedidos Online"
-        >
-
+        <img class="denexa-powered-logo" src="assets/denexa-logo.png" alt="DENEXA Pedidos Online">
         <div class="denexa-powered-copy">
           <strong>DENEXA</strong>
           <span>Plataforma de pedidos para comercios</span>
         </div>
       </div>
-
       <div class="denexa-powered-meta">
-        <span>Simple</span>
-        <i aria-hidden="true">•</i>
-        <span>Rápido</span>
-        <i aria-hidden="true">•</i>
-        <span>Seguro</span>
+        <span>SIMPLE</span><i>|</i><span>RAPIDO</span><i>|</i><span>SEGURO</span>
       </div>
-
-      <div class="denexa-powered-country">Hecho en Uruguay 🇺🇾</div>
+      <div class="denexa-powered-country">HECHO EN URUGUAY</div>
     </div>
   `;
 
