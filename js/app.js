@@ -741,7 +741,16 @@ function applyBusinessBranding() {
   const deep =
     hexToDark(primary,.42);
 
-  storeName.textContent = name;
+  if (String(business?.slug || "").toLowerCase() === "carro-kechu-carmelo") {
+    storeName.innerHTML = `
+      <span class="kechu-brand-carro">CARRO</span>
+      <span class="kechu-brand-kechu">KECHU</span>
+      <span class="kechu-brand-carmelo">CARMELO</span>
+    `;
+  } else {
+    storeName.textContent = name;
+  }
+
   storeNameSmall.textContent = name;
   document.title =
     `${name} | Pedidos`;
@@ -3000,9 +3009,7 @@ function updateCartBar() {
     );
 
   cartCount.textContent =
-    quantity === 1
-      ? "1 producto"
-      : `${quantity} productos`;
+    String(quantity);
 
   cartTotal.textContent =
     money(cartGrandTotal());
