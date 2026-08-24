@@ -7893,3 +7893,125 @@ html[data-store-theme="carro-kechu-carmelo"] .product-options:empty{
     font-size:.74rem !important;
   }
 }
+
+
+/* ==========================================================
+   DENEXA v112 — CIERRE VISUAL MÓVIL KECHU
+   Correcciones integradas sobre v110 estable.
+   ========================================================== */
+
+/* Título: estilo de la maqueta, compacto y de alto impacto */
+html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carro,
+html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-kechu,
+html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carmelo{
+  font-family:"Arial Black","Roboto Slab",Rockwell,Georgia,serif !important;
+  font-weight:900 !important;
+  transform:scaleX(.88) !important;
+  transform-origin:left center !important;
+  text-shadow:0 1px 0 rgba(255,255,255,.06) !important;
+  letter-spacing:-.045em !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carro{
+  font-size:1.18rem !important;color:#fff !important;line-height:.92 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-kechu{
+  font-size:2.72rem !important;color:#ffcf00 !important;line-height:.83 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carmelo{
+  font-size:1.22rem !important;color:#fff !important;line-height:.92 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .store-heading::after{
+  content:"★ TRADICIÓN DE FAMILIA DESDE 23 AGOSTO 1986" !important;
+  display:block !important;
+  white-space:nowrap !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+  font-size:clamp(.54rem,2.15vw,.68rem) !important;
+  font-weight:800 !important;
+  letter-spacing:-.025em !important;
+  color:#f2f2f2 !important;
+  margin-top:8px !important;
+}
+
+/* Las fotos se asignan por NOMBRE de categoría, nunca por posición. */
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-hamburguesas .category-tab-visual{background-image:url("../assets/kechu/categorias/hamburguesas.jpg") !important}
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-milanesas .category-tab-visual{background-image:url("../assets/kechu/categorias/milanesas.jpg") !important}
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-chivitos .category-tab-visual{background-image:url("../assets/kechu/categorias/chivitos.jpg") !important}
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-papas-fritas .category-tab-visual{background-image:url("../assets/kechu/categorias/papas-fritas.jpg") !important}
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-postres .category-tab-visual{background-image:url("../assets/kechu/categorias/postres.jpg") !important}
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-bebidas .category-tab-visual{background-image:url("../assets/kechu/categorias/bebidas.jpg") !important}
+/* neutraliza la vieja asignación por nth-child */
+html[data-store-theme="carro-kechu-carmelo"] .category-tab:not(.category-hamburguesas):not(.category-milanesas):not(.category-chivitos):not(.category-papas-fritas):not(.category-postres):not(.category-bebidas) .category-tab-visual{background-image:none !important}
+
+/* Tipografía de categorías/productos similar a referencia y sin cortes feos */
+html[data-store-theme="carro-kechu-carmelo"] .category-tab-label,
+html[data-store-theme="carro-kechu-carmelo"] .category-section-title h3,
+html[data-store-theme="carro-kechu-carmelo"] .product-info h4,
+html[data-store-theme="carro-kechu-carmelo"] .cart-action-label{
+  font-family:"Arial Black",Impact,"Arial Narrow",sans-serif !important;
+  font-weight:900 !important;
+  letter-spacing:-.025em !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-info h4{
+  overflow-wrap:normal !important;
+  word-break:normal !important;
+  hyphens:none !important;
+  font-size:1.02rem !important;
+  line-height:1.04 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-info h4.product-name-long{
+  font-size:.88rem !important;
+  letter-spacing:-.04em !important;
+}
+
+/* Más ancho para el texto y tarjetas algo más compactas */
+html[data-store-theme="carro-kechu-carmelo"] .product-card{
+  grid-template-columns:38% minmax(0,1fr) !important;
+  min-height:138px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-image,
+html[data-store-theme="carro-kechu-carmelo"] .product-image img{
+  height:138px !important;min-height:138px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-info{
+  min-height:138px !important;
+  padding:10px 47px 9px 12px !important;
+}
+
+/* Barra inferior completa y legible */
+html[data-store-theme="carro-kechu-carmelo"] .floating-cart.kechu-cart-bar{
+  display:grid !important;
+  grid-template-columns:44px minmax(92px,1fr) 138px !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .floating-cart .cart-copy{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-start !important;
+  justify-content:center !important;
+  min-width:0 !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .floating-cart .cart-copy strong{
+  display:block !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .cart-action-label{
+  display:flex !important;align-items:center !important;justify-content:center !important;
+  min-width:138px !important;padding:8px 10px !important;
+}
+
+/* Modal de producto: el contenido define la altura */
+html[data-store-theme="carro-kechu-carmelo"] .product-modal-card{
+  height:auto !important;min-height:0 !important;max-height:90dvh !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] #productModalContent{
+  min-height:0 !important;height:auto !important;
+}
+
+@media(max-width:390px){
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-kechu{font-size:2.45rem !important}
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading::after{font-size:.52rem !important}
+  html[data-store-theme="carro-kechu-carmelo"] .floating-cart.kechu-cart-bar{grid-template-columns:40px minmax(82px,1fr) 124px !important}
+  html[data-store-theme="carro-kechu-carmelo"] .cart-action-label{min-width:124px !important;font-size:.70rem !important}
+}
