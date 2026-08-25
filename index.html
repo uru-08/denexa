@@ -257,10 +257,20 @@
 
         <div class="checkout-grid">
 
-          <label id="deliveryChoiceField" class="field full-width delivery-choice-field">
+          <div id="deliveryChoiceField" class="field full-width delivery-choice-field">
             <span>&iquest;C&oacute;mo quer&eacute;s recibir tu pedido?</span>
-            <select id="deliveryType" required></select>
-          </label>
+            <div id="fulfillmentButtons" class="fulfillment-buttons" role="group" aria-label="Tipo de pedido">
+              <button id="deliveryModeButton" class="fulfillment-button" type="button" data-fulfillment="delivery">
+                <span class="fulfillment-icon" aria-hidden="true">&#128757;</span>
+                <span>DELIVERY</span>
+              </button>
+              <button id="pickupModeButton" class="fulfillment-button" type="button" data-fulfillment="pickup">
+                <span class="fulfillment-icon" aria-hidden="true">&#127978;</span>
+                <span>RETIRO EN EL LOCAL</span>
+              </button>
+            </div>
+            <select id="deliveryType" class="fulfillment-native-select" required aria-hidden="true" tabindex="-1"></select>
+          </div>
 
           <div id="fulfillmentModeNotice" class="fulfillment-mode-notice full-width" hidden></div>
 
