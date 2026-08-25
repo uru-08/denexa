@@ -8731,3 +8731,40 @@ html[data-store-theme="carro-kechu-carmelo"] .category-tab{
   scroll-snap-align:none !important;
   scroll-snap-stop:normal !important;
 }
+
+
+/* ==========================================================
+   DENEXA v121 - PARPADEO + TEXTO BOTONES CHECKOUT
+   ========================================================== */
+
+/* Transición limpia: no mostrar contenido de portada sin branding listo */
+html.branding-loading #welcomeScreen .welcome-content{
+  opacity:0 !important;
+  visibility:hidden !important;
+}
+html:not(.branding-loading) #welcomeScreen .welcome-content{
+  opacity:1 !important;
+  visibility:visible !important;
+  transition:opacity .16s ease !important;
+}
+
+/* DELIVERY / RETIRO: colores correctos incluso dentro de .field */
+html[data-store-theme="carro-kechu-carmelo"] .delivery-choice-field .fulfillment-button > span{
+  color:#F5F5F5 !important;
+  -webkit-text-fill-color:#F5F5F5 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .delivery-choice-field .fulfillment-button.active,
+html[data-store-theme="carro-kechu-carmelo"] .delivery-choice-field .fulfillment-button.active > span{
+  color:#050505 !important;
+  -webkit-text-fill-color:#050505 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .delivery-choice-field .fulfillment-button.active .fulfillment-icon{
+  color:#050505 !important;
+  -webkit-text-fill-color:initial !important;
+}
+
+/* El tema Kechu se aplica desde el primer frame, antes de consultar Supabase */
+html[data-store-theme="carro-kechu-carmelo"],
+html[data-store-theme="carro-kechu-carmelo"] body{
+  background:#050505 !important;
+}
