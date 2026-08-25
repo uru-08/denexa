@@ -514,6 +514,7 @@ async function loadStore() {
         .toLowerCase();
 
     applyBusinessBranding();
+    document.documentElement.classList.remove("branding-loading");
     ensureDenexaPoweredFooter();
     applyDailyPromo();
     applyOrderingStatus();
@@ -583,6 +584,7 @@ async function loadStore() {
     restoreCart();
 
   } catch (error) {
+    document.documentElement.classList.remove("branding-loading");
     console.error("Error cargando tienda:", error);
 
     catalogContent.innerHTML = `
