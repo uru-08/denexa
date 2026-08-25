@@ -8482,3 +8482,11 @@ html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-meta{text-transform
   html[data-store-theme="carro-kechu-carmelo"] .fulfillment-button{font-size:.69rem !important;min-height:72px !important}
   html[data-store-theme="carro-kechu-carmelo"] .product-info{padding-right:48px !important}
 }
+
+
+/* v118 - botones Delivery / Retiro: respetar estados ocultos */
+html[data-store-theme="carro-kechu-carmelo"] .fulfillment-button[hidden],
+html[data-store-theme="carro-kechu-carmelo"] .pickup-info-card[hidden],
+html[data-store-theme="carro-kechu-carmelo"] .fulfillment-mode-notice[hidden]{
+  display:none !important;
+}
