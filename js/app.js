@@ -60,6 +60,8 @@ const customerName = document.getElementById("customerName");
 const customerPhone = document.getElementById("customerPhone");
 const deliveryType = document.getElementById("deliveryType");
 const deliveryChoiceField = document.getElementById("deliveryChoiceField");
+const deliveryModeButton = document.getElementById("deliveryModeButton");
+const pickupModeButton = document.getElementById("pickupModeButton");
 const fulfillmentModeNotice = document.getElementById("fulfillmentModeNotice");
 const pickupInfoCard = document.getElementById("pickupInfoCard");
 const pickupAddressText = document.getElementById("pickupAddressText");
@@ -467,7 +469,7 @@ function ensureDenexaPoweredFooter() {
         </div>
       </div>
       <div class="denexa-powered-meta">
-        <span>SIMPLE</span><i>|</i><span>RAPIDO</span><i>|</i><span>SEGURO</span>
+        <span>SIMPLE</span><i>|</i><span>RÁPIDO</span><i>|</i><span>SEGURO</span>
       </div>
       <div class="denexa-powered-country">HECHO EN URUGUAY</div>
     </div>
@@ -3242,12 +3244,28 @@ function configureFulfillmentOptions() {
   syncDeliveryFields();
 }
 
+function syncFulfillmentButtons() {
+  const settings = fulfillmentSettings();
+  if (deliveryModeButton) {
+    deliveryModeButton.hidden = !settings.deliveryEnabled;
+    deliveryModeButton.classList.toggle("active", deliveryType.value === "delivery");
+    deliveryModeButton.setAttribute("aria-pressed", deliveryType.value === "delivery" ? "true" : "false");
+  }
+  if (pickupModeButton) {
+    pickupModeButton.hidden = !settings.pickupEnabled;
+    pickupModeButton.classList.toggle("active", deliveryType.value === "pickup");
+    pickupModeButton.setAttribute("aria-pressed", deliveryType.value === "pickup" ? "true" : "false");
+  }
+}
+
 function syncDeliveryFields() {
   const isDelivery =
     deliveryType.value === "delivery";
 
   const isPickup =
     deliveryType.value === "pickup";
+
+  syncFulfillmentButtons();
 
   if (pickupInfoCard) {
     pickupInfoCard.hidden =
@@ -3826,6 +3844,20 @@ checkoutForm.addEventListener(
     }
   }
 );
+
+if (deliveryModeButton) {
+  deliveryModeButton.addEventListener("click", () => {
+    deliveryType.value = "delivery";
+    syncDeliveryFields();
+  });
+}
+
+if (pickupModeButton) {
+  pickupModeButton.addEventListener("click", () => {
+    deliveryType.value = "pickup";
+    syncDeliveryFields();
+  });
+}
 
 deliveryType.addEventListener(
   "change",
