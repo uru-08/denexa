@@ -3845,17 +3845,59 @@ checkoutForm.addEventListener(
   }
 );
 
+function selectFulfillmentMode(mode) {
+  if (!deliveryType) return;
+
+  const settings = fulfillmentSettings();
+  const allowed =
+    mode === "delivery"
+      ? settings.deliveryEnabled
+      : mode === "pickup"
+        ? settings.pickupEnabled
+        : false;
+
+  if (!allowed) return;
+
+  const hasOption = [...deliveryType.options].some(
+    (option) => option.value === mode
+  );
+
+  if (!hasOption) {
+    configureFulfillmentOptions();
+  }
+
+  deliveryType.value = mode;
+
+  // Sincroniza inmediatamente la interfaz y también dispara el
+  // change nativo para conservar cualquier lógica existente.
+  syncDeliveryFields();
+  deliveryType.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
 if (deliveryModeButton) {
-  deliveryModeButton.addEventListener("click", () => {
-    deliveryType.value = "delivery";
-    syncDeliveryFields();
+  deliveryModeButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    selectFulfillmentMode("delivery");
   });
 }
 
 if (pickupModeButton) {
-  pickupModeButton.addEventListener("click", () => {
-    deliveryType.value = "pickup";
-    syncDeliveryFields();
+  pickupModeButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    selectFulfillmentMode("pickup");
+  });
+}
+
+// Respaldo por delegación: mejora la respuesta táctil en Chrome móvil
+// incluso si el contenido del checkout se re-renderiza.
+if (fulfillmentButtons) {
+  fulfillmentButtons.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-fulfillment]");
+    if (!button) return;
+    event.preventDefault();
+    selectFulfillmentMode(button.dataset.fulfillment);
   });
 }
 
