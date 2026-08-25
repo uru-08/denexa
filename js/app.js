@@ -1,6 +1,18 @@
-const TARGET_BUSINESS_SLUG = "carro-kechu-carmelo";
-const TARGET_BUSINESS_NAME = "carro kechu carmelo";
-const LOCAL_LOGO_URL = "assets/logo-kechu.png";
+const BUSINESS_PARAMS = new URLSearchParams(window.location.search);
+
+const TARGET_BUSINESS_SLUG = (
+  BUSINESS_PARAMS.get("business") ||
+  BUSINESS_PARAMS.get("comercio") ||
+  "mamma-mia"
+).trim().toLowerCase();
+
+const TARGET_BUSINESS_NAME =
+  TARGET_BUSINESS_SLUG.replace(/-/g, " ");
+
+const LOCAL_LOGO_URL =
+  TARGET_BUSINESS_SLUG === "mamma-mia"
+    ? "assets/mamma-mia-logo.png"
+    : "";
 
 const welcomeScreen = document.getElementById("welcomeScreen");
 const enterStoreButton = document.getElementById("enterStoreButton");
@@ -47,6 +59,12 @@ const closeCheckoutButton = document.getElementById("closeCheckoutButton");
 const customerName = document.getElementById("customerName");
 const customerPhone = document.getElementById("customerPhone");
 const deliveryType = document.getElementById("deliveryType");
+const deliveryChoiceField = document.getElementById("deliveryChoiceField");
+const deliveryModeButton = document.getElementById("deliveryModeButton");
+const pickupModeButton = document.getElementById("pickupModeButton");
+const fulfillmentModeNotice = document.getElementById("fulfillmentModeNotice");
+const pickupInfoCard = document.getElementById("pickupInfoCard");
+const pickupAddressText = document.getElementById("pickupAddressText");
 const customerAddress = document.getElementById("customerAddress");
 const customerReference = document.getElementById("customerReference");
 const addressField = document.getElementById("addressField");
@@ -55,6 +73,13 @@ const deliveryExtraFields = document.getElementById("deliveryExtraFields");
 const paymentMethod = document.getElementById("paymentMethod");
 const cashAmount = document.getElementById("cashAmount");
 const cashAmountField = document.getElementById("cashAmountField");
+const transferInfoCard = document.getElementById("transferInfoCard");
+const transferBankName = document.getElementById("transferBankName");
+const transferAccountHolder = document.getElementById("transferAccountHolder");
+const transferAccountNumber = document.getElementById("transferAccountNumber");
+const transferCurrency = document.getElementById("transferCurrency");
+const transferInstructions = document.getElementById("transferInstructions");
+
 const customerNotes = document.getElementById("customerNotes");
 const checkoutItemsCount = document.getElementById("checkoutItemsCount");
 const checkoutTotal = document.getElementById("checkoutTotal");
@@ -212,6 +237,23 @@ function applyOrderingStatus() {
         : status === "closed"
           ? "Pedidos cerrados"
           : "Tomando pedidos";
+
+    const welcomeStatus =
+      welcomeStatusText.closest(
+        ".welcome-status"
+      );
+
+    if (welcomeStatus) {
+      welcomeStatus.classList.toggle(
+        "closed",
+        status === "closed"
+      );
+
+      welcomeStatus.classList.toggle(
+        "sold-out",
+        status === "sold_out"
+      );
+    }
   }
 
   if (orderingStatusNotice) {
@@ -282,7 +324,7 @@ async function refreshOrderingStatusFromSupabase() {
   try {
     const rows =
       await requestJSON(
-        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,promo_active,promo_badge,promo_title,promo_text,active`
+        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,active`
       );
 
     const fresh =
@@ -329,6 +371,26 @@ async function refreshOrderingStatusFromSupabase() {
     business.promo_reward_product_id = fresh.promo_reward_product_id ?? business.promo_reward_product_id;
     business.promo_reward_qty = fresh.promo_reward_qty ?? business.promo_reward_qty;
     business.promo_repeat = fresh.promo_repeat ?? business.promo_repeat;
+    business.payment_bank_name =
+      fresh.payment_bank_name ??
+      business.payment_bank_name;
+
+    business.payment_account_holder =
+      fresh.payment_account_holder ??
+      business.payment_account_holder;
+
+    business.payment_account_number =
+      fresh.payment_account_number ??
+      business.payment_account_number;
+
+    business.payment_currency =
+      fresh.payment_currency ??
+      business.payment_currency;
+
+    business.payment_instructions =
+      fresh.payment_instructions ??
+      business.payment_instructions;
+
 
     applyDailyPromo();
 
@@ -387,35 +449,75 @@ async function requireOrderingOpen() {
   return true;
 }
 
+
+function ensureDenexaPoweredFooter() {
+  if (document.getElementById("denexaPoweredFooter")) {
+    return;
+  }
+
+  const footer = document.createElement("footer");
+  footer.id = "denexaPoweredFooter";
+  footer.className = "denexa-powered-footer";
+  footer.innerHTML = `
+    <div class="denexa-powered-inner">
+      <span class="denexa-powered-label">POWERED BY</span>
+      <div class="denexa-powered-row">
+        <img class="denexa-powered-logo" src="assets/denexa-logo.png" alt="DENEXA Pedidos Online">
+        <div class="denexa-powered-copy">
+          <strong>DENEXA</strong>
+          <span>Plataforma de pedidos para comercios <span class="denexa-country-flag" aria-label="Uruguay">&#127482;&#127486;</span></span>
+        </div>
+      </div>
+      <div class="denexa-powered-meta">
+        <span>SIMPLE</span><i>|</i><span>RÁPIDO</span><i>|</i><span>SEGURO</span>
+      </div>
+      <div class="denexa-powered-country" aria-label="Uruguay">&#127482;&#127486;</div>
+    </div>
+  `;
+
+  const shell =
+    document.getElementById("appShell") ||
+    document.body;
+
+  shell.appendChild(footer);
+}
+
+
 async function loadStore() {
   catalogContent.innerHTML =
     '<div class="loading-card">Cargando el men\u00fa...</div>';
 
   try {
     const businesses = await requestJSON(
-      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,active,ordering_status,sold_out_message"
+      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,delivery_enabled,pickup_enabled,pickup_address,active,ordering_status,sold_out_message"
     );
 
     business =
       businesses.find(
         (item) =>
-          normalizeText(item.slug) === TARGET_BUSINESS_SLUG
+          normalizeText(item.slug) === normalizeText(TARGET_BUSINESS_SLUG)
       ) ||
       businesses.find(
         (item) =>
-          normalizeText(item.name) === TARGET_BUSINESS_NAME
-      ) ||
-      businesses.find(
-        (item) => item.active !== false
+          normalizeText(item.name) === normalizeText(TARGET_BUSINESS_NAME)
       );
 
     if (!business) {
-      throw new Error("No se encontr\u00f3 Mamma Mia.");
+      throw new Error(
+        `No se encontr\u00f3 el comercio "${TARGET_BUSINESS_SLUG}".`
+      );
     }
 
+    document.documentElement.dataset.storeTheme =
+      String(business?.slug || "")
+        .trim()
+        .toLowerCase();
+
     applyBusinessBranding();
+    ensureDenexaPoweredFooter();
     applyDailyPromo();
     applyOrderingStatus();
+    configureFulfillmentOptions();
 
     const [
       allCategories,
@@ -558,6 +660,69 @@ function safeBrandColor(
 }
 
 
+
+function promoDestinationCategoryId() {
+  const explicitPromoCategory =
+    categories.find((category) => {
+      const name = normalizeText(category?.name || "");
+      return (
+        name === "promo" ||
+        name === "promos" ||
+        name.includes("promo del dia") ||
+        name.includes("promocion")
+      );
+    });
+
+  if (explicitPromoCategory) {
+    return String(explicitPromoCategory.id);
+  }
+
+  const targetId = String(business?.promo_target_id || "");
+
+  if (business?.promo_target_type === "category" && targetId) {
+    const category = categories.find(
+      (item) => String(item.id) === targetId
+    );
+    if (category) return String(category.id);
+  }
+
+  if (business?.promo_target_type === "product" && targetId) {
+    const product = products.find(
+      (item) => String(item.id) === targetId
+    );
+    if (product?.category_id != null) {
+      return String(product.category_id);
+    }
+  }
+
+  return categories[0]?.id != null
+    ? String(categories[0].id)
+    : "";
+}
+
+function goToPromoProducts() {
+  const categoryId = promoDestinationCategoryId();
+  if (!categoryId) return;
+
+  const target = document.getElementById(`category-${categoryId}`);
+  if (!target) return;
+
+  categoryTabs
+    ?.querySelectorAll(".category-tab")
+    .forEach((tab) => {
+      tab.classList.toggle(
+        "active",
+        String(tab.dataset.categoryId) === categoryId
+      );
+    });
+
+  target.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+
 function applyDailyPromo() {
   if (!dailyPromoBanner) {
     return;
@@ -601,19 +766,6 @@ function applyDailyPromo() {
     text;
 
   dailyPromoBanner.hidden = false;
-  dailyPromoBanner.setAttribute("role","button");
-  dailyPromoBanner.setAttribute("tabindex","0");
-  dailyPromoBanner.setAttribute("aria-label","Ver promociones");
-
-  const goToPromo = () => {
-    const promoCategory = categories.find(c => normalizeText(c.name).includes("promo"));
-    const targetId = promoCategory?.id || (business?.promo_target_type === "category" ? business?.promo_target_id : null);
-    const target = targetId ? document.getElementById(`category-${targetId}`) : null;
-    welcomeScreen?.classList.add("hidden");
-    setTimeout(() => target?.scrollIntoView({behavior:"smooth",block:"start"}), 80);
-  };
-  dailyPromoBanner.onclick = goToPromo;
-  dailyPromoBanner.onkeydown = (event) => { if(event.key === "Enter" || event.key === " "){ event.preventDefault(); goToPromo(); } };
 
   requestAnimationFrame(
     () => {
@@ -626,7 +778,7 @@ function applyDailyPromo() {
 
 function applyBusinessBranding() {
   const name =
-    business.name || "Mamma Mia";
+    business.name || "Comercio";
 
   const primary =
     safeBrandColor(
@@ -652,8 +804,16 @@ function applyBusinessBranding() {
   const deep =
     hexToDark(primary,.42);
 
-  document.documentElement.dataset.storeTheme = normalizeText(business.slug || name).replace(/\s+/g,"-");
-  storeName.textContent = name;
+  if (String(business?.slug || "").toLowerCase() === "carro-kechu-carmelo") {
+    storeName.innerHTML = `
+      <span class="kechu-brand-carro">CARRO</span>
+      <span class="kechu-brand-kechu">KECHU</span>
+      <span class="kechu-brand-carmelo">CARMELO</span>
+    `;
+  } else {
+    storeName.textContent = name;
+  }
+
   storeNameSmall.textContent = name;
   document.title =
     `${name} | Pedidos`;
@@ -694,30 +854,62 @@ function applyBusinessBranding() {
     business.logo_url ||
     LOCAL_LOGO_URL;
 
-  storeLogo.innerHTML = `
-    <img
-      src="${escapeHTML(logoUrl)}"
-      alt="${escapeHTML(name)}"
-    >
-  `;
+  if (logoUrl) {
+    storeLogo.innerHTML = `
+      <img
+        src="${escapeHTML(logoUrl)}"
+        alt="${escapeHTML(name)}"
+      >
+    `;
 
-  if (welcomeLogo) {
-    welcomeLogo.src =
-      logoUrl;
-    welcomeLogo.alt =
-      name;
+    if (welcomeLogo) {
+      welcomeLogo.hidden = false;
+      welcomeLogo.src = logoUrl;
+      welcomeLogo.alt = name;
+    }
+  } else {
+    storeLogo.textContent =
+      name.slice(0, 2).toUpperCase();
+
+    if (welcomeLogo) {
+      welcomeLogo.hidden = true;
+      welcomeLogo.removeAttribute("src");
+      welcomeLogo.alt = "";
+    }
+  }
+
+  document.title = `${name} | Pedidos`;
+
+  const welcomeSection = document.getElementById("welcomeScreen");
+  if (welcomeSection) {
+    welcomeSection.setAttribute(
+      "aria-label",
+      `Bienvenida a ${name}`
+    );
+  }
+
+  const successCopy = document.querySelector(".success-copy");
+  if (successCopy) {
+    successCopy.textContent =
+      `${name} recibió tu pedido correctamente. Ya podés volver al menú.`;
   }
 
   if (welcomeBusinessName) {
-    welcomeBusinessName.textContent =
-      business.hero_title ||
-      name;
+    if (String(business?.slug || "").toLowerCase() === "carro-kechu-carmelo") {
+      welcomeBusinessName.innerHTML = `
+        <span class="welcome-kechu-carro">CARRO</span>
+        <span class="welcome-kechu-main">KECHU</span>
+        <span class="welcome-kechu-carmelo">CARMELO</span>
+      `;
+    } else {
+      welcomeBusinessName.textContent = business.hero_title || name;
+    }
   }
 
   if (welcomeBusinessDescription) {
     welcomeBusinessDescription.textContent =
       business.hero_description ||
-      "Pizzas y empanadas preparadas para disfrutar. Elegí lo que más te guste y armá tu pedido.";
+      "Elegí lo que más te guste y armá tu pedido.";
   }
 
   if (welcomeButtonText) {
@@ -803,6 +995,12 @@ function productById(id){
 function cartGiftItems(){
   if(activePromoRuleType()!=="gift") return [];
 
+  /*
+    Si el regalo es el mismo producto/categoría de la promo,
+    se descuenta dentro de la cantidad comprada (v74).
+    Si es un producto diferente —por ejemplo 6 empanadas
+    => 1 Coca Cola 500 ml— se agrega aparte como GRATIS.
+  */
   if (promoUsesIncludedFreeUnits()) {
     return [];
   }
@@ -1143,6 +1341,197 @@ function currentProductNewFreeUnits(
 }
 
 
+function normalizedCategoryName(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+function categoryVisualMarkup(categoryName) {
+  const name =
+    normalizedCategoryName(
+      categoryName
+    );
+
+  let type = "generic";
+
+  if (name.includes("pizza")) {
+    type = "pizza";
+  } else if (name.includes("empan")) {
+    type = "empanada";
+  } else if (
+    name.includes("bebida") ||
+    name.includes("refresco") ||
+    name.includes("drink")
+  ) {
+    type = "drink";
+  } else if (
+    name.includes("postre") ||
+    name.includes("dulce")
+  ) {
+    type = "dessert";
+  } else if (
+    name.includes("hamburg") ||
+    name.includes("burger")
+  ) {
+    type = "burger";
+  } else if (
+    name.includes("papa") ||
+    name.includes("frita")
+  ) {
+    type = "fries";
+  } else if (
+    name.includes("parrilla") ||
+    name.includes("carne")
+  ) {
+    type = "grill";
+  }
+
+  const art = {
+    pizza: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="pizzaCrust" x1="0" x2="1">
+            <stop stop-color="#F8C45E"/>
+            <stop offset="1" stop-color="#D98A24"/>
+          </linearGradient>
+          <linearGradient id="pizzaCheese" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#FFE37A"/>
+            <stop offset="1" stop-color="#F4B633"/>
+          </linearGradient>
+        </defs>
+        <path d="M12 48 28 12c1-3 5-4 8-2l17 12c3 2 3 7 0 9L12 48Z"
+          fill="url(#pizzaCheese)" stroke="#C66A18" stroke-width="2"/>
+        <path d="M27 12c4-5 11-6 17-2l10 7c5 3 6 9 3 14"
+          fill="none" stroke="url(#pizzaCrust)" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="32" cy="27" r="4" fill="#D94A33"/>
+        <circle cx="42" cy="31" r="4" fill="#D94A33"/>
+        <circle cx="27" cy="38" r="3.7" fill="#D94A33"/>
+        <path d="m37 20 3 3M22 31l3 2M37 39l3-2"
+          stroke="#3C9B4A" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    `,
+    empanada: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="empFill" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#FFD66B"/>
+            <stop offset=".55" stop-color="#EAA23A"/>
+            <stop offset="1" stop-color="#C8731E"/>
+          </linearGradient>
+        </defs>
+        <path d="M11 39c11-20 29-27 43-16-1 19-16 31-35 27-7-2-11-6-8-11Z"
+          fill="url(#empFill)" stroke="#B76418" stroke-width="2.2"/>
+        <path d="M15 40c7 4 21 5 35-11"
+          fill="none" stroke="#FFE5A0" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M17 43c2 2 3 3 5 4m2-7c2 2 3 3 5 4m2-7c2 2 3 2 5 3m2-7c2 1 3 2 5 2"
+          stroke="#9E5517" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    `,
+    drink: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="cola" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="#6E351F"/>
+            <stop offset=".55" stop-color="#3D1B12"/>
+            <stop offset="1" stop-color="#170C0A"/>
+          </linearGradient>
+        </defs>
+        <path d="M18 12h30l-4 40H22L18 12Z"
+          fill="#F7F9FC" stroke="#B9C3D2" stroke-width="2"/>
+        <path d="M21 24h24l-3 25H24L21 24Z" fill="url(#cola)"/>
+        <path d="M38 8c6 5 8 11 8 19" fill="none"
+          stroke="#E33E34" stroke-width="3" stroke-linecap="round"/>
+        <rect x="25" y="18" width="8" height="7" rx="2" fill="#D9EEF5" opacity=".9"/>
+        <rect x="35" y="20" width="7" height="6" rx="2" fill="#D9EEF5" opacity=".9"/>
+        <path d="M22 29h22" stroke="#F4C565" stroke-width="1.5" opacity=".7"/>
+      </svg>
+    `,
+    dessert: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="cake" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="#FFF1C6"/>
+            <stop offset="1" stop-color="#F0C981"/>
+          </linearGradient>
+        </defs>
+        <path d="M12 49 25 18h24l5 31H12Z"
+          fill="url(#cake)" stroke="#C9944E" stroke-width="2"/>
+        <path d="M25 18c6-8 15-8 24 0"
+          fill="#FFF" stroke="#E7D7C5" stroke-width="2"/>
+        <path d="M20 29h31" stroke="#C98649" stroke-width="4"/>
+        <path d="M25 19c6-5 11-5 16-1 3-4 7-4 11-1"
+          fill="none" stroke="#D82842" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="34" cy="14" r="4" fill="#D82842"/>
+        <circle cx="45" cy="15" r="4" fill="#C91E37"/>
+      </svg>
+    `,
+    burger: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M12 28c1-11 9-17 20-17s19 6 20 17H12Z"
+          fill="#E7A944" stroke="#B86C22" stroke-width="2"/>
+        <path d="M14 32h36" stroke="#4D9F48" stroke-width="5" stroke-linecap="round"/>
+        <path d="M16 39h32" stroke="#8E4026" stroke-width="8" stroke-linecap="round"/>
+        <path d="M18 35h28" stroke="#F6C84B" stroke-width="4" stroke-linecap="round"/>
+        <path d="M14 47c3 6 32 6 36 0H14Z" fill="#D89235" stroke="#A9611D" stroke-width="2"/>
+        <circle cx="25" cy="20" r="1.3" fill="#FFF0B5"/>
+        <circle cx="34" cy="18" r="1.3" fill="#FFF0B5"/>
+        <circle cx="41" cy="22" r="1.3" fill="#FFF0B5"/>
+      </svg>
+    `,
+    fries: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M18 14v24M27 10v28M36 12v25M45 8v30"
+          stroke="#F3C648" stroke-width="6" stroke-linecap="round"/>
+        <path d="M15 29h34l-4 25H20l-5-25Z"
+          fill="#D73A32" stroke="#A8211D" stroke-width="2"/>
+        <path d="M20 33h24" stroke="#F4C565" stroke-width="3"/>
+      </svg>
+    `,
+    grill: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M18 18c7-7 22-8 30 1 7 8 2 24-11 29-12 4-26-2-27-13-1-7 3-13 8-17Z"
+          fill="#A64B2B" stroke="#74301E" stroke-width="2"/>
+        <path d="M20 24 42 42M17 31l17 14M28 18l20 17M36 17l13 10"
+          stroke="#572616" stroke-width="3" stroke-linecap="round"/>
+        <path d="M17 23c7-6 21-7 30 0" stroke="#D97A49" stroke-width="2" opacity=".7"/>
+      </svg>
+    `,
+    generic: `
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="22" fill="#EEF4FF" stroke="#B9CCE8" stroke-width="2"/>
+        <path d="M22 39c3-10 7-15 10-15s7 5 10 15"
+          fill="none" stroke="#0B43A0" stroke-width="3" stroke-linecap="round"/>
+        <path d="M21 42h22" stroke="#D8A52A" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    `
+  };
+
+  return `
+    <span class="category-tab-visual category-tab-visual-${type}">
+      ${art[type]}
+    </span>
+  `;
+}
+
+function kechuCategoryKey(name) {
+  const value = String(name || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+
+  if (value.includes("hamburg")) return "hamburguesas";
+  if (value.includes("milan")) return "milanesas";
+  if (value.includes("chivit")) return "chivitos";
+  if (value.includes("papa")) return "papas-fritas";
+  if (value.includes("postre") || value.includes("dulce")) return "postres";
+  if (value.includes("bebida") || value.includes("refresco")) return "bebidas";
+  return "generic";
+}
+
 function renderCatalog() {
   const visibleCategories = categories.filter(
     (category) =>
@@ -1163,10 +1552,14 @@ function renderCatalog() {
   categoryTabs.innerHTML = visibleCategories.map((category, index) => `
     <button
       type="button"
-      class="category-tab ${index === 0 ? "active" : ""}"
+      class="category-tab category-${kechuCategoryKey(category.name)} ${index === 0 ? "active" : ""}"
+      data-category-key="${kechuCategoryKey(category.name)}"
       data-category-id="${escapeHTML(category.id)}"
     >
-      ${escapeHTML(category.name)}
+      ${categoryVisualMarkup(category.name)}
+      <span class="category-tab-label">
+        ${escapeHTML(category.name)}
+      </span>
     </button>
   `).join("");
 
@@ -1217,6 +1610,26 @@ function renderCatalog() {
       </section>
     `;
   }).join("");
+
+  if ("IntersectionObserver" in window) {
+    window.__denexaCategoryObserver?.disconnect?.();
+    window.__denexaCategoryObserver = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting)
+          .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        const id = visible.target.id.replace("category-","");
+        categoryTabs.querySelectorAll(".category-tab").forEach((tab) => {
+          const active = String(tab.dataset.categoryId) === String(id);
+          tab.classList.toggle("active", active);
+        });
+      },
+      {rootMargin:"-22% 0px -58% 0px",threshold:[0,.1,.25,.5]}
+    );
+    catalogContent.querySelectorAll(".category-section").forEach(
+      (section) => window.__denexaCategoryObserver.observe(section)
+    );
+  }
 
   catalogContent
     .querySelectorAll(".product-card")
@@ -1344,7 +1757,7 @@ function renderProductCard(product) {
       </div>
 
       <div class="product-info">
-        <h4>${escapeHTML(product.name)}</h4>
+        <h4 class="${String(product.name || "").length > 12 ? "product-name-long" : ""}">${escapeHTML(product.name)}</h4>
 
         ${
           product.description
@@ -2702,21 +3115,24 @@ function updateCartBar() {
     );
 
   cartCount.textContent =
-    quantity === 1
-      ? "1 producto"
-      : `${quantity} productos`;
+    String(quantity);
 
   cartTotal.textContent =
     money(cartGrandTotal());
 
   cartModalTotal.textContent =
     money(cartGrandTotal());
+
+  if (cartButton) {
+    cartButton.classList.toggle("has-items", quantity > 0);
+    cartButton.setAttribute("aria-hidden", quantity > 0 ? "false" : "true");
+  }
 }
 
 function saveCart() {
   try {
     localStorage.setItem(
-      "proyecto-x-cart-mamma-mia",
+      `denexa-v104-cart-${business?.slug || TARGET_BUSINESS_SLUG}`,
       JSON.stringify(cart)
     );
   } catch (error) {
@@ -2728,7 +3144,7 @@ function restoreCart() {
   try {
     const stored =
       localStorage.getItem(
-        "proyecto-x-cart-mamma-mia"
+        `denexa-v104-cart-${business?.slug || TARGET_BUSINESS_SLUG}`
       );
 
     cart =
@@ -2778,9 +3194,157 @@ function closeCheckoutModal() {
   document.body.classList.remove("modal-open");
 }
 
+function fulfillmentSettings() {
+  const deliveryEnabled =
+    business?.delivery_enabled !== false;
+
+  const pickupEnabled =
+    business?.pickup_enabled !== false;
+
+  const pickupAddress =
+    String(
+      business?.pickup_address ||
+      business?.address ||
+      ""
+    ).trim();
+
+  return {
+    deliveryEnabled,
+    pickupEnabled,
+    pickupAddress
+  };
+}
+
+function setDefaultFulfillmentType() {
+  const settings =
+    fulfillmentSettings();
+
+  if (settings.deliveryEnabled) {
+    deliveryType.value = "delivery";
+  } else if (settings.pickupEnabled) {
+    deliveryType.value = "pickup";
+  }
+}
+
+function configureFulfillmentOptions() {
+  if (!deliveryType) {
+    return;
+  }
+
+  const settings =
+    fulfillmentSettings();
+
+  const options = [];
+
+  if (settings.deliveryEnabled) {
+    options.push(
+      '<option value="delivery">Delivery - env&iacute;o a domicilio</option>'
+    );
+  }
+
+  if (settings.pickupEnabled) {
+    options.push(
+      '<option value="pickup">Retiro en el local</option>'
+    );
+  }
+
+  /*
+    La RPC no permite guardar ambos métodos desactivados,
+    pero este fallback evita dejar el checkout inutilizable si
+    todavía hay datos antiguos en caché.
+  */
+  if (!options.length) {
+    options.push(
+      '<option value="delivery">Delivery - env&iacute;o a domicilio</option>'
+    );
+  }
+
+  const previous =
+    deliveryType.value;
+
+  deliveryType.innerHTML =
+    options.join("");
+
+  if (
+    previous &&
+    [...deliveryType.options].some(
+      (option) =>
+        option.value === previous
+    )
+  ) {
+    deliveryType.value = previous;
+  } else {
+    setDefaultFulfillmentType();
+  }
+
+  if (deliveryChoiceField) {
+    deliveryChoiceField.hidden =
+      options.length === 1;
+  }
+
+  if (fulfillmentModeNotice) {
+    if (
+      settings.deliveryEnabled &&
+      !settings.pickupEnabled
+    ) {
+      fulfillmentModeNotice.textContent =
+        "Este comercio realiza únicamente entregas por delivery.";
+      fulfillmentModeNotice.hidden = false;
+    } else if (
+      !settings.deliveryEnabled &&
+      settings.pickupEnabled
+    ) {
+      fulfillmentModeNotice.textContent =
+        "Este comercio trabaja únicamente con retiro en el local.";
+      fulfillmentModeNotice.hidden = false;
+    } else {
+      fulfillmentModeNotice.hidden = true;
+      fulfillmentModeNotice.textContent = "";
+    }
+  }
+
+  syncDeliveryFields();
+}
+
+function syncFulfillmentButtons() {
+  const settings = fulfillmentSettings();
+  if (deliveryModeButton) {
+    deliveryModeButton.hidden = !settings.deliveryEnabled;
+    deliveryModeButton.classList.toggle("active", deliveryType.value === "delivery");
+    deliveryModeButton.setAttribute("aria-pressed", deliveryType.value === "delivery" ? "true" : "false");
+  }
+  if (pickupModeButton) {
+    pickupModeButton.hidden = !settings.pickupEnabled;
+    pickupModeButton.classList.toggle("active", deliveryType.value === "pickup");
+    pickupModeButton.setAttribute("aria-pressed", deliveryType.value === "pickup" ? "true" : "false");
+  }
+}
+
 function syncDeliveryFields() {
   const isDelivery =
     deliveryType.value === "delivery";
+
+  const isPickup =
+    deliveryType.value === "pickup";
+
+  syncFulfillmentButtons();
+
+  if (pickupInfoCard) {
+    pickupInfoCard.hidden =
+      !isPickup;
+  }
+
+  if (
+    isPickup &&
+    pickupAddressText
+  ) {
+    const settings =
+      fulfillmentSettings();
+
+    pickupAddressText.textContent =
+      settings.pickupAddress ||
+      "Consultá al comercio por la dirección de retiro.";
+  }
 
   deliveryExtraFields.style.display =
     isDelivery ? "grid" : "none";
@@ -2798,6 +3362,46 @@ function syncDeliveryFields() {
   syncPaymentFields();
 }
 
+function paymentDisplayDefaults() {
+  return {
+    bank:"Banco / Institución",
+    holder:"Nombre del titular",
+    account:"0000000000",
+    currency:"Pesos uruguayos",
+    instructions:
+      "Realizá la transferencia por el total del pedido. Conservá el comprobante."
+  };
+}
+
+function renderTransferInfo() {
+  const defaults =
+    paymentDisplayDefaults();
+
+  if (!transferInfoCard) {
+    return;
+  }
+
+  transferBankName.textContent =
+    business?.payment_bank_name ||
+    defaults.bank;
+
+  transferAccountHolder.textContent =
+    business?.payment_account_holder ||
+    defaults.holder;
+
+  transferAccountNumber.textContent =
+    business?.payment_account_number ||
+    defaults.account;
+
+  transferCurrency.textContent =
+    business?.payment_currency ||
+    defaults.currency;
+
+  transferInstructions.textContent =
+    business?.payment_instructions ||
+    defaults.instructions;
+}
+
 function syncPaymentFields() {
   const isDelivery =
     deliveryType.value === "delivery";
@@ -2805,13 +3409,25 @@ function syncPaymentFields() {
   const isCash =
     paymentMethod.value === "cash";
 
+  const isTransfer =
+    paymentMethod.value === "transfer";
+
   cashAmountField.style.display =
     isDelivery && isCash
       ? "grid"
       : "none";
 
+  if (transferInfoCard) {
+    transferInfoCard.hidden =
+      !(isDelivery && isTransfer);
+  }
+
   if (!isDelivery || !isCash) {
     cashAmount.value = "";
+  }
+
+  if (isDelivery && isTransfer) {
+    renderTransferInfo();
   }
 }
 
@@ -3112,6 +3728,15 @@ function whatsappOrderMessage() {
 
   if (deliveryType.value === "pickup") {
     lines.push("\ud83c\udfea *RETIRO EN EL LOCAL*");
+
+    const pickupAddress =
+      fulfillmentSettings().pickupAddress;
+
+    if (pickupAddress) {
+      lines.push(
+        `Dirección: ${pickupAddress}`
+      );
+    }
   } else {
     lines.push("\ud83d\udef5 *DELIVERY*");
     lines.push(
@@ -3137,13 +3762,13 @@ function whatsappOrderMessage() {
         );
       }
     } else {
-      lines.push("Transferencia");
+      lines.push("Transferencia / Débito");
     }
   }
 
   lines.push("");
   lines.push("--------------------");
-  lines.push("*Pedido realizado desde Mamma Mia*");
+  lines.push(`*Pedido realizado desde ${business?.name || "DENEXA"}*`);
 
   return lines.join("\n");
 }
@@ -3179,6 +3804,31 @@ checkoutForm.addEventListener(
       showCheckoutError(
         "Escrib\u00ed tu tel\u00e9fono."
       );
+      return;
+    }
+
+    const fulfillment =
+      fulfillmentSettings();
+
+    if (
+      deliveryType.value === "delivery" &&
+      !fulfillment.deliveryEnabled
+    ) {
+      showCheckoutError(
+        "El delivery no está disponible en este momento."
+      );
+      configureFulfillmentOptions();
+      return;
+    }
+
+    if (
+      deliveryType.value === "pickup" &&
+      !fulfillment.pickupEnabled
+    ) {
+      showCheckoutError(
+        "El retiro en el local no está disponible en este momento."
+      );
+      configureFulfillmentOptions();
       return;
     }
 
@@ -3232,9 +3882,10 @@ checkoutForm.addEventListener(
       updateCartBar();
 
       checkoutForm.reset();
-      deliveryType.value = "delivery";
+      configureFulfillmentOptions();
       paymentMethod.value = "cash";
       syncDeliveryFields();
+      syncPaymentFields();
 
       window.location.href =
         whatsappUrl;
@@ -3255,6 +3906,62 @@ checkoutForm.addEventListener(
     }
   }
 );
+
+function selectFulfillmentMode(mode) {
+  if (!deliveryType) return;
+
+  const settings = fulfillmentSettings();
+  const allowed =
+    mode === "delivery"
+      ? settings.deliveryEnabled
+      : mode === "pickup"
+        ? settings.pickupEnabled
+        : false;
+
+  if (!allowed) return;
+
+  const hasOption = [...deliveryType.options].some(
+    (option) => option.value === mode
+  );
+
+  if (!hasOption) {
+    configureFulfillmentOptions();
+  }
+
+  deliveryType.value = mode;
+
+  // Sincroniza inmediatamente la interfaz y también dispara el
+  // change nativo para conservar cualquier lógica existente.
+  syncDeliveryFields();
+  deliveryType.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
+if (deliveryModeButton) {
+  deliveryModeButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    selectFulfillmentMode("delivery");
+  });
+}
+
+if (pickupModeButton) {
+  pickupModeButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    selectFulfillmentMode("pickup");
+  });
+}
+
+// Respaldo por delegación: mejora la respuesta táctil en Chrome móvil
+// incluso si el contenido del checkout se re-renderiza.
+if (fulfillmentButtons) {
+  fulfillmentButtons.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-fulfillment]");
+    if (!button) return;
+    event.preventDefault();
+    selectFulfillmentMode(button.dataset.fulfillment);
+  });
+}
 
 deliveryType.addEventListener(
   "change",
@@ -3296,6 +4003,10 @@ function enterStore() {
     return;
   }
 
+  if (appShell) {
+    appShell.style.visibility = "visible";
+  }
+
   welcomeScreen.classList.add("is-leaving");
 
   document.body.classList.remove("welcome-open");
@@ -3307,16 +4018,59 @@ function enterStore() {
 
 document.body.classList.add("welcome-open");
 
+/*
+  V92 - BOTÓN DE PORTADA
+  No esperamos una consulta de red antes de abrir el menú.
+  La portada ya tiene en memoria el estado del comercio y además
+  ese estado se refresca periódicamente.
+
+  Esto evita que un toque parezca "no hacer nada" por una demora,
+  error de red o comportamiento táctil del navegador móvil.
+*/
+let enteringStore = false;
+
+async function handleEnterStore(event) {
+  event?.preventDefault?.();
+  event?.stopPropagation?.();
+
+  if (
+    enteringStore ||
+    !enterStoreButton ||
+    enterStoreButton.disabled
+  ) {
+    return;
+  }
+
+  if (!orderingIsOpen()) {
+    showOrderingClosedMessage();
+
+    // Actualizamos en segundo plano por si el estado cambió.
+    refreshOrderingStatusFromSupabase();
+    return;
+  }
+
+  enteringStore = true;
+  enterStoreButton.disabled = true;
+
+  // Abrimos de inmediato.
+  enterStore();
+
+  // Verificación no bloqueante del estado real.
+  refreshOrderingStatusFromSupabase()
+    .catch(() => {})
+    .finally(() => {
+      window.setTimeout(() => {
+        enteringStore = false;
+        enterStoreButton.disabled = false;
+      }, 700);
+    });
+}
+
 enterStoreButton?.addEventListener(
   "click",
-  async () => {
-    if (!(await requireOrderingOpen())) {
-      return;
-    }
-
-    enterStore();
-  }
+  handleEnterStore
 );
+
 
 closeProductButton.addEventListener(
   "click",
@@ -3337,6 +4091,14 @@ cartButton.addEventListener(
       return;
     }
 
+    /*
+      V75:
+      requireOrderingOpen() también actualiza en este momento
+      toda la configuración de la promoción desde Supabase.
+      Así el carrito siempre calcula el beneficio vigente,
+      aunque el comercio haya cambiado la promo con la web
+      del cliente ya abierta.
+    */
     openCartModal();
   }
 );
@@ -3398,6 +4160,13 @@ document.addEventListener(
     }
   }
 );
+
+
+const promoJumpButton = document.getElementById("promoJumpButton");
+promoJumpButton?.addEventListener("click", (event) => {
+  event.preventDefault();
+  goToPromoProducts();
+});
 
 loadStore();
 
