@@ -8697,3 +8697,37 @@ html[data-store-theme="carro-kechu-carmelo"] .floating-cart.kechu-cart-bar:not(.
     font-size:.52rem !important;
   }
 }
+
+
+/* ==========================================================
+   DENEXA v120 - FIX ESTABILIDAD
+   ========================================================== */
+
+/* Portada: el CTA nunca puede crecer ni convertirse en overlay */
+html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton.welcome-button{
+  position:relative !important;
+  inset:auto !important;
+  display:flex !important;
+  width:100% !important;
+  max-width:305px !important;
+  height:auto !important;
+  min-height:58px !important;
+  max-height:64px !important;
+  flex:0 0 auto !important;
+  margin:6px auto 0 !important;
+  padding:12px 18px !important;
+  border-radius:14px !important;
+  overflow:hidden !important;
+  transform:none !important;
+}
+
+/* Categorías totalmente estables durante scroll vertical */
+html[data-store-theme="carro-kechu-carmelo"] .category-tabs{
+  scroll-snap-type:none !important;
+  scroll-behavior:auto !important;
+  overflow-anchor:none !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .category-tab{
+  scroll-snap-align:none !important;
+  scroll-snap-stop:normal !important;
+}
