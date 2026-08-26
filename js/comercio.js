@@ -790,6 +790,14 @@ merchantLogoutButton?.addEventListener(
   logoutMerchant
 );
 
+const merchantMobileLogoutButton =
+  document.getElementById("merchantMobileLogoutButton");
+
+merchantMobileLogoutButton?.addEventListener(
+  "click",
+  logoutMerchant
+);
+
 async function bootstrapMerchantAuth() {
   showMerchantLogin();
 
