@@ -1783,1359 +1783,19 @@ select{
 
 
 /* =========================================================
-   PRODUCTOS V49 - CATEGORIAS + ELIMINAR + PRECIO BASE
-========================================================= */
-
-.field-help{
-  display:block;
-  margin-top:6px;
-  color:#65758b;
-  font-size:.70rem;
-  font-weight:650;
-  line-height:1.4;
-}
-
-.products-panel{
-  padding:0 !important;
-  overflow:hidden;
-}
-
-.products-main-toolbar{
-  padding:16px 18px;
-  border-bottom:1px solid #e5eaf1;
-  background:#fff;
-}
-
-.merchant-product-category-group{
-  padding:18px;
-  border-top:10px solid #f5f8fc;
-}
-
-.merchant-product-category-group:first-of-type{
-  border-top:0;
-}
-
-.merchant-category-heading{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:12px;
-  margin-bottom:12px;
-  padding-bottom:9px;
-  border-bottom:2px solid rgba(217,169,61,.72);
-}
-
-.merchant-category-kicker{
-  display:block;
-  margin-bottom:3px;
-  color:#6b7890;
-  font-size:.58rem;
-  font-weight:950;
-  letter-spacing:.12em;
-}
-
-.merchant-category-heading h3{
-  margin:0;
-  color:#0a347f;
-  font-size:1.18rem;
-  font-weight:950;
-}
-
-.merchant-category-count{
-  padding:5px 8px;
-  border-radius:999px;
-  background:#eef5ff;
-  color:#46638a;
-  font-size:.65rem;
-  font-weight:850;
-  white-space:nowrap;
-}
-
-.merchant-category-products{
-  display:grid;
-  gap:12px;
-}
-
-.merchant-product-card{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) auto;
-  gap:14px;
-  align-items:center;
-  padding:14px;
-  border:1px solid #dfe6ef;
-  border-radius:15px;
-  background:#fff;
-  box-shadow:0 7px 22px rgba(15,23,42,.05);
-}
-
-.merchant-product-main{
-  display:grid;
-  grid-template-columns:92px minmax(0,1fr);
-  gap:13px;
-  align-items:center;
-  min-width:0;
-}
-
-.merchant-product-card .product-thumb{
-  width:92px;
-  height:92px;
-  border-radius:14px;
-  overflow:hidden;
-}
-
-.merchant-product-copy{
-  min-width:0;
-}
-
-.merchant-product-name{
-  display:block;
-  color:#10213d;
-  font-size:1rem;
-  font-weight:950;
-  overflow-wrap:anywhere;
-}
-
-.merchant-product-category{
-  display:block;
-  margin-top:3px;
-  color:#627189;
-  font-weight:750;
-}
-
-.merchant-product-price-row{
-  display:flex;
-  align-items:baseline;
-  gap:7px;
-  flex-wrap:wrap;
-  margin-top:7px;
-}
-
-.merchant-product-price-label{
-  color:#6b7890;
-  font-size:.64rem;
-  font-weight:850;
-  text-transform:uppercase;
-}
-
-.merchant-product-price-row .product-price{
-  color:#0b3f99;
-  font-size:1rem;
-  font-weight:950;
-}
-
-.merchant-product-badges{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  margin-top:8px;
-}
-
-.merchant-stock-badge{
-  display:inline-flex;
-  padding:5px 8px;
-  border-radius:999px;
-  font-size:.62rem;
-  font-weight:900;
-}
-
-.merchant-stock-badge.available{
-  border:1px solid #bfe5cf;
-  background:#edf9f2;
-  color:#167647;
-}
-
-.merchant-stock-badge.sold-out{
-  border:1px solid #efc1bc;
-  background:#fff0ef;
-  color:#b42318;
-}
-
-.merchant-product-actions{
-  display:grid !important;
-  grid-template-columns:repeat(2,minmax(120px,1fr));
-  gap:8px !important;
-  min-width:270px;
-}
-
-.merchant-product-actions button{
-  width:100%;
-  min-height:40px;
-  margin:0 !important;
-  line-height:1.15;
-}
-
-.delete-product-button{
-  border:1px solid #e9b0ab;
-  background:#fff;
-  color:#b42318;
-}
-
-.delete-product-button:hover{
-  background:#fff0ef;
-}
-
-@media(max-width:860px){
-  .merchant-product-card{
-    grid-template-columns:1fr;
-  }
-
-  .merchant-product-actions{
-    min-width:0;
-  }
-}
-
-@media(max-width:620px){
-  .merchant-product-category-group{
-    padding:13px 11px;
-  }
-
-  .products-main-toolbar{
-    padding:13px 11px;
-  }
-
-  .merchant-category-heading{
-    align-items:center;
-  }
-
-  .merchant-product-card{
-    padding:12px;
-    gap:12px;
-  }
-
-  .merchant-product-main{
-    grid-template-columns:86px minmax(0,1fr);
-    align-items:start;
-  }
-
-  .merchant-product-card .product-thumb{
-    width:86px;
-    height:86px;
-  }
-
-  .merchant-product-name{
-    font-size:.94rem;
-  }
-
-  .merchant-product-actions{
-    display:grid !important;
-    grid-template-columns:1fr 1fr;
-    gap:8px !important;
-  }
-
-  .merchant-product-actions button{
-    min-height:44px;
-    padding:9px 7px;
-    font-size:.73rem;
-    white-space:normal;
-  }
-}
-
-@media(max-width:390px){
-  .merchant-product-main{
-    grid-template-columns:78px minmax(0,1fr);
-  }
-
-  .merchant-product-card .product-thumb{
-    width:78px;
-    height:78px;
-  }
-
-  .merchant-product-actions{
-    grid-template-columns:1fr;
-  }
-}
-
-
-/* =========================================================
-   V66 - PANEL COMERCIO PREMIUM / MAMMA MIA
-   Capa visual. Mantiene la logica existente.
-========================================================= */
-
-:root{
-  --merchant-blue:#083d91;
-  --merchant-blue-dark:#031d49;
-  --merchant-blue-soft:#edf4ff;
-  --merchant-gold:#d8ab47;
-  --merchant-gold-soft:#fff8e8;
-  --merchant-ink:#10213d;
-  --merchant-muted:#65758c;
-  --merchant-bg:#f4f7fb;
-}
-
-body{
-  background:
-    radial-gradient(circle at 92% 0%,rgba(216,171,71,.12),transparent 25rem),
-    radial-gradient(circle at 35% 10%,rgba(8,61,145,.07),transparent 28rem),
-    var(--merchant-bg);
-}
-
-.sidebar{
-  background:
-    radial-gradient(circle at 20% 0%,rgba(255,255,255,.10),transparent 13rem),
-    linear-gradient(180deg,#031b43 0%,#07377f 54%,#0a4eb6 100%);
-  box-shadow:10px 0 36px rgba(3,29,73,.18);
-}
-
-.brand{
-  gap:14px;
-}
-
-.merchant-logo-mark{
-  width:52px;
-  height:52px;
-  flex:0 0 52px;
-  border-radius:17px;
-  border:2px solid var(--merchant-gold) !important;
-  box-shadow:
-    0 10px 24px rgba(0,0,0,.18),
-    inset 0 0 0 3px rgba(216,171,71,.10);
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:1.12rem;
-  letter-spacing:-.05em;
-}
-
-.brand strong{
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:1.08rem;
-  letter-spacing:.06em;
-}
-
-.brand span{
-  font-size:.78rem;
-  opacity:.88;
-}
-
-.nav{
-  gap:8px;
-}
-
-.nav-item{
-  min-height:48px;
-  border-radius:14px;
-  padding:10px 12px;
-  font-weight:800;
-}
-
-.nav-item.active{
-  background:linear-gradient(135deg,rgba(255,255,255,.17),rgba(255,255,255,.10));
-  border-color:rgba(216,171,71,.88);
-  box-shadow:
-    inset 3px 0 0 var(--merchant-gold),
-    0 8px 20px rgba(0,0,0,.10);
-}
-
-.nav-icon{
-  border:1px solid rgba(255,255,255,.08);
-}
-
-.main{
-  max-width:1500px;
-  margin:0 auto;
-  padding:34px 38px 56px;
-}
-
-.page-header{
-  align-items:center;
-  margin-bottom:22px;
-}
-
-.page-header h1{
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:clamp(1.9rem,3vw,2.65rem);
-  color:var(--merchant-ink);
-}
-
-.eyebrow{
-  color:#7a3ad7;
-  letter-spacing:.16em;
-}
-
-.subtitle{
-  color:var(--merchant-muted);
-}
-
-.status-badge{
-  border-radius:999px;
-  padding:10px 16px;
-  font-size:.76rem;
-  font-weight:950;
-  letter-spacing:.035em;
-  box-shadow:0 7px 18px rgba(22,118,71,.08);
-}
-
-.cards{
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:14px;
-}
-
-.metric-card{
-  min-height:116px;
-  padding:18px;
-  border:1px solid rgba(215,222,232,.85);
-  border-top:3px solid #7657e8;
-  border-radius:20px;
-  box-shadow:0 10px 28px rgba(16,33,61,.07);
-}
-
-.metric-card:hover{
-  transform:translateY(-2px);
-}
-
-.metric-card.order-metric.sales{
-  background:linear-gradient(135deg,#fffdf7,#fff7df);
-  border-top-color:var(--merchant-gold);
-}
-
-.metric-icon{
-  width:48px;
-  height:48px;
-  flex:0 0 48px;
-  border-radius:15px;
-}
-
-.metric-card small{
-  color:#66758a;
-  font-size:.76rem;
-  font-weight:850;
-}
-
-.metric-card strong{
-  margin-top:2px;
-  color:var(--merchant-ink);
-  font-size:1.72rem;
-}
-
-.panel{
-  border:1px solid rgba(215,222,232,.82);
-  border-radius:22px;
-  box-shadow:0 12px 32px rgba(16,33,61,.075);
-}
-
-.merchant-quick-panel{
-  margin-top:16px;
-  padding:20px 22px;
-  border-top:3px solid var(--merchant-gold);
-}
-
-.merchant-quick-panel h2,
-.dashboard-orders-panel h2,
-.merchant-status-panel h2{
-  font-family:Georgia,"Times New Roman",serif;
-}
-
-.merchant-quick-actions{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(130px,1fr));
-  gap:9px;
-  min-width:min(520px,48vw);
-}
-
-.merchant-quick-actions button{
-  min-height:46px;
-  border-radius:13px;
-  padding:10px 12px;
-  font-size:.82rem;
-}
-
-.primary-button{
-  border-radius:13px;
-  background:linear-gradient(135deg,#6d28d9,#4f46e5);
-  box-shadow:0 8px 20px rgba(79,70,229,.18);
-}
-
-.secondary-button,
-.danger-button{
-  border-radius:13px;
-}
-
-.dashboard-orders-panel{
-  margin-top:16px;
-  padding:20px 22px;
-}
-
-.products-panel{
-  border-radius:22px !important;
-  box-shadow:0 12px 34px rgba(16,33,61,.08);
-}
-
-.products-main-toolbar{
-  padding:14px 16px;
-  background:linear-gradient(180deg,#fff,#fbfcff);
-}
-
-.merchant-product-category-group{
-  padding:16px;
-  border-top:8px solid #f4f7fb;
-}
-
-.merchant-category-heading{
-  margin-bottom:10px;
-  padding-bottom:8px;
-  border-bottom:2px solid rgba(216,171,71,.72);
-}
-
-.merchant-category-heading h3{
-  font-family:Georgia,"Times New Roman",serif;
-  color:var(--merchant-blue);
-}
-
-.merchant-category-products{
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-}
-
-.merchant-product-card{
-  grid-template-columns:1fr;
-  align-content:start;
-  padding:13px;
-  gap:11px;
-  border-radius:18px;
-  box-shadow:0 8px 22px rgba(16,33,61,.055);
-}
-
-.merchant-product-main{
-  grid-template-columns:78px minmax(0,1fr);
-  gap:12px;
-  align-items:start;
-}
-
-.merchant-product-card .product-thumb{
-  width:78px;
-  height:78px;
-  border-radius:14px;
-}
-
-.merchant-product-name{
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:.98rem;
-  line-height:1.15;
-}
-
-.merchant-product-category{
-  font-size:.72rem;
-}
-
-.merchant-product-price-row{
-  margin-top:5px;
-}
-
-.merchant-product-badges{
-  margin-top:6px;
-}
-
-.merchant-product-actions{
-  min-width:0;
-  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
-  gap:7px !important;
-}
-
-.merchant-product-actions button{
-  min-height:38px;
-  padding:8px 9px;
-  border-radius:11px;
-  font-size:.72rem;
-}
-
-.merchant-status-panel{
-  max-width:920px;
-}
-
-.order-card{
-  border-radius:18px;
-  box-shadow:0 8px 22px rgba(16,33,61,.06);
-}
-
-/* Tablet / mobile: menu horizontal compacto */
-@media(max-width:760px){
-  body{
-    display:block;
-  }
-
-  .sidebar{
-    position:sticky;
-    top:0;
-    z-index:80;
-    width:100%;
-    height:auto;
-    padding:12px 14px 10px;
-    box-shadow:0 8px 28px rgba(3,29,73,.22);
-  }
-
-  .brand{
-    padding:0 2px 10px;
-    border-bottom:1px solid rgba(255,255,255,.12);
-  }
-
-  .merchant-logo-mark{
-    width:42px;
-    height:42px;
-    flex-basis:42px;
-    border-radius:13px;
-    font-size:.94rem;
-  }
-
-  .brand strong{
-    font-size:.92rem;
-  }
-
-  .brand span{
-    margin-top:1px;
-    font-size:.68rem;
-  }
-
-  .nav{
-    display:flex;
-    gap:7px;
-    margin-top:9px;
-    overflow-x:auto;
-    padding:1px 1px 5px;
-    scrollbar-width:none;
-    -webkit-overflow-scrolling:touch;
-  }
-
-  .nav::-webkit-scrollbar{
-    display:none;
-  }
-
-  .nav-item{
-    width:auto;
-    min-width:max-content;
-    min-height:40px;
-    flex:0 0 auto;
-    gap:7px;
-    padding:7px 11px;
-    border-radius:12px;
-    font-size:.74rem;
-  }
-
-  .nav-icon{
-    width:25px;
-    height:25px;
-    flex-basis:25px;
-    border-radius:8px;
-    font-size:.59rem;
-  }
-
-  .main{
-    padding:20px 14px 42px;
-  }
-
-  .page-header{
-    display:grid;
-    gap:12px;
-    margin-bottom:16px;
-  }
-
-  .page-header h1{
-    font-size:2rem;
-  }
-
-  .subtitle{
-    margin-top:5px;
-    font-size:.88rem;
-    line-height:1.42;
-  }
-
-  .status-badge{
-    width:max-content;
-    max-width:100%;
-    padding:8px 12px;
-    font-size:.68rem;
-  }
-
-  .cards{
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:9px;
-  }
-
-  .metric-card{
-    min-height:88px;
-    display:grid;
-    grid-template-columns:36px minmax(0,1fr);
-    gap:9px;
-    padding:12px 10px;
-    border-radius:16px;
-  }
-
-  .metric-icon{
-    width:36px;
-    height:36px;
-    flex-basis:36px;
-    border-radius:11px;
-    font-size:.67rem;
-  }
-
-  .metric-card small{
-    font-size:.62rem;
-  }
-
-  .metric-card strong{
-    font-size:1.25rem;
-  }
-
-  .merchant-quick-panel{
-    display:grid;
-    gap:14px;
-    padding:16px;
-  }
-
-  .merchant-quick-panel h2{
-    font-size:1.35rem;
-  }
-
-  .merchant-quick-panel p{
-    font-size:.86rem;
-  }
-
-  .merchant-quick-actions{
-    min-width:0;
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:7px;
-  }
-
-  .merchant-quick-actions button{
-    width:100%;
-    min-height:44px;
-    padding:8px 6px;
-    font-size:.68rem;
-    line-height:1.15;
-  }
-
-  .dashboard-orders-panel{
-    padding:16px;
-  }
-
-  .merchant-product-category-group{
-    padding:13px 10px;
-  }
-
-  .merchant-category-products{
-    grid-template-columns:1fr;
-    gap:10px;
-  }
-
-  .merchant-product-card{
-    padding:11px;
-    gap:10px;
-  }
-
-  .merchant-product-main{
-    grid-template-columns:74px minmax(0,1fr);
-    gap:10px;
-  }
-
-  .merchant-product-card .product-thumb{
-    width:74px;
-    height:74px;
-  }
-
-  .merchant-product-actions{
-    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
-  }
-
-  .merchant-product-actions button{
-    min-height:40px;
-    font-size:.68rem;
-  }
-
-  .merchant-status-buttons{
-    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-    gap:7px;
-  }
-
-  .merchant-status-buttons button{
-    min-height:44px;
-    padding:8px 6px;
-    font-size:.68rem;
-    line-height:1.15;
-  }
-}
-
-@media(max-width:430px){
-  .cards{
-    grid-template-columns:repeat(3,minmax(0,1fr));
-  }
-
-  .metric-card{
-    grid-template-columns:1fr;
-    text-align:center;
-    justify-items:center;
-    gap:5px;
-    min-height:96px;
-  }
-
-  .metric-card strong{
-    font-size:1.18rem;
-  }
-
-  .merchant-quick-actions,
-  .merchant-status-buttons{
-    grid-template-columns:1fr 1fr !important;
-  }
-
-  .merchant-quick-actions .danger-button,
-  .merchant-status-buttons .danger-button{
-    grid-column:1 / -1;
-  }
-}
-
-@media(min-width:1200px){
-  .merchant-category-products{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-
-  .main{
-    padding-left:46px;
-    padding-right:46px;
-  }
-}
-
-
-/* =========================================================
-   V67 - DISEÑO DE MI TIENDA
-========================================================= */
-
-.merchant-logo-mark{
-  overflow:hidden;
-  display:grid;
-  place-items:center;
-  background:#fff;
-  color:var(--merchant-blue);
-}
-
-.merchant-logo-mark img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.design-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1.45fr) minmax(300px,.75fr);
-  gap:18px;
-  align-items:start;
-}
-
-.design-form{
-  padding:22px;
-}
-
-.design-block{
-  display:grid;
-  gap:14px;
-  padding:18px 0;
-  border-bottom:1px solid #e6ebf2;
-}
-
-.design-block:first-child{
-  padding-top:0;
-}
-
-.design-block:last-of-type{
-  border-bottom:0;
-}
-
-.design-block h2{
-  margin:3px 0 0;
-  font-family:Georgia,"Times New Roman",serif;
-  color:var(--merchant-ink);
-}
-
-.design-help{
-  margin:5px 0 0;
-  color:var(--merchant-muted);
-  font-size:.82rem;
-}
-
-.design-logo-row{
-  display:grid;
-  grid-template-columns:110px minmax(0,1fr);
-  gap:16px;
-  align-items:center;
-}
-
-.design-logo-preview{
-  width:110px;
-  height:110px;
-  display:grid;
-  place-items:center;
-  overflow:hidden;
-  border:2px solid var(--merchant-gold);
-  border-radius:24px;
-  background:#fff;
-  box-shadow:0 10px 28px rgba(16,33,61,.10);
-  color:var(--merchant-blue);
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:1.5rem;
-  font-weight:900;
-}
-
-.design-logo-preview img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.design-logo-fields{
-  display:grid;
-  gap:10px;
-}
-
-.design-form label{
-  display:grid;
-  gap:6px;
-  color:#42516a;
-  font-size:.78rem;
-  font-weight:800;
-}
-
-.design-form input,
-.design-form textarea{
-  width:100%;
-  border:1px solid #d8e0eb;
-  border-radius:12px;
-  padding:11px 12px;
-  background:#fff;
-  color:var(--merchant-ink);
-}
-
-.design-form input[type="color"]{
-  height:48px;
-  padding:5px;
-  cursor:pointer;
-}
-
-.design-colors{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:10px;
-}
-
-.design-actions{
-  display:flex;
-  gap:10px;
-  margin-top:18px;
-  flex-wrap:wrap;
-}
-
-.design-preview-card{
-  position:sticky;
-  top:24px;
-  padding:16px;
-  overflow:hidden;
-}
-
-.design-preview{
-  --preview-primary:#0B43A0;
-  --preview-secondary:#0E5BD8;
-  --preview-accent:#F4C565;
-  min-height:470px;
-  margin-top:10px;
-  padding:20px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  border-radius:24px;
-  background:
-    radial-gradient(circle at 50% 30%,rgba(255,255,255,.14),transparent 13rem),
-    linear-gradient(155deg,var(--preview-primary),var(--preview-secondary));
-  background-position:center;
-  background-size:cover;
-  color:#fff;
-  box-shadow:0 18px 40px rgba(8,61,145,.20);
-}
-
-.design-preview-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-}
-
-.design-preview-top > span{
-  padding:7px 10px;
-  border:1px solid rgba(255,255,255,.24);
-  border-radius:999px;
-  background:rgba(255,255,255,.12);
-  font-size:.68rem;
-  font-weight:850;
-}
-
-.design-preview-logo{
-  width:72px;
-  height:72px;
-  display:grid;
-  place-items:center;
-  overflow:hidden;
-  border:2px solid var(--preview-accent);
-  border-radius:20px;
-  background:#fff;
-  color:var(--preview-primary);
-  font-family:Georgia,"Times New Roman",serif;
-  font-weight:900;
-}
-
-.design-preview-logo img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.design-preview-copy{
-  text-align:center;
-}
-
-.design-preview-copy small{
-  font-weight:850;
-  letter-spacing:.14em;
-  opacity:.88;
-}
-
-.design-preview-copy strong{
-  display:block;
-  margin:6px 0 10px;
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:2rem;
-}
-
-.design-preview-copy p{
-  margin:0 auto 18px;
-  max-width:290px;
-  line-height:1.45;
-  opacity:.92;
-}
-
-.design-preview-copy button{
-  width:100%;
-  min-height:48px;
-  border:0;
-  border-radius:14px;
-  background:#fff;
-  color:var(--preview-primary);
-  font-weight:900;
-}
-
-.design-preview-note{
-  margin:12px 2px 0;
-  color:var(--merchant-muted);
-  font-size:.74rem;
-  line-height:1.4;
-}
-
-@media(max-width:900px){
-  .design-layout{
-    grid-template-columns:1fr;
-  }
-
-  .design-preview-card{
-    position:static;
-  }
-}
-
-@media(max-width:560px){
-  .design-form{
-    padding:16px;
-  }
-
-  .design-logo-row{
-    grid-template-columns:82px minmax(0,1fr);
-  }
-
-  .design-logo-preview{
-    width:82px;
-    height:82px;
-    border-radius:19px;
-  }
-
-  .design-colors{
-    grid-template-columns:1fr;
-  }
-
-  .design-actions{
-    display:grid;
-  }
-
-  .design-actions button{
-    width:100%;
-  }
-
-  .design-preview{
-    min-height:390px;
-  }
-}
-
-
-/* =========================================================
-   V68 - PROMO DEL DÍA / PANEL
-========================================================= */
-
-.promo-admin-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);
-  gap:18px;
-  align-items:start;
-}
-
-.promo-admin-form{
-  padding:22px;
-}
-
-.promo-switch-card{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:20px;
-  padding:18px;
-  border:1px solid #e0e7f0;
-  border-radius:18px;
-  background:linear-gradient(135deg,#fbfdff,#f5f8fc);
-}
-
-.promo-switch-card h2{
-  margin:4px 0 5px;
-  font-family:Georgia,"Times New Roman",serif;
-  color:var(--merchant-ink);
-}
-
-.promo-switch-card p{
-  margin:0;
-  color:var(--merchant-muted);
-  font-size:.82rem;
-  line-height:1.45;
-}
-
-.promo-toggle{
-  display:grid;
-  justify-items:center;
-  gap:7px;
-  flex:0 0 auto;
-  cursor:pointer;
-}
-
-.promo-toggle input{
-  position:absolute;
-  opacity:0;
-  pointer-events:none;
-}
-
-.promo-toggle-track{
-  width:62px;
-  height:34px;
-  padding:4px;
-  display:block;
-  border-radius:999px;
-  background:#c7d0dc;
-  transition:.2s ease;
-}
-
-.promo-toggle-knob{
-  width:26px;
-  height:26px;
-  display:block;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:0 3px 9px rgba(16,33,61,.20);
-  transition:.2s ease;
-}
-
-.promo-toggle input:checked + .promo-toggle-track{
-  background:#169b62;
-}
-
-.promo-toggle input:checked + .promo-toggle-track .promo-toggle-knob{
-  transform:translateX(28px);
-}
-
-.promo-toggle strong{
-  color:var(--merchant-ink);
-  font-size:.72rem;
-}
-
-.promo-fields{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:18px;
-}
-
-.promo-fields label{
-  display:grid;
-  gap:6px;
-  color:#42516a;
-  font-size:.78rem;
-  font-weight:850;
-}
-
-.promo-fields .full-width{
-  grid-column:1 / -1;
-}
-
-.promo-fields input,
-.promo-fields textarea{
-  width:100%;
-  border:1px solid #d8e0eb;
-  border-radius:12px;
-  padding:12px;
-  background:#fff;
-  color:var(--merchant-ink);
-  font:inherit;
-}
-
-.promo-fields small{
-  color:var(--merchant-muted);
-  font-size:.68rem;
-  font-weight:600;
-}
-
-.promo-admin-actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:18px;
-}
-
-.promo-preview-panel{
-  position:sticky;
-  top:24px;
-  padding:16px;
-}
-
-.daily-promo-preview{
-  position:relative;
-  overflow:hidden;
-  margin-top:10px;
-  padding:24px 20px;
-  border:2px solid var(--merchant-gold);
-  border-radius:22px;
-  background:
-    radial-gradient(circle at 100% 0%,rgba(255,255,255,.16),transparent 12rem),
-    linear-gradient(145deg,var(--merchant-blue-dark),var(--merchant-blue));
-  color:#fff;
-  text-align:center;
-  box-shadow:0 16px 36px rgba(8,61,145,.18);
-  transition:.2s ease;
-}
-
-.daily-promo-preview::after{
-  content:"%";
-  position:absolute;
-  right:-12px;
-  bottom:-42px;
-  color:rgba(255,255,255,.08);
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:9rem;
-  font-weight:900;
-}
-
-.daily-promo-preview > span{
-  position:relative;
-  z-index:1;
-  display:inline-flex;
-  padding:6px 10px;
-  border-radius:999px;
-  background:var(--merchant-gold);
-  color:#2e2107;
-  font-size:.68rem;
-  font-weight:950;
-  letter-spacing:.09em;
-}
-
-.daily-promo-preview strong{
-  position:relative;
-  z-index:1;
-  display:block;
-  margin:12px 0 7px;
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:1.55rem;
-  line-height:1.12;
-}
-
-.daily-promo-preview p{
-  position:relative;
-  z-index:1;
-  margin:0;
-  font-size:.92rem;
-  line-height:1.45;
-}
-
-.daily-promo-preview.inactive{
-  filter:grayscale(.65);
-  opacity:.55;
-}
-
-.promo-preview-help{
-  margin:12px 2px 0;
-  color:var(--merchant-muted);
-  font-size:.74rem;
-  line-height:1.4;
-}
-
-@media(max-width:900px){
-  .promo-admin-layout{
-    grid-template-columns:1fr;
-  }
-
-  .promo-preview-panel{
-    position:static;
-  }
-}
-
-@media(max-width:560px){
-  .promo-admin-form{
-    padding:15px;
-  }
-
-  .promo-switch-card{
-    align-items:flex-start;
-    padding:15px;
-  }
-
-  .promo-fields{
-    grid-template-columns:1fr;
-  }
-
-  .promo-fields .full-width{
-    grid-column:auto;
-  }
-
-  .promo-admin-actions{
-    display:grid;
-  }
-
-  .promo-admin-actions button{
-    width:100%;
-  }
-}
-
-/* V69 - MOTOR DE PROMOCIONES */
-.promo-rule-divider{margin-top:8px;padding-top:16px;border-top:1px solid #e5eaf1}
-.promo-fields select{width:100%;min-height:44px;border:1px solid #d8e0eb;border-radius:12px;padding:10px 12px;background:#fff;color:var(--merchant-ink);font:inherit}
-.promo-rule-box{margin-top:4px;padding:16px;border:1px solid #dfe6f0;border-radius:16px;background:#f8faff}
-.promo-rule-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
-.promo-rule-grid:first-child{margin-top:0}
-.promo-rule-example{align-self:end;padding:12px;border-radius:12px;background:#eef5ff;color:#42516a;font-size:.76rem;line-height:1.45}
-.promo-repeat-label{display:flex!important;align-items:flex-start;gap:8px!important;padding-top:26px}
-.promo-repeat-label input{width:auto!important;margin-top:2px}
-.promo-repeat-label small{display:block;margin-top:3px;color:#7b8798;font-weight:500}
-@media(max-width:620px){.promo-rule-grid{grid-template-columns:1fr}.promo-repeat-label{padding-top:0}}
-
-
-/* ==========================================================
-   DENEXA v104 — PANEL CARRO KECHU
-   SOLO se aplica a carro-kechu-carmelo.
-   Conserva la estructura responsive estable de v69.
-   ========================================================== */
-
+   DENEXA v101 — PANEL CARRO KECHU
+   Negro real + amarillo; SOLO para carro-kechu-carmelo.
+   ========================================================= */
 html[data-merchant-theme="carro-kechu-carmelo"]{
   --primary:#FFD400 !important;
-  --primary-2:#FFD400 !important;
+  --primary-2:#F4C400 !important;
   --primary-dark:#050505 !important;
   --accent:#FFD400 !important;
   --bg:#080808 !important;
   --surface:#111111 !important;
   --surface-soft:#171717 !important;
   --text:#FFFFFF !important;
-  --muted:#BEBEBE !important;
+  --muted:#BDBDBD !important;
   --line:#323232 !important;
 }
 
@@ -3144,217 +1804,596 @@ html[data-merchant-theme="carro-kechu-carmelo"] body{
   background:#080808 !important;
   color:#fff !important;
 }
-
 html[data-merchant-theme="carro-kechu-carmelo"] body{
-  background:#080808 !important;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(255,212,0,.08),transparent 360px),
+    #080808 !important;
 }
-
 html[data-merchant-theme="carro-kechu-carmelo"] .sidebar{
   background:#050505 !important;
-  border-color:#3E3500 !important;
-  color:#fff !important;
+  border-right-color:#403600 !important;
 }
-
 html[data-merchant-theme="carro-kechu-carmelo"] .brand{
-  border-color:#292929 !important;
+  border-bottom-color:#292929 !important;
 }
-
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logo-mark,
-html[data-merchant-theme="carro-kechu-carmelo"] .brand-mark{
-  overflow:hidden !important;
-  border:1px solid #514500 !important;
+html[data-merchant-theme="carro-kechu-carmelo"] .brand strong,
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-business-name{
+  color:#FFD400 !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  letter-spacing:.035em !important;
+  text-transform:uppercase !important;
+}
+html[data-merchant-theme="carro-kechu-carmelo"] .brand span,
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-user-caption{
+  color:#CFCFCF !important;
+}
+html[data-merchant-theme="carro-kechu-carmelo"] .brand-mark,
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logo-mark{
+  border-color:#504400 !important;
   background:#0D0D0D !important;
   color:#FFD400 !important;
   box-shadow:none !important;
 }
-
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logo-mark img,
-html[data-merchant-theme="carro-kechu-carmelo"] .brand-mark img{
-  width:100% !important;
-  height:100% !important;
-  max-width:100% !important;
-  max-height:100% !important;
-  object-fit:contain !important;
-}
-
-html[data-merchant-theme="carro-kechu-carmelo"] .brand strong{
-  color:#FFD400 !important;
-  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
-  letter-spacing:.03em !important;
-  text-transform:uppercase !important;
-}
-
-html[data-merchant-theme="carro-kechu-carmelo"] .brand span,
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-user-caption{
-  color:#C8C8C8 !important;
-}
-
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logout-button{
-  border-color:#3B3B3B !important;
-  background:#111 !important;
-  color:#fff !important;
-}
-
 html[data-merchant-theme="carro-kechu-carmelo"] .nav-item{
-  color:#D0D0D0 !important;
+  color:#D2D2D2 !important;
   background:transparent !important;
-  border-color:transparent !important;
 }
-
 html[data-merchant-theme="carro-kechu-carmelo"] .nav-item:hover{
   background:#121212 !important;
   color:#fff !important;
 }
-
 html[data-merchant-theme="carro-kechu-carmelo"] .nav-item.active{
   border-color:#FFD400 !important;
   background:#171400 !important;
   color:#FFD400 !important;
   box-shadow:inset 4px 0 0 #FFD400 !important;
 }
-
 html[data-merchant-theme="carro-kechu-carmelo"] .nav-icon{
-  border:1px solid #383838 !important;
   background:#151515 !important;
+  border-color:#3A3A3A !important;
   color:#FFD400 !important;
 }
-
-html[data-merchant-theme="carro-kechu-carmelo"] .main{
-  background:#080808 !important;
+html[data-merchant-theme="carro-kechu-carmelo"] main,
+html[data-merchant-theme="carro-kechu-carmelo"] .main,
+html[data-merchant-theme="carro-kechu-carmelo"] .content{
+  background:transparent !important;
   color:#fff !important;
 }
-
-html[data-merchant-theme="carro-kechu-carmelo"] .page-header h1,
-html[data-merchant-theme="carro-kechu-carmelo"] .page-header h2{
-  color:#fff !important;
-}
-
 html[data-merchant-theme="carro-kechu-carmelo"] .eyebrow{
   color:#FFD400 !important;
 }
-
-html[data-merchant-theme="carro-kechu-carmelo"] .subtitle,
-html[data-merchant-theme="carro-kechu-carmelo"] .section-description,
-html[data-merchant-theme="carro-kechu-carmelo"] .design-help{
-  color:#BEBEBE !important;
+html[data-merchant-theme="carro-kechu-carmelo"] .page-header h1,
+html[data-merchant-theme="carro-kechu-carmelo"] .page-header h2,
+html[data-merchant-theme="carro-kechu-carmelo"] .panel h1,
+html[data-merchant-theme="carro-kechu-carmelo"] .panel h2,
+html[data-merchant-theme="carro-kechu-carmelo"] .panel h3{
+  color:#fff !important;
 }
-
 html[data-merchant-theme="carro-kechu-carmelo"] .panel,
 html[data-merchant-theme="carro-kechu-carmelo"] .stat-card,
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-panel,
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-status-panel,
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-product-card,
+html[data-merchant-theme="carro-kechu-carmelo"] .product-admin-card,
+html[data-merchant-theme="carro-kechu-carmelo"] .category-admin-card,
 html[data-merchant-theme="carro-kechu-carmelo"] .order-card{
   border-color:#323232 !important;
   background:#111 !important;
   color:#fff !important;
-  box-shadow:none !important;
+  box-shadow:0 10px 30px rgba(0,0,0,.28) !important;
 }
-
-html[data-merchant-theme="carro-kechu-carmelo"] .panel h2,
-html[data-merchant-theme="carro-kechu-carmelo"] .panel h3,
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-product-name,
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-category-heading h3{
+html[data-merchant-theme="carro-kechu-carmelo"] .subtitle,
+html[data-merchant-theme="carro-kechu-carmelo"] .design-help,
+html[data-merchant-theme="carro-kechu-carmelo"] .panel p{
+  color:#BDBDBD !important;
+}
+html[data-merchant-theme="carro-kechu-carmelo"] input,
+html[data-merchant-theme="carro-kechu-carmelo"] select,
+html[data-merchant-theme="carro-kechu-carmelo"] textarea{
+  border-color:#3A3A3A !important;
+  background:#0B0B0B !important;
   color:#fff !important;
 }
-
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-category-heading h3,
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-product-name{
-  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
-  letter-spacing:.025em !important;
+html[data-merchant-theme="carro-kechu-carmelo"] input:focus,
+html[data-merchant-theme="carro-kechu-carmelo"] select:focus,
+html[data-merchant-theme="carro-kechu-carmelo"] textarea:focus{
+  border-color:#FFD400 !important;
+  box-shadow:0 0 0 3px rgba(255,212,0,.10) !important;
 }
-
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-product-price-row .product-price{
-  color:#FFD400 !important;
-}
-
-html[data-merchant-theme="carro-kechu-carmelo"] .primary-button,
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-login-button{
+html[data-merchant-theme="carro-kechu-carmelo"] label{color:#E1E1E1 !important;}
+html[data-merchant-theme="carro-kechu-carmelo"] .primary-button{
   border-color:#FFD400 !important;
   background:#FFD400 !important;
   color:#050505 !important;
   box-shadow:none !important;
 }
-
 html[data-merchant-theme="carro-kechu-carmelo"] .secondary-button{
   border-color:#504400 !important;
   background:#151515 !important;
   color:#FFD400 !important;
 }
-
-html[data-merchant-theme="carro-kechu-carmelo"] input,
-html[data-merchant-theme="carro-kechu-carmelo"] select,
-html[data-merchant-theme="carro-kechu-carmelo"] textarea{
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logout-button{
   border-color:#3A3A3A !important;
-  background:#0D0D0D !important;
+  background:#111 !important;
   color:#fff !important;
 }
-
-html[data-merchant-theme="carro-kechu-carmelo"] input:focus,
-html[data-merchant-theme="carro-kechu-carmelo"] select:focus,
-html[data-merchant-theme="carro-kechu-carmelo"] textarea:focus{
-  outline:none !important;
-  border-color:#FFD400 !important;
-  box-shadow:0 0 0 3px rgba(255,212,0,.10) !important;
+html[data-merchant-theme="carro-kechu-carmelo"] .badge,
+html[data-merchant-theme="carro-kechu-carmelo"] .status-badge{
+  border-color:#4C4100 !important;
+  background:#171400 !important;
+  color:#FFD400 !important;
 }
-
-html[data-merchant-theme="carro-kechu-carmelo"] label{
-  color:#E0E0E0 !important;
-}
-
 html[data-merchant-theme="carro-kechu-carmelo"] .modal-backdrop{
   background:rgba(0,0,0,.82) !important;
 }
-
 html[data-merchant-theme="carro-kechu-carmelo"] .modal-card{
   border-color:#373737 !important;
   background:#0D0D0D !important;
   color:#fff !important;
 }
-
 html[data-merchant-theme="carro-kechu-carmelo"] .modal-card h2,
 html[data-merchant-theme="carro-kechu-carmelo"] .modal-card h3{
   color:#FFD400 !important;
 }
-
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-login-screen{
-  background:#050505 !important;
-}
-
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-login-card{
-  border:1px solid #3C3C3C !important;
-  background:#101010 !important;
-  color:#fff !important;
-  box-shadow:0 24px 70px rgba(0,0,0,.62) !important;
-}
-
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-login-card h1{
-  color:#fff !important;
-}
-
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-login-brand strong{
+html[data-merchant-theme="carro-kechu-carmelo"] .close-button{
+  border-color:#3F3F3F !important;
+  background:#171717 !important;
   color:#FFD400 !important;
 }
 
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-login-brand span,
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-login-copy,
-html[data-merchant-theme="carro-kechu-carmelo"] .merchant-login-foot{
-  color:#BEBEBE !important;
-}
-
-/* En móvil NO tocamos el layout base; solo colores/contención. */
 @media(max-width:900px){
   html[data-merchant-theme="carro-kechu-carmelo"] .sidebar{
     border-right:0 !important;
-    border-bottom:1px solid #3E3500 !important;
+    border-bottom-color:#403600 !important;
   }
-
   html[data-merchant-theme="carro-kechu-carmelo"] .nav-item.active{
     box-shadow:inset 0 -3px 0 #FFD400 !important;
   }
+}
 
-  html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logo-mark{
-    max-width:58px !important;
-    max-height:58px !important;
+
+/* DENEXA v103: panel Kechu responsive estable */
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logo-mark img,
+html[data-merchant-theme="carro-kechu-carmelo"] .brand-mark img{
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+}
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logo-mark,
+html[data-merchant-theme="carro-kechu-carmelo"] .brand-mark{
+  overflow:hidden !important;
+}
+@media(max-width:900px){
+  html[data-merchant-theme="carro-kechu-carmelo"] body{overflow-x:hidden !important;}
+  html[data-merchant-theme="carro-kechu-carmelo"] .admin-shell,
+  html[data-merchant-theme="carro-kechu-carmelo"] .merchant-shell,
+  html[data-merchant-theme="carro-kechu-carmelo"] .dashboard-shell{
+    width:100% !important;
+    max-width:100% !important;
+    grid-template-columns:1fr !important;
+  }
+  html[data-merchant-theme="carro-kechu-carmelo"] .sidebar{
+    width:100% !important;
+    max-width:100% !important;
+    position:static !important;
+  }
+  html[data-merchant-theme="carro-kechu-carmelo"] main,
+  html[data-merchant-theme="carro-kechu-carmelo"] .main,
+  html[data-merchant-theme="carro-kechu-carmelo"] .content{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+  }
+  html[data-merchant-theme="carro-kechu-carmelo"] .stats-grid,
+  html[data-merchant-theme="carro-kechu-carmelo"] .merchant-products-grid{
+    grid-template-columns:1fr !important;
+  }
+}
+
+
+/* =========================================================
+   DENEXA v126 — REFORMA ESTÉTICA PANEL CARRO KECHU
+   SOLO PRESENTACIÓN. NO TOCA JS NI SUPABASE.
+   ========================================================= */
+
+html[data-merchant-theme="carro-kechu-carmelo"]{
+  --panel-yellow:#FFD000;
+  --panel-yellow-2:#F5C400;
+  --panel-black:#050505;
+  --panel-card:#101010;
+  --panel-card-2:#151515;
+  --panel-line:#343434;
+  --panel-white:#FFFFFF;
+  --panel-muted:#BEBEBE;
+  --panel-danger:#E53935;
+  --panel-green:#29C46A;
+}
+
+/* Base */
+html[data-merchant-theme="carro-kechu-carmelo"] body.kechu-panel-v126{
+  background:
+    radial-gradient(circle at 50% -120px,rgba(255,208,0,.10),transparent 360px),
+    #050505 !important;
+  color:#fff !important;
+}
+
+/* Cabecera lateral / superior */
+html[data-merchant-theme="carro-kechu-carmelo"] .sidebar{
+  background:#070707 !important;
+  border-color:#282400 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .brand{
+  gap:11px !important;
+  padding-bottom:13px !important;
+  border-bottom:1px solid #2B2B2B !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logo-mark,
+html[data-merchant-theme="carro-kechu-carmelo"] .brand-mark{
+  width:64px !important;
+  height:64px !important;
+  min-width:64px !important;
+  border:1px solid #5B4D00 !important;
+  border-radius:50% !important;
+  background:#0B0B0B !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .brand strong,
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-business-name{
+  display:block !important;
+  color:#FFD000 !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  font-size:1.05rem !important;
+  line-height:1 !important;
+  letter-spacing:.025em !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .brand span{
+  color:#BEBEBE !important;
+  font-size:.72rem !important;
+}
+
+/* Navegación clara y táctil */
+html[data-merchant-theme="carro-kechu-carmelo"] .nav{
+  gap:7px !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .nav-item{
+  min-height:50px !important;
+  padding:8px 10px !important;
+  gap:9px !important;
+  border:1px solid transparent !important;
+  border-radius:13px !important;
+  color:#D6D6D6 !important;
+  font-weight:800 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .nav-item.active{
+  border-color:#FFD000 !important;
+  background:#181400 !important;
+  color:#FFD000 !important;
+  box-shadow:none !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .nav-icon{
+  width:34px !important;
+  height:34px !important;
+  min-width:34px !important;
+  display:grid !important;
+  place-items:center !important;
+  border:1px solid #3D3D3D !important;
+  border-radius:10px !important;
+  background:#141414 !important;
+  color:#FFD000 !important;
+  font-family:Arial,sans-serif !important;
+  font-size:1rem !important;
+  line-height:1 !important;
+}
+
+/* Contenido */
+html[data-merchant-theme="carro-kechu-carmelo"] .main{
+  padding:22px !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .page-header{
+  margin-bottom:16px !important;
+  padding:0 !important;
+  align-items:flex-end !important;
+  gap:12px !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .page-header .eyebrow{
+  margin-bottom:4px !important;
+  color:#FFD000 !important;
+  font-size:.68rem !important;
+  letter-spacing:.10em !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .page-header h1{
+  margin:0 !important;
+  color:#FFFFFF !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  font-size:clamp(2rem,5vw,3.05rem) !important;
+  line-height:.95 !important;
+  letter-spacing:.018em !important;
+  text-transform:uppercase !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .page-header .subtitle{
+  max-width:580px !important;
+  margin-top:7px !important;
+  color:#BEBEBE !important;
+  font-size:.82rem !important;
+  line-height:1.35 !important;
+}
+
+/* Estado abierto/cerrado */
+html[data-merchant-theme="carro-kechu-carmelo"] .status-badge{
+  min-height:38px !important;
+  padding:8px 13px !important;
+  border:1px solid #6A5900 !important;
+  border-radius:999px !important;
+  background:#171400 !important;
+  color:#FFD000 !important;
+  font-size:.72rem !important;
+  font-weight:900 !important;
+  box-shadow:none !important;
+}
+
+/* Métricas: 2x2 en celular, nunca una tarjeta sola perdida */
+html[data-merchant-theme="carro-kechu-carmelo"] .cards{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:10px !important;
+  margin-bottom:14px !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .metric-card{
+  min-height:105px !important;
+  padding:14px !important;
+  border:1px solid #333333 !important;
+  border-radius:16px !important;
+  background:
+    linear-gradient(145deg,#151515,#0E0E0E) !important;
+  color:#fff !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .metric-card::before{
+  background:#FFD000 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .metric-icon{
+  width:34px !important;
+  height:34px !important;
+  min-width:34px !important;
+  border:1px solid #4E4300 !important;
+  border-radius:10px !important;
+  background:#181400 !important;
+  color:#FFD000 !important;
+  font-family:Arial,sans-serif !important;
+  font-size:.95rem !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .metric-card small{
+  color:#BEBEBE !important;
+  font-size:.69rem !important;
+  font-weight:800 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .metric-card strong{
+  color:#FFD000 !important;
+  font-size:1.65rem !important;
+  line-height:1 !important;
+}
+
+/* Paneles */
+html[data-merchant-theme="carro-kechu-carmelo"] .panel{
+  border:1px solid #303030 !important;
+  border-radius:17px !important;
+  background:#101010 !important;
+  box-shadow:none !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-panel{
+  padding:16px !important;
+  border-top:1px solid #FFD000 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-panel h2{
+  color:#FFFFFF !important;
+  font-size:1.2rem !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-actions{
+  gap:8px !important;
+}
+
+/* Botones principales como el menú del cliente */
+html[data-merchant-theme="carro-kechu-carmelo"] .primary-button{
+  min-height:44px !important;
+  border:1px solid #FFE45A !important;
+  border-radius:12px !important;
+  background:#FFD000 !important;
+  color:#050505 !important;
+  font-weight:950 !important;
+  box-shadow:none !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .secondary-button{
+  min-height:44px !important;
+  border:1px solid #474747 !important;
+  border-radius:12px !important;
+  background:#171717 !important;
+  color:#F2F2F2 !important;
+  font-weight:850 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .danger-button{
+  min-height:44px !important;
+  border:1px solid #6D2826 !important;
+  border-radius:12px !important;
+  background:#241110 !important;
+  color:#FF6963 !important;
+  font-weight:900 !important;
+}
+
+/* Últimos pedidos / listas */
+html[data-merchant-theme="carro-kechu-carmelo"] .dashboard-orders-panel,
+html[data-merchant-theme="carro-kechu-carmelo"] .orders-toolbar-panel{
+  margin-top:12px !important;
+  padding:15px !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .orders-whatsapp-note{
+  border:1px solid #393000 !important;
+  border-radius:14px !important;
+  background:#151200 !important;
+  color:#F2F2F2 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .orders-whatsapp-note strong{
+  color:#FFD000 !important;
+}
+
+/* Formularios */
+html[data-merchant-theme="carro-kechu-carmelo"] input,
+html[data-merchant-theme="carro-kechu-carmelo"] select,
+html[data-merchant-theme="carro-kechu-carmelo"] textarea{
+  border:1px solid #3A3A3A !important;
+  border-radius:11px !important;
+  background:#0B0B0B !important;
+  color:#FFFFFF !important;
+  -webkit-text-fill-color:#FFFFFF !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] input::placeholder,
+html[data-merchant-theme="carro-kechu-carmelo"] textarea::placeholder{
+  color:#818181 !important;
+  -webkit-text-fill-color:#818181 !important;
+}
+
+/* Cerrar sesión secundario */
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logout-button{
+  min-height:38px !important;
+  border:1px solid #393939 !important;
+  border-radius:11px !important;
+  background:#101010 !important;
+  color:#CFCFCF !important;
+  font-size:.72rem !important;
+  font-weight:800 !important;
+}
+
+/* Móvil */
+@media(max-width:900px){
+  html[data-merchant-theme="carro-kechu-carmelo"] .sidebar{
+    padding:10px 12px 9px !important;
+    position:sticky !important;
+    top:0 !important;
+    z-index:150 !important;
+    border-bottom:1px solid #332C00 !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .brand{
+    padding:0 0 9px !important;
+    margin-bottom:8px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logo-mark,
+  html[data-merchant-theme="carro-kechu-carmelo"] .brand-mark{
+    width:52px !important;
+    height:52px !important;
+    min-width:52px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .nav{
+    display:grid !important;
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    gap:5px !important;
+    overflow:visible !important;
+    padding:0 !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .nav-item{
+    min-width:0 !important;
+    min-height:58px !important;
+    padding:6px 2px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    gap:4px !important;
+    border-radius:11px !important;
+    font-size:.58rem !important;
+    line-height:1.05 !important;
+    text-align:center !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .nav-item.active{
+    box-shadow:inset 0 -3px 0 #FFD000 !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .nav-icon{
+    width:28px !important;
+    height:28px !important;
+    min-width:28px !important;
+    border:0 !important;
+    background:transparent !important;
+    font-size:1rem !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .main{
+    padding:14px 12px 30px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .page-header{
+    display:grid !important;
+    align-items:start !important;
+    margin-bottom:13px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .page-header h1{
+    font-size:2rem !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .status-badge{
+    width:max-content !important;
+    min-height:34px !important;
+    padding:7px 11px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .cards{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:8px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .metric-card{
+    min-height:98px !important;
+    padding:12px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .metric-card strong{
+    font-size:1.5rem !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-panel{
+    gap:12px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-actions{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-actions .danger-button{
+    grid-column:1/-1 !important;
+  }
+}
+
+@media(max-width:390px){
+  html[data-merchant-theme="carro-kechu-carmelo"] .nav-item{
+    font-size:.54rem !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .main{
+    padding-inline:10px !important;
   }
 }
