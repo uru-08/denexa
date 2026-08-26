@@ -3556,7 +3556,7 @@ const WHATSAPP_ORDER_PHONE = "59892569559";
 
 function whatsappOrderMessage() {
   const lines = [
-    "\ud83c\udf55 *MAMMA MIA - NUEVO PEDIDO*",
+    "\ud83c\udf54 *CARRO KECHU - NUEVO PEDIDO*",
     "",
     "\ud83e\uddfe *PEDIDO*",
     ""
