@@ -9,13 +9,34 @@
     name="description"
     content="Hac&eacute; tu pedido online con DENEXA."
   >
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var slug = (
+        params.get("business") ||
+        params.get("comercio") ||
+        "mamma-mia"
+      ).trim().toLowerCase();
+
+      document.documentElement.dataset.storeTheme = slug;
+      document.documentElement.classList.add("branding-loading");
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Knewave&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css?v=120">
+  <link rel="stylesheet" href="css/app.css?v=121">
   <style>
+    html,body{background:#050505}
     #appShell{visibility:hidden}
-    #welcomeScreen{visibility:visible}
+    #welcomeScreen{
+      visibility:visible;
+      opacity:1;
+      background:#050505;
+    }
+    html.branding-loading #welcomeScreen .welcome-content{
+      opacity:0;
+    }
   </style>
 </head>
 
@@ -430,6 +451,6 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=32"></script>
-  <script src="js/app.js?v=120"></script>
+  <script src="js/app.js?v=121"></script>
 </body>
 </html>
