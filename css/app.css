@@ -9154,3 +9154,135 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
     font-size:.61rem !important;
   }
 }
+
+
+/* ==========================================================
+   DENEXA v124 - INPUTS LEGIBLES + BADGE CABECERA
+   ========================================================== */
+
+/* Checkout: lo escrito siempre debe verse */
+html[data-store-theme="carro-kechu-carmelo"] .field input,
+html[data-store-theme="carro-kechu-carmelo"] .field textarea,
+html[data-store-theme="carro-kechu-carmelo"] .field select{
+  background:#171717 !important;
+  color:#F7F7F7 !important;
+  -webkit-text-fill-color:#F7F7F7 !important;
+  caret-color:#FFD000 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .field input::placeholder,
+html[data-store-theme="carro-kechu-carmelo"] .field textarea::placeholder{
+  color:#8F8F8F !important;
+  -webkit-text-fill-color:#8F8F8F !important;
+  opacity:1 !important;
+}
+
+/* Chrome / Android autofill: evita fondo celeste + texto blanco */
+html[data-store-theme="carro-kechu-carmelo"] .field input:-webkit-autofill,
+html[data-store-theme="carro-kechu-carmelo"] .field input:-webkit-autofill:hover,
+html[data-store-theme="carro-kechu-carmelo"] .field input:-webkit-autofill:focus,
+html[data-store-theme="carro-kechu-carmelo"] .field input:-webkit-autofill:active{
+  -webkit-text-fill-color:#F7F7F7 !important;
+  caret-color:#FFD000 !important;
+  -webkit-box-shadow:0 0 0 1000px #171717 inset !important;
+  box-shadow:0 0 0 1000px #171717 inset !important;
+  transition:background-color 9999s ease-out 0s !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .field input:focus,
+html[data-store-theme="carro-kechu-carmelo"] .field textarea:focus,
+html[data-store-theme="carro-kechu-carmelo"] .field select:focus{
+  border-color:#FFD000 !important;
+  box-shadow:0 0 0 3px rgba(255,208,0,.14) !important;
+}
+
+/* Cabecera: usar el espacio derecho con un sello discreto DENEXA + bandera */
+html[data-store-theme="carro-kechu-carmelo"] .store-brand{
+  grid-template-columns:88px minmax(0,1fr) 68px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-country-badge{
+  width:64px !important;
+  min-height:72px !important;
+  align-self:center !important;
+  justify-self:end !important;
+  padding:8px 5px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:5px !important;
+  border:1px solid rgba(255,208,0,.32) !important;
+  border-radius:14px !important;
+  background:
+    radial-gradient(circle at 50% 20%,rgba(255,208,0,.08),transparent 55%),
+    #0D0D0D !important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.018) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-country-flag{
+  display:block !important;
+  font-size:1.9rem !important;
+  line-height:1 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-country-badge strong{
+  color:#FFD000 !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.52rem !important;
+  font-weight:700 !important;
+  letter-spacing:.08em !important;
+  line-height:1 !important;
+}
+
+/* Ajustes mobile */
+@media(max-width:620px){
+  html[data-store-theme="carro-kechu-carmelo"] .store-brand{
+    grid-template-columns:84px minmax(0,1fr) 62px !important;
+    gap:9px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-country-badge{
+    width:58px !important;
+    min-height:66px !important;
+    border-radius:12px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-country-flag{
+    font-size:1.7rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-kechu{
+    font-size:2.65rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carro,
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carmelo{
+    font-size:1.04rem !important;
+  }
+}
+
+@media(max-width:390px){
+  html[data-store-theme="carro-kechu-carmelo"] .store-brand{
+    grid-template-columns:76px minmax(0,1fr) 55px !important;
+    gap:7px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-country-badge{
+    width:52px !important;
+    min-height:60px !important;
+    padding:7px 3px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-country-flag{
+    font-size:1.5rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-country-badge strong{
+    font-size:.46rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-kechu{
+    font-size:2.42rem !important;
+  }
+}
