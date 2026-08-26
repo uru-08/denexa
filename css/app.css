@@ -8949,3 +8949,208 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
     margin-left:86px !important;
   }
 }
+
+
+/* ==========================================================
+   DENEXA v123 - REDISEÑO REAL DE CABECERA
+   ========================================================== */
+
+/* Cabecera como bloque compacto de marca, no como filas separadas */
+html[data-store-theme="carro-kechu-carmelo"] .store-header{
+  padding:12px 14px 13px !important;
+  background:
+    radial-gradient(circle at 18% 28%,rgba(255,208,0,.055),transparent 30%),
+    #050505 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-header-inner{
+  width:min(650px,100%) !important;
+  margin:0 auto !important;
+  display:grid !important;
+  grid-template-columns:96px minmax(0,1fr) !important;
+  grid-template-areas:
+    "brand brand"
+    "status services" !important;
+  align-items:center !important;
+  column-gap:10px !important;
+  row-gap:7px !important;
+}
+
+/* La marca ocupa toda la fila superior */
+html[data-store-theme="carro-kechu-carmelo"] .store-brand{
+  grid-area:brand !important;
+  display:grid !important;
+  grid-template-columns:96px minmax(0,1fr) !important;
+  gap:12px !important;
+  align-items:center !important;
+  width:100% !important;
+  padding:0 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-logo{
+  width:96px !important;
+  height:96px !important;
+  flex-basis:96px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-heading{
+  min-width:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-kicker,
+html[data-store-theme="carro-kechu-carmelo"] .store-subtitle{
+  display:none !important;
+}
+
+/* Título claramente más grande que antes */
+html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carro,
+html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carmelo{
+  font-size:1.22rem !important;
+  line-height:.80 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-kechu{
+  font-size:3.15rem !important;
+  line-height:.78 !important;
+  margin:.02em 0 !important;
+}
+
+/* Slogan con mejor jerarquía */
+html[data-store-theme="carro-kechu-carmelo"] .store-heading::after{
+  margin-top:8px !important;
+  font-size:clamp(.61rem,2.15vw,.73rem) !important;
+  line-height:1 !important;
+  letter-spacing:.015em !important;
+  white-space:nowrap !important;
+}
+
+/* Estado + servicios en una sola fila útil */
+html[data-store-theme="carro-kechu-carmelo"] .store-status{
+  grid-area:status !important;
+  align-self:stretch !important;
+  width:auto !important;
+  min-width:0 !important;
+  min-height:42px !important;
+  margin:0 !important;
+  padding:8px 11px !important;
+  display:flex !important;
+  justify-content:center !important;
+  border-radius:13px !important;
+  font-size:.72rem !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-header .service-strip{
+  grid-area:services !important;
+  width:100% !important;
+  min-width:0 !important;
+  min-height:42px !important;
+  margin:0 !important;
+  padding:7px 10px !important;
+  display:flex !important;
+  justify-content:center !important;
+  gap:9px !important;
+  border:1px solid rgba(255,208,0,.28) !important;
+  border-radius:13px !important;
+  background:#0d0d0d !important;
+}
+
+/* El estado ya está a la izquierda: ocultamos el "Tomando pedidos" duplicado */
+html[data-store-theme="carro-kechu-carmelo"] .store-header .service-strip .service-strip-item:first-child,
+html[data-store-theme="carro-kechu-carmelo"] .store-header .service-strip .service-strip-item:first-child + .service-divider{
+  display:none !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-header .service-strip-item{
+  gap:5px !important;
+  font-size:.72rem !important;
+  white-space:nowrap !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-header .service-divider{
+  height:23px !important;
+}
+
+/* Como la franja se movió al header, la promo sube enseguida */
+html[data-store-theme="carro-kechu-carmelo"] .main-content{
+  padding-top:10px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
+  margin-top:0 !important;
+}
+
+/* Eliminar cualquier margen heredado que producía el gran vacío */
+@media(max-width:620px){
+  html[data-store-theme="carro-kechu-carmelo"] .store-header-inner{
+    grid-template-columns:1fr 1.45fr !important;
+    grid-template-areas:
+      "brand brand"
+      "status services" !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-brand{
+    grid-template-columns:88px minmax(0,1fr) !important;
+    gap:10px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-logo{
+    width:88px !important;
+    height:88px !important;
+    flex-basis:88px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carro,
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-carmelo{
+    font-size:1.12rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-kechu{
+    font-size:2.9rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading::after{
+    font-size:clamp(.55rem,2vw,.64rem) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-status{
+    margin:0 !important;
+    font-size:.68rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-header .service-strip{
+    margin:0 !important;
+    padding-inline:8px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-header .service-strip-item{
+    font-size:.67rem !important;
+  }
+}
+
+@media(max-width:390px){
+  html[data-store-theme="carro-kechu-carmelo"] .store-brand{
+    grid-template-columns:80px minmax(0,1fr) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-logo{
+    width:80px !important;
+    height:80px !important;
+    flex-basis:80px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-brand-kechu{
+    font-size:2.62rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-status,
+  html[data-store-theme="carro-kechu-carmelo"] .store-header .service-strip{
+    min-height:39px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-header .service-strip-item{
+    font-size:.61rem !important;
+  }
+}
