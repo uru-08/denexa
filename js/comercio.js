@@ -798,11 +798,13 @@ merchantLogoutButton?.addEventListener(
 merchantViewMenuButton?.addEventListener(
   "click",
   () => {
-    const slug = String(
-      selectedBusiness?.slug || ""
-    ).trim();
+    const businessId =
+      String(selectedBusiness?.id || "").trim();
 
-    if (!slug) {
+    const slug =
+      String(selectedBusiness?.slug || "").trim();
+
+    if (!businessId && !slug) {
       showToast(
         "No se pudo obtener el enlace de tu menú.",
         "error"
@@ -811,13 +813,33 @@ merchantViewMenuButton?.addEventListener(
     }
 
     const menuUrl =
-      `index.html?business=${encodeURIComponent(slug)}`;
+      new URL("index.html", window.location.href);
 
-    window.open(
-      menuUrl,
-      "_blank",
-      "noopener"
+    if (businessId) {
+      menuUrl.searchParams.set(
+        "business_id",
+        businessId
+      );
+    }
+
+    if (slug) {
+      menuUrl.searchParams.set(
+        "business",
+        slug
+      );
+    }
+
+    menuUrl.searchParams.set(
+      "from_panel",
+      "1"
     );
+
+    /*
+      Abrimos en la misma pestaña. En Android/WebView es mucho más
+      estable que window.open("_blank"). El botón Atrás vuelve al panel.
+    */
+    window.location.href =
+      menuUrl.toString();
   }
 );
 
@@ -7238,6 +7260,15 @@ async function initAdmin() {
       .trim()
       .toLowerCase();
 
+  const merchantIdentityText =
+    `${selectedBusiness?.slug || ""} ${selectedBusiness?.name || ""}`
+      .toLowerCase();
+
+  document.body.classList.toggle(
+    "merchant-kechu",
+    merchantIdentityText.includes("kechu")
+  );
+
   /*
     Apenas tenemos el comercio real, sincronizamos todos los textos
     que en HTML arrancan como "Cargando estado...".
@@ -7284,34 +7315,3 @@ async function initAdmin() {
 }
 
 bootstrapMerchantAuth();
-
-
-/* =========================================================
-   DENEXA v132 — enlace público robusto desde el panel
-   ========================================================= */
-function denexaPublicMenuUrl() {
-  const business = selectedBusiness || {};
-  const id = business.id != null ? String(business.id) : "";
-  const slug = business.slug ? String(business.slug) : "";
-  const base = new URL("index.html", window.location.href);
-  if (id) base.searchParams.set("business_id", id);
-  if (slug) base.searchParams.set("business", slug);
-  base.searchParams.set("v", "132");
-  return base.href;
-}
-
-document.addEventListener("click", function (event) {
-  const target = event.target.closest(
-    '[data-action="view-menu"], #view-menu-button, .view-menu-button, a[href*="index.html"][class*="menu"]'
-  );
-  if (!target) return;
-  event.preventDefault();
-  window.location.href = denexaPublicMenuUrl();
-}, true);
-
-/* El botón flotante era redundante y tapaba formularios. */
-document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll(
-    ".floating-business-switch, .business-switch-floating, .change-business-floating, #change-business-floating"
-  ).forEach(el => el.remove());
-});
