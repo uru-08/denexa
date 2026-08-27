@@ -890,18 +890,6 @@ function applyBusinessBranding() {
       welcomeLogo.hidden = false;
       welcomeLogo.src = logoUrl;
       welcomeLogo.alt = name;
-
-      /*
-        v136: límite duro del logo de portada.
-        Inline + important para evitar que una regla móvil o caché
-        vuelva a convertir el logo en una imagen gigante.
-      */
-      welcomeLogo.style.setProperty("width", "100%", "important");
-      welcomeLogo.style.setProperty("height", "100%", "important");
-      welcomeLogo.style.setProperty("max-width", "190px", "important");
-      welcomeLogo.style.setProperty("max-height", "190px", "important");
-      welcomeLogo.style.setProperty("object-fit", "contain", "important");
-      welcomeLogo.style.setProperty("display", "block", "important");
     }
   } else {
     storeLogo.textContent =
@@ -955,8 +943,27 @@ function applyBusinessBranding() {
   }
 
   if (welcomeScreen) {
-    const heroImage =
+    const rawHeroImage =
       business.hero_image_url || "";
+
+    const isKechu =
+      normalizeText(business.slug).includes("kechu") ||
+      normalizeText(business.name).includes("kechu");
+
+    const isMobile =
+      window.matchMedia("(max-width: 899px)").matches;
+
+    /*
+      v137:
+      El archivo hero_image_url que quedó guardado en Kechu es la imagen
+      DENEXA que en Android estaba cubriendo toda la portada.
+      En PC se conserva el fondo personalizado.
+      En móvil Kechu usamos la portada normal, estable y completa.
+    */
+    const heroImage =
+      isKechu && isMobile
+        ? ""
+        : rawHeroImage;
 
     welcomeScreen.classList.toggle(
       "has-custom-hero",
@@ -4023,25 +4030,24 @@ function enterStore() {
   if (appShell) {
     appShell.style.visibility = "visible";
     appShell.style.opacity = "1";
-    appShell.style.display = "block";
   }
 
-  /*
-    v136:
-    En móvil no dejamos una pantalla fixed invisible durante 560 ms.
-    Se oculta la portada de inmediato y se libera el scroll del body.
-  */
   welcomeScreen.classList.add("is-leaving");
-  welcomeScreen.style.display = "none";
-  welcomeScreen.style.visibility = "hidden";
-  welcomeScreen.style.pointerEvents = "none";
 
   document.body.classList.remove("welcome-open");
   document.body.classList.remove("modal-open");
-  document.body.style.removeProperty("overflow");
-  document.documentElement.style.removeProperty("overflow");
+  document.body.style.overflow = "";
+  document.documentElement.style.overflow = "";
 
-  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  window.setTimeout(() => {
+    welcomeScreen.style.display = "none";
+    welcomeScreen.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+  }, 180);
+
+  window.scrollTo(0, 0);
 }
 
 document.body.classList.add("welcome-open");
