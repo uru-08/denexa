@@ -8041,97 +8041,59 @@ html[data-store-theme] .welcome-screen.has-custom-hero{
 
 
 /* =========================================================
-   DENEXA v136 — PORTADA + SCROLL + PROMO MOBILE
-   Restaura el flujo normal: portada -> botón -> menú.
+   DENEXA v137 — MOBILE ESTABLE CARRO KECHU
    ========================================================= */
 
 @media(max-width:899px){
 
-  /* La portada vuelve a existir en celular. */
-  #welcomeScreen.welcome-screen{
-    display:flex !important;
-    visibility:visible !important;
-    opacity:1 !important;
-    position:fixed !important;
-    inset:0 !important;
-    width:100% !important;
-    height:100svh !important;
-    min-height:100svh !important;
-    max-height:100svh !important;
-    overflow:hidden !important;
-    z-index:999 !important;
+  /* Kechu en móvil usa la portada normal; ningún hero externo puede taparla. */
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen,
+  html[data-store-theme*="kechu"] #welcomeScreen{
+    background:
+      radial-gradient(circle at 50% 24%,rgba(255,208,0,.08),transparent 22rem),
+      #050505 !important;
+    background-image:
+      radial-gradient(circle at 50% 24%,rgba(255,208,0,.08),transparent 22rem) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen::after,
+  html[data-store-theme*="kechu"] #welcomeScreen::after{
+    display:none !important;
+  }
+
+  #welcomeScreen{
+    display:flex;
+    visibility:visible;
+    opacity:1;
   }
 
   #welcomeScreen.is-leaving{
-    display:none !important;
-    visibility:hidden !important;
     opacity:0 !important;
+    visibility:hidden !important;
     pointer-events:none !important;
   }
 
   #welcomeScreen .welcome-content{
-    width:min(560px,100%) !important;
-    height:100% !important;
-    max-height:100% !important;
-    display:flex !important;
-    flex-direction:column !important;
-    align-items:center !important;
-    justify-content:center !important;
     visibility:visible !important;
     opacity:1 !important;
-    overflow:hidden !important;
     position:relative !important;
-    z-index:20 !important;
-    padding:8px 12px 12px !important;
-    box-sizing:border-box !important;
-  }
-
-  html.branding-loading #welcomeScreen .welcome-content{
-    visibility:visible !important;
-    opacity:1 !important;
+    z-index:5 !important;
   }
 
   #welcomeScreen .welcome-logo-wrap{
-    width:min(190px,48vw,24svh) !important;
-    height:min(190px,48vw,24svh) !important;
-    max-width:190px !important;
-    max-height:190px !important;
-    min-height:0 !important;
-    margin:2px auto 6px !important;
-    overflow:hidden !important;
-    flex:0 0 auto !important;
+    width:min(210px,56vw,27svh) !important;
+    max-width:210px !important;
+    max-height:210px !important;
   }
 
   #welcomeScreen #welcomeLogo{
     width:100% !important;
     height:100% !important;
-    max-width:190px !important;
-    max-height:190px !important;
+    max-width:210px !important;
+    max-height:210px !important;
     object-fit:contain !important;
-    display:block !important;
   }
 
-  /* Si existe una imagen de fondo, queda detrás del contenido. */
-  #welcomeScreen.has-custom-hero{
-    background-position:center center !important;
-    background-size:cover !important;
-    background-repeat:no-repeat !important;
-  }
-
-  #welcomeScreen.has-custom-hero::after{
-    content:"" !important;
-    position:absolute !important;
-    inset:0 !important;
-    z-index:1 !important;
-    pointer-events:none !important;
-    background:rgba(0,0,0,.58) !important;
-  }
-
-  #welcomeScreen.has-custom-hero .welcome-content{
-    z-index:20 !important;
-  }
-
-  /* Menú: después de entrar, scroll normal. */
   body:not(.welcome-open){
     overflow-y:auto !important;
     overflow-x:hidden !important;
@@ -8144,18 +8106,18 @@ html[data-store-theme] .welcome-screen.has-custom-hero{
     visibility:visible !important;
     opacity:1 !important;
     display:block !important;
-    overflow:visible !important;
   }
 
-  /* El carrito vuelve a su diseño de barra original. */
-  .floating-cart.kechu-cart-bar{
-    display:flex !important;
+  /* No alterar el diseño original del carrito. */
+  .floating-cart{
+    pointer-events:auto !important;
   }
 
-  /* El botón de promo mantiene el estilo del comercio y vuelve a ser tocable. */
-  #promoJumpButton{
+  /* Promo nuevamente clickeable. */
+  #promoJumpButton,
+  .promo-jump-button,
+  [data-promo-jump]{
     pointer-events:auto !important;
     touch-action:manipulation !important;
-    cursor:pointer !important;
   }
 }
