@@ -890,6 +890,18 @@ function applyBusinessBranding() {
       welcomeLogo.hidden = false;
       welcomeLogo.src = logoUrl;
       welcomeLogo.alt = name;
+
+      /*
+        v136: límite duro del logo de portada.
+        Inline + important para evitar que una regla móvil o caché
+        vuelva a convertir el logo en una imagen gigante.
+      */
+      welcomeLogo.style.setProperty("width", "100%", "important");
+      welcomeLogo.style.setProperty("height", "100%", "important");
+      welcomeLogo.style.setProperty("max-width", "190px", "important");
+      welcomeLogo.style.setProperty("max-height", "190px", "important");
+      welcomeLogo.style.setProperty("object-fit", "contain", "important");
+      welcomeLogo.style.setProperty("display", "block", "important");
     }
   } else {
     storeLogo.textContent =
@@ -4010,15 +4022,26 @@ function enterStore() {
 
   if (appShell) {
     appShell.style.visibility = "visible";
+    appShell.style.opacity = "1";
+    appShell.style.display = "block";
   }
 
+  /*
+    v136:
+    En móvil no dejamos una pantalla fixed invisible durante 560 ms.
+    Se oculta la portada de inmediato y se libera el scroll del body.
+  */
   welcomeScreen.classList.add("is-leaving");
+  welcomeScreen.style.display = "none";
+  welcomeScreen.style.visibility = "hidden";
+  welcomeScreen.style.pointerEvents = "none";
 
   document.body.classList.remove("welcome-open");
+  document.body.classList.remove("modal-open");
+  document.body.style.removeProperty("overflow");
+  document.documentElement.style.removeProperty("overflow");
 
-  window.setTimeout(() => {
-    welcomeScreen.style.display = "none";
-  }, 560);
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 }
 
 document.body.classList.add("welcome-open");
