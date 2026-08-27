@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Knewave&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css?v=135">
+  <link rel="stylesheet" href="css/app.css?v=136">
   <style>
     html,body{background:#050505}
     #appShell{visibility:hidden}
@@ -37,46 +37,20 @@
     html.branding-loading #welcomeScreen .welcome-content{
       opacity:0;
     }
-
-    /* v134: la portada nunca puede quedar tapada por una imagen */
-    #welcomeScreen .welcome-content{
-      visibility:visible !important;
-      opacity:1 !important;
-      display:flex !important;
-      position:relative !important;
-      z-index:20 !important;
-    }
-    #welcomeScreen .welcome-logo-wrap{
-      width:min(220px,58vw) !important;
-      max-width:220px !important;
-      max-height:220px !important;
-      overflow:hidden !important;
-    }
-    #welcomeScreen #welcomeLogo{
-      width:100% !important;
-      height:100% !important;
-      max-width:220px !important;
-      max-height:220px !important;
-      object-fit:contain !important;
-    }
   
-    /* v135: en celular entrar directo al menÃº; la portada no puede bloquearlo */
-    @media (max-width: 768px){
-      #welcomeScreen{
-        display:none !important;
+    /* v136: flujo mÃ³vil correcto. Portada visible hasta tocar "Hacer mi pedido". */
+    @media(max-width:899px){
+      body.welcome-open #welcomeScreen{
+        display:flex !important;
+      }
+      body.welcome-open #appShell{
         visibility:hidden !important;
-        opacity:0 !important;
-        pointer-events:none !important;
       }
-      #appShell{
-        display:block !important;
+      body:not(.welcome-open) #welcomeScreen{
+        display:none !important;
+      }
+      body:not(.welcome-open) #appShell{
         visibility:visible !important;
-        opacity:1 !important;
-      }
-      html,body{
-        overflow:auto !important;
-        height:auto !important;
-        min-height:100% !important;
       }
     }
 
@@ -500,6 +474,6 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=32"></script>
-  <script src="js/app.js?v=133"></script>
+  <script src="js/app.js?v=136"></script>
 </body>
 </html>
