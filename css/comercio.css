@@ -4239,3 +4239,91 @@ html[data-merchant-theme="carro-kechu-carmelo"] .product-panel > .card:first-chi
   color:#fff !important;
   border-color:#343434 !important;
 }
+
+
+/* =========================================================
+   DENEXA v133 — CONTRASTE REAL CARRO KECHU
+   Se usa body.merchant-kechu para no depender del slug exacto.
+   ========================================================= */
+
+body.merchant-kechu .order-summary-card,
+body.merchant-kechu .products-main-toolbar,
+body.merchant-kechu .merchant-product-card,
+body.merchant-kechu .merchant-product-category-group,
+body.merchant-kechu .fulfillment-toggle-row,
+body.merchant-kechu .fulfillment-address-fields,
+body.merchant-kechu .notice-setting-card,
+body.merchant-kechu .promo-rule-box,
+body.merchant-kechu .promo-fields,
+body.merchant-kechu .promo-condition-fields{
+  background:#111111 !important;
+  border-color:#363636 !important;
+  color:#ffffff !important;
+  box-shadow:none !important;
+}
+
+body.merchant-kechu .order-summary-card span,
+body.merchant-kechu .order-summary-card strong,
+body.merchant-kechu .products-main-toolbar strong,
+body.merchant-kechu .products-main-toolbar small,
+body.merchant-kechu .merchant-product-card strong,
+body.merchant-kechu .merchant-product-card small,
+body.merchant-kechu .fulfillment-toggle-row strong,
+body.merchant-kechu .fulfillment-toggle-row small,
+body.merchant-kechu .fulfillment-address-fields label,
+body.merchant-kechu .fulfillment-address-fields p,
+body.merchant-kechu .notice-setting-card strong,
+body.merchant-kechu .notice-setting-card small,
+body.merchant-kechu .notice-setting-card label,
+body.merchant-kechu .promo-rule-box label,
+body.merchant-kechu .promo-rule-box small{
+  color:#eeeeee !important;
+}
+
+body.merchant-kechu .order-summary-card strong,
+body.merchant-kechu .products-main-toolbar strong,
+body.merchant-kechu .merchant-product-price-row .product-price{
+  color:#ffd000 !important;
+}
+
+body.merchant-kechu .products-main-toolbar{
+  border-bottom:1px solid #403700 !important;
+}
+
+body.merchant-kechu .merchant-product-category-group{
+  border-top:8px solid #080808 !important;
+}
+
+body.merchant-kechu .merchant-category-heading h3{
+  color:#ffffff !important;
+}
+
+body.merchant-kechu .merchant-category-count{
+  background:#181400 !important;
+  border:1px solid #554900 !important;
+  color:#ffd000 !important;
+}
+
+body.merchant-kechu .fulfillment-address-fields input,
+body.merchant-kechu .notice-setting-card textarea,
+body.merchant-kechu .promo-rule-box input,
+body.merchant-kechu .promo-rule-box select,
+body.merchant-kechu .promo-fields input,
+body.merchant-kechu .promo-fields select,
+body.merchant-kechu .promo-condition-fields input,
+body.merchant-kechu .promo-condition-fields select{
+  background:#080808 !important;
+  border:1px solid #484848 !important;
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+}
+
+body.merchant-kechu .fulfillment-address-fields input::placeholder{
+  color:#777 !important;
+  -webkit-text-fill-color:#777 !important;
+}
+
+/* Se elimina el flotante duplicado de forma definitiva. */
+body.merchant-kechu .merchant-session-float{
+  display:none !important;
+}
