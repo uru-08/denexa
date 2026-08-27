@@ -5981,14 +5981,26 @@ async function loadCategories() {
   try {
     const categories = await getTableData(
       "categories",
-      "id,name,business_id,active"
+      "id,name,business_id,active,sort_order"
     );
 
-    const filtered = categories.filter(
-      (category) =>
-        String(category.business_id) ===
-        String(selectedBusiness.id)
-    );
+    const filtered = categories
+      .filter(
+        (category) =>
+          String(category.business_id) ===
+          String(selectedBusiness.id)
+      )
+      .sort((a, b) => {
+        const orderDiff =
+          Number(a.sort_order || 0) -
+          Number(b.sort_order || 0);
+
+        if (orderDiff !== 0) {
+          return orderDiff;
+        }
+
+        return Number(a.id || 0) - Number(b.id || 0);
+      });
 
     const header = `
       <div class="section-toolbar">
@@ -6025,18 +6037,49 @@ async function loadCategories() {
     } else {
       container.innerHTML =
         header +
-        filtered.map((category) => `
-          <div class="list-item">
+        filtered.map((category, index) => `
+          <div class="list-item category-order-item">
 
-            <div>
-              <strong>
-                ${escapeHTML(category.name || "Sin nombre")}
-              </strong>
+            <div class="category-order-main">
+              <span class="category-order-number">
+                ${index + 1}
+              </span>
+
+              <div>
+                <strong>
+                  ${escapeHTML(category.name || "Sin nombre")}
+                </strong>
+                <small>Posici&oacute;n ${index + 1} en el men&uacute;</small>
+              </div>
             </div>
 
-            <span class="status-pill ${category.active ? "" : "inactive"}">
-              ${category.active ? "Activa" : "Inactiva"}
-            </span>
+            <div class="category-order-actions">
+              <button
+                type="button"
+                class="category-order-button"
+                data-category-move="up"
+                data-category-id="${escapeHTML(category.id)}"
+                ${index === 0 ? "disabled" : ""}
+                aria-label="Subir categor&iacute;a"
+              >
+                &#8593;
+              </button>
+
+              <button
+                type="button"
+                class="category-order-button"
+                data-category-move="down"
+                data-category-id="${escapeHTML(category.id)}"
+                ${index === filtered.length - 1 ? "disabled" : ""}
+                aria-label="Bajar categor&iacute;a"
+              >
+                &#8595;
+              </button>
+
+              <span class="status-pill ${category.active ? "" : "inactive"}">
+                ${category.active ? "Activa" : "Inactiva"}
+              </span>
+            </div>
 
           </div>
         `).join("");
@@ -6045,12 +6088,126 @@ async function loadCategories() {
     document
       .getElementById("newCategoryButton")
       ?.addEventListener("click", openCategoryModal);
+
+    container
+      .querySelectorAll("[data-category-move]")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          const categoryId =
+            button.dataset.categoryId;
+
+          const direction =
+            button.dataset.categoryMove;
+
+          await moveCategory(
+            categoryId,
+            direction,
+            filtered
+          );
+        });
+      });
   } catch (error) {
     console.error("Error cargando categorias:", error);
 
     container.className = "panel error";
     container.textContent =
       "No se pudieron cargar las categor\u00edas.";
+  }
+}
+
+
+async function moveCategory(
+  categoryId,
+  direction,
+  currentCategories
+) {
+  const list =
+    Array.isArray(currentCategories)
+      ? currentCategories
+      : [];
+
+  const currentIndex =
+    list.findIndex(
+      (item) =>
+        String(item.id) ===
+        String(categoryId)
+    );
+
+  if (currentIndex < 0) {
+    return;
+  }
+
+  const targetIndex =
+    direction === "up"
+      ? currentIndex - 1
+      : currentIndex + 1;
+
+  if (
+    targetIndex < 0 ||
+    targetIndex >= list.length
+  ) {
+    return;
+  }
+
+  const current = list[currentIndex];
+  const target = list[targetIndex];
+
+  /*
+    Normalizamos a 10,20,30... para que el orden sea
+    estable incluso si categorías antiguas tienen 0/null.
+  */
+  const normalized =
+    list.map((item, index) => ({
+      id: item.id,
+      sort_order: (index + 1) * 10
+    }));
+
+  const currentNormalized =
+    normalized[currentIndex].sort_order;
+
+  const targetNormalized =
+    normalized[targetIndex].sort_order;
+
+  try {
+    await Promise.all(
+      normalized.map((item) =>
+        updateTableRow(
+          "categories",
+          item.id,
+          { sort_order: item.sort_order }
+        )
+      )
+    );
+
+    await Promise.all([
+      updateTableRow(
+        "categories",
+        current.id,
+        { sort_order: targetNormalized }
+      ),
+      updateTableRow(
+        "categories",
+        target.id,
+        { sort_order: currentNormalized }
+      )
+    ]);
+
+    showToast(
+      "Orden del men\u00fa actualizado.",
+      "success"
+    );
+
+    await loadCategories();
+  } catch (error) {
+    console.error(
+      "Error ordenando categorias:",
+      error
+    );
+
+    showToast(
+      "No se pudo cambiar el orden de las categor\u00edas.",
+      "error"
+    );
   }
 }
 
@@ -6866,12 +7023,36 @@ categoryForm.addEventListener(
     categoryFormMessage.textContent = "";
 
     try {
+      const existingCategories =
+        await getTableData(
+          "categories",
+          "id,business_id,sort_order"
+        );
+
+      const businessCategories =
+        existingCategories.filter(
+          (category) =>
+            String(category.business_id) ===
+            String(selectedBusiness.id)
+        );
+
+      const nextSortOrder =
+        businessCategories.reduce(
+          (max, category) =>
+            Math.max(
+              max,
+              Number(category.sort_order || 0)
+            ),
+          0
+        ) + 10;
+
       await insertTableRow(
         "categories",
         {
           business_id: selectedBusiness.id,
           name,
-          active: categoryActive.checked
+          active: categoryActive.checked,
+          sort_order: nextSortOrder
         }
       );
 
