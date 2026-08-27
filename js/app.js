@@ -11,22 +11,6 @@ const DENEXA_MENU_BUSINESS_SLUG = DENEXA_MENU_PARAMS.get("business");
   el ID tiene prioridad. Esto evita caer en una portada genérica
   cuando el slug no coincide exactamente.
 */
-async function denexaResolveBusinessFromUrl() {
-  if (!DENEXA_MENU_BUSINESS_ID) return null;
-  try {
-    const response = await fetch(
-      `${SUPABASE_REST}/businesses?id=eq.${encodeURIComponent(DENEXA_MENU_BUSINESS_ID)}&select=*`,
-      { headers: publicHeaders ? publicHeaders() : { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
-    );
-    if (!response.ok) return null;
-    const rows = await response.json();
-    return Array.isArray(rows) && rows.length ? rows[0] : null;
-  } catch (e) {
-    console.error("No se pudo resolver business_id:", e);
-    return null;
-  }
-}
-
 const BUSINESS_PARAMS = new URLSearchParams(window.location.search);
 
 const TARGET_BUSINESS_SLUG = (
@@ -522,6 +506,15 @@ async function loadStore() {
     );
 
     business =
+      (
+        DENEXA_MENU_BUSINESS_ID
+          ? businesses.find(
+              (item) =>
+                String(item.id) ===
+                String(DENEXA_MENU_BUSINESS_ID)
+            )
+          : null
+      ) ||
       businesses.find(
         (item) =>
           normalizeText(item.slug) === normalizeText(TARGET_BUSINESS_SLUG)
