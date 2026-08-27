@@ -6123,7 +6123,7 @@ async function moveCategory(
 ) {
   const list =
     Array.isArray(currentCategories)
-      ? currentCategories
+      ? [...currentCategories]
       : [];
 
   const currentIndex =
@@ -6149,51 +6149,56 @@ async function moveCategory(
     return;
   }
 
-  const current = list[currentIndex];
-  const target = list[targetIndex];
-
   /*
-    Normalizamos a 10,20,30... para que el orden sea
-    estable incluso si categorías antiguas tienen 0/null.
+    Movemos primero en memoria y enviamos a Supabase
+    el orden COMPLETO. De esta forma no dependemos de
+    múltiples PATCH que pueden quedar bloqueados por RLS.
   */
-  const normalized =
-    list.map((item, index) => ({
-      id: item.id,
-      sort_order: (index + 1) * 10
-    }));
+  [
+    list[currentIndex],
+    list[targetIndex]
+  ] = [
+    list[targetIndex],
+    list[currentIndex]
+  ];
 
-  const currentNormalized =
-    normalized[currentIndex].sort_order;
-
-  const targetNormalized =
-    normalized[targetIndex].sort_order;
+  const orderedIds =
+    list.map((item) => Number(item.id));
 
   try {
-    await Promise.all(
-      normalized.map((item) =>
-        updateTableRow(
-          "categories",
-          item.id,
-          { sort_order: item.sort_order }
-        )
-      )
-    );
+    const responseText =
+      await requestText(
+        `${SUPABASE_REST}/rpc/set_category_order`,
+        {
+          method: "POST",
+          headers: merchantHeaders({
+            Prefer: "return=representation"
+          }),
+          body: JSON.stringify({
+            p_business_id:
+              Number(selectedBusiness.id),
+            p_category_ids:
+              orderedIds
+          })
+        }
+      );
 
-    await Promise.all([
-      updateTableRow(
-        "categories",
-        current.id,
-        { sort_order: targetNormalized }
-      ),
-      updateTableRow(
-        "categories",
-        target.id,
-        { sort_order: currentNormalized }
-      )
-    ]);
+    if (
+      responseText.trim() &&
+      responseText.trim() !== "true"
+    ) {
+      const parsed =
+        JSON.parse(responseText);
+
+      if (parsed !== true) {
+        throw new Error(
+          "Supabase no confirmó el nuevo orden."
+        );
+      }
+    }
 
     showToast(
-      "Orden del men\u00fa actualizado.",
+      "Orden del menú actualizado.",
       "success"
     );
 
@@ -6205,7 +6210,7 @@ async function moveCategory(
     );
 
     showToast(
-      "No se pudo cambiar el orden de las categor\u00edas.",
+      "No se pudo cambiar el orden. Ejecutá primero el SQL incluido en v131.",
       "error"
     );
   }
