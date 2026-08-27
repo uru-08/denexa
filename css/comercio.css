@@ -4202,3 +4202,40 @@ html[data-merchant-theme="carro-kechu-carmelo"] .category-order-button:not(:disa
   color:#050505 !important;
   transform:scale(.94) !important;
 }
+
+/* =========================================================
+   DENEXA v132 — contraste final + sin botón flotante
+   ========================================================= */
+html[data-merchant-theme="carro-kechu-carmelo"] .order-column,
+html[data-merchant-theme="carro-kechu-carmelo"] .orders-column,
+html[data-merchant-theme="carro-kechu-carmelo"] .kanban-column,
+html[data-merchant-theme="carro-kechu-carmelo"] .status-column,
+html[data-merchant-theme="carro-kechu-carmelo"] .products-summary,
+html[data-merchant-theme="carro-kechu-carmelo"] .products-toolbar,
+html[data-merchant-theme="carro-kechu-carmelo"] .product-list-header,
+html[data-merchant-theme="carro-kechu-carmelo"] .catalog-toolbar{
+  background:#111 !important;
+  border-color:#343434 !important;
+  color:#fff !important;
+}
+html[data-merchant-theme="carro-kechu-carmelo"] .order-column *,
+html[data-merchant-theme="carro-kechu-carmelo"] .orders-column *,
+html[data-merchant-theme="carro-kechu-carmelo"] .kanban-column *,
+html[data-merchant-theme="carro-kechu-carmelo"] .status-column *{
+  color:inherit;
+}
+html[data-merchant-theme="carro-kechu-carmelo"] .floating-business-switch,
+html[data-merchant-theme="carro-kechu-carmelo"] .business-switch-floating,
+html[data-merchant-theme="carro-kechu-carmelo"] .change-business-floating,
+html[data-merchant-theme="carro-kechu-carmelo"] #change-business-floating{
+  display:none !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .orders-board > *,
+html[data-merchant-theme="carro-kechu-carmelo"] .order-board > *,
+html[data-merchant-theme="carro-kechu-carmelo"] .products-panel > .card:first-child,
+html[data-merchant-theme="carro-kechu-carmelo"] .product-panel > .card:first-child{
+  background:#111 !important;
+  color:#fff !important;
+  border-color:#343434 !important;
+}
