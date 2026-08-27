@@ -8038,3 +8038,84 @@ html[data-store-theme] .welcome-screen.has-custom-hero{
   background-size:cover !important;
   background-repeat:no-repeat !important;
 }
+
+
+/* =========================================================
+   DENEXA v134 — FAIL-SAFE PORTADA
+   La imagen de fondo o el logo nunca pueden tapar el menú.
+   ========================================================= */
+
+#welcomeScreen{
+  position:relative !important;
+  overflow:hidden !important;
+}
+
+#welcomeScreen .welcome-content{
+  visibility:visible !important;
+  opacity:1 !important;
+  display:flex !important;
+  position:relative !important;
+  z-index:20 !important;
+}
+
+html.branding-loading #welcomeScreen .welcome-content{
+  visibility:visible !important;
+  opacity:1 !important;
+}
+
+#welcomeScreen .welcome-logo-wrap{
+  width:min(220px,58vw) !important;
+  max-width:220px !important;
+  max-height:220px !important;
+  overflow:hidden !important;
+  flex:0 0 auto !important;
+}
+
+#welcomeScreen #welcomeLogo{
+  width:100% !important;
+  height:100% !important;
+  max-width:220px !important;
+  max-height:220px !important;
+  object-fit:contain !important;
+  display:block !important;
+}
+
+/* Si hay fondo personalizado, siempre queda DETRÁS del contenido. */
+#welcomeScreen.has-custom-hero{
+  background-position:center !important;
+  background-size:cover !important;
+  background-repeat:no-repeat !important;
+}
+
+#welcomeScreen.has-custom-hero::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:1 !important;
+  pointer-events:none !important;
+  background:rgba(0,0,0,.58) !important;
+}
+
+#welcomeScreen.has-custom-hero .welcome-content{
+  z-index:20 !important;
+}
+
+/* En Kechu dejamos margen seguro alrededor de la portada. */
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content{
+  width:min(560px,100%) !important;
+  margin:auto !important;
+  padding:20px 18px 24px !important;
+}
+
+@media(max-width:600px){
+  #welcomeScreen .welcome-logo-wrap{
+    width:min(180px,50vw) !important;
+    max-width:180px !important;
+    max-height:180px !important;
+  }
+
+  #welcomeScreen #welcomeLogo{
+    max-width:180px !important;
+    max-height:180px !important;
+  }
+}
