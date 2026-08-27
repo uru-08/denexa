@@ -6,7 +6,7 @@
 
   <title>DENEXA | Panel del comercio</title>
 
-  <link rel="stylesheet" href="css/comercio.css?v=127">
+  <link rel="stylesheet" href="css/comercio.css?v=129">
 
 <style>
   .compact-notice{
@@ -395,7 +395,7 @@
 
 </head>
 
-<body class="auth-locked">
+<body class="panel-v128 auth-locked">
 
   <section id="merchantLoginScreen" class="merchant-login-screen" aria-label="Acceso al panel">
     <div class="merchant-login-card">
@@ -472,55 +472,60 @@
       Cerrar sesi&oacute;n / cambiar comercio
     </button>
 
+    <button id="merchantViewMenuButton" class="merchant-view-menu-button" type="button">
+      <span aria-hidden="true">&#128065;</span>
+      Ver mi men&uacute;
+    </button>
+
     <nav class="nav" aria-label="Navegaci&oacute;n principal">
 
       <button class="nav-item active" data-section="dashboard" type="button">
-        <span class="nav-icon">I</span>
+        <span class="nav-icon" aria-hidden="true">&#8962;</span>
         <span>Inicio</span>
       </button>
 
       <button class="nav-item" data-section="orders" type="button">
-        <span class="nav-icon">P</span>
+        <span class="nav-icon" aria-hidden="true">&#128203;</span>
         <span>Pedidos</span>
       </button>
 
       <button class="nav-item" data-section="categories" type="button">
-        <span class="nav-icon">C</span>
+        <span class="nav-icon" aria-hidden="true">&#9776;</span>
         <span>Categor&iacute;as</span>
       </button>
 
       <button class="nav-item" data-section="products" type="button">
-        <span class="nav-icon">PR</span>
+        <span class="nav-icon" aria-hidden="true">&#128230;</span>
         <span>Productos</span>
       </button>
 
       <button class="nav-item" data-section="storeStatus" type="button">
-        <span class="nav-icon">E</span>
+        <span class="nav-icon" aria-hidden="true">&#9679;</span>
         <span>Estado del local</span>
       </button>
 
       <button class="nav-item" data-section="storeDesign" type="button">
-        <span class="nav-icon">DI</span>
+        <span class="nav-icon" aria-hidden="true">&#9998;</span>
         <span>Dise&ntilde;o</span>
       </button>
 
       <button class="nav-item" data-section="dailyPromo" type="button">
-        <span class="nav-icon">%</span>
+        <span class="nav-icon" aria-hidden="true">%</span>
         <span>Promo del d&iacute;a</span>
       </button>
 
       <button class="nav-item" data-section="fulfillment" type="button">
-        <span class="nav-icon">EN</span>
+        <span class="nav-icon" aria-hidden="true">&#128666;</span>
         <span>Entrega y retiro</span>
       </button>
 
       <button class="nav-item" data-section="payments" type="button">
-        <span class="nav-icon">$</span>
+        <span class="nav-icon" aria-hidden="true">$</span>
         <span>Cobros</span>
       </button>
 
       <button class="nav-item" data-section="customerNotices" type="button">
-        <span class="nav-icon">WA</span>
+        <span class="nav-icon" aria-hidden="true">&#9993;</span>
         <span>Avisos al cliente</span>
       </button>
 
@@ -567,7 +572,7 @@
         </article>
 
         <article class="metric-card">
-          <span class="metric-icon">PR</span>
+          <span class="metric-icon" aria-hidden="true">&#128230;</span>
           <div>
             <small>Productos</small>
             <strong id="productsCount">0</strong>
@@ -583,7 +588,7 @@
         </article>
 
         <article class="metric-card order-metric">
-          <span class="metric-icon">P</span>
+          <span class="metric-icon" aria-hidden="true">&#128203;</span>
           <div>
             <small>Pedidos hoy</small>
             <strong id="ordersTodayCount">0</strong>
@@ -591,7 +596,7 @@
         </article>
 
         <article class="metric-card order-metric pending">
-          <span class="metric-icon">!</span>
+          <span class="metric-icon" aria-hidden="true">&#9888;</span>
           <div>
             <small>Pendientes</small>
             <strong id="pendingOrdersCount">0</strong>
@@ -599,7 +604,7 @@
         </article>
 
         <article class="metric-card order-metric sales">
-          <span class="metric-icon">$</span>
+          <span class="metric-icon" aria-hidden="true">$</span>
           <div>
             <small>Ventas hoy</small>
             <strong id="salesTodayTotal">$0</strong>
@@ -2017,7 +2022,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/comercio.js?v=127"></script>
+  <script src="js/comercio.js?v=129"></script>
 
 </body>
 </html>
