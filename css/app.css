@@ -7994,3 +7994,47 @@ html[data-store-theme="carro-kechu-carmelo"]
   position:relative !important;
   z-index:1 !important;
 }
+
+
+/* =========================================================
+   DENEXA v133 — PORTADA CON IMAGEN: CONTENIDO SIEMPRE VISIBLE
+   ========================================================= */
+
+html[data-store-theme] .welcome-screen.has-custom-hero{
+  position:relative !important;
+  isolation:isolate !important;
+  display:grid !important;
+  place-items:center !important;
+}
+
+html[data-store-theme] .welcome-screen.has-custom-hero::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:0 !important;
+  pointer-events:none !important;
+  background:linear-gradient(
+    rgba(0,0,0,.52),
+    rgba(0,0,0,.72)
+  ) !important;
+}
+
+html[data-store-theme] .welcome-screen.has-custom-hero .welcome-content{
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  position:relative !important;
+  z-index:5 !important;
+}
+
+html:not(.branding-loading) #welcomeScreen .welcome-content{
+  visibility:visible !important;
+  opacity:1 !important;
+}
+
+/* La imagen de fondo nunca se convierte en una imagen gigante independiente. */
+html[data-store-theme] .welcome-screen.has-custom-hero{
+  background-position:center center !important;
+  background-size:cover !important;
+  background-repeat:no-repeat !important;
+}
