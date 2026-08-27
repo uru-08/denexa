@@ -7284,3 +7284,34 @@ async function initAdmin() {
 }
 
 bootstrapMerchantAuth();
+
+
+/* =========================================================
+   DENEXA v132 — enlace público robusto desde el panel
+   ========================================================= */
+function denexaPublicMenuUrl() {
+  const business = selectedBusiness || {};
+  const id = business.id != null ? String(business.id) : "";
+  const slug = business.slug ? String(business.slug) : "";
+  const base = new URL("index.html", window.location.href);
+  if (id) base.searchParams.set("business_id", id);
+  if (slug) base.searchParams.set("business", slug);
+  base.searchParams.set("v", "132");
+  return base.href;
+}
+
+document.addEventListener("click", function (event) {
+  const target = event.target.closest(
+    '[data-action="view-menu"], #view-menu-button, .view-menu-button, a[href*="index.html"][class*="menu"]'
+  );
+  if (!target) return;
+  event.preventDefault();
+  window.location.href = denexaPublicMenuUrl();
+}, true);
+
+/* El botón flotante era redundante y tapaba formularios. */
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(
+    ".floating-business-switch, .business-switch-floating, .change-business-floating, #change-business-floating"
+  ).forEach(el => el.remove());
+});
