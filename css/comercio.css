@@ -3946,3 +3946,162 @@ html[data-merchant-theme="carro-kechu-carmelo"] .merchant-view-menu-button:hover
     font-size:.68rem !important;
   }
 }
+
+
+/* =========================================================
+   DENEXA v130 — CONTRASTE + ORDEN DE CATEGORÍAS
+   ========================================================= */
+
+/* En Kechu no dejamos tarjetas blancas con texto blanco/gris claro. */
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-rule-box,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-rule-example,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-switch-card,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-admin-form,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-setting-card,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-placeholders,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-settings-intro,
+html[data-merchant-theme="carro-kechu-carmelo"] .list-item{
+  background:#121212 !important;
+  border-color:#373737 !important;
+  color:#ffffff !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-rule-box label,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-rule-box small,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-rule-example,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-setting-card label,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-setting-card strong,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-setting-card small,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-settings-intro strong,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-settings-intro p{
+  color:#e8e8e8 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-rule-example{
+  background:#171400 !important;
+  border:1px solid #554900 !important;
+  color:#f1e7aa !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-fields select,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-rule-box select,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-rule-box input,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-rule-box textarea,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-setting-card textarea{
+  background:#090909 !important;
+  border-color:#444 !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-setting-card textarea{
+  min-height:118px !important;
+  line-height:1.35 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-setting-card input[type="checkbox"],
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-rule-box input[type="checkbox"]{
+  accent-color:#ffd000 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-placeholders span{
+  background:#171400 !important;
+  border:1px solid #554900 !important;
+  color:#ffd000 !important;
+}
+
+/* Categorías: orden visible y fácil desde el teléfono. */
+html[data-merchant-theme="carro-kechu-carmelo"] .category-order-item{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  padding:13px 14px !important;
+  margin-top:8px !important;
+  border:1px solid #333 !important;
+  border-radius:14px !important;
+  background:#111 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .category-order-main{
+  min-width:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .category-order-main strong{
+  display:block !important;
+  color:#fff !important;
+  font-size:.86rem !important;
+  overflow-wrap:anywhere !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .category-order-main small{
+  display:block !important;
+  margin-top:3px !important;
+  color:#999 !important;
+  font-size:.62rem !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .category-order-number{
+  width:32px !important;
+  height:32px !important;
+  min-width:32px !important;
+  display:grid !important;
+  place-items:center !important;
+  border-radius:50% !important;
+  background:#ffd000 !important;
+  color:#050505 !important;
+  font-family:Arial,sans-serif !important;
+  font-size:.75rem !important;
+  font-weight:950 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .category-order-actions{
+  display:flex !important;
+  align-items:center !important;
+  gap:6px !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .category-order-button{
+  width:38px !important;
+  height:38px !important;
+  min-width:38px !important;
+  display:grid !important;
+  place-items:center !important;
+  border:1px solid #5d5000 !important;
+  border-radius:10px !important;
+  background:#171400 !important;
+  color:#ffd000 !important;
+  font-family:Arial,sans-serif !important;
+  font-size:1.1rem !important;
+  font-weight:950 !important;
+  cursor:pointer !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .category-order-button:disabled{
+  opacity:.25 !important;
+  cursor:default !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .category-order-actions .status-pill{
+  margin-left:3px !important;
+}
+
+@media(max-width:560px){
+  html[data-merchant-theme="carro-kechu-carmelo"] .category-order-item{
+    align-items:flex-start !important;
+    flex-direction:column !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .category-order-actions{
+    width:100% !important;
+    justify-content:flex-end !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .promo-rule-box,
+  html[data-merchant-theme="carro-kechu-carmelo"] .notice-setting-card{
+    padding:13px !important;
+  }
+}
