@@ -8041,118 +8041,121 @@ html[data-store-theme] .welcome-screen.has-custom-hero{
 
 
 /* =========================================================
-   DENEXA v134 — FAIL-SAFE PORTADA
-   La imagen de fondo o el logo nunca pueden tapar el menú.
+   DENEXA v136 — PORTADA + SCROLL + PROMO MOBILE
+   Restaura el flujo normal: portada -> botón -> menú.
    ========================================================= */
 
-#welcomeScreen{
-  position:relative !important;
-  overflow:hidden !important;
-}
+@media(max-width:899px){
 
-#welcomeScreen .welcome-content{
-  visibility:visible !important;
-  opacity:1 !important;
-  display:flex !important;
-  position:relative !important;
-  z-index:20 !important;
-}
-
-html.branding-loading #welcomeScreen .welcome-content{
-  visibility:visible !important;
-  opacity:1 !important;
-}
-
-#welcomeScreen .welcome-logo-wrap{
-  width:min(220px,58vw) !important;
-  max-width:220px !important;
-  max-height:220px !important;
-  overflow:hidden !important;
-  flex:0 0 auto !important;
-}
-
-#welcomeScreen #welcomeLogo{
-  width:100% !important;
-  height:100% !important;
-  max-width:220px !important;
-  max-height:220px !important;
-  object-fit:contain !important;
-  display:block !important;
-}
-
-/* Si hay fondo personalizado, siempre queda DETRÁS del contenido. */
-#welcomeScreen.has-custom-hero{
-  background-position:center !important;
-  background-size:cover !important;
-  background-repeat:no-repeat !important;
-}
-
-#welcomeScreen.has-custom-hero::after{
-  content:"" !important;
-  position:absolute !important;
-  inset:0 !important;
-  z-index:1 !important;
-  pointer-events:none !important;
-  background:rgba(0,0,0,.58) !important;
-}
-
-#welcomeScreen.has-custom-hero .welcome-content{
-  z-index:20 !important;
-}
-
-/* En Kechu dejamos margen seguro alrededor de la portada. */
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content{
-  width:min(560px,100%) !important;
-  margin:auto !important;
-  padding:20px 18px 24px !important;
-}
-
-@media(max-width:600px){
-  #welcomeScreen .welcome-logo-wrap{
-    width:min(180px,50vw) !important;
-    max-width:180px !important;
-    max-height:180px !important;
+  /* La portada vuelve a existir en celular. */
+  #welcomeScreen.welcome-screen{
+    display:flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    position:fixed !important;
+    inset:0 !important;
+    width:100% !important;
+    height:100svh !important;
+    min-height:100svh !important;
+    max-height:100svh !important;
+    overflow:hidden !important;
+    z-index:999 !important;
   }
 
-  #welcomeScreen #welcomeLogo{
-    max-width:180px !important;
-    max-height:180px !important;
-  }
-}
-
-
-/* =========================================================
-   DENEXA v135 — CELULAR ENTRA DIRECTO AL MENÚ
-   Solución definitiva al bloqueo por imagen/logo de portada.
-   Desktop conserva la portada. Mobile muestra el catálogo.
-   ========================================================= */
-@media (max-width:768px){
-  #welcomeScreen,
-  .welcome-screen{
+  #welcomeScreen.is-leaving{
     display:none !important;
     visibility:hidden !important;
     opacity:0 !important;
     pointer-events:none !important;
-    position:absolute !important;
-    width:0 !important;
-    height:0 !important;
-    min-height:0 !important;
-    overflow:hidden !important;
   }
 
-  #appShell,
-  .app-shell{
-    display:block !important;
+  #welcomeScreen .welcome-content{
+    width:min(560px,100%) !important;
+    height:100% !important;
+    max-height:100% !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
     visibility:visible !important;
     opacity:1 !important;
-    transform:none !important;
+    overflow:hidden !important;
+    position:relative !important;
+    z-index:20 !important;
+    padding:8px 12px 12px !important;
+    box-sizing:border-box !important;
   }
 
-  html,
-  body{
-    overflow-x:hidden !important;
+  html.branding-loading #welcomeScreen .welcome-content{
+    visibility:visible !important;
+    opacity:1 !important;
+  }
+
+  #welcomeScreen .welcome-logo-wrap{
+    width:min(190px,48vw,24svh) !important;
+    height:min(190px,48vw,24svh) !important;
+    max-width:190px !important;
+    max-height:190px !important;
+    min-height:0 !important;
+    margin:2px auto 6px !important;
+    overflow:hidden !important;
+    flex:0 0 auto !important;
+  }
+
+  #welcomeScreen #welcomeLogo{
+    width:100% !important;
+    height:100% !important;
+    max-width:190px !important;
+    max-height:190px !important;
+    object-fit:contain !important;
+    display:block !important;
+  }
+
+  /* Si existe una imagen de fondo, queda detrás del contenido. */
+  #welcomeScreen.has-custom-hero{
+    background-position:center center !important;
+    background-size:cover !important;
+    background-repeat:no-repeat !important;
+  }
+
+  #welcomeScreen.has-custom-hero::after{
+    content:"" !important;
+    position:absolute !important;
+    inset:0 !important;
+    z-index:1 !important;
+    pointer-events:none !important;
+    background:rgba(0,0,0,.58) !important;
+  }
+
+  #welcomeScreen.has-custom-hero .welcome-content{
+    z-index:20 !important;
+  }
+
+  /* Menú: después de entrar, scroll normal. */
+  body:not(.welcome-open){
     overflow-y:auto !important;
+    overflow-x:hidden !important;
     height:auto !important;
     min-height:100% !important;
+    touch-action:auto !important;
+  }
+
+  body:not(.welcome-open) #appShell{
+    visibility:visible !important;
+    opacity:1 !important;
+    display:block !important;
+    overflow:visible !important;
+  }
+
+  /* El carrito vuelve a su diseño de barra original. */
+  .floating-cart.kechu-cart-bar{
+    display:flex !important;
+  }
+
+  /* El botón de promo mantiene el estilo del comercio y vuelve a ser tocable. */
+  #promoJumpButton{
+    pointer-events:auto !important;
+    touch-action:manipulation !important;
+    cursor:pointer !important;
   }
 }
