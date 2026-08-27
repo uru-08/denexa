@@ -887,9 +887,22 @@ function applyBusinessBranding() {
     `;
 
     if (welcomeLogo) {
-      welcomeLogo.hidden = false;
-      welcomeLogo.src = logoUrl;
-      welcomeLogo.alt = name;
+      const mobileKechu =
+        window.matchMedia("(max-width: 899px)").matches &&
+        (
+          normalizeText(business.slug).includes("kechu") ||
+          normalizeText(business.name).includes("kechu")
+        );
+
+      if (mobileKechu) {
+        welcomeLogo.hidden = true;
+        welcomeLogo.removeAttribute("src");
+        welcomeLogo.alt = "";
+      } else {
+        welcomeLogo.hidden = false;
+        welcomeLogo.src = logoUrl;
+        welcomeLogo.alt = name;
+      }
     }
   } else {
     storeLogo.textContent =
@@ -964,6 +977,49 @@ function applyBusinessBranding() {
       isKechu && isMobile
         ? ""
         : rawHeroImage;
+
+    /*
+      v138 DEFINITIVO:
+      En móvil Carro Kechu no utiliza NINGUNA imagen remota en la portada.
+      Esto elimina de raíz la imagen DENEXA gigante que Android seguía
+      mostrando por logo_url/hero_image_url/caché.
+    */
+    if (isKechu && isMobile) {
+      welcomeScreen.classList.remove("has-custom-hero");
+      welcomeScreen.style.setProperty(
+        "background-image",
+        "none",
+        "important"
+      );
+      welcomeScreen.style.setProperty(
+        "background",
+        "#050505",
+        "important"
+      );
+
+      const welcomeLogoWrap =
+        document.querySelector(
+          "#welcomeScreen .welcome-logo-wrap"
+        );
+
+      if (welcomeLogoWrap) {
+        welcomeLogoWrap.style.setProperty(
+          "display",
+          "none",
+          "important"
+        );
+      }
+
+      if (welcomeLogo) {
+        welcomeLogo.hidden = true;
+        welcomeLogo.removeAttribute("src");
+        welcomeLogo.style.setProperty(
+          "display",
+          "none",
+          "important"
+        );
+      }
+    }
 
     welcomeScreen.classList.toggle(
       "has-custom-hero",
