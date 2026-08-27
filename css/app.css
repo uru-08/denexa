@@ -8121,3 +8121,50 @@ html[data-store-theme] .welcome-screen.has-custom-hero{
     touch-action:manipulation !important;
   }
 }
+
+
+/* =========================================================
+   DENEXA v138 — PORTADA MÓVIL KECHU SIN IMAGEN REMOTA
+   ========================================================= */
+@media(max-width:899px){
+  html[data-store-theme*="kechu"] #welcomeScreen{
+    background:#050505 !important;
+    background-image:none !important;
+  }
+
+  html[data-store-theme*="kechu"] #welcomeScreen::before,
+  html[data-store-theme*="kechu"] #welcomeScreen::after{
+    display:none !important;
+  }
+
+  html[data-store-theme*="kechu"]
+  #welcomeScreen .welcome-logo-wrap,
+  html[data-store-theme*="kechu"]
+  #welcomeScreen #welcomeLogo{
+    display:none !important;
+  }
+
+  html[data-store-theme*="kechu"]
+  #welcomeScreen .welcome-content{
+    display:flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    justify-content:center !important;
+    position:relative !important;
+    z-index:10 !important;
+  }
+
+  html[data-store-theme*="kechu"]
+  #welcomeScreen .welcome-copy,
+  html[data-store-theme*="kechu"]
+  #welcomeScreen .welcome-business-name,
+  html[data-store-theme*="kechu"]
+  #welcomeScreen .welcome-button,
+  html[data-store-theme*="kechu"]
+  #welcomeScreen .welcome-services,
+  html[data-store-theme*="kechu"]
+  #welcomeScreen .welcome-denexa-signature{
+    visibility:visible !important;
+    opacity:1 !important;
+  }
+}
