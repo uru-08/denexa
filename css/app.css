@@ -8119,3 +8119,40 @@ html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content{
     max-height:180px !important;
   }
 }
+
+
+/* =========================================================
+   DENEXA v135 — CELULAR ENTRA DIRECTO AL MENÚ
+   Solución definitiva al bloqueo por imagen/logo de portada.
+   Desktop conserva la portada. Mobile muestra el catálogo.
+   ========================================================= */
+@media (max-width:768px){
+  #welcomeScreen,
+  .welcome-screen{
+    display:none !important;
+    visibility:hidden !important;
+    opacity:0 !important;
+    pointer-events:none !important;
+    position:absolute !important;
+    width:0 !important;
+    height:0 !important;
+    min-height:0 !important;
+    overflow:hidden !important;
+  }
+
+  #appShell,
+  .app-shell{
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    transform:none !important;
+  }
+
+  html,
+  body{
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+    height:auto !important;
+    min-height:100% !important;
+  }
+}
