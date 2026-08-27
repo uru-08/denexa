@@ -3436,3 +3436,513 @@ html[data-merchant-theme="carro-kechu-carmelo"] .merchant-session-float button{
   background:#111000 !important;
   color:#FFD400 !important;
 }
+
+
+/* =========================================================
+   DENEXA v128 — REFORMA VISUAL PANEL CARRO KECHU
+   SOLO ESTÉTICA. NO CAMBIA LÓGICA, LOGIN NI SUPABASE.
+   ========================================================= */
+
+html[data-merchant-theme="carro-kechu-carmelo"]{
+  --k-yellow:#ffd000;
+  --k-yellow-soft:#f4c400;
+  --k-black:#050505;
+  --k-card:#101010;
+  --k-card-2:#151515;
+  --k-line:#323232;
+  --k-muted:#bdbdbd;
+  --k-green:#32d07f;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] body.panel-v128{
+  background:
+    radial-gradient(circle at 50% -160px,rgba(255,208,0,.10),transparent 430px),
+    #050505 !important;
+  color:#fff !important;
+}
+
+/* ===== CABECERA / IDENTIDAD ===== */
+html[data-merchant-theme="carro-kechu-carmelo"] .sidebar{
+  background:#070707 !important;
+  border-right:1px solid #292400 !important;
+  box-shadow:none !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .brand{
+  padding:2px 4px 15px !important;
+  gap:11px !important;
+  border-bottom:1px solid #292929 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logo-mark,
+html[data-merchant-theme="carro-kechu-carmelo"] .brand-mark{
+  width:62px !important;
+  height:62px !important;
+  min-width:62px !important;
+  border-radius:18px !important;
+  border:1px solid #5f5000 !important;
+  background:#0b0b0b !important;
+  box-shadow:none !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .brand strong{
+  color:#ffd000 !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  font-size:1.05rem !important;
+  line-height:1 !important;
+  letter-spacing:.035em !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .brand span{
+  color:#bebebe !important;
+  font-size:.72rem !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-user-caption{
+  margin:10px 3px 0 !important;
+  max-width:none !important;
+  color:#b8b8b8 !important;
+  font-size:.66rem !important;
+  opacity:1 !important;
+}
+
+/* Logout secundario pero claro */
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logout-button{
+  min-height:40px !important;
+  margin-top:9px !important;
+  border:1px solid #594c00 !important;
+  border-radius:12px !important;
+  background:#151300 !important;
+  color:#ffd000 !important;
+  font-size:.70rem !important;
+  font-weight:900 !important;
+}
+
+/* ===== NAVEGACIÓN ===== */
+html[data-merchant-theme="carro-kechu-carmelo"] .nav{
+  gap:6px !important;
+  margin-top:13px !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .nav-item{
+  min-height:48px !important;
+  padding:8px 10px !important;
+  gap:9px !important;
+  border:1px solid transparent !important;
+  border-radius:12px !important;
+  background:transparent !important;
+  color:#d8d8d8 !important;
+  font-size:.78rem !important;
+  font-weight:850 !important;
+  transform:none !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .nav-item:hover{
+  background:#111 !important;
+  color:#fff !important;
+  transform:none !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .nav-item.active{
+  border-color:#ffd000 !important;
+  background:#181400 !important;
+  color:#ffd000 !important;
+  box-shadow:inset 0 -3px 0 #ffd000 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .nav-icon{
+  width:32px !important;
+  height:32px !important;
+  min-width:32px !important;
+  display:grid !important;
+  place-items:center !important;
+  border:1px solid #3c3c3c !important;
+  border-radius:9px !important;
+  background:#141414 !important;
+  color:#ffd000 !important;
+  font-family:Arial,sans-serif !important;
+  font-size:.95rem !important;
+  font-weight:900 !important;
+}
+
+/* ===== CONTENIDO ===== */
+html[data-merchant-theme="carro-kechu-carmelo"] .main{
+  padding:26px !important;
+  background:transparent !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .page-header{
+  margin-bottom:16px !important;
+  gap:14px !important;
+  align-items:flex-end !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .eyebrow{
+  margin-bottom:5px !important;
+  color:#ffd000 !important;
+  font-size:.66rem !important;
+  letter-spacing:.11em !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .page-header h1{
+  color:#fff !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  font-size:clamp(2rem,5vw,3.1rem) !important;
+  line-height:.94 !important;
+  letter-spacing:.018em !important;
+  text-transform:uppercase !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .page-header .subtitle{
+  margin-top:7px !important;
+  max-width:620px !important;
+  color:#bdbdbd !important;
+  font-size:.82rem !important;
+  line-height:1.35 !important;
+}
+
+/* Estado */
+html[data-merchant-theme="carro-kechu-carmelo"] .status-badge{
+  min-height:38px !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  padding:8px 13px !important;
+  border:1px solid #426d55 !important;
+  border-radius:999px !important;
+  background:#0d2116 !important;
+  color:#8ce5b2 !important;
+  font-size:.70rem !important;
+  font-weight:900 !important;
+  box-shadow:none !important;
+}
+
+/* ===== MÉTRICAS ===== */
+html[data-merchant-theme="carro-kechu-carmelo"] .cards{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:10px !important;
+  margin-bottom:14px !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .metric-card{
+  min-width:0 !important;
+  min-height:106px !important;
+  padding:14px !important;
+  gap:11px !important;
+  border:1px solid #313131 !important;
+  border-radius:16px !important;
+  background:linear-gradient(145deg,#151515,#0d0d0d) !important;
+  color:#fff !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .metric-card::before{
+  height:3px !important;
+  background:#ffd000 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .metric-icon{
+  width:34px !important;
+  height:34px !important;
+  min-width:34px !important;
+  border:1px solid #4f4400 !important;
+  border-radius:10px !important;
+  background:#171400 !important;
+  color:#ffd000 !important;
+  font-family:Arial,sans-serif !important;
+  font-size:.9rem !important;
+  box-shadow:none !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .metric-card small{
+  color:#bdbdbd !important;
+  font-size:.68rem !important;
+  line-height:1.15 !important;
+  font-weight:800 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .metric-card strong{
+  color:#ffd000 !important;
+  font-size:1.6rem !important;
+  line-height:1 !important;
+}
+
+/* ===== PANELES / CONTROL RÁPIDO ===== */
+html[data-merchant-theme="carro-kechu-carmelo"] .panel,
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-panel,
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-status-panel,
+html[data-merchant-theme="carro-kechu-carmelo"] .order-card,
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-product-card{
+  border:1px solid #303030 !important;
+  border-radius:17px !important;
+  background:#101010 !important;
+  color:#fff !important;
+  box-shadow:none !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-panel{
+  padding:17px !important;
+  border-top:2px solid #ffd000 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-panel h2,
+html[data-merchant-theme="carro-kechu-carmelo"] .panel h2,
+html[data-merchant-theme="carro-kechu-carmelo"] .panel h3{
+  color:#fff !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-actions{
+  gap:8px !important;
+}
+
+/* ===== BOTONES ===== */
+html[data-merchant-theme="carro-kechu-carmelo"] .primary-button{
+  min-height:44px !important;
+  border:1px solid #ffe45c !important;
+  border-radius:12px !important;
+  background:#ffd000 !important;
+  color:#050505 !important;
+  font-weight:950 !important;
+  box-shadow:none !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .secondary-button{
+  min-height:44px !important;
+  border:1px solid #454545 !important;
+  border-radius:12px !important;
+  background:#171717 !important;
+  color:#f2f2f2 !important;
+  font-weight:850 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .danger-button{
+  min-height:44px !important;
+  border:1px solid #6b302c !important;
+  border-radius:12px !important;
+  background:#241210 !important;
+  color:#ff756f !important;
+  font-weight:900 !important;
+}
+
+/* ===== FORMULARIOS ===== */
+html[data-merchant-theme="carro-kechu-carmelo"] input,
+html[data-merchant-theme="carro-kechu-carmelo"] select,
+html[data-merchant-theme="carro-kechu-carmelo"] textarea{
+  border:1px solid #3a3a3a !important;
+  border-radius:11px !important;
+  background:#0b0b0b !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] input::placeholder,
+html[data-merchant-theme="carro-kechu-carmelo"] textarea::placeholder{
+  color:#777 !important;
+  -webkit-text-fill-color:#777 !important;
+}
+
+/* ===== BOTÓN FLOTANTE: menos invasivo ===== */
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-session-float button{
+  min-height:38px !important;
+  padding:7px 11px !important;
+  border-color:#5a4d00 !important;
+  background:#111000 !important;
+  color:#ffd000 !important;
+  font-size:.64rem !important;
+  opacity:.92 !important;
+}
+
+/* ===== MÓVIL ===== */
+@media(max-width:760px){
+  html[data-merchant-theme="carro-kechu-carmelo"] body.panel-v128{
+    display:block !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .sidebar{
+    position:relative !important;
+    width:100% !important;
+    height:auto !important;
+    min-height:0 !important;
+    padding:14px 14px 10px !important;
+    border-right:0 !important;
+    border-bottom:1px solid #332c00 !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .brand{
+    padding:0 0 10px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logo-mark,
+  html[data-merchant-theme="carro-kechu-carmelo"] .brand-mark{
+    width:50px !important;
+    height:50px !important;
+    min-width:50px !important;
+    border-radius:14px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .merchant-user-caption{
+    margin-top:7px !important;
+    font-size:.64rem !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .merchant-logout-button{
+    min-height:36px !important;
+    margin-top:7px !important;
+    padding:7px 10px !important;
+    font-size:.65rem !important;
+  }
+
+  /* Una sola fila desplazable, sin romper el ancho */
+  html[data-merchant-theme="carro-kechu-carmelo"] .nav{
+    display:flex !important;
+    gap:7px !important;
+    margin-top:10px !important;
+    padding:0 0 3px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    scroll-snap-type:x proximity !important;
+    scrollbar-width:none !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .nav::-webkit-scrollbar{
+    display:none !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .nav-item{
+    width:auto !important;
+    min-width:92px !important;
+    min-height:55px !important;
+    flex:0 0 auto !important;
+    padding:7px 9px !important;
+    justify-content:center !important;
+    scroll-snap-align:start !important;
+    font-size:.68rem !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .nav-icon{
+    width:28px !important;
+    height:28px !important;
+    min-width:28px !important;
+    font-size:.82rem !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .main{
+    padding:16px 14px 70px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .page-header{
+    display:block !important;
+    margin-bottom:13px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .page-header h1{
+    font-size:2rem !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .page-header .subtitle{
+    max-width:92% !important;
+    font-size:.76rem !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .status-badge{
+    margin-top:12px !important;
+    min-height:34px !important;
+    padding:7px 11px !important;
+  }
+
+  /* 2 x 2 real en teléfono */
+  html[data-merchant-theme="carro-kechu-carmelo"] .cards{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:8px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .metric-card{
+    min-height:94px !important;
+    padding:11px !important;
+    gap:8px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .metric-icon{
+    width:31px !important;
+    height:31px !important;
+    min-width:31px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .metric-card strong{
+    font-size:1.45rem !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-panel{
+    padding:14px !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-actions{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .merchant-quick-actions .danger-button{
+    grid-column:1/-1 !important;
+  }
+}
+
+@media(max-width:390px){
+  html[data-merchant-theme="carro-kechu-carmelo"] .nav-item{
+    min-width:86px !important;
+    font-size:.64rem !important;
+  }
+
+  html[data-merchant-theme="carro-kechu-carmelo"] .main{
+    padding-inline:10px !important;
+  }
+}
+
+
+/* =========================================================
+   DENEXA v129 — BOTÓN VER MI MENÚ
+   ========================================================= */
+
+.merchant-view-menu-button{
+  width:100% !important;
+  min-height:44px !important;
+  margin:8px 0 4px !important;
+  padding:9px 12px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  border:1px solid #4b4b4b !important;
+  border-radius:12px !important;
+  background:#171717 !important;
+  color:#f4f4f4 !important;
+  font-size:.72rem !important;
+  font-weight:900 !important;
+  cursor:pointer !important;
+}
+
+.merchant-view-menu-button span{
+  font-family:Arial,sans-serif !important;
+  font-size:1rem !important;
+  line-height:1 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-view-menu-button{
+  border-color:#ffd000 !important;
+  background:#ffd000 !important;
+  color:#050505 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .merchant-view-menu-button:hover{
+  background:#ffe057 !important;
+}
+
+@media(max-width:760px){
+  .merchant-view-menu-button{
+    min-height:40px !important;
+    margin-top:7px !important;
+    padding:8px 10px !important;
+    font-size:.68rem !important;
+  }
+}
