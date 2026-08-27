@@ -277,6 +277,11 @@ const merchantLogoutButton =
     "merchantLogoutButton"
   );
 
+const merchantViewMenuButton =
+  document.getElementById(
+    "merchantViewMenuButton"
+  );
+
 const merchantUserCaption =
   document.getElementById(
     "merchantUserCaption"
@@ -788,6 +793,32 @@ merchantLoginForm?.addEventListener(
 merchantLogoutButton?.addEventListener(
   "click",
   logoutMerchant
+);
+
+merchantViewMenuButton?.addEventListener(
+  "click",
+  () => {
+    const slug = String(
+      selectedBusiness?.slug || ""
+    ).trim();
+
+    if (!slug) {
+      showToast(
+        "No se pudo obtener el enlace de tu menú.",
+        "error"
+      );
+      return;
+    }
+
+    const menuUrl =
+      `index.html?business=${encodeURIComponent(slug)}`;
+
+    window.open(
+      menuUrl,
+      "_blank",
+      "noopener"
+    );
+  }
 );
 
 const merchantMobileLogoutButton =
