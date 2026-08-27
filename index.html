@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Knewave&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css?v=136">
+  <link rel="stylesheet" href="css/app.css?v=137">
   <style>
     html,body{background:#050505}
     #appShell{visibility:hidden}
@@ -38,19 +38,12 @@
       opacity:0;
     }
   
-    /* v136: flujo mÃ³vil correcto. Portada visible hasta tocar "Hacer mi pedido". */
+    /* v137 fail-safe mÃ³vil: nunca usar hero externo de Kechu */
     @media(max-width:899px){
-      body.welcome-open #welcomeScreen{
-        display:flex !important;
-      }
-      body.welcome-open #appShell{
-        visibility:hidden !important;
-      }
-      body:not(.welcome-open) #welcomeScreen{
-        display:none !important;
-      }
-      body:not(.welcome-open) #appShell{
-        visibility:visible !important;
+      html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen,
+      html[data-store-theme*="kechu"] #welcomeScreen{
+        background-image:none !important;
+        background-color:#050505 !important;
       }
     }
 
@@ -474,6 +467,6 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=32"></script>
-  <script src="js/app.js?v=136"></script>
+  <script src="js/app.js?v=137"></script>
 </body>
 </html>
