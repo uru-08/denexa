@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Knewave&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css?v=133">
+  <link rel="stylesheet" href="css/app.css?v=134">
   <style>
     html,body{background:#050505}
     #appShell{visibility:hidden}
@@ -36,6 +36,28 @@
     }
     html.branding-loading #welcomeScreen .welcome-content{
       opacity:0;
+    }
+
+    /* v134: la portada nunca puede quedar tapada por una imagen */
+    #welcomeScreen .welcome-content{
+      visibility:visible !important;
+      opacity:1 !important;
+      display:flex !important;
+      position:relative !important;
+      z-index:20 !important;
+    }
+    #welcomeScreen .welcome-logo-wrap{
+      width:min(220px,58vw) !important;
+      max-width:220px !important;
+      max-height:220px !important;
+      overflow:hidden !important;
+    }
+    #welcomeScreen #welcomeLogo{
+      width:100% !important;
+      height:100% !important;
+      max-width:220px !important;
+      max-height:220px !important;
+      object-fit:contain !important;
     }
   </style>
 </head>
