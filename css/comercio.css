@@ -4105,3 +4105,100 @@ html[data-merchant-theme="carro-kechu-carmelo"] .category-order-actions .status-
     padding:13px !important;
   }
 }
+
+
+/* =========================================================
+   DENEXA v131 — CORRECCIÓN DEFINITIVA DE CONTRASTE
+   ========================================================= */
+
+html[data-merchant-theme="carro-kechu-carmelo"] .list-item:hover{
+  background:#171717 !important;
+  transform:none !important;
+}
+
+/* Delivery / retiro */
+html[data-merchant-theme="carro-kechu-carmelo"] .fulfillment-settings-panel,
+html[data-merchant-theme="carro-kechu-carmelo"] .fulfillment-settings-intro,
+html[data-merchant-theme="carro-kechu-carmelo"] .fulfillment-toggle-row,
+html[data-merchant-theme="carro-kechu-carmelo"] .fulfillment-address-fields{
+  background:#111111 !important;
+  border-color:#373737 !important;
+  color:#ffffff !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .fulfillment-toggle-row strong,
+html[data-merchant-theme="carro-kechu-carmelo"] .fulfillment-address-fields label{
+  color:#ffffff !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .fulfillment-toggle-row small,
+html[data-merchant-theme="carro-kechu-carmelo"] .fulfillment-address-fields p,
+html[data-merchant-theme="carro-kechu-carmelo"] .fulfillment-settings-intro p{
+  color:#bcbcbc !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .fulfillment-toggle-row input[type="checkbox"]{
+  accent-color:#ffd000 !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .fulfillment-address-fields input{
+  background:#080808 !important;
+  border:1px solid #454545 !important;
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .fulfillment-address-fields input::placeholder{
+  color:#777777 !important;
+  -webkit-text-fill-color:#777777 !important;
+}
+
+/* Promo: cubrimos contenedores internos que heredaban blanco */
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-admin-panel,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-admin-section,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-fields,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-condition-fields,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-rule-box,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-preview-panel{
+  background:#111111 !important;
+  border-color:#373737 !important;
+  color:#ffffff !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-admin-panel label,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-condition-fields label,
+html[data-merchant-theme="carro-kechu-carmelo"] .promo-fields label{
+  color:#eeeeee !important;
+}
+
+/* Avisos WhatsApp */
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-settings-list,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-setting-card,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-settings-intro,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-placeholders{
+  background:#111111 !important;
+  border-color:#373737 !important;
+  color:#ffffff !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-setting-card .full-width,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-setting-card .checkbox-label,
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-setting-card .checkbox-label strong{
+  color:#ffffff !important;
+}
+
+html[data-merchant-theme="carro-kechu-carmelo"] .notice-setting-card .checkbox-label small{
+  color:#bcbcbc !important;
+}
+
+/* Formas de pago y cualquier panel con formularios */
+html[data-merchant-theme="carro-kechu-carmelo"] .form-grid label{
+  color:#eeeeee !important;
+}
+
+/* Botones de ordenar categoría: feedback visual */
+html[data-merchant-theme="carro-kechu-carmelo"] .category-order-button:not(:disabled):active{
+  background:#ffd000 !important;
+  color:#050505 !important;
+  transform:scale(.94) !important;
+}
