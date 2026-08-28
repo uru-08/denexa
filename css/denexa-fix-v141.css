@@ -1,0 +1,428 @@
+/* =========================================================
+   DENEXA v141 — CORRECCIÓN VISUAL INTEGRAL
+   - Mantiene eliminado el hero/logo gigante.
+   - Recupera una portada cuidada.
+   - Repara el botón VER PROMO.
+   - Evita que el carrito flotante tape el menú.
+   ========================================================= */
+
+/* ---------- PORTADA: SEGURA, SIN IMAGEN GIGANTE ---------- */
+
+#welcomeScreen,
+#welcomeScreen.has-custom-hero,
+html[data-store-theme] #welcomeScreen,
+html[data-store-theme] #welcomeScreen.has-custom-hero{
+  background:
+    radial-gradient(circle at 50% 18%,rgba(18,102,230,.24),transparent 20rem),
+    radial-gradient(circle at 12% 85%,rgba(244,197,101,.08),transparent 16rem),
+    linear-gradient(155deg,#020914 0%,#031a43 46%,#082f77 100%) !important;
+  background-image:
+    radial-gradient(circle at 50% 18%,rgba(18,102,230,.24),transparent 20rem),
+    radial-gradient(circle at 12% 85%,rgba(244,197,101,.08),transparent 16rem),
+    linear-gradient(155deg,#020914 0%,#031a43 46%,#082f77 100%) !important;
+  --custom-hero-image:none !important;
+}
+
+/* Nunca permitir una imagen de fondo externa en la bienvenida. */
+#welcomeScreen::before,
+#welcomeScreen::after,
+#welcomeScreen.has-custom-hero::before,
+#welcomeScreen.has-custom-hero::after{
+  background-image:none !important;
+  pointer-events:none !important;
+}
+
+/* El logo grande conflictivo sigue eliminado. */
+#welcomeScreen .welcome-logo-wrap,
+#welcomeScreen #welcomeLogo,
+#welcomeScreen .welcome-denexa-signature img{
+  display:none !important;
+}
+
+/* Composición más cuidada y respirada. */
+#welcomeScreen .welcome-content{
+  width:min(560px,calc(100% - 28px)) !important;
+  max-width:560px !important;
+  min-height:100% !important;
+  justify-content:center !important;
+  padding:
+    max(24px,env(safe-area-inset-top))
+    0
+    max(28px,env(safe-area-inset-bottom)) !important;
+  overflow:visible !important;
+}
+
+#welcomeScreen .welcome-status{
+  margin:0 auto 26px !important;
+  padding:10px 16px !important;
+  border-radius:999px !important;
+  background:rgba(3,12,28,.72) !important;
+  border:1px solid rgba(244,197,101,.36) !important;
+  box-shadow:0 8px 26px rgba(0,0,0,.20) !important;
+  backdrop-filter:blur(12px) !important;
+}
+
+#welcomeScreen .welcome-copy{
+  width:100% !important;
+}
+
+#welcomeScreen .welcome-kicker{
+  margin-bottom:8px !important;
+  color:rgba(255,255,255,.86) !important;
+  font-size:.78rem !important;
+  letter-spacing:.18em !important;
+}
+
+#welcomeScreen .welcome-copy h1{
+  max-width:100% !important;
+  margin:0 auto !important;
+  line-height:.92 !important;
+  text-wrap:balance;
+}
+
+#welcomeScreen .kechu-welcome-services{
+  width:min(480px,100%) !important;
+  margin:24px auto 0 !important;
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:8px !important;
+}
+
+#welcomeScreen .welcome-service-card{
+  min-height:82px !important;
+  padding:11px 8px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:6px !important;
+  border:1px solid rgba(255,255,255,.15) !important;
+  border-radius:15px !important;
+  background:rgba(255,255,255,.055) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+
+#welcomeScreen .welcome-service-icon{
+  font-size:1.25rem !important;
+}
+
+#welcomeScreen .welcome-service-card strong{
+  font-size:.72rem !important;
+  line-height:1.15 !important;
+  text-align:center !important;
+}
+
+#welcomeScreen .welcome-button{
+  width:min(500px,100%) !important;
+  min-height:62px !important;
+  margin:26px auto 0 !important;
+  border-radius:18px !important;
+  font-size:1.06rem !important;
+  box-shadow:0 16px 36px rgba(0,0,0,.25) !important;
+}
+
+#welcomeScreen .welcome-mobile-note{
+  margin:13px 0 0 !important;
+}
+
+#welcomeScreen .welcome-note{
+  margin-top:8px !important;
+}
+
+#welcomeScreen .welcome-denexa-signature{
+  margin-top:24px !important;
+  padding-top:15px !important;
+  border-top:1px solid rgba(255,255,255,.10) !important;
+}
+
+#welcomeScreen .welcome-denexa-signature > div{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  justify-content:center !important;
+  align-items:baseline !important;
+  column-gap:6px !important;
+  row-gap:2px !important;
+  color:rgba(255,255,255,.76) !important;
+}
+
+#welcomeScreen .welcome-denexa-signature span,
+#welcomeScreen .welcome-denexa-signature small{
+  font-size:.72rem !important;
+}
+
+#welcomeScreen .welcome-denexa-signature strong{
+  font-size:.82rem !important;
+}
+
+
+/* ---------- KECHU: PORTADA NEGRA/AMARILLA LIMPIA ---------- */
+
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen,
+html[data-store-theme*="kechu"] #welcomeScreen{
+  background:
+    radial-gradient(circle at 50% 24%,rgba(255,212,0,.08),transparent 20rem),
+    linear-gradient(180deg,#050505 0%,#000 100%) !important;
+  background-image:
+    radial-gradient(circle at 50% 24%,rgba(255,212,0,.08),transparent 20rem),
+    linear-gradient(180deg,#050505 0%,#000 100%) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content,
+html[data-store-theme*="kechu"] #welcomeScreen .welcome-content{
+  width:min(590px,calc(100% - 30px)) !important;
+  padding-left:0 !important;
+  padding-right:0 !important;
+  transform:none !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-copy h1,
+html[data-store-theme*="kechu"] #welcomeScreen .welcome-copy h1{
+  color:#FFD400 !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  font-size:clamp(3rem,13vw,4.8rem) !important;
+  letter-spacing:.02em !important;
+  text-transform:uppercase !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-service-card,
+html[data-store-theme*="kechu"] #welcomeScreen .welcome-service-card{
+  border-color:rgba(255,212,0,.24) !important;
+  background:#090909 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-button,
+html[data-store-theme*="kechu"] #welcomeScreen .welcome-button{
+  border:1px solid #FFE45B !important;
+  background:#FFD400 !important;
+  color:#050505 !important;
+  box-shadow:0 14px 32px rgba(255,212,0,.08) !important;
+}
+
+
+/* ---------- BOTÓN PROMO: RECONSTRUIDO ---------- */
+
+.promo-jump-button{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:9px !important;
+  min-height:48px !important;
+  margin-top:15px !important;
+  padding:11px 18px !important;
+  border:0 !important;
+  border-radius:14px !important;
+  background:linear-gradient(135deg,var(--primary),var(--primary-2)) !important;
+  color:#fff !important;
+  font-family:inherit !important;
+  font-size:.84rem !important;
+  font-weight:950 !important;
+  letter-spacing:.045em !important;
+  text-transform:uppercase !important;
+  line-height:1 !important;
+  box-shadow:0 10px 24px rgba(5,43,108,.18) !important;
+  cursor:pointer !important;
+  touch-action:manipulation !important;
+}
+
+.promo-jump-button:active{
+  transform:scale(.985) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .promo-jump-button,
+html[data-store-theme*="kechu"] .promo-jump-button{
+  border:1px solid #FFE45B !important;
+  background:#FFD400 !important;
+  color:#050505 !important;
+  box-shadow:none !important;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:.9rem !important;
+}
+
+
+/* ---------- CARRITO FLOTANTE: COMPACTO Y SIN TAPAR MENÚ ---------- */
+
+/*
+  Reservamos espacio real al final del catálogo.
+  Así ningún producto termina debajo de la barra flotante.
+*/
+.app-shell{
+  padding-bottom:
+    calc(138px + env(safe-area-inset-bottom)) !important;
+}
+
+.main-content{
+  padding-bottom:56px !important;
+}
+
+.floating-cart,
+#cartButton{
+  position:fixed !important;
+  left:50% !important;
+  right:auto !important;
+  bottom:max(12px,env(safe-area-inset-bottom)) !important;
+  z-index:1200 !important;
+  width:min(460px,calc(100% - 24px)) !important;
+  min-height:66px !important;
+  max-height:72px !important;
+  margin:0 !important;
+  padding:9px 12px !important;
+  transform:translateX(-50%) !important;
+  display:grid !important;
+  grid-template-columns:auto minmax(0,1fr) auto !important;
+  align-items:center !important;
+  gap:10px !important;
+  border-radius:22px !important;
+  overflow:hidden !important;
+  box-shadow:0 14px 34px rgba(0,0,0,.24) !important;
+}
+
+.floating-cart:active,
+#cartButton:active{
+  transform:translateX(-50%) scale(.985) !important;
+}
+
+#cartButton .cart-icon-wrap{
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  display:grid !important;
+  place-items:center !important;
+  position:relative !important;
+}
+
+#cartButton .cart-icon{
+  font-size:1.35rem !important;
+}
+
+#cartButton .cart-copy{
+  min-width:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-start !important;
+  gap:2px !important;
+}
+
+#cartButton .cart-copy strong{
+  line-height:1.05 !important;
+}
+
+#cartButton .cart-summary-total{
+  font-size:.86rem !important;
+}
+
+#cartButton .cart-action-label{
+  flex:0 0 auto !important;
+  min-height:44px !important;
+  padding:0 15px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:14px !important;
+  font-size:.76rem !important;
+  font-weight:950 !important;
+  white-space:nowrap !important;
+}
+
+/* Kechu: barra negra, acción amarilla. */
+html[data-store-theme="carro-kechu-carmelo"] #cartButton,
+html[data-store-theme*="kechu"] #cartButton{
+  border:1px solid rgba(255,212,0,.58) !important;
+  background:#090909 !important;
+  color:#fff !important;
+  box-shadow:0 14px 34px rgba(0,0,0,.58) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #cartButton .cart-action-label,
+html[data-store-theme*="kechu"] #cartButton .cart-action-label{
+  background:#FFD400 !important;
+  color:#050505 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #cartButton .cart-count-badge,
+html[data-store-theme*="kechu"] #cartButton .cart-count-badge{
+  background:#FFD400 !important;
+  color:#050505 !important;
+}
+
+
+/* ---------- MÓVIL ---------- */
+
+@media(max-width:520px){
+
+  #welcomeScreen .welcome-content{
+    width:calc(100% - 24px) !important;
+  }
+
+  #welcomeScreen .welcome-status{
+    margin-bottom:20px !important;
+  }
+
+  #welcomeScreen .kechu-welcome-services{
+    gap:6px !important;
+    margin-top:20px !important;
+  }
+
+  #welcomeScreen .welcome-service-card{
+    min-height:72px !important;
+    padding:9px 5px !important;
+  }
+
+  #welcomeScreen .welcome-service-card strong{
+    font-size:.64rem !important;
+  }
+
+  #welcomeScreen .welcome-button{
+    min-height:60px !important;
+    margin-top:22px !important;
+  }
+
+  #welcomeScreen .welcome-denexa-signature{
+    margin-top:20px !important;
+  }
+
+  .floating-cart,
+  #cartButton{
+    width:calc(100% - 20px) !important;
+    min-height:62px !important;
+    max-height:66px !important;
+    padding:8px 9px !important;
+    border-radius:20px !important;
+  }
+
+  #cartButton .cart-icon-wrap{
+    width:38px !important;
+    height:38px !important;
+    min-width:38px !important;
+  }
+
+  #cartButton .cart-action-label{
+    min-height:40px !important;
+    padding:0 12px !important;
+    font-size:.71rem !important;
+  }
+
+  .app-shell{
+    padding-bottom:
+      calc(128px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .menu-promo-banner{
+    padding-left:18px !important;
+    padding-right:18px !important;
+  }
+}
+
+
+/* Pantallas muy angostas: el carrito sigue sin invadir el catálogo. */
+@media(max-width:370px){
+  #cartButton .cart-copy strong:first-child{
+    font-size:.76rem !important;
+  }
+
+  #cartButton .cart-action-label{
+    padding:0 9px !important;
+    font-size:.67rem !important;
+  }
+}
