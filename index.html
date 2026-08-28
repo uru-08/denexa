@@ -40,7 +40,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="css/app.css?v=150">
+  <link rel="stylesheet" href="css/app.css?v=151">
 <style>
     html,
     body {
@@ -1764,6 +1764,245 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
   }
 }
 
+
+
+/* =========================================================
+   DENEXA V151 - HEADER SEGUN BOCETO MANUAL
+   Logo | Nombre + slogan | Cocina
+   Fila unica: DENEXA | TOMANDO PEDIDOS | RAPIDO Y SEGURO
+   ========================================================= */
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-trust-strip{
+  display:none !important;
+}
+
+.kechu-kitchen-symbol{
+  display:none;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-header-inner{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  row-gap:10px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-brand{
+  display:grid !important;
+  grid-template-columns:96px minmax(0,1fr) 96px !important;
+  gap:12px !important;
+  align-items:center !important;
+  width:100% !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-logo{
+  width:96px !important;
+  height:112px !important;
+  min-width:96px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-heading{
+  min-width:0 !important;
+  padding-left:2px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-heading h1{
+  font-size:clamp(1.95rem,9.5vw,3rem) !important;
+  line-height:.86 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .store-subtitle{
+  margin-top:7px !important;
+  font-size:.56rem !important;
+  line-height:1.15 !important;
+}
+
+/* SÃ­mbolo visual de cocina, sin imagen externa */
+html[data-store-theme="carro-kechu-carmelo"] .kechu-kitchen-symbol{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:96px !important;
+  padding:8px 6px !important;
+  border:1px solid rgba(255,212,0,.42) !important;
+  border-radius:18px !important;
+  background:
+    radial-gradient(circle at 50% 35%,rgba(255,212,0,.09),transparent 3.8rem),
+    #070707 !important;
+  color:#fff !important;
+  text-align:center !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-kitchen-utensils{
+  width:48px !important;
+  height:48px !important;
+  display:grid !important;
+  place-items:center !important;
+  margin-bottom:4px !important;
+  border-radius:50% !important;
+  background:#FFD400 !important;
+  color:#050505 !important;
+  box-shadow:0 0 0 5px rgba(255,212,0,.08) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-fork{
+  font-size:1.55rem !important;
+  line-height:1 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-kitchen-symbol strong{
+  color:#FFD400 !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.62rem !important;
+  font-weight:900 !important;
+  letter-spacing:.05em !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-kitchen-symbol small{
+  margin-top:2px !important;
+  color:#fff !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.42rem !important;
+  font-weight:700 !important;
+  line-height:1.05 !important;
+}
+
+/* Ocultar estructuras viejas */
+html[data-store-theme="carro-kechu-carmelo"] .kechu-denexa-menu-brand,
+html[data-store-theme="carro-kechu-carmelo"] #storeStatus,
+html[data-store-theme="carro-kechu-carmelo"] .service-strip{
+  display:none !important;
+}
+
+/* Fila unica */
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-info-row{
+  display:grid !important;
+  grid-template-columns:1fr 1fr 1fr !important;
+  align-items:center !important;
+  width:100% !important;
+  min-height:60px !important;
+  padding:6px 7px !important;
+  margin:0 !important;
+  border:1px solid rgba(255,212,0,.5) !important;
+  border-radius:18px !important;
+  background:#070707 !important;
+}
+
+/* Izquierda: DENEXA */
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa{
+  min-height:46px !important;
+  justify-content:center !important;
+  padding:0 8px !important;
+  border-right:1px solid rgba(255,255,255,.22) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa-wordmark{
+  font-size:1.02rem !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa small{
+  font-size:.36rem !important;
+}
+
+/* Medio: estado */
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-ordering-status{
+  min-height:46px !important;
+  padding:0 6px !important;
+  border-right:1px solid rgba(255,255,255,.22) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-ordering-status strong{
+  font-size:.61rem !important;
+  white-space:normal !important;
+}
+
+/* Derecha: rapido y seguro */
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-fast-safe{
+  min-height:46px !important;
+  padding:0 7px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-fast-icon{
+  color:#FFD400 !important;
+  font-size:1.2rem !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-fast-safe > div{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-start !important;
+  line-height:1 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-fast-safe strong{
+  color:#FFD400 !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.58rem !important;
+  font-weight:900 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-fast-safe small{
+  margin-top:2px !important;
+  color:#fff !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.52rem !important;
+  font-weight:800 !important;
+}
+
+/* Acercar promo al encabezado */
+html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
+  margin-top:8px !important;
+}
+
+@media(max-width:420px){
+  html[data-store-theme="carro-kechu-carmelo"] .store-brand{
+    grid-template-columns:86px minmax(0,1fr) 84px !important;
+    gap:9px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-logo{
+    width:86px !important;
+    height:104px !important;
+    min-width:86px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading h1{
+    font-size:clamp(1.72rem,9.4vw,2.55rem) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-subtitle{
+    font-size:.49rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-kitchen-symbol{
+    min-height:84px !important;
+    padding:6px 4px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-kitchen-utensils{
+    width:42px !important;
+    height:42px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-info-row{
+    min-height:56px !important;
+    padding:5px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa-wordmark{
+    font-size:.9rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-ordering-status strong,
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-fast-safe strong{
+    font-size:.53rem !important;
+  }
+}
+
 </style>
 </head>
 
@@ -1896,40 +2135,15 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
 
         </div>
 
-        <section
-          class="kechu-trust-strip"
-          aria-label="Confianza y servicio"
-        >
-          <div class="kechu-trust-item">
-            <span class="kechu-trust-icon" aria-hidden="true">&#127482;&#127486;</span>
-            <span class="kechu-trust-copy">
-              <strong>HECHO EN</strong>
-              <b>URUGUAY</b>
-            </span>
+        <div class="kechu-kitchen-symbol" aria-label="Cocina">
+          <div class="kechu-kitchen-utensils" aria-hidden="true">
+            <span class="kechu-fork">&#127860;</span>
           </div>
+          <strong>COCINA</strong>
+          <small>TRADICI&Oacute;N Y SABOR</small>
+        </div>
 
-          <span class="kechu-trust-divider" aria-hidden="true"></span>
-
-          <div class="kechu-trust-item">
-            <span class="kechu-trust-icon kechu-trust-shield" aria-hidden="true">&#10003;</span>
-            <span class="kechu-trust-copy">
-              <strong>CALIDAD</strong>
-              <b>GARANTIZADA</b>
-            </span>
-          </div>
-
-          <span class="kechu-trust-divider" aria-hidden="true"></span>
-
-          <div class="kechu-trust-item">
-            <span class="kechu-trust-icon" aria-hidden="true">&#128666;</span>
-            <span class="kechu-trust-copy">
-              <strong>R&Aacute;PIDO</strong>
-              <b>Y SEGURO</b>
-            </span>
-          </div>
-        </section>
-
-        <div class="kechu-final-info-row" aria-label="DENEXA, estado de pedidos y WhatsApp">
+        <div class="kechu-final-info-row" aria-label="DENEXA, estado de pedidos y entrega segura">
           <div class="kechu-final-denexa">
             <div class="kechu-final-denexa-wordmark">/DENE<span>X</span>A</div>
             <small>PLATAFORMA DE PEDIDOS ONLINE</small>
@@ -1940,20 +2154,15 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
             <strong id="kechuFinalStatusText">Tomando pedidos</strong>
           </div>
 
-          <div class="kechu-final-whatsapp" aria-label="WhatsApp">
-            <svg
-              class="kechu-whatsapp-icon"
-              viewBox="0 0 32 32"
-              role="img"
-              aria-label="WhatsApp"
-            >
-              <path
-                fill="currentColor"
-                d="M16 3C8.82 3 3 8.66 3 15.65c0 2.49.74 4.91 2.15 6.98L3.7 29l6.58-1.72A13.2 13.2 0 0 0 16 28.57c7.18 0 13-5.66 13-12.65C29 8.93 23.18 3 16 3Zm0 23.2c-1.93 0-3.82-.52-5.47-1.51l-.39-.23-3.91 1.02 1.04-3.7-.25-.38a10.31 10.31 0 0 1-1.67-5.75C5.35 9.96 10.13 5.3 16 5.3c5.87 0 10.65 4.66 10.65 10.35S21.87 26.2 16 26.2Zm5.84-7.78c-.32-.16-1.9-.92-2.2-1.02-.29-.11-.5-.16-.72.16-.21.31-.82 1.01-1.01 1.22-.19.21-.37.24-.69.08-.32-.16-1.36-.49-2.58-1.56-.95-.83-1.59-1.86-1.78-2.17-.19-.31-.02-.48.14-.64.14-.14.32-.37.48-.56.16-.18.21-.31.32-.52.11-.21.05-.4-.03-.56-.08-.16-.72-1.7-.99-2.33-.26-.63-.53-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.29.31-1.12 1.07-1.12 2.61s1.15 3.03 1.31 3.24c.16.21 2.26 3.38 5.48 4.74.77.32 1.36.52 1.83.67.77.24 1.47.21 2.02.13.62-.09 1.9-.76 2.17-1.49.27-.73.27-1.35.19-1.49-.08-.13-.29-.21-.61-.37Z"
-              />
-            </svg>
-            <strong>WHATSAPP</strong>
+          <div class="kechu-final-fast-safe">
+            <span class="kechu-final-fast-icon" aria-hidden="true">&#128666;</span>
+            <div>
+              <strong>R&Aacute;PIDO</strong>
+              <small>Y SEGURO</small>
+            </div>
           </div>
+        </div>
+
         </div>
 
         <div class="kechu-denexa-menu-brand" aria-label="Powered by DENEXA">
@@ -2500,7 +2709,7 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
   </script>
 
   <script src="js/config.js?v=36"></script>
-  <script src="js/app.js?v=150"></script>
+  <script src="js/app.js?v=151"></script>
 
 
 <script>
