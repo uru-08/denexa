@@ -40,7 +40,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="css/app.css?v=144">
+  <link rel="stylesheet" href="css/app.css?v=146">
 <style>
     html,
     body {
@@ -550,6 +550,274 @@ html[data-store-theme="carro-kechu-carmelo"]
     min-height:56px !important;
     padding:9px 7px !important;
     font-size:.72rem !important;
+  }
+}
+
+
+
+/* =========================================================
+   DENEXA V146 - TARJETA PROMOCIONAL UNIVERSAL
+   Imagen generica + nombre de producto/promocion protagonista.
+   ========================================================= */
+
+#dailyPromoBanner.menu-promo-banner{
+  position:relative !important;
+  isolation:isolate !important;
+  width:100% !important;
+  min-height:220px !important;
+  margin:20px 0 28px !important;
+  padding:24px 46% 22px 22px !important;
+  overflow:hidden !important;
+  border:1px solid rgba(11,67,160,.26) !important;
+  border-radius:24px !important;
+  background:
+    linear-gradient(135deg,#ffffff 0%,#f5f9ff 100%) !important;
+  color:#10213D !important;
+  box-shadow:0 15px 38px rgba(5,43,108,.12) !important;
+  cursor:pointer !important;
+}
+
+/* Imagen generica: se usa solo la zona del megafono/promocion.
+   No contiene un producto concreto. */
+#dailyPromoBanner.menu-promo-banner::before{
+  content:"" !important;
+  position:absolute !important;
+  z-index:-1 !important;
+  top:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  width:47% !important;
+  background-image:
+    linear-gradient(90deg,#f5f9ff 0%,rgba(245,249,255,.10) 35%,rgba(0,0,0,.05) 100%),
+    url("assets/promo-generica-denexa.png") !important;
+  background-repeat:no-repeat !important;
+  background-position:left center, 88% 49% !important;
+  background-size:100% 100%, 690px auto !important;
+  pointer-events:none !important;
+}
+
+#dailyPromoBanner.menu-promo-banner::after{
+  content:"" !important;
+  position:absolute !important;
+  z-index:-1 !important;
+  inset:0 !important;
+  background:
+    radial-gradient(circle at 82% 50%,rgba(244,197,101,.10),transparent 15rem) !important;
+  pointer-events:none !important;
+}
+
+#dailyPromoBanner.menu-promo-banner[hidden]{
+  display:none !important;
+}
+
+#dailyPromoBannerBadge{
+  display:inline-flex !important;
+  align-items:center !important;
+  width:max-content !important;
+  margin:0 0 13px !important;
+  padding:7px 11px !important;
+  border-radius:999px !important;
+  background:#0B43A0 !important;
+  color:#fff !important;
+  font-size:.65rem !important;
+  font-weight:950 !important;
+  letter-spacing:.09em !important;
+  line-height:1 !important;
+  text-transform:uppercase !important;
+}
+
+/* NOMBRE DEL PRODUCTO / PROMO = protagonista */
+#dailyPromoBannerTitle{
+  display:block !important;
+  position:relative !important;
+  z-index:2 !important;
+  max-width:100% !important;
+  margin:0 !important;
+  color:#10213D !important;
+  font-size:clamp(1.75rem,6vw,2.55rem) !important;
+  font-weight:1000 !important;
+  line-height:.98 !important;
+  letter-spacing:-.035em !important;
+  text-wrap:balance !important;
+}
+
+/* Beneficio/descuento = informacion secundaria */
+#dailyPromoBannerText{
+  display:block !important;
+  position:relative !important;
+  z-index:2 !important;
+  max-width:360px !important;
+  margin:12px 0 0 !important;
+  color:#52627b !important;
+  font-size:.94rem !important;
+  font-weight:850 !important;
+  line-height:1.35 !important;
+}
+
+#promoJumpButton,
+#dailyPromoBanner .promo-jump-button{
+  position:relative !important;
+  z-index:3 !important;
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:auto !important;
+  min-width:0 !important;
+  min-height:45px !important;
+  margin:18px 0 0 !important;
+  padding:0 18px !important;
+  border:0 !important;
+  border-radius:14px !important;
+  background:#0B43A0 !important;
+  color:#fff !important;
+  box-shadow:none !important;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
+  font-size:.75rem !important;
+  font-weight:950 !important;
+  letter-spacing:.045em !important;
+  line-height:1 !important;
+  text-transform:uppercase !important;
+  white-space:nowrap !important;
+  cursor:pointer !important;
+}
+
+#promoJumpButton::after,
+#dailyPromoBanner .promo-jump-button::after{
+  content:"\2192" !important;
+  display:inline-block !important;
+  margin-left:8px !important;
+  font-size:1rem !important;
+}
+
+/* ---------- KECHU ---------- */
+
+html[data-store-theme="carro-kechu-carmelo"]
+#dailyPromoBanner.menu-promo-banner{
+  min-height:230px !important;
+  padding:24px 45% 23px 22px !important;
+  border:1px solid rgba(255,212,0,.62) !important;
+  background:
+    linear-gradient(135deg,#0c0c0c 0%,#050505 100%) !important;
+  color:#fff !important;
+  box-shadow:
+    0 0 0 1px rgba(255,212,0,.06),
+    0 12px 34px rgba(0,0,0,.34) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"]
+#dailyPromoBanner.menu-promo-banner::before{
+  width:48% !important;
+  background-image:
+    linear-gradient(90deg,#050505 0%,rgba(5,5,5,.25) 38%,rgba(5,5,5,.02) 100%),
+    url("assets/promo-generica-denexa.png") !important;
+  background-position:left center, 89% 49% !important;
+  background-size:100% 100%, 690px auto !important;
+  opacity:1 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"]
+#dailyPromoBanner.menu-promo-banner::after{
+  background:
+    radial-gradient(circle at 80% 52%,rgba(255,212,0,.10),transparent 15rem) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"]
+#dailyPromoBannerBadge{
+  background:#FFD400 !important;
+  color:#050505 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"]
+#dailyPromoBannerTitle{
+  color:#fff !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  font-size:clamp(2rem,8vw,3.15rem) !important;
+  line-height:.91 !important;
+  letter-spacing:.015em !important;
+  text-transform:uppercase !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"]
+#dailyPromoBannerText{
+  max-width:330px !important;
+  color:#FFD400 !important;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:.96rem !important;
+  font-weight:900 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"]
+#promoJumpButton,
+html[data-store-theme="carro-kechu-carmelo"]
+#dailyPromoBanner .promo-jump-button{
+  min-height:46px !important;
+  border:1px solid #FFE45B !important;
+  background:#FFD400 !important;
+  color:#050505 !important;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:.78rem !important;
+}
+
+/* ---------- MOVIL ---------- */
+
+@media(max-width:620px){
+
+  #dailyPromoBanner.menu-promo-banner,
+  html[data-store-theme="carro-kechu-carmelo"]
+  #dailyPromoBanner.menu-promo-banner{
+    min-height:250px !important;
+    padding:20px 40% 20px 17px !important;
+    border-radius:21px !important;
+  }
+
+  #dailyPromoBanner.menu-promo-banner::before,
+  html[data-store-theme="carro-kechu-carmelo"]
+  #dailyPromoBanner.menu-promo-banner::before{
+    width:43% !important;
+    background-position:left center, 88% 49% !important;
+    background-size:100% 100%, 660px auto !important;
+  }
+
+  #dailyPromoBannerTitle{
+    font-size:clamp(1.55rem,7vw,2.15rem) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"]
+  #dailyPromoBannerTitle{
+    font-size:clamp(1.85rem,9vw,2.65rem) !important;
+  }
+
+  #dailyPromoBannerText,
+  html[data-store-theme="carro-kechu-carmelo"]
+  #dailyPromoBannerText{
+    max-width:100% !important;
+    font-size:.86rem !important;
+  }
+
+  #promoJumpButton,
+  #dailyPromoBanner .promo-jump-button{
+    min-height:43px !important;
+    margin-top:15px !important;
+    padding:0 15px !important;
+    font-size:.71rem !important;
+  }
+}
+
+@media(max-width:420px){
+
+  #dailyPromoBanner.menu-promo-banner,
+  html[data-store-theme="carro-kechu-carmelo"]
+  #dailyPromoBanner.menu-promo-banner{
+    min-height:245px !important;
+    padding-right:36% !important;
+  }
+
+  #dailyPromoBanner.menu-promo-banner::before,
+  html[data-store-theme="carro-kechu-carmelo"]
+  #dailyPromoBanner.menu-promo-banner::before{
+    width:39% !important;
   }
 }
 
@@ -1224,7 +1492,32 @@ html[data-store-theme="carro-kechu-carmelo"]
   </script>
 
   <script src="js/config.js?v=36"></script>
-  <script src="js/app.js?v=144"></script>
+  <script src="js/app.js?v=146"></script>
+
+
+<script>
+  (function () {
+    var promoCard = document.getElementById("dailyPromoBanner");
+    var promoButton = document.getElementById("promoJumpButton");
+
+    if (!promoCard || !promoButton) return;
+
+    promoCard.setAttribute("role", "button");
+    promoCard.setAttribute("tabindex", "0");
+
+    promoCard.addEventListener("click", function (event) {
+      if (event.target.closest("#promoJumpButton")) return;
+      promoButton.click();
+    });
+
+    promoCard.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        promoButton.click();
+      }
+    });
+  })();
+</script>
 
 </body>
 </html>
