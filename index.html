@@ -40,7 +40,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="css/app.css?v=149">
+  <link rel="stylesheet" href="css/app.css?v=150">
 <style>
     html,
     body {
@@ -1586,6 +1586,184 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
   }
 }
 
+
+
+/* =========================================================
+   DENEXA V150 - FILA FINAL UNICA
+   DENEXA | TOMANDO PEDIDOS | WHATSAPP
+   ========================================================= */
+
+.kechu-final-info-row{
+  display:none;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-info-row{
+  grid-column:1 / -1 !important;
+  display:grid !important;
+  grid-template-columns:1fr 1fr 1fr !important;
+  align-items:center !important;
+  width:100% !important;
+  min-height:64px !important;
+  padding:7px 8px !important;
+  margin:0 !important;
+  border:1px solid rgba(255,212,0,.48) !important;
+  border-radius:18px !important;
+  background:#070707 !important;
+  color:#fff !important;
+}
+
+/* Ocultar por completo las dos estructuras que estaban duplicando datos. */
+html[data-store-theme="carro-kechu-carmelo"] .kechu-denexa-menu-brand,
+html[data-store-theme="carro-kechu-carmelo"] #storeStatus,
+html[data-store-theme="carro-kechu-carmelo"] .service-strip{
+  display:none !important;
+}
+
+/* DENEXA izquierda */
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa{
+  min-width:0 !important;
+  padding:0 10px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  align-items:flex-start !important;
+  border-right:1px solid rgba(255,255,255,.22) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa-wordmark{
+  color:#fff !important;
+  font-family:Arial,sans-serif !important;
+  font-size:1.14rem !important;
+  font-weight:1000 !important;
+  letter-spacing:-.05em !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa-wordmark span{
+  color:#FFD400 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa small{
+  margin-top:3px !important;
+  color:#d8d8d8 !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.42rem !important;
+  font-weight:800 !important;
+  letter-spacing:.045em !important;
+  line-height:1.1 !important;
+}
+
+/* Estado al medio */
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-ordering-status{
+  min-width:0 !important;
+  min-height:48px !important;
+  padding:0 8px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:7px !important;
+  border-right:1px solid rgba(255,255,255,.22) !important;
+  text-align:center !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-status-dot{
+  width:10px !important;
+  height:10px !important;
+  flex:0 0 10px !important;
+  border-radius:50% !important;
+  background:#35D39A !important;
+  box-shadow:0 0 0 4px rgba(53,211,154,.13) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-ordering-status strong{
+  color:#fff !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.7rem !important;
+  font-weight:900 !important;
+  line-height:1.05 !important;
+  text-transform:uppercase !important;
+}
+
+/* WhatsApp derecha */
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-whatsapp{
+  min-width:0 !important;
+  min-height:48px !important;
+  padding:0 9px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:7px !important;
+  color:#25D366 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-whatsapp-icon{
+  width:25px !important;
+  height:25px !important;
+  flex:0 0 25px !important;
+  display:block !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu-final-whatsapp strong{
+  color:#fff !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.67rem !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+}
+
+/* Reducir todavÃ­a mÃ¡s la altura total del encabezado */
+html[data-store-theme="carro-kechu-carmelo"] .store-header-inner{
+  row-gap:9px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
+  margin-top:10px !important;
+}
+
+@media(max-width:420px){
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-info-row{
+    min-height:58px !important;
+    padding:6px 5px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa{
+    padding:0 6px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa-wordmark{
+    font-size:.94rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa small{
+    font-size:.35rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-ordering-status{
+    padding:0 5px !important;
+    gap:5px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-ordering-status strong{
+    font-size:.57rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-whatsapp{
+    padding:0 5px !important;
+    gap:5px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-whatsapp-icon{
+    width:23px !important;
+    height:23px !important;
+    flex-basis:23px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-whatsapp strong{
+    font-size:.56rem !important;
+  }
+}
+
 </style>
 </head>
 
@@ -1750,6 +1928,33 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
             </span>
           </div>
         </section>
+
+        <div class="kechu-final-info-row" aria-label="DENEXA, estado de pedidos y WhatsApp">
+          <div class="kechu-final-denexa">
+            <div class="kechu-final-denexa-wordmark">/DENE<span>X</span>A</div>
+            <small>PLATAFORMA DE PEDIDOS ONLINE</small>
+          </div>
+
+          <div class="kechu-final-ordering-status">
+            <span class="kechu-final-status-dot" aria-hidden="true"></span>
+            <strong id="kechuFinalStatusText">Tomando pedidos</strong>
+          </div>
+
+          <div class="kechu-final-whatsapp" aria-label="WhatsApp">
+            <svg
+              class="kechu-whatsapp-icon"
+              viewBox="0 0 32 32"
+              role="img"
+              aria-label="WhatsApp"
+            >
+              <path
+                fill="currentColor"
+                d="M16 3C8.82 3 3 8.66 3 15.65c0 2.49.74 4.91 2.15 6.98L3.7 29l6.58-1.72A13.2 13.2 0 0 0 16 28.57c7.18 0 13-5.66 13-12.65C29 8.93 23.18 3 16 3Zm0 23.2c-1.93 0-3.82-.52-5.47-1.51l-.39-.23-3.91 1.02 1.04-3.7-.25-.38a10.31 10.31 0 0 1-1.67-5.75C5.35 9.96 10.13 5.3 16 5.3c5.87 0 10.65 4.66 10.65 10.35S21.87 26.2 16 26.2Zm5.84-7.78c-.32-.16-1.9-.92-2.2-1.02-.29-.11-.5-.16-.72.16-.21.31-.82 1.01-1.01 1.22-.19.21-.37.24-.69.08-.32-.16-1.36-.49-2.58-1.56-.95-.83-1.59-1.86-1.78-2.17-.19-.31-.02-.48.14-.64.14-.14.32-.37.48-.56.16-.18.21-.31.32-.52.11-.21.05-.4-.03-.56-.08-.16-.72-1.7-.99-2.33-.26-.63-.53-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.29.31-1.12 1.07-1.12 2.61s1.15 3.03 1.31 3.24c.16.21 2.26 3.38 5.48 4.74.77.32 1.36.52 1.83.67.77.24 1.47.21 2.02.13.62-.09 1.9-.76 2.17-1.49.27-.73.27-1.35.19-1.49-.08-.13-.29-.21-.61-.37Z"
+              />
+            </svg>
+            <strong>WHATSAPP</strong>
+          </div>
+        </div>
 
         <div class="kechu-denexa-menu-brand" aria-label="Powered by DENEXA">
           <div class="kechu-denexa-wordmark">/DENE<span>X</span>A</div>
@@ -2295,7 +2500,7 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
   </script>
 
   <script src="js/config.js?v=36"></script>
-  <script src="js/app.js?v=149"></script>
+  <script src="js/app.js?v=150"></script>
 
 
 <script>
@@ -2320,6 +2525,38 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
       }
     });
   })();
+</script>
+
+
+<script>
+(function(){
+  var source = document.querySelector("#storeStatus span:last-child");
+  var target = document.getElementById("kechuFinalStatusText");
+  var dot = document.querySelector(".kechu-final-status-dot");
+
+  if (!source || !target) return;
+
+  function syncKechuStatus(){
+    var text = (source.textContent || "Tomando pedidos").trim();
+    target.textContent = text;
+
+    if (dot) {
+      var closed = /cerrado|agotado|stock/i.test(text);
+      dot.style.background = closed ? "#F97066" : "#35D39A";
+      dot.style.boxShadow = closed
+        ? "0 0 0 4px rgba(249,112,102,.13)"
+        : "0 0 0 4px rgba(53,211,154,.13)";
+    }
+  }
+
+  syncKechuStatus();
+
+  new MutationObserver(syncKechuStatus).observe(source,{
+    childList:true,
+    characterData:true,
+    subtree:true
+  });
+})();
 </script>
 
 </body>
