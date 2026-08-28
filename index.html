@@ -2,85 +2,188 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
   <meta name="theme-color" content="#073B94">
+
   <title>DENEXA | Pedidos</title>
+
   <meta
     name="description"
-    content="Hac&eacute; tu pedido online con DENEXA."
+    content="Hacé tu pedido online con DENEXA."
   >
+
   <script>
     (function () {
-      var params = new URLSearchParams(window.location.search);
+
+      var params =
+        new URLSearchParams(
+          window.location.search
+        );
+
       var slug = (
         params.get("business") ||
         params.get("comercio") ||
         "mamma-mia"
-      ).trim().toLowerCase();
+      )
+        .trim()
+        .toLowerCase();
 
-      document.documentElement.dataset.storeTheme = slug;
-      document.documentElement.classList.add("branding-loading");
+      document.documentElement.dataset.storeTheme =
+        slug;
+
+      document.documentElement.classList.add(
+        "branding-loading"
+      );
+
     })();
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Knewave&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css?v=138">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Knewave&family=Oswald:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/app.css?v=139"
+  >
+
   <style>
-    html,body{background:#050505}
-    #appShell{visibility:hidden}
-    #welcomeScreen{
+
+    html,
+    body {
+      background:#050505;
+    }
+
+    #appShell {
+      visibility:hidden;
+    }
+
+    #welcomeScreen {
       visibility:visible;
       opacity:1;
       background:#050505;
     }
-    html.branding-loading #welcomeScreen .welcome-content{
+
+    html.branding-loading
+    #welcomeScreen
+    .welcome-content {
       opacity:0;
     }
-  
-    /* v137 fail-safe mÃ³vil: nunca usar hero externo de Kechu */
-    @media(max-width:899px){
-      html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen,
-      html[data-store-theme*="kechu"] #welcomeScreen{
-        background-image:none !important;
-        background-color:#050505 !important;
-      }
-    }
 
-  
-    @media(max-width:899px){
-      html[data-store-theme*="kechu"] #welcomeScreen{
+
+    /*
+      KECHU:
+      mientras corregimos definitivamente
+      las imágenes de portada, ninguna imagen
+      externa puede ocupar toda la pantalla.
+    */
+
+    @media(max-width:899px) {
+
+      html[data-store-theme="carro-kechu-carmelo"]
+      #welcomeScreen,
+
+      html[data-store-theme*="kechu"]
+      #welcomeScreen {
+
         background:#050505 !important;
         background-image:none !important;
+
       }
-      html[data-store-theme*="kechu"] #welcomeScreen .welcome-logo-wrap,
-      html[data-store-theme*="kechu"] #welcomeScreen #welcomeLogo{
+
+      html[data-store-theme*="kechu"]
+      #welcomeScreen
+      .welcome-logo-wrap,
+
+      html[data-store-theme*="kechu"]
+      #welcomeScreen
+      #welcomeLogo {
+
         display:none !important;
+
       }
-      html[data-store-theme*="kechu"] #welcomeScreen .welcome-content{
+
+      html[data-store-theme*="kechu"]
+      #welcomeScreen
+      .welcome-content {
+
         visibility:visible !important;
         opacity:1 !important;
+
       }
+
     }
 
   </style>
+
 </head>
+
 
 <body>
 
-  <section id="welcomeScreen" class="welcome-screen" aria-label="Bienvenida al comercio">
-    <div class="welcome-glow welcome-glow-one"></div>
-    <div class="welcome-glow welcome-glow-two"></div>
-    <div class="welcome-grid"></div>
+
+  <!-- =====================================================
+       PORTADA DEL COMERCIO
+       ===================================================== -->
+
+  <section
+    id="welcomeScreen"
+    class="welcome-screen"
+    aria-label="Bienvenida al comercio"
+  >
+
+    <div
+      class="welcome-glow welcome-glow-one"
+    ></div>
+
+    <div
+      class="welcome-glow welcome-glow-two"
+    ></div>
+
+    <div
+      class="welcome-grid"
+    ></div>
+
 
     <div class="welcome-content">
+
+
       <div class="welcome-status">
-        <span class="status-dot"></span>
-        <span id="welcomeStatusText">Tomando pedidos</span>
+
+        <span
+          class="status-dot"
+        ></span>
+
+        <span id="welcomeStatusText">
+          Tomando pedidos
+        </span>
+
       </div>
 
+
       <div class="welcome-logo-wrap">
-        <div class="welcome-logo-ring"></div>
+
+        <div
+          class="welcome-logo-ring"
+        ></div>
+
         <img
           id="welcomeLogo"
           class="welcome-logo"
@@ -88,223 +191,695 @@
           alt=""
           hidden
         >
+
       </div>
+
 
       <div class="welcome-copy">
-        <p class="welcome-kicker">BIENVENIDOS A</p>
-        <h1 id="welcomeBusinessName">Cargando...</h1>
 
-        <div class="kechu-welcome-services" aria-label="Opciones del comercio">
+        <p class="welcome-kicker">
+          BIENVENIDOS A
+        </p>
+
+        <h1 id="welcomeBusinessName">
+          Cargando...
+        </h1>
+
+
+        <div
+          class="kechu-welcome-services"
+          aria-label="Opciones del comercio"
+        >
+
+
           <div class="welcome-service-card">
-            <span class="welcome-service-icon" aria-hidden="true">&#128757;</span>
-            <strong>DELIVERY</strong>
+
+            <span
+              class="welcome-service-icon"
+              aria-hidden="true"
+            >
+              &#128757;
+            </span>
+
+            <strong>
+              DELIVERY
+            </strong>
+
           </div>
+
+
           <div class="welcome-service-card">
-            <span class="welcome-service-icon" aria-hidden="true">&#127978;</span>
-            <strong>RETIRO EN LOCAL</strong>
+
+            <span
+              class="welcome-service-icon"
+              aria-hidden="true"
+            >
+              &#127978;
+            </span>
+
+            <strong>
+              RETIRO EN LOCAL
+            </strong>
+
           </div>
+
+
           <div class="welcome-service-card">
-            <span class="welcome-service-icon" aria-hidden="true">&#128179;</span>
-            <strong>PAGO FLEXIBLE</strong>
+
+            <span
+              class="welcome-service-icon"
+              aria-hidden="true"
+            >
+              &#128179;
+            </span>
+
+            <strong>
+              PAGO FLEXIBLE
+            </strong>
+
           </div>
+
+
         </div>
+
       </div>
 
-      <button id="enterStoreButton" class="welcome-button" type="button">
-        <span id="welcomeButtonText">Hacer mi pedido</span>
-        <span class="welcome-arrow" aria-hidden="true">&rarr;</span>
+
+      <button
+        id="enterStoreButton"
+        class="welcome-button"
+        type="button"
+      >
+
+        <span id="welcomeButtonText">
+          Hacer mi pedido
+        </span>
+
+        <span
+          class="welcome-arrow"
+          aria-hidden="true"
+        >
+          &rarr;
+        </span>
+
       </button>
 
-      <div id="orderingStatusNotice" class="ordering-status-notice" hidden></div>
 
-      <p class="welcome-mobile-note">R&aacute;pido <span>&bull;</span> F&aacute;cil <span>&bull;</span> En tu casa</p>
-      <p class="welcome-note">Delivery y retiro en el local</p>
+      <div
+        id="orderingStatusNotice"
+        class="ordering-status-notice"
+        hidden
+      ></div>
+
+
+      <p class="welcome-mobile-note">
+
+        R&aacute;pido
+
+        <span>&bull;</span>
+
+        F&aacute;cil
+
+        <span>&bull;</span>
+
+        En tu casa
+
+      </p>
+
+
+      <p class="welcome-note">
+        Delivery y retiro en el local
+      </p>
+
 
       <div class="welcome-denexa-signature">
-        <img src="assets/denexa-logo.png" alt="DENEXA">
+
+        <img
+          src="assets/denexa-logo.png"
+          alt="DENEXA"
+        >
+
         <div>
-          <span>Powered by</span>
-          <strong>DENEXA</strong>
-          <small>Plataforma de pedidos para comercios <span class="denexa-country-flag" aria-label="Uruguay">&#127482;&#127486;</span></small>
+
+          <span>
+            Powered by
+          </span>
+
+          <strong>
+            DENEXA
+          </strong>
+
+          <small>
+
+            Plataforma de pedidos para comercios
+
+            <span
+              class="denexa-country-flag"
+              aria-label="Uruguay"
+            >
+              &#127482;&#127486;
+            </span>
+
+          </small>
+
         </div>
+
       </div>
+
+
     </div>
+
   </section>
 
-  <div id="appShell" class="app-shell">
+
+
+  <!-- =====================================================
+       MENÚ DEL COMERCIO
+       ===================================================== -->
+
+  <div
+    id="appShell"
+    class="app-shell"
+  >
+
 
     <header class="store-header">
+
       <div class="store-header-inner">
+
+
         <div class="store-brand">
-          <div id="storeLogo" class="store-logo">
+
+
+          <div
+            id="storeLogo"
+            class="store-logo"
+          >
+
             <img
               src=""
               alt=""
               hidden
             >
+
           </div>
+
 
           <div class="store-heading">
-            <p class="store-kicker">PEDIDOS ONLINE</p>
-            <h1 id="storeName">Cargando...</h1>
-            <p id="storeSubtitle" class="store-subtitle">
-              Eleg&iacute; tus favoritos y arm&aacute; tu pedido.
+
+            <p class="store-kicker">
+              PEDIDOS ONLINE
             </p>
+
+            <h1 id="storeName">
+              Cargando...
+            </h1>
+
+            <p
+              id="storeSubtitle"
+              class="store-subtitle"
+            >
+              Elegí tus favoritos y armá tu pedido.
+            </p>
+
           </div>
 
-          <div class="store-country-badge" aria-label="DENEXA Uruguay">
-            <span class="store-country-flag" aria-hidden="true">&#127482;&#127486;</span>
-            <strong>DENEXA</strong>
+
+          <div
+            class="store-country-badge"
+            aria-label="DENEXA Uruguay"
+          >
+
+            <span
+              class="store-country-flag"
+              aria-hidden="true"
+            >
+              &#127482;&#127486;
+            </span>
+
+            <strong>
+              DENEXA
+            </strong>
+
           </div>
+
+
         </div>
 
-        <div id="storeStatus" class="store-status">
-          <span class="status-dot"></span>
-          <span>Cargando...</span>
+
+        <div
+          id="storeStatus"
+          class="store-status"
+        >
+
+          <span
+            class="status-dot"
+          ></span>
+
+          <span>
+            Cargando...
+          </span>
+
         </div>
 
-      <section class="service-strip" aria-label="Informaci&oacute;n del servicio">
-        <div class="service-strip-item">
-          <span class="service-dot" aria-hidden="true"></span>
-          <span>Tomando pedidos</span>
-        </div>
-        <span class="service-divider" aria-hidden="true"></span>
-        <div class="service-strip-item">
-          <span aria-hidden="true">&#128757;</span>
-          <span>Delivery</span>
-        </div>
-        <span class="service-divider" aria-hidden="true"></span>
-        <div class="service-strip-item">
-          <span aria-hidden="true">&#127978;</span>
-          <span>Retiro</span>
-        </div>
-      </section>
+
+
+        <section
+          class="service-strip"
+          aria-label="Información del servicio"
+        >
+
+
+          <div class="service-strip-item">
+
+            <span
+              class="service-dot"
+              aria-hidden="true"
+            ></span>
+
+            <span>
+              Tomando pedidos
+            </span>
+
+          </div>
+
+
+          <span
+            class="service-divider"
+            aria-hidden="true"
+          ></span>
+
+
+          <div class="service-strip-item">
+
+            <span aria-hidden="true">
+              &#128757;
+            </span>
+
+            <span>
+              Delivery
+            </span>
+
+          </div>
+
+
+          <span
+            class="service-divider"
+            aria-hidden="true"
+          ></span>
+
+
+          <div class="service-strip-item">
+
+            <span aria-hidden="true">
+              &#127978;
+            </span>
+
+            <span>
+              Retiro
+            </span>
+
+          </div>
+
+
+        </section>
+
 
       </div>
+
     </header>
+
+
 
     <main class="main-content">
 
-      <section class="store-info-card legacy-store-info" aria-hidden="true">
-        <div class="info-item">
-          <span class="info-icon" aria-hidden="true">&#9679;</span>
-          <div>
-            <span class="info-label">Comercio</span>
-            <strong id="storeNameSmall">Comercio</strong>
-          </div>
-        </div>
+
+      <section
+        class="store-info-card legacy-store-info"
+        aria-hidden="true"
+      >
+
 
         <div class="info-item">
-          <span class="info-icon" aria-hidden="true">&#8594;</span>
+
+          <span
+            class="info-icon"
+            aria-hidden="true"
+          >
+            &#9679;
+          </span>
+
           <div>
-            <span class="info-label">Pedido</span>
-            <strong>Delivery o retiro</strong>
+
+            <span class="info-label">
+              Comercio
+            </span>
+
+            <strong id="storeNameSmall">
+              Comercio
+            </strong>
+
           </div>
+
         </div>
+
+
+        <div class="info-item">
+
+          <span
+            class="info-icon"
+            aria-hidden="true"
+          >
+            &#8594;
+          </span>
+
+          <div>
+
+            <span class="info-label">
+              Pedido
+            </span>
+
+            <strong>
+              Delivery o retiro
+            </strong>
+
+          </div>
+
+        </div>
+
+
       </section>
 
-      <aside id="dailyPromoBanner" class="menu-promo-banner" hidden>
-        <span id="dailyPromoBannerBadge">PROMO DEL D&Iacute;A</span>
-        <strong id="dailyPromoBannerTitle">&iexcl;No te la pierdas!</strong>
+
+
+      <aside
+        id="dailyPromoBanner"
+        class="menu-promo-banner"
+        hidden
+      >
+
+        <span id="dailyPromoBannerBadge">
+          PROMO DEL DÍA
+        </span>
+
+        <strong id="dailyPromoBannerTitle">
+          ¡No te la pierdas!
+        </strong>
+
         <p id="dailyPromoBannerText"></p>
-        <button id="promoJumpButton" class="promo-jump-button" type="button">VER PROMO &rarr;</button>
+
+        <button
+          id="promoJumpButton"
+          class="promo-jump-button"
+          type="button"
+        >
+          VER PROMO &rarr;
+        </button>
+
       </aside>
 
+
+
       <section class="catalog-section">
+
+
         <div class="section-heading">
+
           <div>
-            <p class="eyebrow">NUESTRO MEN&Uacute;</p>
-            <h2>Eleg&iacute; qu&eacute; quer&eacute;s pedir</h2>
-            <p class="section-subtitle">
-              Toc&aacute; un producto para ver sus opciones y agregarlo a tu pedido.
+
+            <p class="eyebrow">
+              NUESTRO MENÚ
             </p>
+
+            <h2>
+              Elegí qué querés pedir
+            </h2>
+
+            <p class="section-subtitle">
+              Tocá un producto para ver sus opciones
+              y agregarlo a tu pedido.
+            </p>
+
           </div>
+
         </div>
 
-        <div id="categoryTabs" class="category-tabs" aria-label="Categor&iacute;as"></div>
 
-        <div id="catalogContent" class="catalog-content">
+        <div
+          id="categoryTabs"
+          class="category-tabs"
+          aria-label="Categorías"
+        ></div>
+
+
+        <div
+          id="catalogContent"
+          class="catalog-content"
+        >
+
           <div class="loading-card">
-            Cargando el men&uacute;...
+            Cargando el menú...
           </div>
+
         </div>
+
+
       </section>
+
 
     </main>
 
-    <button id="cartButton" class="floating-cart kechu-cart-bar" type="button" aria-label="Abrir carrito">
-      <span class="cart-icon-wrap" aria-hidden="true">
-        <span class="cart-icon">&#128722;</span>
-        <span id="cartCount" class="cart-count-badge">0</span>
+
+
+    <button
+      id="cartButton"
+      class="floating-cart kechu-cart-bar"
+      type="button"
+      aria-label="Abrir carrito"
+    >
+
+
+      <span
+        class="cart-icon-wrap"
+        aria-hidden="true"
+      >
+
+        <span class="cart-icon">
+          &#128722;
+        </span>
+
+        <span
+          id="cartCount"
+          class="cart-count-badge"
+        >
+          0
+        </span>
+
       </span>
 
+
       <span class="cart-copy">
-        <strong>Tu pedido</strong>
-        <strong id="cartTotal" class="cart-summary-total">$0</strong>
+
+        <strong>
+          Tu pedido
+        </strong>
+
+        <strong
+          id="cartTotal"
+          class="cart-summary-total"
+        >
+          $0
+        </strong>
+
       </span>
+
 
       <span class="cart-action-label">
         VER PEDIDO
       </span>
+
+
     </button>
+
 
   </div>
 
-  <div id="productModal" class="modal" aria-hidden="true">
-    <div class="modal-backdrop" data-close-product></div>
 
-    <div class="modal-card product-modal-card" role="dialog" aria-modal="true">
-      <button id="closeProductButton" class="modal-close" type="button" aria-label="Cerrar">
+
+  <!-- =====================================================
+       MODAL PRODUCTO
+       ===================================================== -->
+
+  <div
+    id="productModal"
+    class="modal"
+    aria-hidden="true"
+  >
+
+    <div
+      class="modal-backdrop"
+      data-close-product
+    ></div>
+
+
+    <div
+      class="modal-card product-modal-card"
+      role="dialog"
+      aria-modal="true"
+    >
+
+      <button
+        id="closeProductButton"
+        class="modal-close"
+        type="button"
+        aria-label="Cerrar"
+      >
         &times;
       </button>
 
+
       <div id="productModalContent"></div>
+
+
     </div>
+
   </div>
 
-  <div id="cartModal" class="modal" aria-hidden="true">
-    <div class="modal-backdrop" data-close-cart></div>
 
-    <div class="modal-card cart-modal-card" role="dialog" aria-modal="true">
+
+  <!-- =====================================================
+       CARRITO
+       ===================================================== -->
+
+  <div
+    id="cartModal"
+    class="modal"
+    aria-hidden="true"
+  >
+
+    <div
+      class="modal-backdrop"
+      data-close-cart
+    ></div>
+
+
+    <div
+      class="modal-card cart-modal-card"
+      role="dialog"
+      aria-modal="true"
+    >
+
+
       <div class="modal-title-row">
+
         <div>
-          <p class="eyebrow">TU PEDIDO</p>
-          <h2>Carrito</h2>
+
+          <p class="eyebrow">
+            TU PEDIDO
+          </p>
+
+          <h2>
+            Carrito
+          </h2>
+
         </div>
 
-        <button id="closeCartButton" class="modal-close inline-close" type="button" aria-label="Cerrar">
+
+        <button
+          id="closeCartButton"
+          class="modal-close inline-close"
+          type="button"
+          aria-label="Cerrar"
+        >
           &times;
         </button>
+
       </div>
 
-      <div id="cartItems" class="cart-items"></div>
+
+      <div
+        id="cartItems"
+        class="cart-items"
+      ></div>
+
 
       <div class="cart-summary">
+
+
         <div>
-          <span>Total</span>
-          <strong id="cartModalTotal">$0</strong>
+
+          <span>
+            Total
+          </span>
+
+          <strong id="cartModalTotal">
+            $0
+          </strong>
+
         </div>
 
-        <button id="continueOrderButton" class="primary-action" type="button">
+
+        <button
+          id="continueOrderButton"
+          class="primary-action"
+          type="button"
+        >
           Continuar pedido
         </button>
 
+
         <p class="cart-note">
-          Revis&aacute; tu pedido y complet&aacute; los datos de entrega.
+          Revisá tu pedido y completá los datos de entrega.
         </p>
+
+
       </div>
+
+
     </div>
+
   </div>
 
-  <div id="checkoutModal" class="modal" aria-hidden="true">
-    <div class="modal-backdrop" data-close-checkout></div>
 
-    <div class="modal-card checkout-modal-card" role="dialog" aria-modal="true">
+
+  <!-- =====================================================
+       CHECKOUT
+       ===================================================== -->
+
+  <div
+    id="checkoutModal"
+    class="modal"
+    aria-hidden="true"
+  >
+
+    <div
+      class="modal-backdrop"
+      data-close-checkout
+    ></div>
+
+
+    <div
+      class="modal-card checkout-modal-card"
+      role="dialog"
+      aria-modal="true"
+    >
+
+
       <div class="modal-title-row">
+
+
         <div>
-          <p class="eyebrow">FINALIZAR PEDIDO</p>
-          <h2>Datos de entrega</h2>
+
+          <p class="eyebrow">
+            FINALIZAR PEDIDO
+          </p>
+
+          <h2>
+            Datos de entrega
+          </h2>
+
         </div>
+
 
         <button
           id="closeCheckoutButton"
@@ -314,135 +889,430 @@
         >
           &times;
         </button>
+
+
       </div>
+
+
 
       <form id="checkoutForm">
 
+
         <div class="checkout-grid">
 
-          <div id="deliveryChoiceField" class="field full-width delivery-choice-field">
-            <span>&iquest;C&oacute;mo quer&eacute;s recibir tu pedido?</span>
-            <div id="fulfillmentButtons" class="fulfillment-buttons" role="group" aria-label="Tipo de pedido">
-              <button id="deliveryModeButton" class="fulfillment-button" type="button" data-fulfillment="delivery">
-                <span class="fulfillment-icon" aria-hidden="true">&#128757;</span>
-                <span>DELIVERY</span>
+
+
+          <div
+            id="deliveryChoiceField"
+            class="field full-width delivery-choice-field"
+          >
+
+            <span>
+              ¿Cómo querés recibir tu pedido?
+            </span>
+
+
+            <div
+              id="fulfillmentButtons"
+              class="fulfillment-buttons"
+              role="group"
+              aria-label="Tipo de pedido"
+            >
+
+
+              <button
+                id="deliveryModeButton"
+                class="fulfillment-button"
+                type="button"
+                data-fulfillment="delivery"
+              >
+
+                <span
+                  class="fulfillment-icon"
+                  aria-hidden="true"
+                >
+                  &#128757;
+                </span>
+
+                <span>
+                  DELIVERY
+                </span>
+
               </button>
-              <button id="pickupModeButton" class="fulfillment-button" type="button" data-fulfillment="pickup">
-                <span class="fulfillment-icon" aria-hidden="true">&#127978;</span>
-                <span>RETIRO EN EL LOCAL</span>
+
+
+
+              <button
+                id="pickupModeButton"
+                class="fulfillment-button"
+                type="button"
+                data-fulfillment="pickup"
+              >
+
+                <span
+                  class="fulfillment-icon"
+                  aria-hidden="true"
+                >
+                  &#127978;
+                </span>
+
+                <span>
+                  RETIRO EN EL LOCAL
+                </span>
+
               </button>
+
+
             </div>
-            <select id="deliveryType" class="fulfillment-native-select" required aria-hidden="true" tabindex="-1"></select>
+
+
+
+            <select
+              id="deliveryType"
+              class="fulfillment-native-select"
+              required
+              aria-hidden="true"
+              tabindex="-1"
+            ></select>
+
+
           </div>
 
-          <div id="fulfillmentModeNotice" class="fulfillment-mode-notice full-width" hidden></div>
 
-          <div id="pickupInfoCard" class="pickup-info-card full-width" hidden>
-            <div class="pickup-info-icon" aria-hidden="true">&#128205;</div>
+
+          <div
+            id="fulfillmentModeNotice"
+            class="fulfillment-mode-notice full-width"
+            hidden
+          ></div>
+
+
+
+          <div
+            id="pickupInfoCard"
+            class="pickup-info-card full-width"
+            hidden
+          >
+
+
+            <div
+              class="pickup-info-icon"
+              aria-hidden="true"
+            >
+              &#128205;
+            </div>
+
+
             <div>
-              <span>Retiro en el local</span>
-              <strong id="pickupAddressText">Direcci&oacute;n del local</strong>
-              <small>Presentate en esta direcci&oacute;n para retirar tu pedido.</small>
+
+              <span>
+                Retiro en el local
+              </span>
+
+              <strong id="pickupAddressText">
+                Dirección del local
+              </strong>
+
+              <small>
+                Presentate en esta dirección para retirar tu pedido.
+              </small>
+
             </div>
+
+
           </div>
 
-          <label class="field">
-            <span>Nombre</span>
-            <input id="customerName" type="text" autocomplete="name" required>
-          </label>
+
 
           <label class="field">
-            <span>Celular</span>
-            <input id="customerPhone" type="tel" inputmode="tel" autocomplete="tel" required>
+
+            <span>
+              Nombre
+            </span>
+
+            <input
+              id="customerName"
+              type="text"
+              autocomplete="name"
+              required
+            >
+
           </label>
 
-          <div id="deliveryExtraFields" class="checkout-extra-fields full-width">
 
-            <label id="addressField" class="field full-width">
-              <span>Direcci&oacute;n</span>
-              <input id="customerAddress" type="text" autocomplete="street-address">
+
+          <label class="field">
+
+            <span>
+              Celular
+            </span>
+
+            <input
+              id="customerPhone"
+              type="tel"
+              inputmode="tel"
+              autocomplete="tel"
+              required
+            >
+
+          </label>
+
+
+
+          <div
+            id="deliveryExtraFields"
+            class="checkout-extra-fields full-width"
+          >
+
+
+
+            <label
+              id="addressField"
+              class="field full-width"
+            >
+
+              <span>
+                Dirección
+              </span>
+
+              <input
+                id="customerAddress"
+                type="text"
+                autocomplete="street-address"
+              >
+
             </label>
 
-            <label id="referenceField" class="field full-width">
-              <span>Referencia / apartamento</span>
-              <input id="customerReference" type="text">
+
+
+            <label
+              id="referenceField"
+              class="field full-width"
+            >
+
+              <span>
+                Referencia / apartamento
+              </span>
+
+              <input
+                id="customerReference"
+                type="text"
+              >
+
             </label>
+
+
 
             <label class="field">
-              <span>Forma de pago</span>
+
+              <span>
+                Forma de pago
+              </span>
+
               <select id="paymentMethod">
-                <option value="cash">Efectivo</option>
-                <option value="transfer">Transferencia / D&eacute;bito</option>
+
+                <option value="cash">
+                  Efectivo
+                </option>
+
+                <option value="transfer">
+                  Transferencia / Débito
+                </option>
+
               </select>
+
             </label>
 
-            <label id="cashAmountField" class="field">
-              <span>&iquest;Con cu&aacute;nto paga?</span>
-              <input id="cashAmount" type="number" min="0" step="1" inputmode="numeric">
+
+
+            <label
+              id="cashAmountField"
+              class="field"
+            >
+
+              <span>
+                ¿Con cuánto paga?
+              </span>
+
+              <input
+                id="cashAmount"
+                type="number"
+                min="0"
+                step="1"
+                inputmode="numeric"
+              >
+
             </label>
 
-            <div id="transferInfoCard" class="transfer-info-card full-width" hidden>
+
+
+            <div
+              id="transferInfoCard"
+              class="transfer-info-card full-width"
+              hidden
+            >
+
+
               <div class="transfer-info-head">
-                <span class="transfer-info-icon">$</span>
+
+                <span class="transfer-info-icon">
+                  $
+                </span>
+
+
                 <div>
-                  <strong>Datos para transferir</strong>
-                  <small>Us&aacute; estos datos para realizar el pago.</small>
+
+                  <strong>
+                    Datos para transferir
+                  </strong>
+
+                  <small>
+                    Usá estos datos para realizar el pago.
+                  </small>
+
                 </div>
+
               </div>
+
+
 
               <div class="transfer-info-grid">
-                <div>
-                  <span>Banco / instituci&oacute;n</span>
-                  <strong id="transferBankName">Banco / Instituci&oacute;n</strong>
-                </div>
+
 
                 <div>
-                  <span>Titular</span>
-                  <strong id="transferAccountHolder">Nombre del titular</strong>
+
+                  <span>
+                    Banco / institución
+                  </span>
+
+                  <strong id="transferBankName">
+                    Banco / Institución
+                  </strong>
+
                 </div>
 
-                <div>
-                  <span>N&uacute;mero de cuenta</span>
-                  <strong id="transferAccountNumber">0000000000</strong>
-                </div>
+
 
                 <div>
-                  <span>Moneda</span>
-                  <strong id="transferCurrency">Pesos uruguayos</strong>
+
+                  <span>
+                    Titular
+                  </span>
+
+                  <strong id="transferAccountHolder">
+                    Nombre del titular
+                  </strong>
+
                 </div>
+
+
+
+                <div>
+
+                  <span>
+                    Número de cuenta
+                  </span>
+
+                  <strong id="transferAccountNumber">
+                    0000000000
+                  </strong>
+
+                </div>
+
+
+
+                <div>
+
+                  <span>
+                    Moneda
+                  </span>
+
+                  <strong id="transferCurrency">
+                    Pesos uruguayos
+                  </strong>
+
+                </div>
+
+
               </div>
 
-              <p id="transferInstructions" class="transfer-instructions">
-                Realiz&aacute; la transferencia por el total del pedido. Conserv&aacute; el comprobante.
+
+
+              <p
+                id="transferInstructions"
+                class="transfer-instructions"
+              >
+                Realizá la transferencia por el total del pedido.
+                Conservá el comprobante.
               </p>
+
+
             </div>
+
 
           </div>
 
+
+
           <label class="field full-width">
-            <span>Observaciones</span>
+
+            <span>
+              Observaciones
+            </span>
+
             <textarea
               id="customerNotes"
               rows="3"
               placeholder="Ejemplo: sin lechuga, sin cebolla, bien cocido, etc."
             ></textarea>
+
           </label>
 
+
         </div>
+
+
 
         <div class="checkout-summary-card">
+
+
           <div class="checkout-summary-line">
-            <span>Productos</span>
-            <strong id="checkoutItemsCount">0</strong>
+
+            <span>
+              Productos
+            </span>
+
+            <strong id="checkoutItemsCount">
+              0
+            </strong>
+
           </div>
+
+
 
           <div class="checkout-summary-line total-line">
-            <span>Total</span>
-            <strong id="checkoutTotal">$0</strong>
+
+            <span>
+              Total
+            </span>
+
+            <strong id="checkoutTotal">
+              $0
+            </strong>
+
           </div>
+
+
         </div>
 
-        <p id="checkoutFormError" class="form-error"></p>
+
+
+        <p
+          id="checkoutFormError"
+          class="form-error"
+        ></p>
+
+
 
         <button
           id="confirmOrderButton"
@@ -452,37 +1322,114 @@
           Confirmar pedido
         </button>
 
+
       </form>
+
+
     </div>
+
   </div>
 
-  <div id="orderSuccessModal" class="modal" aria-hidden="true">
+
+
+  <!-- =====================================================
+       PEDIDO RECIBIDO
+       ===================================================== -->
+
+  <div
+    id="orderSuccessModal"
+    class="modal"
+    aria-hidden="true"
+  >
+
     <div class="modal-backdrop"></div>
 
-    <div class="modal-card success-modal-card" role="dialog" aria-modal="true">
-      <div class="success-icon" aria-hidden="true">&#10003;</div>
 
-      <p class="eyebrow">PEDIDO RECIBIDO</p>
-      <h2>&iexcl;Gracias por tu pedido!</h2>
+    <div
+      class="modal-card success-modal-card"
+      role="dialog"
+      aria-modal="true"
+    >
+
+
+      <div
+        class="success-icon"
+        aria-hidden="true"
+      >
+        &#10003;
+      </div>
+
+
+      <p class="eyebrow">
+        PEDIDO RECIBIDO
+      </p>
+
+
+      <h2>
+        ¡Gracias por tu pedido!
+      </h2>
+
 
       <p class="success-copy">
-        Mamma Mia recibi&oacute; tu pedido correctamente.
-        Ya pod&eacute;s volver al men&uacute;.
+        Recibimos tu pedido correctamente.
+        Ya podés volver al menú.
       </p>
+
 
       <button
         id="closeSuccessButton"
         class="primary-action success-button"
         type="button"
       >
-        Volver al men&uacute;
+        Volver al menú
       </button>
+
+
     </div>
+
   </div>
 
-  <div id="toast" class="toast" aria-live="polite"></div>
 
-  <script src="js/config.js?v=32"></script>
-  <script src="js/app.js?v=138"></script>
+
+  <div
+    id="toast"
+    class="toast"
+    aria-live="polite"
+  ></div>
+
+
+
+  <!-- =====================================================
+       CORRECCIÓN GLOBAL ANDROID / PORTADA
+       =====================================================
+
+       app.js utiliza estos IDs como variables.
+       Las declaramos explícitamente para que no dependa
+       del comportamiento automático del navegador.
+
+       Esto sirve para:
+       - Mamma Mía
+       - Kechu
+       - futuros comercios DENEXA
+       ===================================================== -->
+
+  <script>
+
+    window.appShell =
+      document.getElementById("appShell");
+
+    window.fulfillmentButtons =
+      document.getElementById(
+        "fulfillmentButtons"
+      );
+
+  </script>
+
+
+  <script src="js/config.js?v=33"></script>
+
+  <script src="js/app.js?v=139"></script>
+
+
 </body>
 </html>
