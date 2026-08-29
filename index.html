@@ -40,7 +40,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="css/app.css?v=153">
+  <link rel="stylesheet" href="css/app.css?v=156">
 <style>
     html,
     body {
@@ -1764,22 +1764,24 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
   }
 }
 
+</style>
 
-
+<style>
 /* =========================================================
-   DENEXA V153 - SOLO CABECERA SUPERIOR KECHU
-   Promo, categorias, carrito y pedido quedan intactos.
+   DENEXA V156 - CABECERA KECHU LIMPIA
+   Sin elementos duplicados.
    ========================================================= */
 
-.kechu-kitchen-mark{
+.kechu-single-slogan,
+.kechu-approval-badge,
+.kechu-final-info-row{
   display:none;
 }
 
 @media(max-width:620px){
 
-  /* Solo estructura superior */
   html[data-store-theme="carro-kechu-carmelo"] .store-header{
-    padding:max(14px,env(safe-area-inset-top)) 14px 16px !important;
+    padding:max(14px,env(safe-area-inset-top)) 14px 15px !important;
   }
 
   html[data-store-theme="carro-kechu-carmelo"] .store-header-inner{
@@ -1788,173 +1790,172 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
 
   html[data-store-theme="carro-kechu-carmelo"] .store-brand{
     display:grid !important;
-    grid-template-columns:92px minmax(0,1fr) 82px !important;
-    gap:12px !important;
+    grid-template-columns:88px minmax(0,1fr) 44px !important;
+    gap:10px !important;
     align-items:center !important;
     width:100% !important;
+    overflow:visible !important;
   }
 
   html[data-store-theme="carro-kechu-carmelo"] .store-logo{
-    width:92px !important;
-    height:110px !important;
-    min-width:92px !important;
+    grid-column:1 !important;
+    width:88px !important;
+    height:106px !important;
+    min-width:88px !important;
     margin:0 !important;
   }
 
   html[data-store-theme="carro-kechu-carmelo"] .store-heading{
+    grid-column:2 !important;
     min-width:0 !important;
-    padding-left:2px !important;
+    padding:0 !important;
+    overflow:visible !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-kicker{
+    display:none !important;
   }
 
   html[data-store-theme="carro-kechu-carmelo"] .store-heading h1{
     margin:0 !important;
-    font-size:clamp(1.82rem,9vw,2.72rem) !important;
-    line-height:.87 !important;
+    color:#FFD400 !important;
+    font-family:Georgia,"Times New Roman",serif !important;
+    font-size:clamp(1.82rem,9vw,2.7rem) !important;
+    font-weight:900 !important;
+    line-height:.86 !important;
+    letter-spacing:-.02em !important;
+    text-transform:uppercase !important;
+    white-space:normal !important;
+    overflow:visible !important;
   }
 
-  html[data-store-theme="carro-kechu-carmelo"] .store-subtitle{
-    margin-top:8px !important;
-    max-width:none !important;
-    font-size:.52rem !important;
-    line-height:1.16 !important;
-  }
-
-  /* El bloque vertical viejo desaparece solo en la cabecera */
-  html[data-store-theme="carro-kechu-carmelo"] .kechu-trust-strip{
+  /* El subtÃ­tulo dinÃ¡mico se oculta SOLO en Kechu para evitar duplicados. */
+  html[data-store-theme="carro-kechu-carmelo"] #storeSubtitle{
     display:none !important;
   }
 
-  /* Detalle pequeÃ±o de cocina al costado derecho */
-  html[data-store-theme="carro-kechu-carmelo"] .kechu-kitchen-mark{
-    display:flex !important;
-    flex-direction:column !important;
-    align-items:center !important;
-    justify-content:center !important;
-    width:82px !important;
-    min-height:86px !important;
-    padding:6px 5px !important;
-    border:1px solid rgba(255,212,0,.42) !important;
-    border-radius:17px !important;
-    background:#070707 !important;
-    box-sizing:border-box !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .kechu-kitchen-pan{
-    position:relative !important;
-    width:42px !important;
-    height:32px !important;
-    margin-bottom:6px !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .kechu-pan-body{
-    position:absolute !important;
-    left:3px !important;
-    bottom:2px !important;
-    width:28px !important;
-    height:16px !important;
-    border:3px solid #FFD400 !important;
-    border-top-width:4px !important;
-    border-radius:0 0 15px 15px !important;
-    transform:skewX(-4deg) !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .kechu-pan-handle{
-    position:absolute !important;
-    right:0 !important;
-    bottom:8px !important;
-    width:14px !important;
-    height:4px !important;
-    border-radius:999px !important;
-    background:#FFD400 !important;
-    transform:rotate(-12deg) !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .kechu-steam{
-    position:absolute !important;
-    top:0 !important;
-    width:3px !important;
-    height:12px !important;
-    border-radius:999px !important;
-    background:#fff !important;
-    opacity:.9 !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .kechu-steam-one{
-    left:11px !important;
-    transform:rotate(-8deg) !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .kechu-steam-two{
-    left:21px !important;
-    transform:rotate(8deg) !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .kechu-kitchen-mark strong{
-    color:#FFD400 !important;
-    font-family:"Oswald",Arial,sans-serif !important;
-    font-size:.56rem !important;
-    font-weight:900 !important;
-    letter-spacing:.05em !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .kechu-kitchen-mark small{
-    margin-top:2px !important;
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-single-slogan{
+    display:block !important;
+    width:max-content !important;
+    max-width:none !important;
+    margin:8px 0 0 !important;
     color:#fff !important;
     font-family:"Oswald",Arial,sans-serif !important;
-    font-size:.39rem !important;
-    font-weight:700 !important;
-    line-height:1.05 !important;
-    text-align:center !important;
+    font-size:clamp(.38rem,1.62vw,.5rem) !important;
+    font-weight:800 !important;
+    line-height:1 !important;
+    letter-spacing:-.01em !important;
+    white-space:nowrap !important;
+    overflow:visible !important;
   }
 
-  /* Solo una fila informativa */
-  html[data-store-theme="carro-kechu-carmelo"] .kechu-denexa-menu-brand,
-  html[data-store-theme="carro-kechu-carmelo"] #storeStatus,
-  html[data-store-theme="carro-kechu-carmelo"] .service-strip{
+  /* Se elimina el badge genÃ©rico en Kechu. */
+  html[data-store-theme="carro-kechu-carmelo"] .store-country-badge{
     display:none !important;
   }
 
+  /* Ãšnico tilde, usando entidad HTML para evitar caracteres rotos. */
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-approval-badge{
+    grid-column:3 !important;
+    display:grid !important;
+    place-items:center !important;
+    width:40px !important;
+    height:40px !important;
+    justify-self:end !important;
+    align-self:center !important;
+    padding:0 !important;
+    border:2px solid #FFD400 !important;
+    border-radius:50% !important;
+    background:#080808 !important;
+    color:#FFD400 !important;
+    box-shadow:0 0 16px rgba(255,212,0,.15) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-approval-badge span{
+    display:block !important;
+    color:#FFD400 !important;
+    font-family:Arial,sans-serif !important;
+    font-size:1.45rem !important;
+    font-weight:900 !important;
+    line-height:1 !important;
+  }
+
+  /* Una sola fila: DENEXA | estado | rÃ¡pido y seguro */
   html[data-store-theme="carro-kechu-carmelo"] .kechu-final-info-row{
     display:grid !important;
     grid-template-columns:1fr 1fr 1fr !important;
+    align-items:center !important;
     width:100% !important;
-    min-height:60px !important;
+    min-height:58px !important;
     margin-top:10px !important;
     padding:6px !important;
-    border:1px solid rgba(255,212,0,.5) !important;
+    border:1px solid rgba(255,212,0,.50) !important;
     border-radius:18px !important;
     background:#070707 !important;
-    align-items:center !important;
   }
 
   html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa{
-    min-height:45px !important;
+    min-height:44px !important;
     padding:0 7px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
     border-right:1px solid rgba(255,255,255,.22) !important;
   }
 
   html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa-wordmark{
+    color:#fff !important;
+    font-family:Arial,sans-serif !important;
     font-size:.95rem !important;
+    font-weight:1000 !important;
+    letter-spacing:-.05em !important;
+    line-height:1 !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa-wordmark span{
+    color:#FFD400 !important;
   }
 
   html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa small{
+    margin-top:3px !important;
+    color:#ddd !important;
+    font-family:"Oswald",Arial,sans-serif !important;
     font-size:.34rem !important;
+    font-weight:800 !important;
+    line-height:1.05 !important;
   }
 
   html[data-store-theme="carro-kechu-carmelo"] .kechu-final-ordering-status{
-    min-height:45px !important;
+    min-height:44px !important;
     padding:0 6px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
     gap:6px !important;
     border-right:1px solid rgba(255,255,255,.22) !important;
+    text-align:center !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-status-dot{
+    width:10px !important;
+    height:10px !important;
+    flex:0 0 10px !important;
+    border-radius:50% !important;
+    background:#35D39A !important;
+    box-shadow:0 0 0 4px rgba(53,211,154,.12) !important;
   }
 
   html[data-store-theme="carro-kechu-carmelo"] .kechu-final-ordering-status strong{
-    font-size:.58rem !important;
-    white-space:normal !important;
+    color:#fff !important;
+    font-family:"Oswald",Arial,sans-serif !important;
+    font-size:.57rem !important;
+    font-weight:900 !important;
+    line-height:1.05 !important;
+    text-transform:uppercase !important;
   }
 
   html[data-store-theme="carro-kechu-carmelo"] .kechu-final-fast-safe{
-    min-height:45px !important;
+    min-height:44px !important;
     padding:0 6px !important;
     display:flex !important;
     align-items:center !important;
@@ -1964,7 +1965,7 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
 
   html[data-store-theme="carro-kechu-carmelo"] .kechu-final-fast-icon{
     color:#FFD400 !important;
-    font-size:1.15rem !important;
+    font-size:1.12rem !important;
   }
 
   html[data-store-theme="carro-kechu-carmelo"] .kechu-final-fast-copy{
@@ -1977,7 +1978,7 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
   html[data-store-theme="carro-kechu-carmelo"] .kechu-final-fast-copy strong{
     color:#FFD400 !important;
     font-family:"Oswald",Arial,sans-serif !important;
-    font-size:.55rem !important;
+    font-size:.54rem !important;
     font-weight:900 !important;
   }
 
@@ -1985,170 +1986,50 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
     margin-top:2px !important;
     color:#fff !important;
     font-family:"Oswald",Arial,sans-serif !important;
-    font-size:.49rem !important;
+    font-size:.48rem !important;
     font-weight:800 !important;
   }
-}
 
-@media(max-width:420px){
-  html[data-store-theme="carro-kechu-carmelo"] .store-brand{
-    grid-template-columns:84px minmax(0,1fr) 74px !important;
-    gap:9px !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .store-logo{
-    width:84px !important;
-    height:102px !important;
-    min-width:84px !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .kechu-kitchen-mark{
-    width:74px !important;
-    min-height:80px !important;
-  }
-}
-
-</style>
-
-<style>
-/* DENEXA V154 - correccion puntual: distintivo a la DERECHA del nombre */
-@media(max-width:620px){
-  html[data-store-theme="carro-kechu-carmelo"] .kechu-kitchen-mark{
-    display:none !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .store-brand{
-    grid-template-columns:92px minmax(0,1fr) 56px !important;
-    gap:12px !important;
-    align-items:center !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .store-logo{
-    grid-column:1 !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .store-heading{
-    grid-column:2 !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .store-brand::after{
-    content:"âœ“" !important;
-    grid-column:3 !important;
-    grid-row:1 !important;
-    align-self:center !important;
-    justify-self:center !important;
-    display:grid !important;
-    place-items:center !important;
-    width:46px !important;
-    height:46px !important;
-    padding:0 !important;
-    min-height:0 !important;
-    border:2px solid #FFD400 !important;
-    border-radius:50% !important;
-    background:#080808 !important;
-    color:#FFD400 !important;
-    font-family:Arial,sans-serif !important;
-    font-size:1.75rem !important;
-    font-weight:900 !important;
-    line-height:1 !important;
-    white-space:normal !important;
-    box-shadow:0 0 18px rgba(255,212,0,.16) !important;
-  }
-}
-
-@media(max-width:420px){
-  html[data-store-theme="carro-kechu-carmelo"] .store-brand{
-    grid-template-columns:84px minmax(0,1fr) 48px !important;
-    gap:9px !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .store-brand::after{
-    width:42px !important;
-    height:42px !important;
-    font-size:1.55rem !important;
-  }
-}
-</style>
-
-
-<style>
-/* DENEXA V155 - dos correcciones juntas:
-   1) tilde amarillo a la derecha
-   2) slogan completo en un solo renglon */
-@media(max-width:620px){
-  html[data-store-theme="carro-kechu-carmelo"] .store-brand{
-    grid-template-columns:88px minmax(0,1fr) 48px !important;
-    gap:9px !important;
-    align-items:center !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .store-logo{
-    width:88px !important;
-    min-width:88px !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .store-heading{
-    min-width:0 !important;
-    overflow:visible !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .store-subtitle{
-    display:block !important;
-    width:max-content !important;
-    max-width:none !important;
-    margin-top:7px !important;
+  /* En Kechu quedan ocultas las dos estructuras antiguas, pero permanecen en DOM
+     para que JS siga actualizando el estado y otros comercios sigan funcionando. */
+  html[data-store-theme="carro-kechu-carmelo"] #storeStatus,
+  html[data-store-theme="carro-kechu-carmelo"] .service-strip{
+    position:absolute !important;
+    width:1px !important;
+    height:1px !important;
+    overflow:hidden !important;
+    clip:rect(0 0 0 0) !important;
+    clip-path:inset(50%) !important;
     white-space:nowrap !important;
-    overflow:visible !important;
-    text-overflow:clip !important;
-    font-size:clamp(.38rem,1.72vw,.53rem) !important;
-    line-height:1 !important;
-    letter-spacing:-.015em !important;
-  }
-
-  html[data-store-theme="carro-kechu-carmelo"] .store-brand::after{
-    content:"âœ“" !important;
-    grid-column:3 !important;
-    grid-row:1 !important;
-    align-self:center !important;
-    justify-self:end !important;
-    display:grid !important;
-    place-items:center !important;
-    width:42px !important;
-    height:42px !important;
-    min-height:0 !important;
-    padding:0 !important;
-    border:2px solid #FFD400 !important;
-    border-radius:50% !important;
-    background:#080808 !important;
-    color:#FFD400 !important;
-    font-family:Arial,sans-serif !important;
-    font-size:1.55rem !important;
-    font-weight:900 !important;
-    line-height:1 !important;
-    white-space:normal !important;
+    opacity:0 !important;
+    pointer-events:none !important;
   }
 }
 
 @media(max-width:420px){
   html[data-store-theme="carro-kechu-carmelo"] .store-brand{
-    grid-template-columns:80px minmax(0,1fr) 42px !important;
-    gap:7px !important;
+    grid-template-columns:80px minmax(0,1fr) 40px !important;
+    gap:8px !important;
   }
 
   html[data-store-theme="carro-kechu-carmelo"] .store-logo{
     width:80px !important;
+    height:100px !important;
     min-width:80px !important;
   }
 
-  html[data-store-theme="carro-kechu-carmelo"] .store-subtitle{
-    font-size:clamp(.34rem,1.55vw,.45rem) !important;
-    letter-spacing:-.025em !important;
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-approval-badge{
+    width:37px !important;
+    height:37px !important;
   }
 
-  html[data-store-theme="carro-kechu-carmelo"] .store-brand::after{
-    width:38px !important;
-    height:38px !important;
-    font-size:1.4rem !important;
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-approval-badge span{
+    font-size:1.3rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-single-slogan{
+    font-size:clamp(.33rem,1.42vw,.43rem) !important;
+    letter-spacing:-.02em !important;
   }
 }
 </style>
@@ -2266,11 +2147,19 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
           <div class="store-heading">
             <p class="store-kicker">PEDIDOS ONLINE</p>
             <h1 id="storeName">Cargando...</h1>
+
+            <!-- Slogan exclusivo de Kechu: una sola vez y en un solo renglÃ³n -->
+            <p class="kechu-single-slogan">
+              &#9733; TRADICI&Oacute;N DE FAMILIA DESDE 23 AGOSTO 1986
+            </p>
+
+            <!-- Se conserva para otros comercios y para app.js -->
             <p id="storeSubtitle" class="store-subtitle">
               Eleg&#237; tus favoritos y arm&#225; tu pedido.
             </p>
           </div>
 
+          <!-- Badge genÃ©rico para otros comercios -->
           <div
             class="store-country-badge"
             aria-label="DENEXA Uruguay"
@@ -2282,42 +2171,16 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
             <strong>DENEXA</strong>
           </div>
 
+          <!-- Ãšnico distintivo de Kechu a la derecha del nombre -->
+          <div class="kechu-approval-badge" aria-label="Calidad Kechu">
+            <span aria-hidden="true">&#10003;</span>
+          </div>
+
         </div>
 
-        <section
-          class="kechu-trust-strip"
-          aria-label="Confianza y servicio"
-        >
-          <div class="kechu-trust-item">
-            <span class="kechu-trust-icon" aria-hidden="true">&#127482;&#127486;</span>
-            <span class="kechu-trust-copy">
-              <strong>HECHO EN</strong>
-              <b>URUGUAY</b>
-            </span>
-          </div>
+        <!-- Ãšnica fila especial para Kechu -->
+        <div class="kechu-final-info-row" aria-label="DENEXA, estado de pedidos y entrega segura">
 
-          <span class="kechu-trust-divider" aria-hidden="true"></span>
-
-          <div class="kechu-trust-item">
-            <span class="kechu-trust-icon kechu-trust-shield" aria-hidden="true">&#10003;</span>
-            <span class="kechu-trust-copy">
-              <strong>CALIDAD</strong>
-              <b>GARANTIZADA</b>
-            </span>
-          </div>
-
-          <span class="kechu-trust-divider" aria-hidden="true"></span>
-
-          <div class="kechu-trust-item">
-            <span class="kechu-trust-icon" aria-hidden="true">&#128666;</span>
-            <span class="kechu-trust-copy">
-              <strong>R&Aacute;PIDO</strong>
-              <b>Y SEGURO</b>
-            </span>
-          </div>
-        </section>
-
-        <div class="kechu-final-info-row" aria-label="DENEXA, estado de pedidos y WhatsApp">
           <div class="kechu-final-denexa">
             <div class="kechu-final-denexa-wordmark">/DENE<span>X</span>A</div>
             <small>PLATAFORMA DE PEDIDOS ONLINE</small>
@@ -2335,18 +2198,16 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
               <small>Y SEGURO</small>
             </div>
           </div>
+
         </div>
 
-        <div class="kechu-denexa-menu-brand" aria-label="Powered by DENEXA">
-          <div class="kechu-denexa-wordmark">/DENE<span>X</span>A</div>
-          <small>PLATAFORMA DE PEDIDOS ONLINE</small>
-        </div>
-
+        <!-- Se conserva para que app.js actualice el estado real -->
         <div id="storeStatus" class="store-status">
           <span class="status-dot"></span>
           <span>Cargando...</span>
         </div>
 
+        <!-- Se conserva para otros comercios; en Kechu se oculta -->
         <section
           class="service-strip"
           aria-label="Informaci&#243;n del servicio"
@@ -2881,7 +2742,7 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
   </script>
 
   <script src="js/config.js?v=36"></script>
-  <script src="js/app.js?v=153"></script>
+  <script src="js/app.js?v=156"></script>
 
 
 <script>
