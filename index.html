@@ -40,7 +40,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="css/app.css?v=158">
+  <link rel="stylesheet" href="css/app.css?v=159">
 <style>
     html,
     body {
@@ -2070,6 +2070,59 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
 }
 </style>
 
+
+<style>
+/* DENEXA V159 - slogan + nombres largos de productos */
+
+@media(max-width:620px){
+
+  /* Slogan mÃ¡s grande, pero todavÃ­a en un solo renglÃ³n */
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading::after{
+    font-size:clamp(.50rem,2.15vw,.68rem) !important;
+    letter-spacing:-.02em !important;
+    white-space:nowrap !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+  }
+
+  /* Nombres de productos: permitir 2 lÃ­neas limpias */
+  html[data-store-theme="carro-kechu-carmelo"] .product-card h3,
+  html[data-store-theme="carro-kechu-carmelo"] .product-card .product-name,
+  html[data-store-theme="carro-kechu-carmelo"] .product-card-title,
+  html[data-store-theme="carro-kechu-carmelo"] .product-info h3{
+    white-space:normal !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+    word-break:normal !important;
+    overflow-wrap:break-word !important;
+    hyphens:none !important;
+    line-height:.92 !important;
+    min-height:1.84em !important;
+    max-height:none !important;
+    display:block !important;
+  }
+
+  /* Evitar cortes tipo AMERIC / ANA o NAPOLIT / ANA */
+  html[data-store-theme="carro-kechu-carmelo"] .product-card h3,
+  html[data-store-theme="carro-kechu-carmelo"] .product-card-title{
+    font-size:clamp(1rem,4.3vw,1.34rem) !important;
+    letter-spacing:-.02em !important;
+  }
+}
+
+@media(max-width:420px){
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading::after{
+    font-size:clamp(.46rem,1.95vw,.61rem) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card h3,
+  html[data-store-theme="carro-kechu-carmelo"] .product-card-title{
+    font-size:clamp(.94rem,4.05vw,1.22rem) !important;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -2773,7 +2826,7 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
   </script>
 
   <script src="js/config.js?v=36"></script>
-  <script src="js/app.js?v=158"></script>
+  <script src="js/app.js?v=159"></script>
 
 
 <script>
