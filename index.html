@@ -40,7 +40,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="css/app.css?v=156">
+  <link rel="stylesheet" href="css/app.css?v=157">
 <style>
     html,
     body {
@@ -2034,6 +2034,42 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
 }
 </style>
 
+
+<style>
+/* DENEXA V157 - correccion puntual final de cabecera */
+@media(max-width:620px){
+
+  /* Usamos SOLO el slogan nativo de app.css. */
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-single-slogan{
+    display:none !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading::after{
+    content:"\2605  TRADICI\00D3N DE FAMILIA DESDE 23 AGOSTO 1986" !important;
+    display:block !important;
+    width:max-content !important;
+    max-width:none !important;
+    margin-top:8px !important;
+    color:#fff !important;
+    font-family:"Oswald",Arial,sans-serif !important;
+    font-size:clamp(.34rem,1.45vw,.46rem) !important;
+    font-weight:800 !important;
+    line-height:1 !important;
+    letter-spacing:-.015em !important;
+    white-space:nowrap !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+  }
+}
+
+@media(max-width:420px){
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading::after{
+    font-size:clamp(.31rem,1.32vw,.40rem) !important;
+    letter-spacing:-.025em !important;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -2147,11 +2183,6 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
           <div class="store-heading">
             <p class="store-kicker">PEDIDOS ONLINE</p>
             <h1 id="storeName">Cargando...</h1>
-
-            <!-- Slogan exclusivo de Kechu: una sola vez y en un solo renglÃ³n -->
-            <p class="kechu-single-slogan">
-              &#9733; TRADICI&Oacute;N DE FAMILIA DESDE 23 AGOSTO 1986
-            </p>
 
             <!-- Se conserva para otros comercios y para app.js -->
             <p id="storeSubtitle" class="store-subtitle">
@@ -2742,7 +2773,7 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
   </script>
 
   <script src="js/config.js?v=36"></script>
-  <script src="js/app.js?v=156"></script>
+  <script src="js/app.js?v=157"></script>
 
 
 <script>
@@ -2770,20 +2801,38 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
 </script>
 
 
+
+
+
 <script>
 (function(){
-  var source = document.querySelector("#storeStatus span:last-child");
+  var sourceBox = document.getElementById("storeStatus");
   var target = document.getElementById("kechuFinalStatusText");
   var dot = document.querySelector(".kechu-final-status-dot");
 
-  if (!source || !target) return;
+  if (!sourceBox || !target) return;
 
-  function syncKechuStatus(){
-    var text = (source.textContent || "Tomando pedidos").trim();
+  function readStatus(){
+    var spans = sourceBox.querySelectorAll("span");
+    var text = "";
+
+    if (spans.length) {
+      text = (spans[spans.length - 1].textContent || "").trim();
+    }
+
+    if (!text || /cargando/i.test(text)) {
+      var raw = (sourceBox.textContent || "").trim();
+      if (raw && !/cargando/i.test(raw)) text = raw;
+    }
+
+    if (!text || /cargando/i.test(text)) {
+      text = "Tomando pedidos";
+    }
+
     target.textContent = text;
 
     if (dot) {
-      var closed = /cerrado|agotado|stock/i.test(text);
+      var closed = /cerrado|agotado|sin stock|no disponible/i.test(text);
       dot.style.background = closed ? "#F97066" : "#35D39A";
       dot.style.boxShadow = closed
         ? "0 0 0 4px rgba(249,112,102,.13)"
@@ -2791,13 +2840,18 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
     }
   }
 
-  syncKechuStatus();
+  readStatus();
 
-  new MutationObserver(syncKechuStatus).observe(source,{
+  new MutationObserver(readStatus).observe(sourceBox,{
     childList:true,
     characterData:true,
-    subtree:true
+    subtree:true,
+    attributes:true
   });
+
+  /* Segundo control cuando termina de cargar el comercio. */
+  setTimeout(readStatus, 600);
+  setTimeout(readStatus, 1600);
 })();
 </script>
 
