@@ -14,7 +14,7 @@ function supabaseHeaders(extraHeaders = {}) {
   };
 }
 
-/* DENEXA: capas del panel del comercio. */
+/* DENEXA: capas visuales seguras del panel del comercio. */
 if (/\/comercio\.html$/i.test(window.location.pathname)) {
   const denexaPanelStyle = document.createElement("link");
   denexaPanelStyle.rel = "stylesheet";
@@ -36,9 +36,9 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
   denexaPanelFixesV135.defer = true;
   document.head.appendChild(denexaPanelFixesV135);
 
-  /* V136: quitar definitivamente el selector global en Pedidos. */
-  const denexaPanelFixesV136 = document.createElement("script");
-  denexaPanelFixesV136.src = "js/comercio-v136.js?v=136";
-  denexaPanelFixesV136.defer = true;
-  document.head.appendChild(denexaPanelFixesV136);
+  /* V137 reemplaza por completo la V136 problemática. */
+  const denexaPanelFixesV137 = document.createElement("script");
+  denexaPanelFixesV137.src = "js/comercio-v137.js?v=137";
+  denexaPanelFixesV137.defer = true;
+  document.head.appendChild(denexaPanelFixesV137);
 }
