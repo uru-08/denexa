@@ -3551,6 +3551,140 @@ html[data-store-theme="carro-kechu-carmelo"] body:not(.welcome-open) #appShell{
 </style>
 
 
+
+<style id="denexa-kechu-cover-v172-branding">
+/* V172 - Branding DENEXA siempre visible en portada Kechu */
+.kechu172-denexa-top,
+.kechu172-denexa-bottom{
+  display:none;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top{
+  position:absolute !important;
+  top:max(10px,env(safe-area-inset-top)) !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  z-index:40 !important;
+
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:3px !important;
+
+  width:max-content !important;
+  max-width:88vw !important;
+  min-height:54px !important;
+  padding:7px 18px 8px !important;
+
+  border-radius:15px !important;
+  background:linear-gradient(
+    180deg,
+    rgba(4,4,4,.90),
+    rgba(4,4,4,.72)
+  ) !important;
+  box-shadow:0 8px 20px rgba(0,0,0,.28) !important;
+  backdrop-filter:blur(3px) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top strong{
+  display:block !important;
+  margin:0 !important;
+  color:#fff !important;
+  font-family:Arial Black,Arial,sans-serif !important;
+  font-size:clamp(18px,5.8vw,27px) !important;
+  line-height:1 !important;
+  letter-spacing:.035em !important;
+  white-space:nowrap !important;
+  text-shadow:0 3px 9px rgba(0,0,0,.8) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top small{
+  position:relative !important;
+  display:block !important;
+  margin:0 !important;
+  padding:0 10px !important;
+  color:#fff !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:clamp(8px,2.5vw,11px) !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  letter-spacing:.08em !important;
+  white-space:nowrap !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top small::before,
+html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top small::after{
+  content:"" !important;
+  position:absolute !important;
+  top:50% !important;
+  width:22px !important;
+  height:2px !important;
+  background:#FFD400 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top small::before{
+  right:100% !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top small::after{
+  left:100% !important;
+}
+
+/* Footer DENEXA: siempre visible sobre el recorte inferior */
+html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-bottom{
+  position:absolute !important;
+  left:50% !important;
+  bottom:max(10px,env(safe-area-inset-bottom)) !important;
+  transform:translateX(-50%) !important;
+  z-index:40 !important;
+
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:1px !important;
+
+  width:max-content !important;
+  max-width:84vw !important;
+  min-height:48px !important;
+  padding:6px 17px 7px !important;
+
+  border-radius:14px !important;
+  background:linear-gradient(
+    180deg,
+    rgba(4,4,4,.70),
+    rgba(4,4,4,.92)
+  ) !important;
+  box-shadow:0 -6px 18px rgba(0,0,0,.20) !important;
+  backdrop-filter:blur(3px) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-bottom small{
+  color:#fff !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:clamp(8px,2.3vw,10px) !important;
+  font-weight:800 !important;
+  line-height:1 !important;
+  letter-spacing:.15em !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-bottom strong{
+  color:#fff !important;
+  font-family:Arial Black,Arial,sans-serif !important;
+  font-size:clamp(18px,5.5vw,25px) !important;
+  line-height:1 !important;
+  letter-spacing:.025em !important;
+  white-space:nowrap !important;
+}
+
+/* Cuando la portada se oculta, los overlays tambiÃ©n. */
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen[aria-hidden="true"]
+.kechu172-denexa-top,
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen[aria-hidden="true"]
+.kechu172-denexa-bottom{
+  display:none !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -3565,6 +3699,11 @@ html[data-store-theme="carro-kechu-carmelo"] body:not(.welcome-open) #appShell{
     <div class="welcome-grid"></div>
 
     <div class="welcome-content">
+
+      <div class="kechu172-denexa-top" aria-label="DENEXA Uruguay">
+        <strong>DENEXA <span aria-hidden="true">&#127482;&#127486;</span></strong>
+        <small>PLATAFORMA DE PEDIDOS ONLINE</small>
+      </div>
 
       <div class="welcome-status">
         <span class="status-dot"></span>
@@ -3644,6 +3783,11 @@ html[data-store-theme="carro-kechu-carmelo"] body:not(.welcome-open) #appShell{
             >&#127482;&#127486;</span>
           </small>
         </div>
+      </div>
+
+      <div class="kechu172-denexa-bottom" aria-label="Powered by DENEXA Uruguay">
+        <small>POWERED BY</small>
+        <strong>DENEXA <span aria-hidden="true">&#127482;&#127486;</span></strong>
       </div>
 
     </div>
