@@ -40,7 +40,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="css/app.css?v=160">
+  <link rel="stylesheet" href="css/app.css?v=161">
 <style>
     html,
     body {
@@ -2223,6 +2223,613 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
 }
 </style>
 
+
+<style>
+/* =========================================================
+   DENEXA V161 - REFORMA VISUAL COMPLETA MAMMA MIA
+   EXCLUSIVA PARA data-store-theme="mamma-mia"
+   NO AFECTA KECHU.
+   ========================================================= */
+
+html[data-store-theme="mamma-mia"]{
+  --mm-blue:#0B4FB3;
+  --mm-blue-2:#176FE0;
+  --mm-navy:#092B62;
+  --mm-gold:#E7B83D;
+  --mm-bg:#F4F7FB;
+  --mm-card:#FFFFFF;
+  --mm-text:#14233D;
+  --mm-muted:#65738A;
+  --mm-line:#DCE4F0;
+}
+
+html[data-store-theme="mamma-mia"],
+html[data-store-theme="mamma-mia"] body{
+  background:var(--mm-bg) !important;
+  color:var(--mm-text) !important;
+}
+
+html[data-store-theme="mamma-mia"] #appShell{
+  background:
+    linear-gradient(180deg,#EEF4FC 0,#F7F9FC 270px,#F4F7FB 100%) !important;
+}
+
+/* ---------- CABECERA ---------- */
+
+html[data-store-theme="mamma-mia"] .store-header{
+  position:relative !important;
+  overflow:hidden !important;
+  padding:
+    max(16px,env(safe-area-inset-top))
+    16px
+    18px !important;
+  border-bottom:3px solid var(--mm-gold) !important;
+  background:
+    radial-gradient(circle at 90% 5%,rgba(255,255,255,.15),transparent 12rem),
+    linear-gradient(135deg,#092D68 0%,#0B4FB3 52%,#176FE0 100%) !important;
+  color:#fff !important;
+  box-shadow:0 10px 28px rgba(9,43,98,.18) !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-header::after{
+  content:"" !important;
+  position:absolute !important;
+  right:-50px !important;
+  top:-70px !important;
+  width:190px !important;
+  height:190px !important;
+  border:28px solid rgba(255,255,255,.045) !important;
+  border-radius:50% !important;
+  pointer-events:none !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-header-inner{
+  width:min(760px,100%) !important;
+  margin:0 auto !important;
+  display:grid !important;
+  grid-template-columns:auto minmax(0,1fr) !important;
+  gap:10px 12px !important;
+  align-items:center !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-brand{
+  grid-column:1 / -1 !important;
+  display:grid !important;
+  grid-template-columns:74px minmax(0,1fr) !important;
+  align-items:center !important;
+  gap:14px !important;
+  width:100% !important;
+  min-width:0 !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-logo{
+  width:74px !important;
+  height:74px !important;
+  min-width:74px !important;
+  display:grid !important;
+  place-items:center !important;
+  border:3px solid rgba(255,255,255,.92) !important;
+  border-radius:22px !important;
+  background:#fff !important;
+  overflow:hidden !important;
+  box-shadow:0 10px 24px rgba(0,0,0,.19) !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-logo img{
+  width:96% !important;
+  height:96% !important;
+  object-fit:contain !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-heading{
+  min-width:0 !important;
+  overflow:visible !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-kicker{
+  margin:0 0 3px !important;
+  color:#F8D873 !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.62rem !important;
+  font-weight:900 !important;
+  letter-spacing:.16em !important;
+  text-transform:uppercase !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-heading h1{
+  margin:0 !important;
+  max-width:100% !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  white-space:normal !important;
+  color:#fff !important;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:clamp(1.75rem,7vw,2.35rem) !important;
+  font-weight:900 !important;
+  line-height:.95 !important;
+  letter-spacing:-.025em !important;
+  text-transform:uppercase !important;
+  text-shadow:0 2px 8px rgba(0,0,0,.15) !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-subtitle{
+  display:block !important;
+  max-width:none !important;
+  margin:7px 0 0 !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  white-space:normal !important;
+  color:rgba(255,255,255,.86) !important;
+  font-size:.72rem !important;
+  font-weight:700 !important;
+  line-height:1.25 !important;
+}
+
+/* Los elementos creados exclusivamente para Kechu nunca aparecen en Mamma Mia. */
+html[data-store-theme="mamma-mia"] .kechu-approval-badge,
+html[data-store-theme="mamma-mia"] .kechu-final-info-row,
+html[data-store-theme="mamma-mia"] .store-country-badge{
+  display:none !important;
+}
+
+/* Una sola cÃ¡psula dinÃ¡mica de estado. */
+html[data-store-theme="mamma-mia"] #storeStatus{
+  grid-column:1 !important;
+  grid-row:2 !important;
+  position:static !important;
+  width:auto !important;
+  height:auto !important;
+  clip:auto !important;
+  clip-path:none !important;
+  opacity:1 !important;
+  overflow:visible !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:7px !important;
+  min-height:42px !important;
+  margin:0 !important;
+  padding:8px 12px !important;
+  border:1px solid rgba(255,255,255,.28) !important;
+  border-radius:14px !important;
+  background:rgba(3,27,70,.28) !important;
+  color:#fff !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.72rem !important;
+  font-weight:800 !important;
+  white-space:nowrap !important;
+  backdrop-filter:blur(8px) !important;
+}
+
+/* Delivery + Retiro en una sola banda; se elimina el "Tomando pedidos" duplicado. */
+html[data-store-theme="mamma-mia"] .service-strip{
+  grid-column:2 !important;
+  grid-row:2 !important;
+  position:static !important;
+  display:grid !important;
+  grid-template-columns:1fr auto 1fr !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-height:42px !important;
+  margin:0 !important;
+  padding:7px 10px !important;
+  overflow:hidden !important;
+  border:1px solid rgba(255,255,255,.25) !important;
+  border-radius:14px !important;
+  background:rgba(3,27,70,.22) !important;
+  color:#fff !important;
+  box-shadow:none !important;
+}
+
+html[data-store-theme="mamma-mia"] .service-strip > .service-strip-item:first-child,
+html[data-store-theme="mamma-mia"] .service-strip > .service-divider:nth-of-type(2){
+  display:none !important;
+}
+
+/* En la estructura actual quedan 2 servicios; se distribuyen de forma limpia. */
+html[data-store-theme="mamma-mia"] .service-strip-item{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  color:#fff !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.68rem !important;
+  font-weight:800 !important;
+  white-space:nowrap !important;
+}
+
+html[data-store-theme="mamma-mia"] .service-divider{
+  width:1px !important;
+  height:20px !important;
+  background:rgba(255,255,255,.28) !important;
+}
+
+/* ---------- CONTENIDO ---------- */
+
+html[data-store-theme="mamma-mia"] .main-content{
+  width:min(760px,100%) !important;
+  margin:0 auto !important;
+  padding:18px 14px 118px !important;
+  background:transparent !important;
+}
+
+html[data-store-theme="mamma-mia"] .legacy-store-info{
+  display:none !important;
+}
+
+/* Mantener la promo ya lograda, solo normalizar separaciÃ³n. */
+html[data-store-theme="mamma-mia"] #dailyPromoBanner.menu-promo-banner{
+  margin:0 0 24px !important;
+  border-color:#C8D8EF !important;
+  box-shadow:0 12px 30px rgba(9,43,98,.12) !important;
+}
+
+/* ---------- TITULO DEL MENU ---------- */
+
+html[data-store-theme="mamma-mia"] .catalog-section{
+  padding-top:0 !important;
+}
+
+html[data-store-theme="mamma-mia"] .section-heading{
+  margin:0 0 14px !important;
+  padding:0 2px 13px !important;
+  border-bottom:1px solid #DBE4F0 !important;
+}
+
+html[data-store-theme="mamma-mia"] .section-heading::after{
+  content:"" !important;
+  display:block !important;
+  width:62px !important;
+  height:4px !important;
+  margin-top:11px !important;
+  border-radius:999px !important;
+  background:linear-gradient(90deg,var(--mm-gold),#F7D97E) !important;
+}
+
+html[data-store-theme="mamma-mia"] .eyebrow{
+  margin:0 0 4px !important;
+  color:var(--mm-blue) !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.68rem !important;
+  font-weight:900 !important;
+  letter-spacing:.15em !important;
+}
+
+html[data-store-theme="mamma-mia"] .section-heading h2{
+  margin:0 !important;
+  color:var(--mm-navy) !important;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:clamp(1.55rem,6.5vw,2rem) !important;
+  font-weight:900 !important;
+  line-height:1.03 !important;
+  letter-spacing:-.025em !important;
+}
+
+html[data-store-theme="mamma-mia"] .section-subtitle{
+  margin:7px 0 0 !important;
+  color:#5E6E84 !important;
+  font-size:.78rem !important;
+  font-weight:650 !important;
+  line-height:1.35 !important;
+}
+
+/* ---------- CATEGORIAS ---------- */
+
+html[data-store-theme="mamma-mia"] .category-tabs{
+  position:relative !important;
+  top:auto !important;
+  z-index:5 !important;
+  display:flex !important;
+  gap:10px !important;
+  overflow-x:auto !important;
+  margin:0 -14px 18px !important;
+  padding:4px 14px 12px !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  scrollbar-width:none !important;
+}
+
+html[data-store-theme="mamma-mia"] .category-tab{
+  flex:0 0 106px !important;
+  width:106px !important;
+  min-width:106px !important;
+  min-height:102px !important;
+  max-height:none !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:7px !important;
+  padding:9px 7px !important;
+  overflow:hidden !important;
+  border:1px solid #D4DFEC !important;
+  border-radius:18px !important;
+  background:#fff !important;
+  color:var(--mm-navy) !important;
+  box-shadow:0 7px 18px rgba(9,43,98,.07) !important;
+}
+
+html[data-store-theme="mamma-mia"] .category-tab.active{
+  border-color:#0F5CC4 !important;
+  background:linear-gradient(145deg,#0B4FB3,#176FE0) !important;
+  color:#fff !important;
+  box-shadow:0 9px 22px rgba(11,79,179,.20) !important;
+}
+
+html[data-store-theme="mamma-mia"] .category-tab-visual{
+  width:58px !important;
+  height:58px !important;
+  min-width:58px !important;
+  flex:0 0 58px !important;
+  display:grid !important;
+  place-items:center !important;
+  overflow:hidden !important;
+  border:0 !important;
+  border-radius:15px !important;
+  background:#F1F5FA !important;
+  box-shadow:none !important;
+}
+
+html[data-store-theme="mamma-mia"] .category-tab.active .category-tab-visual{
+  background:rgba(255,255,255,.94) !important;
+}
+
+html[data-store-theme="mamma-mia"] .category-tab-visual img,
+html[data-store-theme="mamma-mia"] .category-tab-visual svg{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+}
+
+html[data-store-theme="mamma-mia"] .category-tab-label{
+  position:static !important;
+  display:block !important;
+  width:100% !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  color:inherit !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.69rem !important;
+  font-weight:900 !important;
+  line-height:1.05 !important;
+  text-align:center !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+
+/* ---------- SECCIONES Y PRODUCTOS ---------- */
+
+html[data-store-theme="mamma-mia"] .catalog-content{
+  display:grid !important;
+  gap:20px !important;
+}
+
+html[data-store-theme="mamma-mia"] .category-section{
+  padding:15px !important;
+  border:1px solid #DCE4EF !important;
+  border-radius:22px !important;
+  background:#fff !important;
+  box-shadow:0 8px 24px rgba(9,43,98,.06) !important;
+}
+
+html[data-store-theme="mamma-mia"] .category-section-title{
+  position:relative !important;
+  margin:0 0 13px !important;
+  padding:0 0 10px !important;
+  border-bottom:3px solid var(--mm-gold) !important;
+}
+
+html[data-store-theme="mamma-mia"] .category-section-title h3{
+  margin:0 !important;
+  color:var(--mm-navy) !important;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:1.35rem !important;
+  font-weight:900 !important;
+}
+
+html[data-store-theme="mamma-mia"] .category-section-title span{
+  padding:5px 9px !important;
+  border:1px solid #D5DFEB !important;
+  border-radius:999px !important;
+  background:#F5F8FC !important;
+  color:#5A6B83 !important;
+  font-size:.66rem !important;
+  font-weight:800 !important;
+}
+
+html[data-store-theme="mamma-mia"] .products-grid{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:12px !important;
+}
+
+html[data-store-theme="mamma-mia"] .product-card{
+  display:grid !important;
+  grid-template-columns:132px minmax(0,1fr) !important;
+  min-height:138px !important;
+  overflow:hidden !important;
+  border:1px solid #DCE4EF !important;
+  border-radius:18px !important;
+  background:#fff !important;
+  color:var(--mm-text) !important;
+  box-shadow:0 5px 15px rgba(9,43,98,.055) !important;
+}
+
+html[data-store-theme="mamma-mia"] .product-image,
+html[data-store-theme="mamma-mia"] .product-image-placeholder{
+  width:132px !important;
+  min-width:132px !important;
+  min-height:138px !important;
+  height:100% !important;
+  aspect-ratio:auto !important;
+  border:0 !important;
+  background:#EEF3F9 !important;
+}
+
+html[data-store-theme="mamma-mia"] .product-image img{
+  width:100% !important;
+  height:100% !important;
+  min-height:138px !important;
+  object-fit:cover !important;
+}
+
+html[data-store-theme="mamma-mia"] .product-info{
+  min-width:0 !important;
+  padding:13px 13px 12px !important;
+  background:#fff !important;
+}
+
+html[data-store-theme="mamma-mia"] .product-info h4{
+  margin:0 !important;
+  color:var(--mm-navy) !important;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:1.08rem !important;
+  font-weight:900 !important;
+  line-height:1.05 !important;
+  overflow-wrap:normal !important;
+  word-break:normal !important;
+}
+
+html[data-store-theme="mamma-mia"] .product-description{
+  margin:6px 0 8px !important;
+  color:#5E6E84 !important;
+  font-size:.73rem !important;
+  font-weight:650 !important;
+  line-height:1.32 !important;
+  -webkit-line-clamp:3 !important;
+}
+
+html[data-store-theme="mamma-mia"] .product-price{
+  width:auto !important;
+  min-height:0 !important;
+  margin-top:auto !important;
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  color:var(--mm-blue) !important;
+  font-size:1rem !important;
+  font-weight:950 !important;
+  box-shadow:none !important;
+}
+
+html[data-store-theme="mamma-mia"] .product-price::after{
+  display:none !important;
+}
+
+/* ---------- CARRITO ---------- */
+
+html[data-store-theme="mamma-mia"] #cartButton{
+  width:min(440px,calc(100% - 20px)) !important;
+  min-height:62px !important;
+  max-height:66px !important;
+  border:1px solid rgba(255,255,255,.18) !important;
+  border-bottom:3px solid var(--mm-gold) !important;
+  border-radius:19px !important;
+  background:linear-gradient(135deg,#092D68,#0B4FB3 55%,#176FE0) !important;
+  color:#fff !important;
+  box-shadow:0 14px 34px rgba(9,43,98,.30) !important;
+}
+
+html[data-store-theme="mamma-mia"] #cartButton .cart-icon-wrap{
+  background:rgba(255,255,255,.12) !important;
+}
+
+html[data-store-theme="mamma-mia"] #cartButton .cart-count-badge{
+  background:var(--mm-gold) !important;
+  color:#14233D !important;
+}
+
+html[data-store-theme="mamma-mia"] #cartButton .cart-action-label{
+  min-height:38px !important;
+  padding:0 13px !important;
+  border-radius:12px !important;
+  background:#fff !important;
+  color:var(--mm-navy) !important;
+  font-family:"Oswald",Arial,sans-serif !important;
+  font-size:.68rem !important;
+  font-weight:900 !important;
+}
+
+/* ---------- MODALES ---------- */
+
+html[data-store-theme="mamma-mia"] .modal-card,
+html[data-store-theme="mamma-mia"] .cart-modal-card,
+html[data-store-theme="mamma-mia"] .checkout-modal-card{
+  background:#fff !important;
+  color:var(--mm-text) !important;
+}
+
+html[data-store-theme="mamma-mia"] .cart-item{
+  background:#fff !important;
+  color:var(--mm-text) !important;
+}
+
+html[data-store-theme="mamma-mia"] .cart-item h3,
+html[data-store-theme="mamma-mia"] .modal-title-row h2{
+  color:var(--mm-navy) !important;
+}
+
+html[data-store-theme="mamma-mia"] .cart-summary{
+  background:#fff !important;
+  color:var(--mm-text) !important;
+}
+
+html[data-store-theme="mamma-mia"] .primary-action{
+  background:linear-gradient(135deg,#0B4FB3,#176FE0) !important;
+  color:#fff !important;
+}
+
+/* ---------- MOVIL PEQUEÃ‘O ---------- */
+
+@media(max-width:390px){
+
+  html[data-store-theme="mamma-mia"] .store-brand{
+    grid-template-columns:66px minmax(0,1fr) !important;
+    gap:11px !important;
+  }
+
+  html[data-store-theme="mamma-mia"] .store-logo{
+    width:66px !important;
+    height:66px !important;
+    min-width:66px !important;
+  }
+
+  html[data-store-theme="mamma-mia"] .store-heading h1{
+    font-size:1.62rem !important;
+  }
+
+  html[data-store-theme="mamma-mia"] .store-header-inner{
+    gap:8px !important;
+  }
+
+  html[data-store-theme="mamma-mia"] #storeStatus{
+    font-size:.66rem !important;
+    padding:7px 9px !important;
+  }
+
+  html[data-store-theme="mamma-mia"] .service-strip-item{
+    font-size:.62rem !important;
+  }
+
+  html[data-store-theme="mamma-mia"] .category-tab{
+    flex-basis:98px !important;
+    width:98px !important;
+    min-width:98px !important;
+  }
+
+  html[data-store-theme="mamma-mia"] .product-card{
+    grid-template-columns:118px minmax(0,1fr) !important;
+  }
+
+  html[data-store-theme="mamma-mia"] .product-image,
+  html[data-store-theme="mamma-mia"] .product-image-placeholder{
+    width:118px !important;
+    min-width:118px !important;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -2926,7 +3533,7 @@ html[data-store-theme="carro-kechu-carmelo"] .menu-promo-banner{
   </script>
 
   <script src="js/config.js?v=36"></script>
-  <script src="js/app.js?v=160"></script>
+  <script src="js/app.js?v=161"></script>
 
 
 <script>
