@@ -3685,6 +3685,35 @@ html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen[aria-hidden="true"]
 }
 </style>
 
+
+<style id="denexa-kechu-cover-v173-single-brand">
+html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-bottom{
+  display:none !important;
+}
+</style>
+
+
+<style id="denexa-kechu-cover-v174-no-duplicate">
+/* V174: elimina visualmente SOLO la frase duplicada que quedÃ³ en la imagen de fondo. */
+html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top::before{
+  content:"" !important;
+  position:absolute !important;
+  left:50% !important;
+  top:-16px !important;
+  transform:translateX(-50%) !important;
+  width:100vw !important;
+  height:22px !important;
+  background:#050505 !important;
+  z-index:-1 !important;
+  pointer-events:none !important;
+}
+
+/* Un Ãºnico branding visible */
+html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-bottom{
+  display:none !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -3784,13 +3813,7 @@ html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen[aria-hidden="true"]
           </small>
         </div>
       </div>
-
-      <div class="kechu172-denexa-bottom" aria-label="Powered by DENEXA Uruguay">
-        <small>POWERED BY</small>
-        <strong>DENEXA <span aria-hidden="true">&#127482;&#127486;</span></strong>
-      </div>
-
-    </div>
+</div>
   </section>
 
 
