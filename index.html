@@ -40,7 +40,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="css/app.css?v=163">
+  <link rel="stylesheet" href="css/app.css?v=164">
 <style>
     html,
     body {
@@ -3213,6 +3213,186 @@ html[data-store-theme="mamma-mia"] .catalog-section{
 </style>
 
 
+<style>
+
+/* =========================================================
+   V164 - MAMMA MIA: CABECERA COMPACTA FORZADA
+   Elimina definitivamente cualquier alto de pantalla completa.
+   ========================================================= */
+
+html[data-store-theme="mamma-mia"] .store-header,
+html[data-store-theme="mamma-mia"] .store-header-inner,
+html[data-store-theme="mamma-mia"] .store-brand,
+html[data-store-theme="mamma-mia"] .store-heading{
+  box-sizing:border-box !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-header{
+  position:relative !important;
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:170px !important;
+  overflow:hidden !important;
+  margin:0 !important;
+  padding:
+    max(10px,env(safe-area-inset-top))
+    12px
+    10px !important;
+  background:
+    linear-gradient(135deg,#082B63 0%,#0B4FB3 58%,#176FE0 100%) !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-header::before,
+html[data-store-theme="mamma-mia"] .store-header::after,
+html[data-store-theme="mamma-mia"] .store-header-inner::before,
+html[data-store-theme="mamma-mia"] .store-header-inner::after,
+html[data-store-theme="mamma-mia"] .store-brand::before,
+html[data-store-theme="mamma-mia"] .store-brand::after{
+  display:none !important;
+  content:none !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-header-inner{
+  position:relative !important;
+  display:grid !important;
+  grid-template-columns:auto minmax(0,1fr) !important;
+  grid-template-rows:auto auto !important;
+  align-items:center !important;
+  gap:7px 9px !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:150px !important;
+  margin:0 auto !important;
+  padding:0 !important;
+  overflow:hidden !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-brand{
+  grid-column:1 / -1 !important;
+  grid-row:1 !important;
+  display:grid !important;
+  grid-template-columns:58px minmax(0,1fr) !important;
+  align-items:center !important;
+  gap:10px !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:74px !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-logo{
+  width:58px !important;
+  height:58px !important;
+  min-width:58px !important;
+  min-height:58px !important;
+  max-width:58px !important;
+  max-height:58px !important;
+  margin:0 !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-heading{
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:70px !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-kicker{
+  margin:0 0 2px !important;
+  font-size:.54rem !important;
+  line-height:1 !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-heading h1{
+  margin:0 !important;
+  font-size:1.42rem !important;
+  line-height:.95 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-subtitle{
+  margin:3px 0 0 !important;
+  font-size:.60rem !important;
+  line-height:1.1 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Cualquier badge o bloque ajeno al encabezado de Mamma Mia desaparece. */
+html[data-store-theme="mamma-mia"] .store-country-badge,
+html[data-store-theme="mamma-mia"] .kechu-approval-badge,
+html[data-store-theme="mamma-mia"] .kechu-final-info-row,
+html[data-store-theme="mamma-mia"] .kechu-trust-strip,
+html[data-store-theme="mamma-mia"] .kechu-denexa-menu-brand,
+html[data-store-theme="mamma-mia"] .menu-brand-strip,
+html[data-store-theme="mamma-mia"] .legacy-store-info,
+html[data-store-theme="mamma-mia"] .store-info-card{
+  display:none !important;
+  position:absolute !important;
+  width:0 !important;
+  height:0 !important;
+  min-height:0 !important;
+  max-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  overflow:hidden !important;
+}
+
+/* Segunda fila compacta */
+html[data-store-theme="mamma-mia"] #storeStatus{
+  grid-column:1 !important;
+  grid-row:2 !important;
+  min-height:34px !important;
+  max-height:34px !important;
+  padding:5px 8px !important;
+  margin:0 !important;
+  font-size:.60rem !important;
+}
+
+html[data-store-theme="mamma-mia"] .service-strip{
+  grid-column:2 !important;
+  grid-row:2 !important;
+  min-height:34px !important;
+  max-height:34px !important;
+  padding:5px 8px !important;
+  margin:0 !important;
+  font-size:.58rem !important;
+}
+
+/* El contenido empieza inmediatamente despuÃ©s. */
+html[data-store-theme="mamma-mia"] .main-content{
+  display:block !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:
+    8px
+    12px
+    118px !important;
+  background:#F4F7FB !important;
+}
+
+html[data-store-theme="mamma-mia"] #dailyPromoBanner.menu-promo-banner{
+  margin:0 0 16px !important;
+}
+
+html[data-store-theme="mamma-mia"] .catalog-section{
+  margin:0 !important;
+  padding:0 !important;
+}
+</style>
 </head>
 
 <body>
@@ -3916,7 +4096,7 @@ html[data-store-theme="mamma-mia"] .catalog-section{
   </script>
 
   <script src="js/config.js?v=36"></script>
-  <script src="js/app.js?v=163"></script>
+  <script src="js/app.js?v=164"></script>
 
 
 <script>
