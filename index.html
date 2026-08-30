@@ -33,10 +33,13 @@
   </script>
 
   
-<style id="denexa-prepaint-v169">
+<style id="denexa-v170-prepaint">
 html,body{background:#050505!important}
-html[data-store-theme*="kechu"],html[data-store-theme*="kechu"] body,
-html[data-store-theme*="kechu"] #welcomeScreen{background:#050505!important}
+html[data-store-theme="carro-kechu-carmelo"],
+html[data-store-theme="carro-kechu-carmelo"] body,
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen{
+  background:#050505!important;
+}
 </style>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3460,87 +3463,192 @@ html[data-store-theme*="mamma"] body:not(.welcome-open) #appShell{
 </style>
 
 
-<style id="denexa-kechu-portada-v169">
-.kechu169-cover,.kechu169-services,.kechu169-quality{display:none}
-html[data-store-theme="carro-kechu-carmelo"],html[data-store-theme="carro-kechu-carmelo"] body{background:#050505!important}
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen{
-position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;min-height:100dvh!important;
-overflow-x:hidden!important;overflow-y:auto!important;color:#fff!important;z-index:3000!important;
-background:radial-gradient(circle at 10% 22%,rgba(205,20,28,.14),transparent 28%),
-radial-gradient(circle at 88% 18%,rgba(255,199,0,.08),transparent 25%),
-linear-gradient(180deg,#050505 0%,#090909 58%,#030303 100%)!important}
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen::before{
-content:""!important;display:block!important;position:fixed!important;inset:0!important;pointer-events:none!important;opacity:.34!important;
-background-image:radial-gradient(circle,rgba(220,25,30,.9) 0 2px,transparent 3px),
-radial-gradient(circle,rgba(255,201,0,.8) 0 1.5px,transparent 2.5px)!important;background-size:145px 185px,190px 225px!important;z-index:0!important}
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen::after{
-content:""!important;display:block!important;position:fixed!important;left:-10%!important;right:-10%!important;bottom:-8vh!important;height:20vh!important;
-background:radial-gradient(ellipse,rgba(215,25,30,.23),transparent 68%)!important;pointer-events:none!important;z-index:0!important}
+<style id="denexa-kechu-cover-v170">
+/* =========================================================
+   DENEXA V170
+   PORTADA KECHU = BOCETO APROBADO COMPLETO
+   SOLO PORTADA. NO TOCA MENU NI LOGICA DE PEDIDOS.
+   ========================================================= */
+
+html[data-store-theme="carro-kechu-carmelo"],
+html[data-store-theme="carro-kechu-carmelo"] body{
+  background:#050505 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen,
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen.has-custom-hero{
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  height:100dvh !important;
+  min-height:100dvh !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  background:#050505 !important;
+  background-image:none !important;
+  z-index:3000 !important;
+}
+
+/* Eliminamos todos los adornos anteriores de la portada. */
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen::before,
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen::after,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-glow,
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-grid,
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-grid{
+  display:none !important;
+  content:none !important;
+}
+
+/*
+  Este contenedor tiene EXACTAMENTE la proporcion del boceto aprobado:
+  853 x 1844.
+  Por eso nunca se corta: se reduce completo hasta entrar en la pantalla.
+*/
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content{
+  position:absolute !important;
+  inset:50% auto auto 50% !important;
+  transform:translate(-50%,-50%) !important;
+
+  width:min(100vw,calc(100dvh * 0.4625813449)) !important;
+  height:min(100dvh,calc(100vw * 2.1617819461)) !important;
+  aspect-ratio:853 / 1844 !important;
+
+  min-width:0 !important;
+  min-height:0 !important;
+  max-width:none !important;
+  max-height:none !important;
+
+  margin:0 !important;
+  padding:0 !important;
+
+  display:block !important;
+  opacity:1 !important;
+  visibility:visible !important;
+
+  background-color:#050505 !important;
+  background-image:url("assets/kechu/portada-kechu-v170.png?v=170") !important;
+  background-repeat:no-repeat !important;
+  background-position:center !important;
+  background-size:100% 100% !important;
+
+  overflow:hidden !important;
+  z-index:5 !important;
+}
+
+/*
+  Todo lo que ya existe en el HTML queda oculto visualmente.
+  El boceto ya contiene marca, estado, delivery, retiro y footer.
+*/
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-status,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-logo-wrap,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-copy,
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu-welcome-services,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-mobile-note,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-note,
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu-welcome-services{display:none!important}
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content{
-position:relative!important;z-index:2!important;width:min(100%,520px)!important;min-height:100dvh!important;margin:0 auto!important;
-padding:max(18px,env(safe-area-inset-top)) 16px max(20px,env(safe-area-inset-bottom))!important;
-display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:12px!important;opacity:1!important;transform:none!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-cover{display:flex!important;flex-direction:column!important;align-items:center!important;width:100%!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-denexa{display:flex!important;flex-direction:column!important;align-items:center!important;gap:3px!important;margin-bottom:9px!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-denexa strong{font-family:Arial Black,Arial,sans-serif!important;font-size:1.5rem!important;line-height:1!important;color:#fff!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-denexa small{font-family:"Oswald",Arial,sans-serif!important;font-size:.65rem!important;font-weight:800!important;letter-spacing:.08em!important;color:#fff!important;border-left:30px solid #FFD400!important;border-right:30px solid #FFD400!important;padding:0 10px!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-brand{display:flex!important;flex-direction:column!important;align-items:center!important;width:100%!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-carro{z-index:4!important;margin-bottom:-3px!important;padding-left:.3em!important;font-family:"Oswald",Arial,sans-serif!important;font-size:1.8rem!important;font-weight:900!important;letter-spacing:.3em!important;line-height:1!important;color:#fff!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-logo-box{position:relative!important;z-index:3!important;width:min(44vw,190px)!important;height:min(44vw,190px)!important;display:grid!important;place-items:center!important;margin:0 auto -10px!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-logo-box img{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;border:0!important;background:transparent!important;filter:drop-shadow(0 10px 16px rgba(0,0,0,.72))!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-kechu{z-index:5!important;margin-top:-9px!important;font-family:"Knewave","Arial Black",sans-serif!important;font-size:clamp(4.4rem,20vw,6.2rem)!important;line-height:.78!important;letter-spacing:-.055em!important;color:#FFD400!important;transform:rotate(-3deg)!important;text-shadow:4px 6px 0 #7B0A0A,0 10px 20px #000!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-carmelo{z-index:5!important;margin-top:6px!important;margin-left:30%!important;font-family:"Knewave","Arial Black",sans-serif!important;font-size:clamp(2.1rem,10vw,3rem)!important;line-height:.9!important;color:#E72A2A!important;transform:rotate(-4deg)!important;text-shadow:3px 4px 0 #640909,0 7px 14px #000!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-tradition{display:flex!important;align-items:center!important;justify-content:center!important;gap:9px!important;width:min(100%,390px)!important;margin:16px auto 2px!important;padding:10px 14px!important;border:2px solid #FFD400!important;border-radius:4px!important;background:rgba(4,4,4,.92)!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-tradition .star{color:#FFD400!important;font-size:1.15rem!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-tradition div{display:flex!important;flex-direction:column!important;align-items:center!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-tradition strong,
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-tradition small{font-family:"Oswald",Arial,sans-serif!important;color:#fff!important;line-height:1.08!important;text-align:center!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-tradition strong{font-size:1.02rem!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-tradition small{font-size:.85rem!important;font-weight:700!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-tradition b{color:#FFD400!important}
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-status{width:min(100%,350px)!important;min-height:54px!important;margin:0 auto!important;padding:0 17px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:12px!important;border:1.5px solid #70F052!important;border-radius:16px!important;background:rgba(3,15,4,.92)!important;color:#75F157!important}
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-status .status-dot{width:17px!important;height:17px!important;flex:0 0 17px!important;border-radius:50%!important;background:#75F157!important;box-shadow:0 0 14px rgba(117,241,87,.45)!important}
-html[data-store-theme="carro-kechu-carmelo"] #welcomeStatusText{font-family:"Oswald",Arial,sans-serif!important;font-size:1.12rem!important;font-weight:900!important;letter-spacing:.04em!important;color:#75F157!important;text-transform:uppercase!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-services{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;width:100%!important;margin:0!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-service{min-height:76px!important;padding:10px 8px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;border-radius:15px!important;background:rgba(5,5,5,.94)!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-service.delivery{border:1.5px solid #FFD400!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-service.pickup{border:1.5px solid #E82A31!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-service .service-symbol{width:31px!important;height:31px!important;display:grid!important;place-items:center!important;border-radius:8px!important;font-family:Arial Black,Arial,sans-serif!important;font-size:1rem!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-service.delivery .service-symbol{background:#FFD400!important;color:#080808!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-service.pickup .service-symbol{background:#E82A31!important;color:#fff!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-service div{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:3px!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-service strong{font-family:"Oswald",Arial,sans-serif!important;font-size:1rem!important;line-height:1!important;color:#fff!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-service small{font-family:"Oswald",Arial,sans-serif!important;font-size:.6rem!important;font-weight:700!important;line-height:1.15!important;color:#fff!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-service.delivery small{color:#FFD400!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-service.pickup small{color:#FF454B!important}
-html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton{position:relative!important;width:100%!important;min-height:72px!important;margin:0!important;padding:0 55px 0 25px!important;border:2px solid #FFF2A0!important;border-radius:19px!important;background:linear-gradient(180deg,#FFD936,#FFC400)!important;color:#080808!important;font-family:"Oswald",Arial,sans-serif!important;font-size:1.35rem!important;font-weight:950!important;letter-spacing:.035em!important;text-transform:uppercase!important;box-shadow:0 0 25px rgba(255,196,0,.24),0 12px 22px rgba(0,0,0,.5)!important}
-html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton::before{content:"\2192"!important;position:absolute!important;right:20px!important;top:50%!important;transform:translateY(-50%)!important;color:#D91F26!important;font-size:2rem!important;font-weight:900!important}
-html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton::after{content:""!important;display:none!important}
-html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton .welcome-arrow{display:none!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-quality{display:grid!important;grid-template-columns:1fr 1px 1fr 1px 1fr!important;align-items:center!important;gap:7px!important;width:100%!important;padding:3px 0!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-quality div{display:flex!important;align-items:center!important;justify-content:center!important;gap:5px!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-quality i{width:1px!important;height:30px!important;background:#D8272D!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-quality span{color:#FFD400!important;font-size:1.15rem!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-quality small{font-family:"Oswald",Arial,sans-serif!important;font-size:.55rem!important;line-height:1.13!important;font-weight:800!important;color:#fff!important;text-align:left!important}
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-denexa-signature{width:100%!important;margin:0!important;padding:1px 0 0!important}
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-denexa-signature>div{display:flex!important;flex-direction:column!important;align-items:center!important;gap:1px!important}
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-denexa-signature span{font-family:"Oswald",Arial,sans-serif!important;font-size:.59rem!important;letter-spacing:.13em!important;color:#fff!important}
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-denexa-signature strong{font-family:Arial Black,Arial,sans-serif!important;font-size:1.2rem!important;color:#fff!important}
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-denexa-signature small{font-family:"Oswald",Arial,sans-serif!important;font-size:.55rem!important;color:#fff!important}
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-denexa-signature{
+  display:none !important;
+}
+
+/*
+  BOTON REAL:
+  se coloca exactamente encima del boton amarillo que ya esta dibujado.
+  Visualmente no agrega ningun boton nuevo.
+*/
+html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton{
+  display:block !important;
+  position:absolute !important;
+  left:4.7% !important;
+  top:76.2% !important;
+  width:90.6% !important;
+  height:10.4% !important;
+  min-width:0 !important;
+  min-height:0 !important;
+
+  margin:0 !important;
+  padding:0 !important;
+
+  border:0 !important;
+  border-radius:7% / 28% !important;
+  background:transparent !important;
+  background-image:none !important;
+  box-shadow:none !important;
+
+  color:transparent !important;
+  font-size:0 !important;
+  opacity:1 !important;
+  cursor:pointer !important;
+  z-index:20 !important;
+  -webkit-tap-highlight-color:transparent !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton span,
+html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton::before,
+html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton::after{
+  display:none !important;
+  content:none !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton:focus-visible{
+  outline:3px solid #fff !important;
+  outline-offset:-5px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton:active{
+  background:rgba(255,255,255,.07) !important;
+}
+
+/*
+  Si el comercio esta cerrado, la logica existente muestra este aviso.
+  Solo aparece cuando realmente hace falta.
+*/
+html[data-store-theme="carro-kechu-carmelo"] #orderingStatusNotice:not([hidden]){
+  display:flex !important;
+  position:absolute !important;
+  left:7% !important;
+  right:7% !important;
+  top:58.5% !important;
+  min-height:8% !important;
+  margin:0 !important;
+  padding:9px 12px !important;
+  border:2px solid #e82b32 !important;
+  border-radius:12px !important;
+  background:rgba(8,8,8,.96) !important;
+  color:#fff !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex-direction:column !important;
+  text-align:center !important;
+  font-family:Arial,sans-serif !important;
+  font-size:clamp(10px,2.7vw,14px) !important;
+  z-index:30 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #orderingStatusNotice[hidden]{
+  display:none !important;
+}
+
+/* Al entrar al menu, la portada desaparece SIN dejar espacio. */
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen[aria-hidden="true"],
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen.is-leaving[aria-hidden="true"]{display:none!important;width:0!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important}
-@media(max-width:380px){
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content{padding-left:12px!important;padding-right:12px!important;gap:10px!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-logo-box{width:165px!important;height:165px!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-kechu{font-size:4rem!important}
-html[data-store-theme="carro-kechu-carmelo"] .kechu169-carmelo{font-size:2rem!important}}
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen.is-leaving[aria-hidden="true"]{
+  display:none !important;
+  width:0 !important;
+  height:0 !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  visibility:hidden !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+
+/* El menu queda exactamente como estaba en V167. */
+html[data-store-theme="carro-kechu-carmelo"] body:not(.welcome-open) #appShell{
+  margin-top:0 !important;
+  padding-top:0 !important;
+  transform:none !important;
+}
 </style>
 
 </head>
@@ -3557,26 +3665,6 @@ html[data-store-theme="carro-kechu-carmelo"] .kechu169-carmelo{font-size:2rem!im
     <div class="welcome-grid"></div>
 
     <div class="welcome-content">
-
-
-<section class="kechu169-cover" aria-label="Carro Kechu Carmelo">
-  <div class="kechu169-denexa">
-    <strong>DENEXA <span>&#127482;&#127486;</span></strong>
-    <small>PLATAFORMA DE PEDIDOS ONLINE</small>
-  </div>
-  <div class="kechu169-brand">
-    <div class="kechu169-carro">CARRO</div>
-    <div class="kechu169-logo-box">
-      <img src="assets/kechu/logo-kechu.png?v=169" alt="Logo Carro Kechu">
-    </div>
-    <div class="kechu169-kechu">KECHU</div>
-    <div class="kechu169-carmelo">CARMELO</div>
-  </div>
-  <div class="kechu169-tradition">
-    <span class="star">&#9733;</span>
-    <div><strong>TRADICI&Oacute;N DE FAMILIA</strong><small>DESDE <b>23 AGOSTO 1986</b></small></div>
-  </div>
-</section>
 
       <div class="welcome-status">
         <span class="status-dot"></span>
@@ -3619,19 +3707,6 @@ html[data-store-theme="carro-kechu-carmelo"] .kechu169-carmelo{font-size:2rem!im
         </div>
       </div>
 
-<div class="kechu169-services" aria-label="Formas de entrega">
-  <div class="kechu169-service delivery">
-    <span class="service-symbol">D</span>
-    <div><strong>DELIVERY</strong><small>TE LO LLEVAMOS<br>A DONDE EST&Eacute;S</small></div>
-  </div>
-  <div class="kechu169-service pickup">
-    <span class="service-symbol">R</span>
-    <div><strong>RETIRO</strong><small>RETIR&Aacute; TU PEDIDO<br>EN EL LOCAL</small></div>
-  </div>
-</div>
-
-
-
       <button
         id="enterStoreButton"
         class="welcome-button"
@@ -3656,13 +3731,6 @@ html[data-store-theme="carro-kechu-carmelo"] .kechu169-carmelo{font-size:2rem!im
       <p class="welcome-note">
         Delivery y retiro en el local
       </p>
-
-
-<div class="kechu169-quality">
-  <div><span>&#10003;</span><small>PRODUCTOS<br>DE CALIDAD</small></div><i></i>
-  <div><span>&#9719;</span><small>PREPARADO<br>AL MOMENTO</small></div><i></i>
-  <div><span>&#9825;</span><small>HECHO CON<br>PASI&Oacute;N</small></div>
-</div>
 
       <div class="welcome-denexa-signature">
         <div>
