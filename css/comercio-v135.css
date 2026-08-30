@@ -1,0 +1,49 @@
+/* DENEXA V135 - correcciones seguras sobre V134 */
+
+/* 1) El comercio logueado NO puede cambiar de comercio desde Pedidos */
+.orders-toolbar label:has(#ordersBusinessFilter){
+  display:none !important;
+}
+
+/* Respaldo para navegadores sin :has() */
+#ordersBusinessFilter{
+  display:none !important;
+}
+
+/* 2) Login: texto siempre legible, incluso al escribir o usar autocompletado */
+.merchant-login-form input{
+  background:#0d0d0d !important;
+  color:#ffffff !important;
+  caret-color:#f5c518 !important;
+  border-color:#3f3f46 !important;
+  -webkit-text-fill-color:#ffffff !important;
+}
+
+.merchant-login-form input:focus{
+  background:#0d0d0d !important;
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  border-color:#f5c518 !important;
+  box-shadow:0 0 0 4px rgba(245,197,24,.14) !important;
+}
+
+.merchant-login-form input:-webkit-autofill,
+.merchant-login-form input:-webkit-autofill:hover,
+.merchant-login-form input:-webkit-autofill:focus,
+.merchant-login-form input:-webkit-autofill:active{
+  -webkit-text-fill-color:#ffffff !important;
+  caret-color:#ffffff !important;
+  -webkit-box-shadow:0 0 0 1000px #0d0d0d inset !important;
+  box-shadow:0 0 0 1000px #0d0d0d inset !important;
+  border-color:#f5c518 !important;
+  transition:background-color 9999s ease-out 0s !important;
+}
+
+.merchant-login-form input::selection{
+  background:#f5c518 !important;
+  color:#111 !important;
+}
+
+.orders-toolbar{
+  align-items:end !important;
+}
