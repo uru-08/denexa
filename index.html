@@ -40,7 +40,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="css/app.css?v=162">
+  <link rel="stylesheet" href="css/app.css?v=163">
 <style>
     html,
     body {
@@ -3100,6 +3100,116 @@ html[data-store-theme="mamma-mia"] #confirmOrderButton{
     min-width:114px !important;
   }
 }
+
+
+/* =========================================================
+   V163 - MAMMA MIA: ELIMINAR ESPACIO VACIO ENTRE CABECERA Y MENU
+   ========================================================= */
+
+html[data-store-theme="mamma-mia"] .store-header{
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  margin:0 !important;
+  padding:
+    max(12px,env(safe-area-inset-top))
+    14px
+    12px !important;
+}
+
+html[data-store-theme="mamma-mia"] .store-header-inner,
+html[data-store-theme="mamma-mia"] .store-brand,
+html[data-store-theme="mamma-mia"] .store-heading{
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+
+/* NingÃºn bloque histÃ³rico puede reservar espacio. */
+html[data-store-theme="mamma-mia"] .legacy-store-info,
+html[data-store-theme="mamma-mia"] .store-info-card,
+html[data-store-theme="mamma-mia"] .menu-brand-strip,
+html[data-store-theme="mamma-mia"] .kechu-trust-strip,
+html[data-store-theme="mamma-mia"] .kechu-denexa-menu-brand,
+html[data-store-theme="mamma-mia"] .kechu-final-info-row,
+html[data-store-theme="mamma-mia"] .kechu-approval-badge{
+  display:none !important;
+  height:0 !important;
+  min-height:0 !important;
+  max-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  overflow:hidden !important;
+}
+
+/* Si la promo estÃ¡ apagada, no deja ni 1px de alto. */
+html[data-store-theme="mamma-mia"] #dailyPromoBanner[hidden]{
+  display:none !important;
+  height:0 !important;
+  min-height:0 !important;
+  max-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+/* Contenido empieza pegado a la cabecera. */
+html[data-store-theme="mamma-mia"] .main-content{
+  margin-top:0 !important;
+  padding-top:10px !important;
+}
+
+html[data-store-theme="mamma-mia"] #dailyPromoBanner.menu-promo-banner{
+  margin-top:0 !important;
+  margin-bottom:18px !important;
+}
+
+html[data-store-theme="mamma-mia"] .catalog-section{
+  margin-top:0 !important;
+  padding-top:0 !important;
+}
+
+/* Cabecera todavÃ­a mÃ¡s compacta en celular. */
+@media(max-width:520px){
+  html[data-store-theme="mamma-mia"] .store-header{
+    padding:
+      max(10px,env(safe-area-inset-top))
+      12px
+      10px !important;
+  }
+
+  html[data-store-theme="mamma-mia"] .store-brand{
+    grid-template-columns:60px minmax(0,1fr) !important;
+    gap:10px !important;
+  }
+
+  html[data-store-theme="mamma-mia"] .store-logo{
+    width:60px !important;
+    height:60px !important;
+    min-width:60px !important;
+  }
+
+  html[data-store-theme="mamma-mia"] .store-heading h1{
+    font-size:1.48rem !important;
+  }
+
+  html[data-store-theme="mamma-mia"] .store-subtitle{
+    margin-top:4px !important;
+    font-size:.64rem !important;
+  }
+
+  html[data-store-theme="mamma-mia"] #storeStatus,
+  html[data-store-theme="mamma-mia"] .service-strip{
+    min-height:36px !important;
+  }
+
+  html[data-store-theme="mamma-mia"] .main-content{
+    padding-top:8px !important;
+  }
+}
+
 </style>
 
 
@@ -3806,7 +3916,7 @@ html[data-store-theme="mamma-mia"] #confirmOrderButton{
   </script>
 
   <script src="js/config.js?v=36"></script>
-  <script src="js/app.js?v=162"></script>
+  <script src="js/app.js?v=163"></script>
 
 
 <script>
