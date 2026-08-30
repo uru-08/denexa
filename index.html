@@ -4454,6 +4454,57 @@ html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-bottom{
 
 
 
+
+<script id="denexaKechuFastEnter">
+(function(){
+  if (document.documentElement.dataset.storeTheme !== "carro-kechu-carmelo") return;
+
+  var button = document.getElementById("enterStoreButton");
+  if (!button) return;
+
+  var lastFastTap = 0;
+
+  function openKechuMenu(event){
+    if (button.disabled) return;
+
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    lastFastTap = Date.now();
+
+    if (typeof window.enterStore === "function") {
+      window.enterStore();
+    } else {
+      /* Respaldo: si app.js todavÃ­a no terminÃ³ de exponer la funciÃ³n,
+         usamos el click normal una sola vez. */
+      window.setTimeout(function(){
+        if (!button.disabled) button.click();
+      }, 0);
+    }
+  }
+
+  if ("PointerEvent" in window) {
+    button.addEventListener("pointerup", openKechuMenu, { passive:false });
+  } else {
+    button.addEventListener("touchend", openKechuMenu, { passive:false });
+  }
+
+  /* Evita que Android genere despuÃ©s un segundo click del mismo toque. */
+  document.addEventListener("click", function(event){
+    if (
+      Date.now() - lastFastTap < 900 &&
+      (event.target === button || button.contains(event.target))
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+    }
+  }, true);
+})();
+</script>
+
 <script>
 (function(){
   var sourceBox = document.getElementById("storeStatus");
