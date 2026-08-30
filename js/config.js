@@ -269,6 +269,92 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
         background:#251211!important;border-color:#73342f!important;color:#ff827b!important
       }
 
+      /* ---------- CORRECCIONES VISUALES FINALES ---------- */
+
+      /* Estado del local: nunca blanco en Kechu */
+      html[data-merchant-theme="carro-kechu-carmelo"] .merchant-status-current,
+      body.merchant-kechu .merchant-status-current{
+        background:#111111!important;
+        border:1px solid #3a3a3a!important;
+        color:#ffffff!important;
+      }
+
+      html[data-merchant-theme="carro-kechu-carmelo"] .merchant-status-current span,
+      body.merchant-kechu .merchant-status-current span{
+        color:#bdbdbd!important;
+      }
+
+      html[data-merchant-theme="carro-kechu-carmelo"] .merchant-status-current strong,
+      body.merchant-kechu .merchant-status-current strong{
+        color:#FFD000!important;
+      }
+
+      html[data-merchant-theme="carro-kechu-carmelo"] .merchant-message-field span,
+      body.merchant-kechu .merchant-message-field span{
+        color:#d6d6d6!important;
+      }
+
+      /* Pedidos: botones coherentes con la identidad Kechu */
+      html[data-merchant-theme="carro-kechu-carmelo"] .order-action-button,
+      body.merchant-kechu .order-action-button{
+        border:1px solid #444!important;
+        background:#181818!important;
+        color:#ffffff!important;
+        box-shadow:none!important;
+      }
+
+      html[data-merchant-theme="carro-kechu-carmelo"] .order-action-button.primary,
+      body.merchant-kechu .order-action-button.primary{
+        background:#FFD000!important;
+        border-color:#FFD000!important;
+        color:#050505!important;
+      }
+
+      html[data-merchant-theme="carro-kechu-carmelo"] .order-action-button.danger,
+      body.merchant-kechu .order-action-button.danger{
+        background:#251211!important;
+        border-color:#73342f!important;
+        color:#ff827b!important;
+      }
+
+      /* Cualquier botón secundario dentro de la tarjeta del pedido */
+      html[data-merchant-theme="carro-kechu-carmelo"] .order-actions .secondary-button,
+      body.merchant-kechu .order-actions .secondary-button{
+        background:#181818!important;
+        border-color:#484848!important;
+        color:#f2f2f2!important;
+      }
+
+      /* Etiqueta retiro/delivery con contraste correcto */
+      html[data-merchant-theme="carro-kechu-carmelo"] .order-delivery-mode.pickup,
+      body.merchant-kechu .order-delivery-mode.pickup{
+        background:#2a2400!important;
+        border:1px solid #6a5900!important;
+        color:#FFD000!important;
+      }
+
+      html[data-merchant-theme="carro-kechu-carmelo"] .order-delivery-mode.delivery,
+      body.merchant-kechu .order-delivery-mode.delivery{
+        background:#0d2116!important;
+        border:1px solid #315c43!important;
+        color:#8ce5b2!important;
+      }
+
+      /* Observaciones: fondo oscuro y lectura clara */
+      html[data-merchant-theme="carro-kechu-carmelo"] .order-notes-box,
+      body.merchant-kechu .order-notes-box{
+        background:#171400!important;
+        border-color:#5a4c00!important;
+        color:#f5e9a9!important;
+      }
+
+      html[data-merchant-theme="carro-kechu-carmelo"] .order-notes-box strong,
+      html[data-merchant-theme="carro-kechu-carmelo"] .order-notes-box span,
+      body.merchant-kechu .order-notes-box strong,
+      body.merchant-kechu .order-notes-box span{
+        color:#f5e9a9!important;
+      }
+
       #ordersBusinessFilter{display:none!important}
       .orders-toolbar label:has(#ordersBusinessFilter){display:none!important}
 
