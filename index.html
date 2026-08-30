@@ -3463,193 +3463,93 @@ html[data-store-theme*="mamma"] body:not(.welcome-open) #appShell{
 </style>
 
 
-<style id="denexa-kechu-cover-v170">
-/* =========================================================
-   DENEXA V170
-   PORTADA KECHU = BOCETO APROBADO COMPLETO
-   SOLO PORTADA. NO TOCA MENU NI LOGICA DE PEDIDOS.
-   ========================================================= */
 
+<style id="denexa-kechu-cover-v171">
+/* V171 - SOLO PORTADA KECHU: ancho completo + aviso centrado */
 html[data-store-theme="carro-kechu-carmelo"],
-html[data-store-theme="carro-kechu-carmelo"] body{
-  background:#050505 !important;
-}
+html[data-store-theme="carro-kechu-carmelo"] body{background:#050505!important}
 
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen.has-custom-hero{
-  position:fixed !important;
-  inset:0 !important;
-  width:100vw !important;
-  height:100dvh !important;
-  min-height:100dvh !important;
-  margin:0 !important;
-  padding:0 !important;
-  overflow:hidden !important;
-  background:#050505 !important;
-  background-image:none !important;
-  z-index:3000 !important;
+ position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;
+ min-height:100dvh!important;margin:0!important;padding:0!important;overflow:hidden!important;
+ background:#050505!important;background-image:none!important;z-index:3000!important
 }
 
-/* Eliminamos todos los adornos anteriores de la portada. */
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen::before,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen::after,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-glow,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-grid{
-  display:none !important;
-  content:none !important;
+ display:none!important;content:none!important
 }
 
-/*
-  Este contenedor tiene EXACTAMENTE la proporcion del boceto aprobado:
-  853 x 1844.
-  Por eso nunca se corta: se reduce completo hasta entrar en la pantalla.
-*/
+/* 100% del ancho. Cover conserva proporciÃ³n y recorta solo excedente vertical. */
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content{
-  position:absolute !important;
-  inset:50% auto auto 50% !important;
-  transform:translate(-50%,-50%) !important;
-
-  width:min(100vw,calc(100dvh * 0.4625813449)) !important;
-  height:min(100dvh,calc(100vw * 2.1617819461)) !important;
-  aspect-ratio:853 / 1844 !important;
-
-  min-width:0 !important;
-  min-height:0 !important;
-  max-width:none !important;
-  max-height:none !important;
-
-  margin:0 !important;
-  padding:0 !important;
-
-  display:block !important;
-  opacity:1 !important;
-  visibility:visible !important;
-
-  background-color:#050505 !important;
-  background-image:url("assets/kechu/portada-kechu-v170.png?v=170") !important;
-  background-repeat:no-repeat !important;
-  background-position:center !important;
-  background-size:100% 100% !important;
-
-  overflow:hidden !important;
-  z-index:5 !important;
+ position:absolute!important;inset:0!important;width:100vw!important;height:100dvh!important;
+ min-width:100vw!important;min-height:100dvh!important;max-width:none!important;max-height:none!important;
+ margin:0!important;padding:0!important;display:block!important;opacity:1!important;visibility:visible!important;
+ transform:none!important;overflow:hidden!important;background-color:#050505!important;
+ background-image:url("assets/kechu/portada-kechu-v170.png?v=171")!important;
+ background-repeat:no-repeat!important;background-position:center center!important;background-size:cover!important;
+ z-index:5!important
 }
 
-/*
-  Todo lo que ya existe en el HTML queda oculto visualmente.
-  El boceto ya contiene marca, estado, delivery, retiro y footer.
-*/
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-status,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-logo-wrap,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-copy,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu-welcome-services,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-mobile-note,
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-note,
-html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-denexa-signature{
-  display:none !important;
-}
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-denexa-signature{display:none!important}
 
-/*
-  BOTON REAL:
-  se coloca exactamente encima del boton amarillo que ya esta dibujado.
-  Visualmente no agrega ningun boton nuevo.
-*/
+/* Zona tÃ¡ctil del botÃ³n dibujado. */
 html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton{
-  display:block !important;
-  position:absolute !important;
-  left:4.7% !important;
-  top:76.2% !important;
-  width:90.6% !important;
-  height:10.4% !important;
-  min-width:0 !important;
-  min-height:0 !important;
-
-  margin:0 !important;
-  padding:0 !important;
-
-  border:0 !important;
-  border-radius:7% / 28% !important;
-  background:transparent !important;
-  background-image:none !important;
-  box-shadow:none !important;
-
-  color:transparent !important;
-  font-size:0 !important;
-  opacity:1 !important;
-  cursor:pointer !important;
-  z-index:20 !important;
-  -webkit-tap-highlight-color:transparent !important;
+ display:block!important;position:absolute!important;left:7.5%!important;top:75.5%!important;
+ width:85%!important;height:9.5%!important;min-width:0!important;min-height:0!important;
+ margin:0!important;padding:0!important;border:0!important;border-radius:24px!important;
+ background:transparent!important;background-image:none!important;box-shadow:none!important;
+ color:transparent!important;font-size:0!important;opacity:1!important;cursor:pointer!important;
+ z-index:20!important;-webkit-tap-highlight-color:transparent!important
 }
-
 html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton span,
 html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton::before,
 html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton::after{
-  display:none !important;
-  content:none !important;
+ display:none!important;content:none!important
 }
 
-html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton:focus-visible{
-  outline:3px solid #fff !important;
-  outline-offset:-5px !important;
-}
-
-html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton:active{
-  background:rgba(255,255,255,.07) !important;
-}
-
-/*
-  Si el comercio esta cerrado, la logica existente muestra este aviso.
-  Solo aparece cuando realmente hace falta.
-*/
+/* Aviso real: centrado y contenido dentro del ancho. */
 html[data-store-theme="carro-kechu-carmelo"] #orderingStatusNotice:not([hidden]){
-  display:flex !important;
-  position:absolute !important;
-  left:7% !important;
-  right:7% !important;
-  top:58.5% !important;
-  min-height:8% !important;
-  margin:0 !important;
-  padding:9px 12px !important;
-  border:2px solid #e82b32 !important;
-  border-radius:12px !important;
-  background:rgba(8,8,8,.96) !important;
-  color:#fff !important;
-  align-items:center !important;
-  justify-content:center !important;
-  flex-direction:column !important;
-  text-align:center !important;
-  font-family:Arial,sans-serif !important;
-  font-size:clamp(10px,2.7vw,14px) !important;
-  z-index:30 !important;
+ box-sizing:border-box!important;display:flex!important;position:absolute!important;
+ left:50%!important;right:auto!important;top:61%!important;width:min(84vw,430px)!important;
+ min-height:104px!important;margin:0!important;padding:14px 18px!important;
+ transform:translate(-50%,-50%)!important;align-items:center!important;justify-content:center!important;
+ flex-direction:column!important;gap:6px!important;overflow:hidden!important;
+ border:2px solid #e82b32!important;border-radius:18px!important;background:rgba(5,5,5,.96)!important;
+ color:#fff!important;text-align:center!important;font-family:Georgia,"Times New Roman",serif!important;
+ font-size:clamp(14px,4vw,18px)!important;font-weight:700!important;line-height:1.25!important;
+ z-index:30!important;box-shadow:0 8px 24px rgba(0,0,0,.45)!important
 }
-
-html[data-store-theme="carro-kechu-carmelo"] #orderingStatusNotice[hidden]{
-  display:none !important;
+html[data-store-theme="carro-kechu-carmelo"] #orderingStatusNotice:not([hidden]) strong{
+ display:block!important;width:100%!important;margin:0!important;color:#FFE7A3!important;
+ font-family:Georgia,"Times New Roman",serif!important;font-size:clamp(18px,5.3vw,25px)!important;
+ line-height:1.05!important;text-align:center!important
 }
+html[data-store-theme="carro-kechu-carmelo"] #orderingStatusNotice:not([hidden]) *{
+ max-width:100%!important;text-align:center!important
+}
+html[data-store-theme="carro-kechu-carmelo"] #orderingStatusNotice[hidden]{display:none!important}
 
-/* Al entrar al menu, la portada desaparece SIN dejar espacio. */
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen[aria-hidden="true"],
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen.is-leaving[aria-hidden="true"]{
-  display:none !important;
-  width:0 !important;
-  height:0 !important;
-  min-width:0 !important;
-  min-height:0 !important;
-  margin:0 !important;
-  padding:0 !important;
-  overflow:hidden !important;
-  visibility:hidden !important;
-  opacity:0 !important;
-  pointer-events:none !important;
+ display:none!important;width:0!important;height:0!important;min-width:0!important;min-height:0!important;
+ margin:0!important;padding:0!important;overflow:hidden!important;visibility:hidden!important;
+ opacity:0!important;pointer-events:none!important
 }
-
-/* El menu queda exactamente como estaba en V167. */
 html[data-store-theme="carro-kechu-carmelo"] body:not(.welcome-open) #appShell{
-  margin-top:0 !important;
-  padding-top:0 !important;
-  transform:none !important;
+ margin-top:0!important;padding-top:0!important;transform:none!important
 }
 </style>
+
 
 </head>
 
