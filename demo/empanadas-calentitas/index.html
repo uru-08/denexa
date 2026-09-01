@@ -1,17 +1,133 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#00a62d"><title>Empanadas Calentitas · Demo DENEXA</title><link rel="stylesheet" href="styles.css"></head><body>
-<div class="demo-bar"><strong>DENEXA 🇺🇾</strong><span>DEMO COMERCIAL · MENÚ ONLINE</span></div>
-<header class="topbar"><div class="brand"><img src="assets/logo-original.jpg" class="logo"><div><h1>EMPANADAS<br>CALENTITAS</h1><p>HORNEADAS AL MOMENTO · VARIEDAD DE SABORES</p></div></div><button id="openCart" class="top-cart">🛒<b id="badge">0</b><small>Mi pedido</small></button></header>
-<main>
-<section class="hero"><div class="hero-copy"><span class="spark">✦</span><p>HOY ES UN BUEN DÍA PARA</p><h2>EMPANADAS</h2><div class="ribbon">HECHAS COMO EN CASA</div><div class="hero-actions"><button class="mode active" data-mode="Delivery">🛵 <span><b>Pedir Delivery</b><small>Te lo llevamos</small></span></button><button class="mode" data-mode="Retiro">🛍️ <span><b>Retiro en el local</b><small>Pasá a buscar</small></span></button></div></div><div class="hero-visual"><div class="mascot-card"><img src="assets/mascota-original.jpg"></div><div class="real-hero-photo"><img src="assets/real-empanadas-abiertas.jpg" alt="Empanadas Calentitas"></div></div></section>
-<section class="categories-section"><div class="section-title"><div><small>ELEGÍ TU ANTOJO</small><h3>¿Qué vamos a pedir hoy? ✦</h3></div><button id="allCategories">Ver categorías</button></div><div id="categories" class="categories"></div></section>
-<section class="brand-banner"><div class="mascot-mini"><img src="assets/mascota-original.jpg"></div><div><small>EL PLAN PERFECTO</small><strong>EXISTE</strong></div><div class="plan">🧉 + 🥟 + ♥<span>MATES · EMPANADAS · BUENOS MOMENTOS</span></div><div class="stamp">HACEN LA<br>MEJOR<br>COMBINACIÓN</div></section>
-<section class="original-brand"><div><small>IDENTIDAD REAL DE LA MARCA</small><h3>Sus sabores, con su estilo original</h3><p>El demo usa ilustraciones tomadas del menú que nos compartieron. Cuando lleguen las fotos reales, se reemplazan sin cambiar la estructura.</p></div><div class="original-cards"><img src="assets/menu-carnes-original.jpg"><img src="assets/menu-variedades-original.jpg"></div></section>
-<section id="catalog" class="catalog"><div class="section-title"><div><small id="eyebrow">DESTACADOS</small><h3 id="catalogTitle">Para empezar ✦</h3></div><button id="backCats">Categorías</button></div><div id="products" class="products"></div></section>
-<section class="benefits"><div>◷ <span><b>PEDÍ FÁCIL Y RÁPIDO</b><small>En pocos pasos</small></span></div><div>◇ <span><b>PAGO SEGURO</b><small>Efectivo o transferencia</small></span></div><div>⌖ <span><b>RETIRÁ O RECIBÍ</b><small>Vos elegís</small></span></div></section>
-</main>
-<footer class="denexa-footer"><div class="denexa-mark"><span>Powered by</span><b>DENEXA 🇺🇾</b></div><strong>Tu comercio. Tu menú. Tus pedidos.</strong><small>Plataforma de pedidos online para comercios</small></footer>
-<button id="floatingCart" class="floating-cart"><span>🛒 <b id="floatingCount">0</b> productos</span><span><strong id="floatingTotal">$ 0</strong><em>Ver pedido</em></span></button>
-<div id="cartModal" class="modal"><div class="sheet"><button class="close">×</button><small>DEMO DENEXA</small><h3>Mi pedido</h3><div id="cartItems"></div><div class="total"><span>Total demostrativo</span><b id="cartTotal">$ 0</b></div><button class="primary" id="checkout">Continuar pedido</button></div></div>
-<div id="checkoutModal" class="modal"><div class="sheet"><button class="close">×</button><small>PEDIDO DE PRUEBA</small><h3>Datos del cliente</h3><div class="checkout-modes"><button class="mode active" data-check="Delivery">🛵 Delivery</button><button class="mode" data-check="Retiro">🛍️ Retiro</button></div><label>Nombre<input id="name" placeholder="Tu nombre"></label><label>Teléfono<input placeholder="099 123 456"></label><label id="addressField">Dirección<input placeholder="Calle y número"></label><label>Forma de pago<select><option>Efectivo</option><option>Transferencia</option></select></label><label>Observaciones<textarea placeholder="Ej: sin cebolla..."></textarea></label><div class="warning"><b>Pedido DEMO.</b> No se envía al comercio ni genera un pedido real.</div><button class="primary" id="finish">Simular pedido</button></div></div>
-<div id="successModal" class="modal"><div class="sheet success"><div class="ok">✓</div><h3>¡Pedido de prueba completado!</h3><p>Así se vería la experiencia de Empanadas Calentitas con DENEXA.</p><button class="primary" id="restart">Volver al demo</button></div></div>
-<script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0aa43b">
+  <title>Empanadas Calentitas · Demo DENEXA</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="demo-strip"><b>DENEXA 🇺🇾</b><span>DEMO COMERCIAL · MENÚ ONLINE</span></div>
+
+  <header class="site-header">
+    <div class="brand-wrap">
+      <img class="brand-logo" src="assets/logo.jpg" alt="Empanadas Calentitas">
+      <div class="brand-copy">
+        <h1>EMPANADAS<br>CALENTITAS</h1>
+        <p>HORNEADAS AL MOMENTO · VARIEDAD DE SABORES</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="header-action" data-mode="Delivery"><span>🛵</span><b>Delivery</b></button>
+      <button class="header-action retiro" data-mode="Retiro"><span>🛍️</span><b>Retiro</b></button>
+      <button class="header-action cart-head" id="openCart"><span>🛒</span><b>Mi pedido</b><em id="badge">0</em></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="spark s1">✦</span><span class="spark s2">✦</span>
+        <p>HOY ES UN BUEN DÍA PARA</p>
+        <h2>EMPANADAS</h2>
+        <div class="hero-ribbon">HECHAS COMO EN CASA</div>
+        <div class="hero-actions">
+          <button class="mode active" data-mode="Delivery"><span class="bigicon">🛵</span><span><b>Pedir Delivery</b><small>Te lo llevamos</small></span></button>
+          <button class="mode" data-mode="Retiro"><span class="bigicon">🛍️</span><span><b>Retiro en el local</b><small>Pasá a buscar</small></span></button>
+        </div>
+      </div>
+      <div class="hero-photo-wrap">
+        <img src="assets/empanadas-reales.jpg" alt="Empanadas Calentitas">
+      </div>
+    </section>
+
+    <section class="category-section" id="categorySection">
+      <div class="section-head">
+        <div><small>ELEGÍ TU ANTOJO</small><h3>¿Qué vamos a pedir hoy? ✦</h3></div>
+      </div>
+      <div class="category-grid" id="categories"></div>
+    </section>
+
+    <section class="brand-banner">
+      <img class="mascot mascot-left" src="assets/mascota-senalando.jpg" alt="Personaje de Empanadas Calentitas">
+      <div class="banner-copy"><small>EL PLAN PERFECTO</small><strong>EXISTE</strong></div>
+      <div class="banner-icons"><b>🧉 + 🥟 + ♥</b><span>MATES · EMPANADAS · BUENOS MOMENTOS</span></div>
+      <div class="stamp">HACEN LA<br>MEJOR<br>COMBINACIÓN</div>
+    </section>
+
+    <section class="featured-strip">
+      <div class="featured-photo"><img src="assets/empanadas-caja.jpg" alt=""></div>
+      <div class="featured-copy"><small>HECHAS COMO EN CASA</small><h3>Calentitas, doradas y listas para pedir</h3><p>Elegí tu categoría y armá el pedido en pocos pasos.</p></div>
+      <img class="mascot mascot-right" src="assets/mascota-empanada.jpg" alt="Personaje de Empanadas Calentitas">
+    </section>
+
+    <section class="catalog" id="catalog">
+      <div class="section-head catalog-head">
+        <div><small id="catalogEyebrow">DESTACADOS</small><h3 id="catalogTitle">Para empezar ✦</h3></div>
+        <button id="backCategories">Categorías</button>
+      </div>
+      <div class="product-grid" id="products"></div>
+    </section>
+
+    <section class="benefits">
+      <article><span>◷</span><div><b>PEDÍ FÁCIL Y RÁPIDO</b><small>En pocos pasos</small></div></article>
+      <article><span>◇</span><div><b>PAGO SEGURO</b><small>Efectivo o transferencia</small></div></article>
+      <article><span>⌖</span><div><b>RETIRÁ O RECIBÍ</b><small>Vos elegís</small></div></article>
+    </section>
+  </main>
+
+  <footer class="denexa-footer">
+    <div class="footer-brand"><span>Powered by</span><b>DENEXA 🇺🇾</b></div>
+    <strong>Tu comercio. Tu menú. Tus pedidos.</strong>
+    <small>Plataforma de pedidos online para comercios</small>
+  </footer>
+
+  <nav class="bottom-nav">
+    <button onclick="window.scrollTo({top:0,behavior:'smooth'})">⌂<span>Inicio</span></button>
+    <button id="navCategories">▦<span>Categorías</span></button>
+    <button id="navCart">🛍️<span>Mi pedido</span></button>
+    <button>•••<span>Más</span></button>
+  </nav>
+
+  <button class="floating-cart" id="floatingCart">
+    <span>🛒 <b id="floatingCount">0</b> productos</span>
+    <span><strong id="floatingTotal">$ 0</strong><em>Ver pedido</em></span>
+  </button>
+
+  <div class="modal" id="cartModal">
+    <div class="sheet">
+      <button class="close">×</button>
+      <small>DEMO DENEXA</small><h3>Mi pedido</h3>
+      <div id="cartItems"></div>
+      <div class="cart-total"><span>Total demostrativo</span><b id="cartTotal">$ 0</b></div>
+      <button class="primary" id="checkout">Continuar pedido</button>
+    </div>
+  </div>
+
+  <div class="modal" id="checkoutModal">
+    <div class="sheet">
+      <button class="close">×</button>
+      <small>PEDIDO DE PRUEBA</small><h3>Datos del cliente</h3>
+      <div class="checkout-modes"><button class="mode active" data-check="Delivery">🛵 Delivery</button><button class="mode" data-check="Retiro">🛍️ Retiro</button></div>
+      <label>Nombre<input id="name" placeholder="Tu nombre"></label>
+      <label>Teléfono<input placeholder="099 123 456"></label>
+      <label id="addressField">Dirección<input placeholder="Calle y número"></label>
+      <label>Forma de pago<select><option>Efectivo</option><option>Transferencia</option></select></label>
+      <label>Observaciones<textarea placeholder="Ej: sin cebolla..."></textarea></label>
+      <div class="warning"><b>Pedido DEMO.</b> No se envía al comercio ni genera un pedido real.</div>
+      <button class="primary" id="finish">Simular pedido</button>
+    </div>
+  </div>
+
+  <div class="modal" id="successModal">
+    <div class="sheet success">
+      <div class="ok">✓</div><h3>¡Pedido de prueba completado!</h3>
+      <p>Así se vería la experiencia de Empanadas Calentitas con DENEXA.</p>
+      <button class="primary" id="restart">Volver al demo</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
