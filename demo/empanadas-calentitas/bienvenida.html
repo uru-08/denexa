@@ -7,24 +7,32 @@
 <title>Empanadas Calentitas · Bienvenidos</title>
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:#050706}
-body{font-family:Arial,sans-serif}
+html,body{
+  margin:0;
+  min-height:100%;
+  background:#050706;
+}
+body{
+  font-family:Arial,sans-serif;
+  overflow-x:hidden;
+}
 .welcome{
   min-height:100svh;
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   justify-content:center;
   background:#050706;
 }
 .poster{
   position:relative;
-  width:min(100%,680px);
-  margin:auto;
+  width:min(100vw,680px);
+  margin:0 auto;
 }
 .poster img{
   display:block;
   width:100%;
   height:auto;
+  margin:0;
 }
 .enter{
   position:absolute;
@@ -43,8 +51,29 @@ body{font-family:Arial,sans-serif}
   outline:3px solid #fff;
   outline-offset:4px;
 }
+
+/* En móvil, eliminamos el espacio negro sobrante:
+   la página mide lo que mide la imagen. */
+@media(max-width:699px){
+  html,body,.welcome{
+    min-height:0;
+    height:auto;
+  }
+  .welcome{
+    display:block;
+  }
+  .poster{
+    width:100vw;
+  }
+}
+
+/* En pantallas grandes mantenemos una presentación centrada */
 @media(min-width:700px){
-  .welcome{padding:24px}
+  .welcome{
+    min-height:100svh;
+    align-items:center;
+    padding:24px;
+  }
   .poster{
     border-radius:26px;
     overflow:hidden;
@@ -57,7 +86,7 @@ body{font-family:Arial,sans-serif}
 <main class="welcome">
   <div class="poster">
     <img
-      src="https://raw.githubusercontent.com/uru-08/denexa/main/demo/empanadas-calentitas/assets/bienvenida-calentitas.png?v=2"
+      src="https://raw.githubusercontent.com/uru-08/denexa/main/demo/empanadas-calentitas/assets/bienvenida-calentitas.png?v=3"
       alt="Bienvenidos a Empanadas Calentitas. Nuestro menú online."
     >
     <button
