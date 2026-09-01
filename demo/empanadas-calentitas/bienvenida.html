@@ -9,7 +9,7 @@
 *{box-sizing:border-box}
 html,body{
   margin:0;
-  min-height:100%;
+  padding:0;
   background:#050706;
 }
 body{
@@ -17,9 +17,8 @@ body{
   overflow-x:hidden;
 }
 .welcome{
-  min-height:100svh;
+  width:100%;
   display:flex;
-  align-items:flex-start;
   justify-content:center;
   background:#050706;
 }
@@ -36,12 +35,12 @@ body{
 }
 .enter{
   position:absolute;
-  left:10%;
-  right:10%;
-  top:72%;
-  height:10%;
+  left:9%;
+  right:9%;
+  top:49.4%;
+  height:10.4%;
   border:0;
-  border-radius:28px;
+  border-radius:30px;
   background:transparent;
   cursor:pointer;
   font-size:0;
@@ -51,33 +50,16 @@ body{
   outline:3px solid #fff;
   outline-offset:4px;
 }
-
-/* En móvil, eliminamos el espacio negro sobrante:
-   la página mide lo que mide la imagen. */
-@media(max-width:699px){
-  html,body,.welcome{
-    min-height:0;
-    height:auto;
-  }
-  .welcome{
-    display:block;
-  }
-  .poster{
-    width:100vw;
-  }
-}
-
-/* En pantallas grandes mantenemos una presentación centrada */
 @media(min-width:700px){
   .welcome{
-    min-height:100svh;
+    min-height:100vh;
     align-items:center;
     padding:24px;
   }
   .poster{
     border-radius:26px;
     overflow:hidden;
-    box-shadow:0 24px 70px #000;
+    box-shadow:0 24px 70px rgba(0,0,0,.55);
   }
 }
 </style>
@@ -86,7 +68,7 @@ body{
 <main class="welcome">
   <div class="poster">
     <img
-      src="https://raw.githubusercontent.com/uru-08/denexa/main/demo/empanadas-calentitas/assets/bienvenida-calentitas.png?v=3"
+      src="assets/bienvenida-calentitas.png"
       alt="Bienvenidos a Empanadas Calentitas. Nuestro menú online."
     >
     <button
