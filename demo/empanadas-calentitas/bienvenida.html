@@ -4,24 +4,70 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050706">
-<title>Empanadas Calentitas Â· Bienvenidos</title>
+<title>Empanadas Calentitas · Bienvenidos</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:#050706}
 body{font-family:Arial,sans-serif}
-.welcome{min-height:100svh;display:flex;align-items:center;justify-content:center;background:#050706}
-.poster{position:relative;width:min(100%,680px);margin:auto}
-.poster img{display:block;width:100%;height:auto}
-.enter{position:absolute;left:10%;right:10%;top:72%;height:10%;border:0;border-radius:28px;background:transparent;cursor:pointer;font-size:0;-webkit-tap-highlight-color:transparent}
-.enter:focus-visible{outline:3px solid #fff;outline-offset:4px}
-@media(min-width:700px){.welcome{padding:24px}.poster{border-radius:26px;overflow:hidden;box-shadow:0 24px 70px #000}}
+.welcome{
+  min-height:100svh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#050706;
+}
+.poster{
+  position:relative;
+  width:min(100%,680px);
+  margin:auto;
+}
+.poster img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+.enter{
+  position:absolute;
+  left:10%;
+  right:10%;
+  top:72%;
+  height:10%;
+  border:0;
+  border-radius:28px;
+  background:transparent;
+  cursor:pointer;
+  font-size:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.enter:focus-visible{
+  outline:3px solid #fff;
+  outline-offset:4px;
+}
+@media(min-width:700px){
+  .welcome{padding:24px}
+  .poster{
+    border-radius:26px;
+    overflow:hidden;
+    box-shadow:0 24px 70px #000;
+  }
+}
 </style>
 </head>
 <body>
 <main class="welcome">
   <div class="poster">
-    <img src="assets/bienvenida-calentitas.png" alt="Bienvenidos a Empanadas Calentitas. Nuestro menÃº online.">
-    <button class="enter" type="button" aria-label="Hacer mi pedido" onclick="location.href='index.html'">Hacer mi pedido</button>
+    <img
+      src="https://raw.githubusercontent.com/uru-08/denexa/main/demo/empanadas-calentitas/assets/bienvenida-calentitas.png?v=2"
+      alt="Bienvenidos a Empanadas Calentitas. Nuestro menú online."
+    >
+    <button
+      class="enter"
+      type="button"
+      aria-label="Hacer mi pedido"
+      onclick="location.href='index.html'"
+    >
+      Hacer mi pedido
+    </button>
   </div>
 </main>
 </body>
