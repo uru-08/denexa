@@ -178,3 +178,78 @@ main{padding-top:14px}
     margin-right:8px !important;
   }
 }
+
+
+/* ===== Portada: imagen intacta, completa y con mayor presencia ===== */
+.hero.hero-reference{
+  position:relative;
+  overflow:hidden;
+  background:#050706;
+  border:1px solid #293832;
+  border-radius:24px;
+}
+
+/* Fondo desenfocado usando el MISMO archivo, sin modificarlo */
+.hero.hero-reference::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:url("assets/portada-boceto.jpg");
+  background-size:cover;
+  background-position:center;
+  filter:blur(18px) brightness(.42) saturate(1.15);
+  transform:scale(1.08);
+  z-index:0;
+}
+
+/* La imagen real va completa y nítida encima */
+.hero-reference-img{
+  position:relative;
+  z-index:1;
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+  object-position:center;
+  margin:auto;
+}
+
+@media(max-width:760px){
+  main{
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+
+  .hero.hero-reference{
+    width:100%;
+    margin:0;
+    border-left:0;
+    border-right:0;
+    border-radius:0 0 24px 24px;
+    min-height:0 !important;
+    aspect-ratio:auto !important;
+    padding:0;
+  }
+
+  .hero-reference-img{
+    width:100%;
+    height:auto !important;
+    max-height:none !important;
+    object-fit:contain !important;
+    object-position:center !important;
+  }
+
+  /* El contenido posterior recupera sus márgenes normales */
+  .section,
+  .promo-reference,
+  .benefits,
+  .thanks-reference{
+    margin-left:18px !important;
+    margin-right:18px !important;
+  }
+
+  .section{
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+}
