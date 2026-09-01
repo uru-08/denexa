@@ -249,3 +249,99 @@ main{padding-top:14px}
     margin-right:18px !important;
   }
 }
+
+
+/* =========================================================
+   AJUSTE FINAL: PORTADA SIN ESPACIOS + NAV INFERIOR MODERNA
+   Sólo presentación. No toca lógica ni contenido.
+   ========================================================= */
+
+@media (max-width:760px){
+  /* Portada: usar la proporción real de la imagen, sin rellenos ni desenfoque */
+  main > .hero.hero-reference{
+    position:relative !important;
+    display:block !important;
+    width:100vw !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    aspect-ratio:auto !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 0 22px 22px !important;
+    overflow:hidden !important;
+    background:#050706 !important;
+  }
+
+  main > .hero.hero-reference::before,
+  main > .hero.hero-reference::after{
+    display:none !important;
+    content:none !important;
+  }
+
+  main > .hero.hero-reference > img.hero-reference-img{
+    position:static !important;
+    display:block !important;
+    width:100% !important;
+    height:auto !important;
+    max-height:none !important;
+    object-fit:contain !important;
+    object-position:center !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  /* Barra inferior moderna: flotante, oscura y más limpia */
+  .bottom-nav{
+    left:12px !important;
+    right:12px !important;
+    bottom:10px !important;
+    transform:none !important;
+    width:auto !important;
+    grid-template-columns:repeat(3,1fr) !important;
+    gap:6px !important;
+    padding:7px !important;
+    border-radius:22px !important;
+    background:rgba(8,15,13,.96) !important;
+    border:1px solid rgba(31,220,102,.48) !important;
+    box-shadow:
+      0 10px 30px rgba(0,0,0,.48),
+      0 0 0 1px rgba(255,255,255,.025) inset !important;
+    backdrop-filter:blur(14px) !important;
+    -webkit-backdrop-filter:blur(14px) !important;
+  }
+
+  .bottom-nav button{
+    min-height:54px !important;
+    border-radius:16px !important;
+    color:#dce6e1 !important;
+    font-size:21px !important;
+    transition:none !important;
+  }
+
+  .bottom-nav button:first-child{
+    background:linear-gradient(180deg,rgba(22,190,81,.22),rgba(10,88,42,.18)) !important;
+    color:#ffffff !important;
+  }
+
+  .bottom-nav span{
+    margin-top:2px !important;
+    font-size:10px !important;
+    font-weight:900 !important;
+    letter-spacing:.01em !important;
+  }
+
+  .bottom-nav em{
+    right:22% !important;
+    top:1px !important;
+    width:21px !important;
+    height:21px !important;
+    border:2px solid #0b1210 !important;
+    box-shadow:0 3px 8px rgba(0,0,0,.35) !important;
+  }
+
+  body{
+    padding-bottom:92px !important;
+  }
+}
