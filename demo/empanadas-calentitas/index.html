@@ -1,56 +1,115 @@
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050706"><title>Empanadas Calentitas · DENEXA</title>
-<link rel="stylesheet" href="styles.css"></head><body>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070909">
+<title>Empanadas Calentitas · Demo DENEXA</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
 <div class="demo-bar"><b>DENEXA 🇺🇾</b><span>DEMO COMERCIAL · MENÚ ONLINE</span></div>
+
 <header class="topbar">
- <div class="brand"><div class="brand-name"><span>EMPANADAS CALENTITAS</span><small>HECHAS COMO EN CASA</small></div></div>
- <button class="cart-btn" id="cartTop">🛒<b id="cartBadge">0</b></button>
+  <button class="menu-btn">☰</button>
+  <div class="brand">
+    <div class="brand-badge"><img src="assets/mascota.png" alt=""></div>
+    <div class="brand-name">
+      <span>EMPANADAS</span>
+      <strong>CALENTITAS</strong>
+      <small>HECHAS COMO EN CASA</small>
+    </div>
+  </div>
+  <button class="cart-btn" id="cartTop">🛒<b id="cartBadge">0</b></button>
 </header>
+
 <main>
-<section class="hero" aria-label="Portada Empanadas Calentitas">
- <img src="assets/portada-referencia.jpg" alt="Empanadas Calentitas">
-</section>
+  <section class="hero">
+    <div class="hero-copy">
+      <p>Hoy es un buen día para</p>
+      <h1>EMPANADAS<br><span>CALENTITAS</span></h1>
+      <div class="hero-tag">HECHAS COMO EN CASA</div>
+    </div>
+    <img src="assets/hero-empanadas.jpg" class="hero-food" alt="Empanadas">
+  </section>
 
-<section class="section" id="categoriesSection">
- <div class="section-head"><h2>Categorías <span>✦</span></h2></div>
- <div id="categories" class="categories"></div>
-</section>
+  <section class="section categories-section" id="categoriesSection">
+    <div class="section-head"><h2>Categorías <span>✦</span></h2></div>
+    <div id="categories" class="categories"></div>
+  </section>
 
-<section class="promo-image"><img src="assets/plan-perfecto.jpg" alt="El plan perfecto existe"></section>
+  <section class="promo-strip">
+    <img src="assets/mascota.png" class="mascot" alt="">
+    <div class="promo-copy"><small>El plan perfecto</small><strong>EXISTE</strong></div>
+    <div class="promo-icons">🧉 <i>+</i> 🥟 <i>+</i> ♥<span>MATES · EMPANADAS · BUENOS MOMENTOS</span></div>
+    <div class="promo-stamp">HACEN LA<br>MEJOR<br>COMBINACIÓN</div>
+  </section>
 
-<section class="section" id="catalogSection">
- <div class="section-head"><h2 id="catalogTitle">Destacados <span>✦</span></h2><button id="backCategories">Categorías ›</button></div>
- <div id="products" class="products"></div>
-</section>
+  <section class="section catalog-section" id="catalogSection">
+    <div class="section-head catalog-head">
+      <h2 id="catalogTitle">Destacados <span>✦</span></h2>
+      <button id="backCategories">Categorías ›</button>
+    </div>
+    <div id="products" class="products"></div>
+  </section>
 
-<section class="benefits">
- <article><b>◷</b><div><strong>Pedí fácil y rápido</strong><small>En pocos pasos</small></div></article>
- <article><b>◇</b><div><strong>Pago seguro</strong><small>Efectivo o transferencia</small></div></article>
- <article><b>⌖</b><div><strong>Retirá o recibí</strong><small>Vos elegís al finalizar</small></div></article>
-</section>
-
-<section class="thanks">
- <div class="thanks-mark">☺</div>
- <div><small>EMPANADAS CALENTITAS</small><strong>GRACIAS POR ELEGIRNOS</strong></div>
-</section>
+  <section class="benefits">
+    <article><b>◷</b><div><strong>Pedí fácil y rápido</strong><small>En pocos pasos</small></div></article>
+    <article><b>◇</b><div><strong>Pago seguro</strong><small>Efectivo o transferencia</small></div></article>
+    <article><b>⌖</b><div><strong>Retirá o recibí</strong><small>Vos elegís al finalizar</small></div></article>
+  </section>
 </main>
 
 <footer class="footer"><span>Powered by</span><b>DENEXA 🇺🇾</b></footer>
 
 <nav class="bottom-nav">
- <button id="navHome">⌂<span>Inicio</span></button>
- <button id="navCategories">▦<span>Categorías</span></button>
- <button id="navCart">🛍️<span>Mi pedido</span><em id="navBadge">0</em></button>
+  <button id="navHome">⌂<span>Inicio</span></button>
+  <button id="navCategories">▦<span>Categorías</span></button>
+  <button id="navCart">🛍️<span>Mi pedido</span><em id="navBadge">0</em></button>
+  <button>•••<span>Más</span></button>
 </nav>
 
-<button class="floating-cart" id="floatingCart"><span>🛒 <b id="floatingCount">0</b> productos</span><strong id="floatingTotal">$ 0</strong></button>
+<button class="floating-cart" id="floatingCart">
+  <span>🛒 <b id="floatingCount">0</b> productos</span>
+  <strong id="floatingTotal">$ 0</strong>
+</button>
 
-<div class="modal" id="cartModal"><div class="sheet"><button class="close">×</button><small>DEMO DENEXA</small><h3>Mi pedido</h3><div id="cartItems"></div><div class="cart-total"><span>Total</span><b id="cartTotal">$ 0</b></div><button class="primary" id="checkout">Finalizar pedido</button></div></div>
-<div class="modal" id="checkoutModal"><div class="sheet"><button class="close">×</button><small>PEDIDO DE PRUEBA</small><h3>¿Cómo querés recibirlo?</h3>
-<div class="mode-grid"><button class="mode active" data-mode="Delivery">🛵<span><b>Delivery</b><small>Te lo llevamos</small></span></button><button class="mode" data-mode="Retiro">🛍️<span><b>Retiro</b><small>Pasá a buscar</small></span></button></div>
-<label>Nombre<input id="name" placeholder="Tu nombre"></label><label>Teléfono<input placeholder="099 123 456"></label><label id="addressField">Dirección<input placeholder="Calle y número"></label>
-<label>Forma de pago<select><option>Efectivo</option><option>Transferencia</option></select></label><label>Observaciones<textarea placeholder="Ej: sin cebolla..."></textarea></label>
-<div class="warning"><b>Pedido DEMO.</b> No se envía al comercio ni se registra.</div><button class="primary" id="finish">Simular pedido</button></div></div>
-<div class="modal" id="successModal"><div class="sheet success"><div class="ok">✓</div><h3>¡Pedido demo completado!</h3><p>Así sería pedir en Empanadas Calentitas con DENEXA.</p><button class="primary" id="restart">Volver al inicio</button></div></div>
-<script src="app.js"></script></body></html>
+<div class="modal" id="cartModal">
+  <div class="sheet">
+    <button class="close">×</button>
+    <small>DEMO DENEXA</small><h3>Mi pedido</h3>
+    <div id="cartItems"></div>
+    <div class="cart-total"><span>Total</span><b id="cartTotal">$ 0</b></div>
+    <button class="primary" id="checkout">Finalizar pedido</button>
+  </div>
+</div>
+
+<div class="modal" id="checkoutModal">
+  <div class="sheet">
+    <button class="close">×</button>
+    <small>PEDIDO DE PRUEBA</small><h3>¿Cómo querés recibirlo?</h3>
+    <div class="mode-grid">
+      <button class="mode active" data-mode="Delivery">🛵<span><b>Delivery</b><small>Te lo llevamos</small></span></button>
+      <button class="mode" data-mode="Retiro">🛍️<span><b>Retiro</b><small>Pasá a buscar</small></span></button>
+    </div>
+    <label>Nombre<input id="name" placeholder="Tu nombre"></label>
+    <label>Teléfono<input placeholder="099 123 456"></label>
+    <label id="addressField">Dirección<input placeholder="Calle y número"></label>
+    <label>Forma de pago<select><option>Efectivo</option><option>Transferencia</option></select></label>
+    <label>Observaciones<textarea placeholder="Ej: sin cebolla..."></textarea></label>
+    <div class="warning"><b>Pedido DEMO.</b> No se envía al comercio ni se registra.</div>
+    <button class="primary" id="finish">Simular pedido</button>
+  </div>
+</div>
+
+<div class="modal" id="successModal">
+  <div class="sheet success">
+    <div class="ok">✓</div><h3>¡Pedido demo completado!</h3>
+    <p>Así sería pedir en Empanadas Calentitas con DENEXA.</p>
+    <button class="primary" id="restart">Volver al inicio</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
