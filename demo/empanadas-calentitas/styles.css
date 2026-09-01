@@ -53,3 +53,48 @@ html{scroll-behavior:smooth;background:var(--bg)}body{margin:0;background:radial
   .promo-reference{border-radius:18px;margin-top:20px}
   .thanks-reference{margin-top:20px}
 }
+
+
+/* Corrección puntual: la portada queda como única presentación superior */
+main{padding-top:14px}
+
+/* Recuadro original suministrado: ancho completo y legible */
+.promo-reference{
+  background:#050706;
+  border-color:#0ecd4c;
+}
+.promo-reference img{
+  width:100%;
+  height:auto;
+  object-fit:contain;
+  display:block;
+}
+@media(max-width:760px){
+  main{padding-top:10px}
+  .promo-reference{
+    overflow:visible;
+    border-radius:14px;
+  }
+  .promo-reference img{
+    width:100%;
+    min-height:auto;
+  }
+}
+
+
+/* Corrección final del pie: separar el bloque Gracias por elegirnos */
+.thanks-reference{
+  margin-top:28px !important;
+  background:#050706 !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+.thanks-reference img{
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+}
+.footer{
+  margin-top:20px;
+}
