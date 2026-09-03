@@ -412,6 +412,29 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
         color:#FFD000!important;
       }
 
+
+      /* STOCK V2 integrado dentro del panel */
+      .denexa-stock-embed-shell{
+        width:100%;
+        min-height:680px;
+        overflow:hidden;
+        border:1px solid #353535;
+        border-radius:18px;
+        background:#0b0b0b;
+      }
+      .denexa-stock-frame{
+        display:block;
+        width:100%;
+        min-height:780px;
+        border:0;
+        background:#0b0b0b;
+      }
+      html[data-merchant-theme="carro-kechu-carmelo"] .denexa-stock-embed-shell,
+      body.merchant-kechu .denexa-stock-embed-shell{
+        border-color:#353535!important;
+        background:#0b0b0b!important;
+      }
+
       @media(max-width:760px){
         html[data-merchant-theme="carro-kechu-carmelo"] .main,
         body.merchant-kechu .main{padding:16px 12px 70px!important}
@@ -493,27 +516,75 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
     }
 
     function ensureStockAccess() {
+      const main = document.querySelector(".main");
       const nav = document.querySelector(".sidebar .nav");
-      if (!nav || document.getElementById("denexaStockNavButton")) return;
 
-      const button = document.createElement("button");
-      button.id = "denexaStockNavButton";
-      button.className = "nav-item denexa-stock-nav";
-      button.type = "button";
-      button.innerHTML = `
-        <span class="nav-icon" aria-hidden="true">📦</span>
-        <span>Stock</span>
-      `;
+      if (main && !document.getElementById("stockV2")) {
+        const section = document.createElement("section");
+        section.id = "stockV2";
+        section.className = "page-section";
+        section.innerHTML = `
+          <header class="page-header">
+            <div>
+              <p class="eyebrow">INVENTARIO</p>
+              <h1>Stock</h1>
+              <p class="subtitle">
+                Controlá insumos reales y consumos automáticos sin salir del panel.
+              </p>
+            </div>
+          </header>
 
-      button.addEventListener("click", () => {
-        window.location.href = "stock.html";
-      });
+          <div class="denexa-stock-embed-shell">
+            <iframe
+              id="denexaStockFrame"
+              class="denexa-stock-frame"
+              src="stock-v2.html"
+              title="Control de stock"
+              loading="eager"
+            ></iframe>
+          </div>
+        `;
+        main.appendChild(section);
+      }
 
-      const productsButton = nav.querySelector('[data-section="products"]');
-      if (productsButton?.nextSibling) {
-        nav.insertBefore(button, productsButton.nextSibling);
-      } else {
-        nav.appendChild(button);
+      if (!nav) return;
+
+      let button = document.getElementById("denexaStockNavButton");
+
+      if (!button) {
+        button = document.createElement("button");
+        button.id = "denexaStockNavButton";
+        button.className = "nav-item denexa-stock-nav";
+        button.type = "button";
+        button.innerHTML = `
+          <span class="nav-icon" aria-hidden="true">ST</span>
+          <span>Stock</span>
+        `;
+
+        const productsButton = nav.querySelector('[data-section="products"]');
+        if (productsButton?.nextSibling) {
+          nav.insertBefore(button, productsButton.nextSibling);
+        } else {
+          nav.appendChild(button);
+        }
+      }
+
+      if (!button.dataset.stockBound) {
+        button.dataset.stockBound = "1";
+        button.addEventListener("click", () => {
+          document.querySelectorAll(".nav-item").forEach((item) => {
+            item.classList.toggle("active", item === button);
+          });
+
+          document.querySelectorAll(".page-section").forEach((section) => {
+            section.classList.toggle("active", section.id === "stockV2");
+          });
+
+          const frame = document.getElementById("denexaStockFrame");
+          try {
+            frame?.contentWindow?.postMessage({ type:"denexa-stock-refresh" }, "*");
+          } catch (error) {}
+        });
       }
     }
 
