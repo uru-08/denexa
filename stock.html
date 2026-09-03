@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07111f">
+  <title>DENEXA | Control de stock</title>
+  <link rel="stylesheet" href="css/stock.css?v=1">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">D</div>
+      <div>
+        <strong>DENEXA ðŸ‡ºðŸ‡¾</strong>
+        <span>Control de stock</span>
+      </div>
+    </div>
+
+    <a class="back-button" href="comercio.html">â† Volver al panel</a>
+  </header>
+
+  <main class="stock-shell">
+    <section class="stock-heading">
+      <div>
+        <p class="eyebrow">INVENTARIO</p>
+        <h1>Control de stock</h1>
+        <p id="businessCaption">Cargando comercio...</p>
+      </div>
+      <button id="refreshStockButton" class="secondary-button" type="button">
+        Actualizar
+      </button>
+    </section>
+
+    <section class="summary-grid" aria-label="Resumen de stock">
+      <article class="summary-card">
+        <span>Productos</span>
+        <strong id="summaryProducts">0</strong>
+      </article>
+      <article class="summary-card warning">
+        <span>Stock bajo</span>
+        <strong id="summaryLow">0</strong>
+      </article>
+      <article class="summary-card danger">
+        <span>Agotados</span>
+        <strong id="summaryOut">0</strong>
+      </article>
+    </section>
+
+    <section class="panel stock-help">
+      <strong>Simple y automÃ¡tico</strong>
+      <p>
+        Todo producto activo del menÃº aparece acÃ¡ automÃ¡ticamente.
+        Las ventas hechas desde la web descuentan stock; las ventas de mostrador
+        se ajustan con los botones âˆ’ / + o escribiendo la cantidad.
+      </p>
+    </section>
+
+    <section class="panel toolbar">
+      <label class="search-field">
+        <span>Buscar producto</span>
+        <input id="stockSearch" type="search" placeholder="Ej.: hamburguesa">
+      </label>
+
+      <label class="filter-field">
+        <span>Mostrar</span>
+        <select id="stockFilter">
+          <option value="all">Todos</option>
+          <option value="low">Stock bajo</option>
+          <option value="out">Agotados</option>
+          <option value="uncontrolled">Sin control</option>
+        </select>
+      </label>
+    </section>
+
+    <section id="stockMessage" class="message" aria-live="polite"></section>
+    <section id="stockList" class="stock-list">
+      <div class="panel loading">Cargando productos...</div>
+    </section>
+  </main>
+
+  <script src="js/config.js?v=30"></script>
+  <script src="js/stock.js?v=1"></script>
+</body>
+</html>
