@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0b0b">
+  <title>Stock</title>
+  <link rel="stylesheet" href="css/stock-v2.css?v=1">
+</head>
+<body>
+  <main class="stock-app">
+    <section class="stock-top">
+      <div>
+        <p class="eyebrow">STOCK REAL</p>
+        <h2>Insumos disponibles</h2>
+        <p class="muted">Hamburguesas, chivitos, milanesas y cualquier insumo que quieras controlar.</p>
+      </div>
+      <button id="reloadBtn" class="button secondary" type="button">Actualizar</button>
+    </section>
+
+    <section class="summary">
+      <article><span>Insumos</span><strong id="countItems">0</strong></article>
+      <article><span>Stock bajo</span><strong id="countLow">0</strong></article>
+      <article><span>Agotados</span><strong id="countOut">0</strong></article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">
+        <div>
+          <h3>Insumos base</h3>
+          <p>Estas son las unidades reales que Kechu tiene disponibles.</p>
+        </div>
+        <button id="newItemBtn" class="button primary" type="button">+ Nuevo insumo</button>
+      </div>
+      <div id="itemsList" class="items-list">
+        <div class="empty">Cargando...</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">
+        <div>
+          <h3>Consumo automÃ¡tico por productos</h3>
+          <p>PodÃ©s aplicar un mismo consumo a toda una categorÃ­a y luego corregir excepciones.</p>
+        </div>
+      </div>
+
+      <div class="bulk-grid">
+        <label>
+          CategorÃ­a
+          <select id="bulkCategory"></select>
+        </label>
+        <label>
+          Insumo
+          <select id="bulkInventory"></select>
+        </label>
+        <label>
+          Consume
+          <input id="bulkUnits" type="number" min="1" step="1" value="1">
+        </label>
+        <button id="applyCategoryBtn" class="button primary" type="button">Aplicar a categorÃ­a</button>
+      </div>
+
+      <div id="productsRules" class="rules-list"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">
+        <div>
+          <h3>Extras y opciones</h3>
+          <p>Ejemplo: Extra carne = +1 carne de hamburguesa o +1 carne de chivito.</p>
+        </div>
+      </div>
+      <div id="optionsRules" class="rules-list"></div>
+    </section>
+
+    <p id="message" class="message" aria-live="polite"></p>
+  </main>
+
+  <dialog id="itemDialog">
+    <form id="itemForm" method="dialog" class="dialog-card">
+      <h3>Nuevo insumo</h3>
+      <label>
+        Nombre
+        <input id="itemName" required placeholder="Ej.: Carne hamburguesa">
+      </label>
+      <label>
+        Cantidad inicial
+        <input id="itemQty" type="number" min="0" step="1" value="0" required>
+      </label>
+      <label>
+        Avisar cuando queden
+        <input id="itemLow" type="number" min="0" step="1" value="3" required>
+      </label>
+      <div class="dialog-actions">
+        <button id="cancelItemBtn" class="button secondary" type="button">Cancelar</button>
+        <button class="button primary" type="submit">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="js/config.js?v=32"></script>
+  <script src="js/stock-v2.js?v=1"></script>
+</body>
+</html>
