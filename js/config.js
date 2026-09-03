@@ -271,7 +271,6 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
 
       /* ---------- CORRECCIONES VISUALES FINALES ---------- */
 
-      /* Estado del local: nunca blanco en Kechu */
       html[data-merchant-theme="carro-kechu-carmelo"] .merchant-status-current,
       body.merchant-kechu .merchant-status-current{
         background:#111111!important;
@@ -294,7 +293,6 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
         color:#d6d6d6!important;
       }
 
-      /* Pedidos: botones coherentes con la identidad Kechu */
       html[data-merchant-theme="carro-kechu-carmelo"] .order-action-button,
       body.merchant-kechu .order-action-button{
         border:1px solid #444!important;
@@ -317,7 +315,6 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
         color:#ff827b!important;
       }
 
-      /* Cualquier botón secundario dentro de la tarjeta del pedido */
       html[data-merchant-theme="carro-kechu-carmelo"] .order-actions .secondary-button,
       body.merchant-kechu .order-actions .secondary-button{
         background:#181818!important;
@@ -325,7 +322,6 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
         color:#f2f2f2!important;
       }
 
-      /* Etiqueta retiro/delivery con contraste correcto */
       html[data-merchant-theme="carro-kechu-carmelo"] .order-delivery-mode.pickup,
       body.merchant-kechu .order-delivery-mode.pickup{
         background:#2a2400!important;
@@ -340,7 +336,6 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
         color:#8ce5b2!important;
       }
 
-      /* Observaciones: fondo oscuro y lectura clara */
       html[data-merchant-theme="carro-kechu-carmelo"] .order-notes-box,
       body.merchant-kechu .order-notes-box{
         background:#171400!important;
@@ -370,11 +365,51 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
       .merchant-login-mark{
         background:#111!important;border:2px solid #FFD000!important;color:#FFD000!important
       }
-      .merchant-login-form input{
-        background:#090909!important;border-color:#444!important;color:#fff!important;-webkit-text-fill-color:#fff!important
+
+      /* LOGIN CORREGIDO: texto legible también con autocompletado de Android/Chrome */
+      .merchant-login-screen .merchant-login-form input,
+      .merchant-login-screen .merchant-password-wrap input{
+        background:#f2f5fb!important;
+        border:2px solid #c7d2e2!important;
+        color:#111827!important;
+        -webkit-text-fill-color:#111827!important;
+        caret-color:#111827!important;
+        box-shadow:0 0 0 1000px #f2f5fb inset!important;
+      }
+      .merchant-login-screen .merchant-login-form input:-webkit-autofill,
+      .merchant-login-screen .merchant-login-form input:-webkit-autofill:hover,
+      .merchant-login-screen .merchant-login-form input:-webkit-autofill:focus,
+      .merchant-login-screen .merchant-login-form input:-webkit-autofill:active{
+        -webkit-text-fill-color:#111827!important;
+        caret-color:#111827!important;
+        -webkit-box-shadow:0 0 0 1000px #f2f5fb inset!important;
+        box-shadow:0 0 0 1000px #f2f5fb inset!important;
+        transition:background-color 9999s ease-out 0s!important;
+      }
+      .merchant-login-screen .merchant-login-form input::placeholder{
+        color:#6b7280!important;
+        -webkit-text-fill-color:#6b7280!important;
+        opacity:1!important;
       }
       .merchant-login-button{
         background:#FFD000!important;color:#050505!important
+      }
+
+      /* STOCK V1: acceso visible desde el panel */
+      .denexa-stock-nav{
+        display:flex!important;
+        border-color:#5a4d00!important;
+      }
+      html[data-merchant-theme="carro-kechu-carmelo"] .denexa-stock-nav,
+      body.merchant-kechu .denexa-stock-nav{
+        color:#FFD000!important;
+        background:#171400!important;
+        border-color:#5a4d00!important;
+      }
+      html[data-merchant-theme="carro-kechu-carmelo"] .denexa-stock-nav .nav-icon,
+      body.merchant-kechu .denexa-stock-nav .nav-icon{
+        background:#241f00!important;
+        color:#FFD000!important;
       }
 
       @media(max-width:760px){
@@ -386,6 +421,7 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
         }
         html[data-merchant-theme="carro-kechu-carmelo"] .merchant-session-float,
         body.merchant-kechu .merchant-session-float{display:none!important}
+        .denexa-stock-nav{display:flex!important}
       }
     `;
     document.head.appendChild(style);
@@ -456,11 +492,38 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
       }, 12000);
     }
 
+    function ensureStockAccess() {
+      const nav = document.querySelector(".sidebar .nav");
+      if (!nav || document.getElementById("denexaStockNavButton")) return;
+
+      const button = document.createElement("button");
+      button.id = "denexaStockNavButton";
+      button.className = "nav-item denexa-stock-nav";
+      button.type = "button";
+      button.innerHTML = `
+        <span class="nav-icon" aria-hidden="true">📦</span>
+        <span>Stock</span>
+      `;
+
+      button.addEventListener("click", () => {
+        window.location.href = "stock.html";
+      });
+
+      const productsButton = nav.querySelector('[data-section="products"]');
+      if (productsButton?.nextSibling) {
+        nav.insertBefore(button, productsButton.nextSibling);
+      } else {
+        nav.appendChild(button);
+      }
+    }
+
     function cleanPanelCopy() {
       const setText = (selector, value) => {
         const el = document.querySelector(selector);
         if (el) el.textContent = value;
       };
+
+      ensureStockAccess();
 
       setText(".merchant-login-brand strong", "DENEXA 🇺🇾");
       setText(".merchant-login-brand span", "Plataforma de pedidos online");
