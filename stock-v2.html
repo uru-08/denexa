@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0b0b0b">
   <title>Stock</title>
-  <link rel="stylesheet" href="css/stock-v2.css?v=1">
+  <link rel="stylesheet" href="css/stock-v2.css?v=2">
 </head>
 <body>
   <main class="stock-app">
@@ -13,7 +13,7 @@
       <div>
         <p class="eyebrow">STOCK REAL</p>
         <h2>Insumos disponibles</h2>
-        <p class="muted">Hamburguesas, chivitos, milanesas y cualquier insumo que quieras controlar.</p>
+        <p class="muted">Control por insumo real, no por cada sabor o estilo del men&uacute;.</p>
       </div>
       <button id="reloadBtn" class="button secondary" type="button">Actualizar</button>
     </section>
@@ -28,7 +28,7 @@
       <div class="panel-title">
         <div>
           <h3>Insumos base</h3>
-          <p>Estas son las unidades reales que Kechu tiene disponibles.</p>
+          <p>Ejemplo: Carne hamburguesa, Carne chivito y Milanesa.</p>
         </div>
         <button id="newItemBtn" class="button primary" type="button">+ Nuevo insumo</button>
       </div>
@@ -40,38 +40,61 @@
     <section class="panel">
       <div class="panel-title">
         <div>
-          <h3>Consumo automÃ¡tico por productos</h3>
-          <p>PodÃ©s aplicar un mismo consumo a toda una categorÃ­a y luego corregir excepciones.</p>
+          <h3>Consumo por categor&iacute;a</h3>
+          <p>Una sola regla controla todos los productos de esa categor&iacute;a.</p>
         </div>
       </div>
+      <div id="categoryRules" class="rules-list"></div>
+    </section>
 
+    <section class="panel">
+      <div class="panel-title">
+        <div>
+          <h3>Excepciones especiales</h3>
+          <p>Usalo solo cuando un producto consume distinto. Ejemplo: Caja Kechu = 2 milanesas.</p>
+        </div>
+      </div>
       <div class="bulk-grid">
         <label>
-          CategorÃ­a
-          <select id="bulkCategory"></select>
+          Producto
+          <select id="exceptionProduct"></select>
         </label>
         <label>
           Insumo
-          <select id="bulkInventory"></select>
+          <select id="exceptionInventory"></select>
         </label>
         <label>
           Consume
-          <input id="bulkUnits" type="number" min="1" step="1" value="1">
+          <input id="exceptionUnits" type="number" min="1" step="1" value="1">
         </label>
-        <button id="applyCategoryBtn" class="button primary" type="button">Aplicar a categorÃ­a</button>
+        <button id="saveExceptionBtn" class="button primary" type="button">Guardar excepci&oacute;n</button>
       </div>
-
-      <div id="productsRules" class="rules-list"></div>
+      <div id="exceptionsList" class="rules-list"></div>
     </section>
 
     <section class="panel">
       <div class="panel-title">
         <div>
           <h3>Extras y opciones</h3>
-          <p>Ejemplo: Extra carne = +1 carne de hamburguesa o +1 carne de chivito.</p>
+          <p>Ejemplo: Extra carne = +1 unidad del insumo correspondiente.</p>
         </div>
       </div>
-      <div id="optionsRules" class="rules-list"></div>
+      <div class="bulk-grid">
+        <label>
+          Extra / opci&oacute;n
+          <select id="optionSelect"></select>
+        </label>
+        <label>
+          Insumo
+          <select id="optionInventory"></select>
+        </label>
+        <label>
+          Consume
+          <input id="optionUnits" type="number" min="1" step="1" value="1">
+        </label>
+        <button id="saveOptionBtn" class="button primary" type="button">Guardar extra</button>
+      </div>
+      <div id="optionsList" class="rules-list"></div>
     </section>
 
     <p id="message" class="message" aria-live="polite"></p>
@@ -100,6 +123,6 @@
   </dialog>
 
   <script src="js/config.js?v=32"></script>
-  <script src="js/stock-v2.js?v=1"></script>
+  <script src="js/stock-v2.js?v=2"></script>
 </body>
 </html>
