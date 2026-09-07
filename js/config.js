@@ -523,6 +523,7 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
         const section = document.createElement("section");
         section.id = "stockV2";
         section.className = "page-section";
+        section.hidden = true;
         section.innerHTML = `
           <header class="page-header">
             <div>
@@ -572,6 +573,8 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
       if (!button.dataset.stockBound) {
         button.dataset.stockBound = "1";
         button.addEventListener("click", () => {
+          const stockSection = document.getElementById("stockV2");
+
           document.querySelectorAll(".nav-item").forEach((item) => {
             item.classList.toggle("active", item === button);
           });
@@ -580,11 +583,29 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
             section.classList.toggle("active", section.id === "stockV2");
           });
 
+          if (stockSection) stockSection.hidden = false;
+
           const frame = document.getElementById("denexaStockFrame");
           try {
             frame?.contentWindow?.postMessage({ type:"denexa-stock-refresh" }, "*");
           } catch (error) {}
         });
+      }
+
+      if (!nav.dataset.stockExitBound) {
+        nav.dataset.stockExitBound = "1";
+        nav.addEventListener("click", (event) => {
+          const target = event.target.closest(".nav-item");
+          if (!target || target === button) return;
+
+          const stockSection = document.getElementById("stockV2");
+          if (stockSection) {
+            stockSection.classList.remove("active");
+            stockSection.hidden = true;
+          }
+
+          button.classList.remove("active");
+        }, true);
       }
     }
 
