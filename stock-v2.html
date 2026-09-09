@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#090a0b">
   <title>Stock</title>
-  <link rel="stylesheet" href="css/stock-v2.css?v=3">
+  <link rel="stylesheet" href="css/stock-v2.css?v=4">
 </head>
 <body>
   <main class="stock-app">
@@ -83,32 +83,60 @@
 
   <script src="js/config.js?v=32"></script>
   <script src="js/stock-v2.js?v=2"></script>
+
   <script>
     (function(){
+      function forceParentTheme(){
+        try{
+          if(parent === window) return;
+          var doc = parent.document;
+          var old = doc.getElementById("denexaMerchantFinalThemeV4");
+          if(old) return;
+
+          var link = doc.createElement("link");
+          link.id = "denexaMerchantFinalThemeV4";
+          link.rel = "stylesheet";
+          link.href = "css/comercio-theme.css?v=4";
+          doc.head.appendChild(link);
+        }catch(e){}
+      }
+
       function resizeParentFrame(){
         try{
           var frame = parent.document.getElementById("denexaStockFrame");
           if(!frame) return;
+
           var h = Math.max(
             document.documentElement.scrollHeight,
             document.body.scrollHeight,
             document.documentElement.offsetHeight,
             document.body.offsetHeight
           );
-          frame.style.height = (h + 4) + "px";
+
+          frame.style.height = (h + 6) + "px";
         }catch(e){}
       }
 
+      forceParentTheme();
+
       window.addEventListener("load", function(){
+        forceParentTheme();
         resizeParentFrame();
         setTimeout(resizeParentFrame, 250);
         setTimeout(resizeParentFrame, 900);
       });
 
-      new ResizeObserver(resizeParentFrame).observe(document.documentElement);
+      if("ResizeObserver" in window){
+        new ResizeObserver(resizeParentFrame).observe(document.documentElement);
+      }
+
       new MutationObserver(function(){
         requestAnimationFrame(resizeParentFrame);
-      }).observe(document.body,{subtree:true,childList:true,attributes:true});
+      }).observe(document.body,{
+        subtree:true,
+        childList:true,
+        attributes:true
+      });
 
       window.addEventListener("resize", resizeParentFrame);
     })();
