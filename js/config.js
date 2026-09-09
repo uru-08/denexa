@@ -671,3 +671,146 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
     }
   })();
 }
+
+/* =========================================================
+   DENEXA - CANCELACION DE PEDIDOS + REPOSICION DE STOCK
+   UI del panel. La reposicion la realiza el trigger Stock V2
+   al cambiar el estado del pedido a "cancelled".
+   ========================================================= */
+if (/\/comercio\.html$/i.test(window.location.pathname)) {
+  (function () {
+    "use strict";
+
+    const CANCELLABLE = new Set(["approved", "preparing", "ready", "on_the_way"]);
+    let cancelling = false;
+
+    function readMerchantSessionForCancel() {
+      try {
+        return JSON.parse(localStorage.getItem("denexa_merchant_session_v1") || "null");
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function statusFromCard(card) {
+      if (!card) return "";
+      const classes = Array.from(card.classList || []);
+      const statusClass = classes.find((name) => name.indexOf("status-") === 0);
+      return statusClass ? statusClass.slice(7) : "";
+    }
+
+    function decorateCancelButtons() {
+      document.querySelectorAll("#ordersList .order-card").forEach((card) => {
+        const status = statusFromCard(card);
+        const actions = card.querySelector(".order-actions");
+        const anyOrderButton = card.querySelector("[data-order-id]");
+        if (!actions || !anyOrderButton) return;
+
+        const existing = actions.querySelector("[data-denexa-cancel-order]");
+        if (!CANCELLABLE.has(status)) {
+          existing?.remove();
+          return;
+        }
+        if (existing) return;
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "order-action-button danger";
+        button.dataset.denexaCancelOrder = "1";
+        button.dataset.orderId = String(anyOrderButton.dataset.orderId || "");
+        button.textContent = "Cancelar pedido";
+
+        const removeButton = actions.querySelector("[data-remove-order]");
+        actions.insertBefore(button, removeButton || null);
+      });
+    }
+
+    async function cancelAcceptedOrder(orderId, button) {
+      if (!orderId || cancelling) return;
+
+      const confirmed = window.confirm(
+        `Cancelar el pedido #${orderId}?\n\n` +
+        "El pedido quedara CANCELADO y DENEXA devolvera automaticamente al stock las unidades que desconto al aceptarlo."
+      );
+      if (!confirmed) return;
+
+      const session = readMerchantSessionForCancel();
+      if (!session?.access_token) {
+        window.alert("La sesion del comercio vencio. Volve a iniciar sesion.");
+        return;
+      }
+
+      cancelling = true;
+      const originalText = button.textContent;
+      button.disabled = true;
+      button.textContent = "Cancelando...";
+
+      try {
+        const response = await fetch(
+          `${SUPABASE_REST}/orders?id=eq.${encodeURIComponent(orderId)}`,
+          {
+            method: "PATCH",
+            headers: supabaseHeaders({
+              Authorization: `Bearer ${session.access_token}`,
+              Prefer: "return=representation"
+            }),
+            body: JSON.stringify({ status: "cancelled" })
+          }
+        );
+
+        const text = await response.text();
+        if (!response.ok) {
+          throw new Error(text || `Error ${response.status}`);
+        }
+
+        let rows = [];
+        try { rows = text.trim() ? JSON.parse(text) : []; } catch (_) {}
+        const saved = Array.isArray(rows) ? rows[0] : rows;
+        if (saved && saved.status && saved.status !== "cancelled") {
+          throw new Error("Supabase no confirmo la cancelacion.");
+        }
+
+        window.alert(
+          `Pedido #${orderId} cancelado.\n\nEl stock consumido fue devuelto automaticamente.`
+        );
+
+        const refresh = document.getElementById("refreshOrdersButton");
+        if (refresh) refresh.click();
+        else window.location.reload();
+      } catch (error) {
+        console.error("DENEXA - error cancelando pedido:", error);
+        window.alert(
+          "No se pudo cancelar el pedido. No se modifico manualmente el stock. Revisa la conexion e intenta nuevamente."
+        );
+        button.disabled = false;
+        button.textContent = originalText;
+      } finally {
+        cancelling = false;
+      }
+    }
+
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-denexa-cancel-order]");
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      cancelAcceptedOrder(button.dataset.orderId, button);
+    }, true);
+
+    const start = () => {
+      const orders = document.getElementById("ordersList");
+      if (!orders) return;
+      decorateCancelButtons();
+      new MutationObserver(decorateCancelButtons).observe(orders, {
+        childList: true,
+        subtree: true
+      });
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", start, { once:true });
+    } else {
+      start();
+    }
+  })();
+}
