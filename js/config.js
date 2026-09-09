@@ -814,3 +814,35 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
     }
   })();
 }
+
+/* DENEXA FINAL: cancelacion nativa de pedidos aceptados */
+if (/\/comercio\.html$/i.test(window.location.pathname)) {
+  (function () {
+    "use strict";
+    let installed = false;
+    const cancellable = new Set(["approved", "preparing", "ready", "on_the_way"]);
+
+    function installNativeCancel() {
+      if (installed || typeof window.orderNextActions !== "function") return false;
+      const original = window.orderNextActions;
+      window.orderNextActions = function(order) {
+        const actions = original(order) || [];
+        if (order && cancellable.has(order.status) && !actions.some(a => a && a[0] === "cancelled")) {
+          actions.push(["cancelled", "Cancelar pedido", "danger"]);
+        }
+        return actions;
+      };
+      installed = true;
+      try {
+        if (typeof window.renderOrders === "function") window.renderOrders();
+        if (typeof window.renderDashboardOrders === "function") window.renderDashboardOrders();
+      } catch (_) {}
+      return true;
+    }
+
+    const timer = setInterval(() => {
+      if (installNativeCancel()) clearInterval(timer);
+    }, 150);
+    setTimeout(() => clearInterval(timer), 15000);
+  })();
+}
