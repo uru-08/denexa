@@ -847,3 +847,23 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
     setTimeout(() => clearInterval(timer), 15000);
   })();
 }
+
+
+/* =========================================================
+   DENEXA - TEMA FINAL DEL PANEL DEL COMERCIO
+   Carga una sola hoja visual, sin alterar la logica del panel.
+   ========================================================= */
+if (/\/comercio\.html$/i.test(window.location.pathname)) {
+  (function () {
+    "use strict";
+    const id = "denexaMerchantFinalTheme";
+    if (document.getElementById(id)) return;
+
+    const link = document.createElement("link");
+    link.id = id;
+    link.rel = "stylesheet";
+    link.href = "css/comercio-theme.css?v=1";
+    document.head.appendChild(link);
+  })();
+}
+
