@@ -141,5 +141,26 @@
       window.addEventListener("resize", resizeParentFrame);
     })();
   </script>
+
+  <script>
+    /* DENEXA V6: el botÃ³n Stock usa exactamente el mismo estilo base
+       que los demÃ¡s botones de navegaciÃ³n. */
+    (function(){
+      function normalizeStockButton(){
+        try{
+          var btn = parent.document.getElementById("denexaStockNavButton");
+          if(!btn) return;
+          btn.classList.remove("denexa-stock-nav");
+          btn.classList.add("nav-item");
+        }catch(e){}
+      }
+
+      normalizeStockButton();
+      window.addEventListener("load", normalizeStockButton);
+      setTimeout(normalizeStockButton, 250);
+      setTimeout(normalizeStockButton, 1000);
+    })();
+  </script>
+
 </body>
 </html>
