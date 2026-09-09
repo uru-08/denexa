@@ -1023,6 +1023,40 @@
     });
   }
 
+  /* =========================================================
+     DENEXA - WHATSAPP DINAMICO POR COMERCIO
+     El destino ya no depende del numero fijo de app.js.
+     Usa businesses.phone del comercio que esta abierto.
+     ========================================================= */
+
+  whatsappOrderUrl = function () {
+    const rawPhone =
+      String(business?.phone || "").trim();
+
+    let phone =
+      rawPhone.replace(/\D/g, "");
+
+    /*
+      Conveniencia para Uruguay:
+      si en Supabase se guarda 099123456, lo normalizamos a 59899123456.
+      Si ya viene en formato internacional (598...), se conserva.
+    */
+    if (phone.startsWith("0")) {
+      phone = `598${phone.slice(1)}`;
+    }
+
+    if (!phone) {
+      throw new Error(
+        "El comercio no tiene un numero de WhatsApp configurado en businesses.phone."
+      );
+    }
+
+    return (
+      `https://wa.me/${phone}` +
+      `?text=${encodeURIComponent(whatsappOrderMessage())}`
+    );
+  };
+
   denexaInventoryBootstrap().catch((error) => {
     console.error("DENEXA inventario bootstrap:",error);
   });
