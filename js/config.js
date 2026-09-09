@@ -707,11 +707,12 @@ if (/\/comercio\.html$/i.test(window.location.pathname)) {
         if (!actions || !anyOrderButton) return;
 
         const existing = actions.querySelector("[data-denexa-cancel-order]");
+        const nativeCancel = actions.querySelector('[data-order-action][data-next-status="cancelled"]');
         if (!CANCELLABLE.has(status)) {
           existing?.remove();
           return;
         }
-        if (existing) return;
+        if (existing || nativeCancel) return;
 
         const button = document.createElement("button");
         button.type = "button";
