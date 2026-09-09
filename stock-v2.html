@@ -162,5 +162,32 @@
     })();
   </script>
 
+
+  <script>
+    /* DENEXA - carga del mÃ³dulo Precio especial en el panel padre.
+       stock-v2.html se crea con loading=eager al iniciar comercio.html,
+       aunque la secciÃ³n Stock todavÃ­a estÃ© oculta. */
+    (function(){
+      function loadFixedPricePanel(){
+        try{
+          if(parent === window) return;
+
+          var doc = parent.document;
+          if(doc.getElementById("denexaPromoFixedPricePanel")) return;
+
+          var script = doc.createElement("script");
+          script.id = "denexaPromoFixedPricePanel";
+          script.src = "js/promo-fixed-price-panel.js?v=1";
+          script.defer = true;
+          doc.body.appendChild(script);
+        }catch(e){}
+      }
+
+      loadFixedPricePanel();
+      window.addEventListener("load", loadFixedPricePanel);
+      setTimeout(loadFixedPricePanel, 300);
+    })();
+  </script>
+
 </body>
 </html>
