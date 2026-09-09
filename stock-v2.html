@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b0b0b">
+  <meta name="theme-color" content="#090a0b">
   <title>Stock</title>
-  <link rel="stylesheet" href="css/stock-v2.css?v=2">
+  <link rel="stylesheet" href="css/stock-v2.css?v=3">
 </head>
 <body>
   <main class="stock-app">
@@ -26,47 +26,27 @@
 
     <section class="panel">
       <div class="panel-title">
-        <div>
-          <h3>Insumos base</h3>
-          <p>Ejemplo: Carne hamburguesa, Carne chivito y Milanesa.</p>
-        </div>
+        <div><h3>Insumos base</h3><p>Carne hamburguesa, Carne chivito y Milanesa.</p></div>
         <button id="newItemBtn" class="button primary" type="button">+ Nuevo insumo</button>
       </div>
-      <div id="itemsList" class="items-list">
-        <div class="empty">Cargando...</div>
-      </div>
+      <div id="itemsList" class="items-list"><div class="empty">Cargando...</div></div>
     </section>
 
     <section class="panel">
       <div class="panel-title">
-        <div>
-          <h3>Consumo por categor&iacute;a</h3>
-          <p>Una sola regla controla todos los productos de esa categor&iacute;a.</p>
-        </div>
+        <div><h3>Consumo por categor&iacute;a</h3><p>Una regla controla todos los productos de la categor&iacute;a.</p></div>
       </div>
       <div id="categoryRules" class="rules-list"></div>
     </section>
 
     <section class="panel">
       <div class="panel-title">
-        <div>
-          <h3>Excepciones especiales</h3>
-          <p>Usalo solo cuando un producto consume distinto. Ejemplo: Caja Kechu = 2 milanesas.</p>
-        </div>
+        <div><h3>Excepciones especiales</h3><p>Para productos que consumen distinto, por ejemplo Caja Kechu.</p></div>
       </div>
       <div class="bulk-grid">
-        <label>
-          Producto
-          <select id="exceptionProduct"></select>
-        </label>
-        <label>
-          Insumo
-          <select id="exceptionInventory"></select>
-        </label>
-        <label>
-          Consume
-          <input id="exceptionUnits" type="number" min="1" step="1" value="1">
-        </label>
+        <label>Producto<select id="exceptionProduct"></select></label>
+        <label>Insumo<select id="exceptionInventory"></select></label>
+        <label>Consume<input id="exceptionUnits" type="number" min="1" step="1" value="1"></label>
         <button id="saveExceptionBtn" class="button primary" type="button">Guardar excepci&oacute;n</button>
       </div>
       <div id="exceptionsList" class="rules-list"></div>
@@ -74,24 +54,12 @@
 
     <section class="panel">
       <div class="panel-title">
-        <div>
-          <h3>Extras y opciones</h3>
-          <p>Ejemplo: Extra carne = +1 unidad del insumo correspondiente.</p>
-        </div>
+        <div><h3>Extras y opciones</h3><p>Los extras pueden sumar consumo, por ejemplo Extra carne +1.</p></div>
       </div>
       <div class="bulk-grid">
-        <label>
-          Extra / opci&oacute;n
-          <select id="optionSelect"></select>
-        </label>
-        <label>
-          Insumo
-          <select id="optionInventory"></select>
-        </label>
-        <label>
-          Consume
-          <input id="optionUnits" type="number" min="1" step="1" value="1">
-        </label>
+        <label>Extra / opci&oacute;n<select id="optionSelect"></select></label>
+        <label>Insumo<select id="optionInventory"></select></label>
+        <label>Consume<input id="optionUnits" type="number" min="1" step="1" value="1"></label>
         <button id="saveOptionBtn" class="button primary" type="button">Guardar extra</button>
       </div>
       <div id="optionsList" class="rules-list"></div>
@@ -103,18 +71,9 @@
   <dialog id="itemDialog">
     <form id="itemForm" method="dialog" class="dialog-card">
       <h3>Nuevo insumo</h3>
-      <label>
-        Nombre
-        <input id="itemName" required placeholder="Ej.: Carne hamburguesa">
-      </label>
-      <label>
-        Cantidad inicial
-        <input id="itemQty" type="number" min="0" step="1" value="0" required>
-      </label>
-      <label>
-        Avisar cuando queden
-        <input id="itemLow" type="number" min="0" step="1" value="3" required>
-      </label>
+      <label>Nombre<input id="itemName" required placeholder="Ej.: Carne hamburguesa"></label>
+      <label>Cantidad inicial<input id="itemQty" type="number" min="0" step="1" value="0" required></label>
+      <label>Avisar cuando queden<input id="itemLow" type="number" min="0" step="1" value="3" required></label>
       <div class="dialog-actions">
         <button id="cancelItemBtn" class="button secondary" type="button">Cancelar</button>
         <button class="button primary" type="submit">Guardar</button>
@@ -124,5 +83,35 @@
 
   <script src="js/config.js?v=32"></script>
   <script src="js/stock-v2.js?v=2"></script>
+  <script>
+    (function(){
+      function resizeParentFrame(){
+        try{
+          var frame = parent.document.getElementById("denexaStockFrame");
+          if(!frame) return;
+          var h = Math.max(
+            document.documentElement.scrollHeight,
+            document.body.scrollHeight,
+            document.documentElement.offsetHeight,
+            document.body.offsetHeight
+          );
+          frame.style.height = (h + 4) + "px";
+        }catch(e){}
+      }
+
+      window.addEventListener("load", function(){
+        resizeParentFrame();
+        setTimeout(resizeParentFrame, 250);
+        setTimeout(resizeParentFrame, 900);
+      });
+
+      new ResizeObserver(resizeParentFrame).observe(document.documentElement);
+      new MutationObserver(function(){
+        requestAnimationFrame(resizeParentFrame);
+      }).observe(document.body,{subtree:true,childList:true,attributes:true});
+
+      window.addEventListener("resize", resizeParentFrame);
+    })();
+  </script>
 </body>
 </html>
