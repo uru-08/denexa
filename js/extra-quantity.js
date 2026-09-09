@@ -1062,3 +1062,212 @@
   });
 
 })();
+
+/* =========================================================
+   DENEXA - PROMO PRECIO ESPECIAL POR PRODUCTO V1
+   Mantiene intacto el precio normal en Supabase.
+   Mientras la promo esta activa, modifica el producto en memoria.
+   ========================================================= */
+(function () {
+  "use strict";
+
+  let lastSignature = "";
+  let promoTimer = null;
+
+  function businessReady() {
+    return Boolean(
+      typeof business !== "undefined" &&
+      business &&
+      business.id &&
+      typeof products !== "undefined" &&
+      Array.isArray(products)
+    );
+  }
+
+  async function readFixedPricePromo() {
+    if (!businessReady()) return null;
+
+    const response = await fetch(
+      `${SUPABASE_REST}/businesses?id=eq.${encodeURIComponent(business.id)}` +
+      `&select=id,promo_active,promo_rule_type,promo_target_type,promo_target_id,promo_fixed_price`,
+      {
+        method: "GET",
+        headers: supabaseHeaders()
+      }
+    );
+
+    const text = await response.text();
+    if (!response.ok) {
+      throw new Error(text || `Error ${response.status}`);
+    }
+
+    const rows = text.trim() ? JSON.parse(text) : [];
+    return Array.isArray(rows) ? rows[0] : null;
+  }
+
+  function rememberRegularPrices() {
+    products.forEach((product) => {
+      if (!Object.prototype.hasOwnProperty.call(product, "_denexaRegularPrice")) {
+        product._denexaRegularPrice = Number(product.price || 0);
+        product._denexaRegularOldPrice = Number(product.old_price || 0);
+      }
+    });
+  }
+
+  function restoreRegularPrices() {
+    let changed = false;
+
+    products.forEach((product) => {
+      if (!Object.prototype.hasOwnProperty.call(product, "_denexaRegularPrice")) {
+        return;
+      }
+
+      const regular = Number(product._denexaRegularPrice || 0);
+      const regularOld = Number(product._denexaRegularOldPrice || 0);
+
+      if (
+        Number(product.price || 0) !== regular ||
+        Number(product.old_price || 0) !== regularOld
+      ) {
+        product.price = regular;
+        product.old_price = regularOld;
+        changed = true;
+      }
+    });
+
+    return changed;
+  }
+
+  function applyPromoToProducts(promo) {
+    rememberRegularPrices();
+
+    let changed = restoreRegularPrices();
+
+    const active =
+      promo?.promo_active === true &&
+      promo?.promo_rule_type === "fixed_price" &&
+      promo?.promo_target_type === "product" &&
+      Number(promo?.promo_target_id || 0) > 0 &&
+      Number(promo?.promo_fixed_price || 0) >= 0;
+
+    if (active) {
+      const targetId = Number(promo.promo_target_id);
+      const fixedPrice = Number(promo.promo_fixed_price);
+
+      const target = products.find(
+        (product) => Number(product.id) === targetId
+      );
+
+      if (target) {
+        const regular = Number(target._denexaRegularPrice || 0);
+
+        if (
+          Number(target.price || 0) !== fixedPrice ||
+          Number(target.old_price || 0) !== regular
+        ) {
+          target.price = fixedPrice;
+          target.old_price = regular;
+          changed = true;
+        }
+
+        business.promo_fixed_price = fixedPrice;
+        business.promo_target_id = targetId;
+        business.promo_target_type = "product";
+        business.promo_rule_type = "fixed_price";
+      }
+    }
+
+    if (changed) {
+      try {
+        if (typeof renderCatalog === "function") {
+          renderCatalog();
+        }
+      } catch (_) {}
+
+      /*
+        Si el producto ya estaba en el carrito antes de que cambiara la promo,
+        actualizamos solamente la diferencia del precio base.
+        Extras/opciones que el cliente haya elegido se conservan.
+      */
+      try {
+        if (typeof cart !== "undefined" && Array.isArray(cart)) {
+          cart.forEach((item) => {
+            const product = products.find(
+              (p) => Number(p.id) === Number(item.productId)
+            );
+            if (!product) return;
+
+            const regular = Number(product._denexaRegularPrice || 0);
+            const currentBase = Number(product.price || 0);
+            const stored = Number(item.unitPrice || 0);
+            const delta = currentBase - regular;
+
+            if (
+              Number.isFinite(stored) &&
+              Number.isFinite(delta) &&
+              !item._denexaFixedPriceAdjusted
+            ) {
+              item.unitPrice = Math.max(0, stored + delta);
+              item.total = item.unitPrice * Number(item.quantity || 1);
+              item._denexaFixedPriceAdjusted = true;
+            }
+          });
+
+          if (typeof renderCart === "function") {
+            renderCart();
+          }
+        }
+      } catch (_) {}
+    }
+  }
+
+  async function refreshFixedPricePromo(force = false) {
+    if (!businessReady()) return;
+
+    try {
+      const promo = await readFixedPricePromo();
+
+      const signature = JSON.stringify([
+        promo?.promo_active === true,
+        promo?.promo_rule_type || "",
+        promo?.promo_target_type || "",
+        Number(promo?.promo_target_id || 0),
+        Number(promo?.promo_fixed_price || 0)
+      ]);
+
+      if (!force && signature === lastSignature) return;
+      lastSignature = signature;
+
+      applyPromoToProducts(promo);
+    } catch (error) {
+      console.error("DENEXA promo precio especial:", error);
+    }
+  }
+
+  function bootstrap() {
+    const wait = setInterval(() => {
+      if (!businessReady()) return;
+
+      clearInterval(wait);
+      refreshFixedPricePromo(true);
+
+      promoTimer = setInterval(() => {
+        if (!document.hidden) {
+          refreshFixedPricePromo(false);
+        }
+      }, 15000);
+    }, 120);
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        refreshFixedPricePromo(true);
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootstrap, { once: true });
+  } else {
+    bootstrap();
+  }
+})();
