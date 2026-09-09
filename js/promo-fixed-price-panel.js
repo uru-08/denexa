@@ -1,20 +1,20 @@
 /* =========================================================
-   DENEXA - PROMO PRECIO ESPECIAL / PANEL DEL COMERCIO V1
-   Agrega un cuarto tipo de Promo del dia:
-   "Precio especial de un producto".
+   DENEXA - PROMO PRECIO ESPECIAL / PANEL V2 DEFINITIVO
+   Integración persistente con Supabase mediante RPC propio.
    ========================================================= */
 (function () {
   "use strict";
 
   const FIXED_TYPE = "fixed_price";
   let installed = false;
-  let loading = false;
+  let loadingConfig = false;
+  let saving = false;
 
   function el(id) {
     return document.getElementById(id);
   }
 
-  function merchantBusinessId() {
+  function businessId() {
     try {
       if (
         typeof MERCHANT_BUSINESS_ID !== "undefined" &&
@@ -59,20 +59,22 @@
   }
 
   function ensureOption() {
-    const type = el("dailyPromoRuleType");
-    if (!type) return false;
+    const select = el("dailyPromoRuleType");
+    if (!select) return false;
 
-    if (!type.querySelector(`option[value="${FIXED_TYPE}"]`)) {
-      const option = document.createElement("option");
+    let option = select.querySelector(`option[value="${FIXED_TYPE}"]`);
+
+    if (!option) {
+      option = document.createElement("option");
       option.value = FIXED_TYPE;
       option.textContent = "Precio especial de un producto";
-      type.appendChild(option);
+      select.appendChild(option);
     }
 
     return true;
   }
 
-  function ensureFixedPriceField() {
+  function ensureField() {
     const automatic = el("promoAutomaticFields");
     if (!automatic) return null;
 
@@ -83,6 +85,7 @@
       box.id = "promoFixedPriceFields";
       box.className = "promo-rule-grid";
       box.hidden = true;
+
       box.innerHTML = `
         <label>
           Precio especial
@@ -95,10 +98,10 @@
             placeholder="Ej.: 740"
           >
           <small>
-            Reemplaza el precio normal mientras la promo esté activa.
-            Los extras siguen sumando normalmente.
+            El precio normal no se modifica. Al apagar la promo vuelve automáticamente.
           </small>
         </label>
+
         <div class="promo-rule-example" id="promoFixedPriceExample">
           Elegí un producto y escribí el precio de oferta.
         </div>
@@ -110,200 +113,329 @@
     return box;
   }
 
-  function targetGrid() {
-    return el("promoTargetId")?.closest(".promo-rule-grid") || null;
+  function setMessage(text) {
+    const message = el("dailyPromoMessage");
+    if (message) message.textContent = text || "";
   }
 
-  function updateFixedUI() {
-    const type = el("dailyPromoRuleType");
-    const fixedBox = ensureFixedPriceField();
-    if (!type || !fixedBox) return;
-
-    const isFixed = type.value === FIXED_TYPE;
-    fixedBox.hidden = !isFixed;
-
-    const targetType = el("promoTargetType");
-
-    if (isFixed && targetType) {
-      if (targetType.value !== "product") {
-        targetType.value = "product";
-        targetType.dispatchEvent(
-          new Event("change", { bubbles: true })
-        );
-      }
-
-      targetType.disabled = true;
-    } else if (targetType) {
-      targetType.disabled = false;
-    }
-
-    if (isFixed) {
-      const percent = el("promoPercentFields");
-      const gift = el("promoGiftFields");
-      if (percent) percent.hidden = true;
-      if (gift) gift.hidden = true;
-    }
-
-    updateExample();
+  function selectedProductName() {
+    return (
+      el("promoTargetId")
+        ?.selectedOptions?.[0]
+        ?.textContent
+        ?.trim() ||
+      "Producto"
+    );
   }
 
   function updateExample() {
     const type = el("dailyPromoRuleType");
     if (!type || type.value !== FIXED_TYPE) return;
 
-    const product = el("promoTargetId");
-    const price = Number(el("promoFixedPrice")?.value || 0);
-    const name =
-      product?.selectedOptions?.[0]?.textContent?.trim() ||
-      "Producto";
-
+    const input = el("promoFixedPrice");
     const example = el("promoFixedPriceExample");
+    const preview = el("dailyPromoPreviewText");
+    const productName = selectedProductName();
+
+    const hasPrice =
+      input &&
+      input.value !== "" &&
+      Number.isFinite(Number(input.value)) &&
+      Number(input.value) >= 0;
+
+    const fixedPrice =
+      hasPrice
+        ? Math.round(Number(input.value))
+        : null;
+
     if (example) {
       example.textContent =
-        price >= 0 && el("promoFixedPrice")?.value !== ""
-          ? `${name}: precio promo $${Math.round(price)}`
+        hasPrice
+          ? `${productName}: precio promo $${fixedPrice}`
           : "Elegí un producto y escribí el precio de oferta.";
     }
 
-    const preview = el("dailyPromoPreviewText");
-    const baseText =
-      el("dailyPromoText")?.value?.trim() ||
-      "Promo del día";
-
     if (preview) {
+      const base =
+        el("dailyPromoText")?.value?.trim() ||
+        "Promo del día";
+
       preview.textContent =
-        price >= 0 && el("promoFixedPrice")?.value !== ""
-          ? `${baseText} · ${name} a $${Math.round(price)}`
-          : baseText;
+        hasPrice
+          ? `${base} · ${productName} a $${fixedPrice}`
+          : base;
     }
   }
 
-  async function fetchPromoConfig() {
-    const businessId = merchantBusinessId();
-    if (!businessId || loading) return;
+  function forceProductTarget() {
+    const targetType = el("promoTargetType");
+    if (!targetType) return;
 
-    loading = true;
+    if (targetType.value !== "product") {
+      targetType.value = "product";
+
+      try {
+        if (typeof refreshPromoTargetOptions === "function") {
+          refreshPromoTargetOptions();
+        } else {
+          targetType.dispatchEvent(
+            new Event("change", { bubbles: true })
+          );
+        }
+      } catch (_) {
+        targetType.dispatchEvent(
+          new Event("change", { bubbles: true })
+        );
+      }
+    }
+
+    targetType.disabled = true;
+  }
+
+  function updateFixedUI() {
+    const type = el("dailyPromoRuleType");
+    const box = ensureField();
+
+    if (!type || !box) return;
+
+    const fixed = type.value === FIXED_TYPE;
+
+    box.hidden = !fixed;
+
+    if (fixed) {
+      forceProductTarget();
+
+      const percent = el("promoPercentFields");
+      const gift = el("promoGiftFields");
+
+      if (percent) percent.hidden = true;
+      if (gift) gift.hidden = true;
+    } else {
+      const targetType = el("promoTargetType");
+      if (targetType) targetType.disabled = false;
+    }
+
+    updateExample();
+  }
+
+  async function readSavedConfig() {
+    const id = businessId();
+    if (!id || loadingConfig) return null;
+
+    loadingConfig = true;
 
     try {
       const response = await fetch(
-        `${SUPABASE_REST}/businesses?id=eq.${businessId}` +
-        `&select=id,promo_active,promo_rule_type,promo_target_type,promo_target_id,promo_fixed_price`,
-        {
-          headers: headers()
-        }
+        `${SUPABASE_REST}/businesses?id=eq.${encodeURIComponent(id)}` +
+        `&select=id,promo_active,promo_badge,promo_title,promo_text,` +
+        `promo_rule_type,promo_target_type,promo_target_id,promo_fixed_price`,
+        { headers: headers() }
       );
 
       const text = await response.text();
+
       if (!response.ok) {
         throw new Error(text || `Error ${response.status}`);
       }
 
       const rows = text.trim() ? JSON.parse(text) : [];
       const row = Array.isArray(rows) ? rows[0] : null;
-      if (!row) return;
 
-      if (row.promo_rule_type === FIXED_TYPE) {
-        const type = el("dailyPromoRuleType");
-        const targetType = el("promoTargetType");
+      if (!row) return null;
 
-        if (type) type.value = FIXED_TYPE;
-
-        if (targetType) {
-          targetType.value = "product";
-          targetType.dispatchEvent(
-            new Event("change", { bubbles: true })
-          );
+      try {
+        if (
+          typeof selectedBusiness !== "undefined" &&
+          selectedBusiness
+        ) {
+          Object.assign(selectedBusiness, row);
         }
+      } catch (_) {}
 
-        window.setTimeout(() => {
-          const target = el("promoTargetId");
-          const price = el("promoFixedPrice");
-
-          if (target && row.promo_target_id != null) {
-            target.value = String(row.promo_target_id);
-          }
-
-          if (price && row.promo_fixed_price != null) {
-            price.value = String(row.promo_fixed_price);
-          }
-
-          updateFixedUI();
-        }, 180);
-      }
-    } catch (error) {
-      console.error("DENEXA - cargar precio especial:", error);
+      return row;
     } finally {
-      loading = false;
+      loadingConfig = false;
     }
   }
 
-  async function saveFixedPromo(event) {
+  async function loadFixedConfigIntoForm() {
+    if (!ensureOption()) return;
+
+    try {
+      const row = await readSavedConfig();
+      if (!row) return;
+
+      if (row.promo_rule_type !== FIXED_TYPE) {
+        updateFixedUI();
+        return;
+      }
+
+      const type = el("dailyPromoRuleType");
+      const targetType = el("promoTargetType");
+
+      if (type) type.value = FIXED_TYPE;
+
+      if (targetType) {
+        targetType.value = "product";
+
+        try {
+          if (typeof refreshPromoTargetOptions === "function") {
+            refreshPromoTargetOptions();
+          } else {
+            targetType.dispatchEvent(
+              new Event("change", { bubbles: true })
+            );
+          }
+        } catch (_) {}
+      }
+
+      window.setTimeout(() => {
+        const target = el("promoTargetId");
+        const price = el("promoFixedPrice");
+
+        if (target && row.promo_target_id != null) {
+          target.value = String(row.promo_target_id);
+        }
+
+        if (price && row.promo_fixed_price != null) {
+          price.value = String(row.promo_fixed_price);
+        }
+
+        updateFixedUI();
+      }, 80);
+    } catch (error) {
+      console.error(
+        "DENEXA - error cargando Precio especial:",
+        error
+      );
+    }
+  }
+
+  async function saveFixedPromo(activeOverride = null) {
+    if (saving) return;
+
+    const id = businessId();
     const type = el("dailyPromoRuleType");
-    if (!type || type.value !== FIXED_TYPE) return;
 
-    event?.preventDefault?.();
-    event?.stopPropagation?.();
-    event?.stopImmediatePropagation?.();
-
-    const businessId = merchantBusinessId();
-    const productId = Number(el("promoTargetId")?.value || 0);
-    const fixedInput = el("promoFixedPrice");
-    const fixedPrice = Number(fixedInput?.value);
-
-    const message = el("dailyPromoMessage");
-    const button = el("saveDailyPromoButton");
-
-    if (!businessId) {
-      if (message) message.textContent = "No se pudo identificar el comercio.";
+    if (!id || !type || type.value !== FIXED_TYPE) {
       return;
     }
+
+    forceProductTarget();
+
+    const productId =
+      Number(el("promoTargetId")?.value || 0);
+
+    const priceInput =
+      el("promoFixedPrice");
+
+    const fixedPrice =
+      Number(priceInput?.value);
+
+    const active =
+      activeOverride === null
+        ? el("dailyPromoActive")?.checked === true
+        : Boolean(activeOverride);
 
     if (!productId) {
-      if (message) message.textContent = "Elegí el producto que va a quedar en oferta.";
+      setMessage(
+        "Elegí el producto que va a quedar en oferta."
+      );
       return;
     }
 
-    if (!fixedInput || fixedInput.value === "" || !Number.isFinite(fixedPrice) || fixedPrice < 0) {
-      if (message) message.textContent = "Escribí un precio especial válido.";
+    if (
+      !priceInput ||
+      priceInput.value === "" ||
+      !Number.isFinite(fixedPrice) ||
+      fixedPrice < 0
+    ) {
+      setMessage(
+        "Escribí un precio especial válido."
+      );
       return;
     }
 
-    const payload = {
-      promo_active: el("dailyPromoActive")?.checked === true,
-      promo_badge: el("dailyPromoBadge")?.value?.trim() || "PROMO DEL DÍA",
-      promo_title: el("dailyPromoTitle")?.value?.trim() || "Precio especial",
-      promo_text: el("dailyPromoText")?.value?.trim() || "",
-      promo_rule_type: FIXED_TYPE,
-      promo_target_type: "product",
-      promo_target_id: productId,
-      promo_fixed_price: fixedPrice
-    };
+    const title =
+      el("dailyPromoTitle")?.value?.trim() || "";
 
-    if (button) {
-      button.disabled = true;
-      button.textContent = "Guardando...";
+    const promoText =
+      el("dailyPromoText")?.value?.trim() || "";
+
+    if (active && (!title || !promoText)) {
+      setMessage(
+        "Para activar la promo, completá el título y la promoción."
+      );
+      return;
     }
 
-    if (message) {
-      message.textContent = "Guardando precio especial...";
+    const saveButton =
+      el("saveDailyPromoButton");
+
+    const disableButton =
+      el("disableDailyPromoButton");
+
+    saving = true;
+
+    if (saveButton) {
+      saveButton.disabled = true;
+      saveButton.textContent = "Guardando...";
     }
+
+    if (disableButton) {
+      disableButton.disabled = true;
+    }
+
+    setMessage("Guardando precio especial...");
 
     try {
       const response = await fetch(
-        `${SUPABASE_REST}/businesses?id=eq.${businessId}`,
+        `${SUPABASE_REST}/rpc/set_business_fixed_price_promo`,
         {
-          method: "PATCH",
+          method: "POST",
           headers: headers({
             Prefer: "return=representation"
           }),
-          body: JSON.stringify(payload)
+          body: JSON.stringify({
+            p_business_id: id,
+            p_active: active,
+            p_badge:
+              el("dailyPromoBadge")?.value?.trim() ||
+              "PROMO DEL DÍA",
+            p_title: title || null,
+            p_text: promoText || null,
+            p_product_id: productId,
+            p_fixed_price: fixedPrice
+          })
         }
       );
 
       const text = await response.text();
 
       if (!response.ok) {
-        throw new Error(text || `Error ${response.status}`);
+        throw new Error(
+          text || `Error ${response.status}`
+        );
+      }
+
+      let saved = null;
+
+      try {
+        const parsed =
+          text.trim()
+            ? JSON.parse(text)
+            : null;
+
+        saved =
+          Array.isArray(parsed)
+            ? parsed[0] || null
+            : parsed;
+      } catch (_) {}
+
+      if (!saved?.id) {
+        throw new Error(
+          "Supabase no confirmó la promoción guardada."
+        );
       }
 
       try {
@@ -311,90 +443,231 @@
           typeof selectedBusiness !== "undefined" &&
           selectedBusiness
         ) {
-          Object.assign(selectedBusiness, payload);
+          Object.assign(selectedBusiness, saved);
         }
       } catch (_) {}
 
-      if (message) {
-        message.textContent =
-          payload.promo_active
-            ? "Precio especial activado correctamente."
-            : "Precio especial guardado. Activá la promo para mostrarlo.";
+      if (el("dailyPromoActive")) {
+        el("dailyPromoActive").checked =
+          saved.promo_active === true;
+      }
+
+      if (el("dailyPromoRuleType")) {
+        el("dailyPromoRuleType").value =
+          FIXED_TYPE;
+      }
+
+      if (el("promoTargetType")) {
+        el("promoTargetType").value =
+          "product";
+      }
+
+      if (el("promoTargetId")) {
+        el("promoTargetId").value =
+          String(saved.promo_target_id || productId);
+      }
+
+      if (el("promoFixedPrice")) {
+        el("promoFixedPrice").value =
+          String(
+            saved.promo_fixed_price ?? fixedPrice
+          );
       }
 
       try {
-        if (typeof showToast === "function") {
-          showToast("Promo guardada");
+        if (typeof updateDailyPromoUI === "function") {
+          updateDailyPromoUI();
         }
       } catch (_) {}
 
-      updateExample();
-    } catch (error) {
-      console.error("DENEXA - guardar precio especial:", error);
+      updateFixedUI();
 
-      if (message) {
-        message.textContent =
-          "No se pudo guardar. Verificá que el SQL de Precio especial esté instalado.";
-      }
+      setMessage(
+        saved.promo_active
+          ? "Precio especial activado correctamente."
+          : "Precio especial guardado y desactivado."
+      );
+
+      try {
+        if (typeof showToast === "function") {
+          showToast(
+            saved.promo_active
+              ? "Precio especial activado."
+              : "Promo desactivada.",
+            "success"
+          );
+        }
+      } catch (_) {}
+    } catch (error) {
+      console.error(
+        "DENEXA - error guardando Precio especial:",
+        error
+      );
+
+      setMessage(
+        `No se pudo guardar: ${error.message || "error desconocido"}`
+      );
+
+      try {
+        if (typeof showToast === "function") {
+          showToast(
+            "No se pudo guardar la promo.",
+            "error"
+          );
+        }
+      } catch (_) {}
     } finally {
-      if (button) {
-        button.disabled = false;
-        button.textContent = "Guardar promo";
+      saving = false;
+
+      if (saveButton) {
+        saveButton.disabled = false;
+        saveButton.textContent = "Guardar promo";
+      }
+
+      if (disableButton) {
+        disableButton.disabled = false;
       }
     }
   }
 
-  function bind() {
-    if (installed) return;
-    if (!ensureOption()) return;
-
-    ensureFixedPriceField();
+  function installHandlers() {
+    if (installed) return true;
 
     const type = el("dailyPromoRuleType");
-    const target = el("promoTargetId");
-    const price = el("promoFixedPrice");
-    const save = el("saveDailyPromoButton");
+    const form = el("dailyPromoForm");
+    const disable = el("disableDailyPromoButton");
 
-    type?.addEventListener("change", () => {
-      updateFixedUI();
+    if (!type || !form) {
+      return false;
+    }
 
-      if (type.value === FIXED_TYPE) {
-        fetchPromoConfig();
-      }
-    });
+    ensureOption();
+    ensureField();
 
-    target?.addEventListener("change", updateExample);
-    price?.addEventListener("input", updateExample);
+    type.addEventListener(
+      "change",
+      () => {
+        updateFixedUI();
+
+        if (type.value === FIXED_TYPE) {
+          forceProductTarget();
+          loadFixedConfigIntoForm();
+        }
+      },
+      true
+    );
+
+    el("promoTargetId")
+      ?.addEventListener(
+        "change",
+        updateExample,
+        true
+      );
+
+    el("promoFixedPrice")
+      ?.addEventListener(
+        "input",
+        updateExample,
+        true
+      );
+
+    el("dailyPromoText")
+      ?.addEventListener(
+        "input",
+        updateExample,
+        true
+      );
 
     /*
-      Captura antes que comercio.js SOLO cuando el tipo es fixed_price.
-      Los otros 3 tipos siguen usando exactamente la lógica original.
+      Capturamos el SUBMIT del formulario antes de la lógica antigua.
+      Solo intervenimos cuando se eligió "Precio especial".
+      Los otros tipos de promo quedan exactamente como estaban.
     */
-    save?.addEventListener("click", saveFixedPromo, true);
+    form.addEventListener(
+      "submit",
+      (event) => {
+        if (
+          el("dailyPromoRuleType")?.value !==
+          FIXED_TYPE
+        ) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+
+        saveFixedPromo(null);
+      },
+      true
+    );
+
+    /*
+      Desactivar también usa el RPC nuevo si la promo actual es fixed_price.
+    */
+    disable?.addEventListener(
+      "click",
+      (event) => {
+        if (
+          el("dailyPromoRuleType")?.value !==
+          FIXED_TYPE
+        ) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+
+        if (el("dailyPromoActive")) {
+          el("dailyPromoActive").checked = false;
+        }
+
+        saveFixedPromo(false);
+      },
+      true
+    );
+
+    document.addEventListener(
+      "click",
+      (event) => {
+        const nav =
+          event.target.closest(
+            '[data-section="dailyPromo"]'
+          );
+
+        if (nav) {
+          window.setTimeout(
+            loadFixedConfigIntoForm,
+            120
+          );
+        }
+      },
+      true
+    );
 
     installed = true;
     updateFixedUI();
-    fetchPromoConfig();
+    loadFixedConfigIntoForm();
+
+    return true;
   }
 
   function bootstrap() {
-    const timer = setInterval(() => {
-      bind();
-
-      if (installed) {
-        clearInterval(timer);
-      }
-    }, 120);
-
-    document.addEventListener("click", (event) => {
-      const button = event.target.closest(
-        '[data-section="dailyPromo"]'
+    const timer =
+      window.setInterval(
+        () => {
+          if (installHandlers()) {
+            window.clearInterval(timer);
+          }
+        },
+        100
       );
 
-      if (button) {
-        window.setTimeout(fetchPromoConfig, 180);
-      }
-    }, true);
+    window.setTimeout(
+      () => window.clearInterval(timer),
+      15000
+    );
   }
 
   if (document.readyState === "loading") {
