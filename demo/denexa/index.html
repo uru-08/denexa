@@ -1,142 +1,210 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#06274a">
-  <title>DENEXA â€“ Pedidos Online ðŸ‡ºðŸ‡¾</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#04111f">
+<title>DENEXA - Pedidos Online</title>
+<link rel="stylesheet" href="styles.css?v=update02">
 </head>
 <body>
-  <div class="app-shell">
 
-    <header class="hero">
-      <div class="topbar">
-        <button class="circle-btn" aria-label="MenÃº">â˜°</button>
+<div class="demo-bar">
+  <b>DENEXA &#127482;&#127486;</b>
+  <span>DEMO COMERCIAL - MENU ONLINE</span>
+</div>
 
-        <div class="brand">
-          <img src="assets/denexa-logo.png" alt="DENEXA">
-          <div class="brand-subtitle">PLATAFORMA DE PEDIDOS ONLINE PARA COMERCIOS</div>
-        </div>
+<main>
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
 
-        <button class="circle-btn cart-button" id="openCart" aria-label="Carrito">
-          ðŸ›’
-          <span class="cart-count" id="cartCount">0</span>
-        </button>
+    <div class="hero-top">
+      <button class="icon-btn" aria-label="Menu">MENU</button>
+
+      <div class="hero-brand">
+        <img src="assets/denexa-logo.png" alt="DENEXA">
+        <span>PLATAFORMA DE PEDIDOS ONLINE PARA COMERCIOS</span>
       </div>
 
-      <div class="hero-main">
-        <div class="hero-copy">
-          <h1>Tu comida <span>favorita</span><br>mÃ¡s cerca</h1>
-          <p class="hero-text">PedÃ­ fÃ¡cil, rÃ¡pido y desde tu celular.</p>
-        </div>
+      <button class="icon-btn cart-top" id="cartTop" aria-label="Carrito">
+        CART
+        <em id="cartBadge">0</em>
+      </button>
+    </div>
 
-        <div class="hero-note">
-          Buenas comidas<br>Grandes momentos
-          <span></span>
-        </div>
+    <div class="hero-content">
+      <div class="hero-copy">
+        <small>COMER BIEN, PEDIR FACIL</small>
+        <h1>Tu comida <strong>favorita</strong><br>mas cerca</h1>
+        <p>Una experiencia de pedido moderna, rapida y pensada para vender mas.</p>
 
-        <div class="hero-food" aria-hidden="true"></div>
-
-        <div class="quick-benefits">
-          <div><b>âœ“</b><span>PEDIDO<br>RÃPIDO</span></div>
-          <div><b>â—‡</b><span>SEGURO<br>Y SIMPLE</span></div>
-          <div><b>â™¡</b><span>COMER<br>SIN LÃMITES</span></div>
+        <div class="hero-stamps">
+          <span><b>01</b>PEDIDO RAPIDO</span>
+          <span><b>02</b>SEGURO Y SIMPLE</span>
+          <span><b>03</b>TODO EN UN LUGAR</span>
         </div>
       </div>
 
-      <div class="service-selector">
-        <button class="service-card delivery" data-mode="Delivery">
-          <span class="service-icon">ðŸ›µ</span>
-          <span><strong>Delivery</strong><small>Te lo llevamos</small></span>
-          <b>â€º</b>
-        </button>
-
-        <button class="service-card pickup" data-mode="Retiro en local">
-          <span class="service-icon">ðŸª</span>
-          <span><strong>Retiro en local</strong><small>PasÃ¡s y retirÃ¡s</small></span>
-          <b>â€º</b>
-        </button>
+      <div class="hero-food-card">
+        <div class="food-photo"></div>
+        <div class="food-badge">SABOR<br>QUE VENDE</div>
       </div>
-    </header>
+    </div>
 
-    <main>
-      <section class="menu-section" id="menuSection">
-        <div class="section-heading">
-          <h2>NUESTRO <span>MENÃš</span></h2>
-          <p>Distintos sabores,<br>un mismo lugar â™¡</p>
-        </div>
+    <div class="mode-strip">
+      <button class="mode-card active" data-mode="Delivery">
+        <span class="mode-icon">D</span>
+        <span><b>Delivery</b><small>Te lo llevamos</small></span>
+        <i>&gt;</i>
+      </button>
 
-        <div class="category-grid" id="categoryGrid"></div>
-      </section>
+      <button class="mode-card light" data-mode="Retiro">
+        <span class="mode-icon">R</span>
+        <span><b>Retiro en local</b><small>Pedi y pasa a buscar</small></span>
+        <i>&gt;</i>
+      </button>
+    </div>
+  </section>
 
-      <section class="trust-strip">
-        <article><b>â˜†</b><span>CALIDAD EN CADA PEDIDO</span></article>
-        <article><b>ðŸ‘¥</b><span>COMERCIOS LOCALES</span></article>
-        <article><b>â™¡</b><span>CLIENTES MÃS FELICES</span></article>
-        <article><b>â–¥</b><span>TU NEGOCIO CRECE</span></article>
-      </section>
+  <section class="section categories-section" id="categoriesSection">
+    <div class="section-head">
+      <div>
+        <small>DESCUBRI</small>
+        <h2>Nuestro <span>menu</span></h2>
+      </div>
+      <p>Distintos sabores.<br>Un mismo lugar.</p>
+    </div>
+    <div id="categories" class="categories"></div>
+  </section>
 
-      <footer class="brand-footer">
-        <div class="footer-branding">
-          <small>Powered by</small>
-          <div class="footer-logo-row">
-            <img src="assets/denexa-logo.png" alt="DENEXA">
-            <span>ðŸ‡ºðŸ‡¾</span>
-          </div>
-          <p>DENEXA â€“ PEDIDOS ONLINE Â· PLATAFORMA PARA COMERCIOS</p>
-        </div>
-        <div class="local-message">Apoyando<br>lo local â™¥</div>
-      </footer>
-    </main>
+  <section class="promo-banner">
+    <div>
+      <small>OFERTA DESTACADA</small>
+      <h3>Promo del dia</h3>
+      <p>Una seccion pensada para impulsar ventas todos los dias.</p>
+    </div>
+    <button id="promoJump">VER PROMO</button>
+  </section>
 
-    <nav class="bottom-nav">
-      <button class="active" id="goHome"><b>âŒ‚</b><span>Inicio</span></button>
-      <button id="goMenu"><b>âŒ•</b><span>Buscar</span></button>
-      <button id="navCart"><b>ðŸ›’</b><span>Mi pedido</span></button>
-      <button id="goPromo"><b>ðŸ·</b><span>Promos</span></button>
-      <button><b>â—</b><span>Mi cuenta</span></button>
-    </nav>
+  <section class="section catalog-section" id="catalogSection">
+    <div class="section-head catalog-head">
+      <div>
+        <small>ELEGI Y AGREGA</small>
+        <h2 id="catalogTitle">Destacados</h2>
+      </div>
+      <button id="backCategories">CATEGORIAS</button>
+    </div>
+    <div id="products" class="products"></div>
+  </section>
+
+  <section class="benefits">
+    <article>
+      <b>01</b>
+      <div><strong>Pedi facil y rapido</strong><small>En pocos pasos</small></div>
+    </article>
+    <article>
+      <b>02</b>
+      <div><strong>Pago simple</strong><small>Efectivo o transferencia</small></div>
+    </article>
+    <article>
+      <b>03</b>
+      <div><strong>Delivery o retiro</strong><small>Vos elegis</small></div>
+    </article>
+  </section>
+
+  <section class="brand-close">
+    <div class="shine"></div>
+    <small>POWERED BY</small>
+    <div class="brand-close-row">
+      <img src="assets/denexa-logo.png" alt="DENEXA">
+      <span>&#127482;&#127486;</span>
+    </div>
+    <h3>Conectamos comercios con personas.</h3>
+  </section>
+</main>
+
+<footer class="footer">
+  <span>DENEXA - PEDIDOS ONLINE</span>
+  <b>Hecho para comercios locales</b>
+</footer>
+
+<nav class="bottom-nav">
+  <button id="navHome" class="active">INICIO</button>
+  <button id="navCategories">CATEGORIAS</button>
+  <button id="navCart">MI PEDIDO<em id="navBadge">0</em></button>
+</nav>
+
+<button class="floating-cart" id="floatingCart">
+  <span><b id="floatingCount">0</b> PRODUCTOS</span>
+  <strong id="floatingTotal">$ 0</strong>
+</button>
+
+<div class="modal" id="cartModal">
+  <div class="sheet">
+    <button class="close">X</button>
+    <small>DEMO DENEXA</small>
+    <h3>Mi pedido</h3>
+    <div id="cartItems"></div>
+    <div class="cart-total"><span>Total</span><b id="cartTotal">$ 0</b></div>
+    <button class="primary" id="checkout">Finalizar pedido</button>
   </div>
+</div>
 
-  <div class="toast" id="toast"></div>
+<div class="modal" id="checkoutModal">
+  <div class="sheet">
+    <button class="close">X</button>
+    <small>PEDIDO DE PRUEBA</small>
+    <h3>Como queres recibirlo?</h3>
 
-  <div class="category-overlay" id="categoryOverlay">
-    <section class="category-panel">
-      <div class="panel-head">
-        <div>
-          <small>CATEGORÃA</small>
-          <h3 id="categoryTitle">Productos</h3>
-        </div>
-        <button class="panel-close" id="closeCategory">âœ•</button>
-      </div>
-      <div class="products-grid" id="productsGrid"></div>
-    </section>
+    <div class="mode-grid">
+      <button class="checkout-mode active" data-checkout-mode="Delivery">
+        <span>D</span>
+        <div><b>Delivery</b><small>Te lo llevamos</small></div>
+      </button>
+      <button class="checkout-mode" data-checkout-mode="Retiro">
+        <span>R</span>
+        <div><b>Retiro</b><small>Pasa a buscar</small></div>
+      </button>
+    </div>
+
+    <label>Nombre
+      <input id="name" placeholder="Tu nombre">
+    </label>
+
+    <label>Telefono
+      <input placeholder="099 123 456">
+    </label>
+
+    <label id="addressField">Direccion
+      <input placeholder="Calle y numero">
+    </label>
+
+    <label>Forma de pago
+      <select>
+        <option>Efectivo</option>
+        <option>Transferencia</option>
+      </select>
+    </label>
+
+    <label>Observaciones
+      <textarea placeholder="Ej: sin cebolla..."></textarea>
+    </label>
+
+    <div class="warning"><b>Pedido DEMO.</b> No se envia al comercio ni se registra.</div>
+    <button class="primary" id="finish">Simular pedido</button>
   </div>
+</div>
 
-  <div class="cart-overlay" id="cartOverlay">
-    <section class="cart-panel">
-      <div class="panel-head">
-        <div>
-          <small>MI PEDIDO</small>
-          <h3>Tu carrito</h3>
-        </div>
-        <button class="panel-close" id="closeCart">âœ•</button>
-      </div>
-
-      <div id="cartItems"></div>
-
-      <div class="cart-total">
-        <span>Total</span>
-        <strong id="cartTotal">$0</strong>
-      </div>
-
-      <button class="primary-button" id="checkoutButton">Continuar pedido</button>
-      <button class="secondary-button" id="keepShopping">Seguir comprando</button>
-    </section>
+<div class="modal" id="successModal">
+  <div class="sheet success">
+    <div class="ok">OK</div>
+    <h3>Pedido demo completado</h3>
+    <p>Asi seria pedir con DENEXA.</p>
+    <button class="primary" id="restart">Volver al inicio</button>
   </div>
+</div>
 
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
