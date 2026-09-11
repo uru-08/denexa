@@ -1,176 +1,184 @@
-const state = {
-  cart: [],
-  selectedMode: "",
-  currentCategory: ""
-};
+let cat=null;
+let mode='Delivery';
+const cart=new Map();
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const money=n=>'$ '+n.toLocaleString('es-UY');
 
-const categoryGrid = document.getElementById("categoryGrid");
-const productsGrid = document.getElementById("productsGrid");
-const categoryOverlay = document.getElementById("categoryOverlay");
-const categoryTitle = document.getElementById("categoryTitle");
-const cartOverlay = document.getElementById("cartOverlay");
-const cartItems = document.getElementById("cartItems");
-const cartTotal = document.getElementById("cartTotal");
-const cartCount = document.getElementById("cartCount");
-const toastEl = document.getElementById("toast");
+function renderCats(){
+  $('#categories').innerHTML=DENEXA_DATA.categories.map(c=>`
+    <button class="cat ${cat===c.name?'active':''}" data-cat="${c.name}">
+      <img src="${c.img}" alt="${c.name}">
+      <span>${c.name}</span>
+    </button>
+  `).join('');
 
-function renderCategories(){
-  categoryGrid.innerHTML = "";
-
-  DENEXA_DATA.categories.forEach(category=>{
-    const button = document.createElement("button");
-    button.className = `category-card${category.promo ? " promo" : ""}`;
-
-    button.innerHTML = `
-      <img src="${category.image}" alt="${category.name}" loading="lazy">
-      <div class="category-footer">
-        <span class="category-name">${category.name.toUpperCase()}</span>
-        <span class="category-arrow">›</span>
-      </div>
-    `;
-
-    button.addEventListener("click",()=>openCategory(category.name));
-    categoryGrid.appendChild(button);
+  $$('.cat').forEach(b=>{
+    b.onclick=()=>{
+      cat=b.dataset.cat;
+      renderCats();
+      renderProducts();
+      $('#catalogSection').scrollIntoView({behavior:'smooth'});
+    };
   });
 }
 
-function openCategory(categoryName){
-  state.currentCategory = categoryName;
-  categoryTitle.textContent = categoryName;
-  productsGrid.innerHTML = "";
+function visibleProducts(){
+  return cat
+    ? DENEXA_DATA.products.filter(p=>p.c===cat)
+    : DENEXA_DATA.products.slice(0,4);
+}
 
-  const products = DENEXA_DATA.products.filter(
-    product => product.category === categoryName
-  );
+function renderProducts(){
+  const list=visibleProducts();
+  $('#catalogTitle').textContent=cat?cat:'Destacados';
 
-  if(products.length === 0){
-    productsGrid.innerHTML = `<p style="grid-column:1/-1;color:#647c91">Todavía no hay productos cargados en esta categoría.</p>`;
-  }
+  $('#products').innerHTML=list.map(p=>`
+    <article class="product">
+      <div class="prod-img"><img src="${p.img}" alt="${p.n}"></div>
+      <div class="prod-body">
+        <h3>${p.n}</h3>
+        <p>${p.d}</p>
+        <div class="price">${money(p.p)}</div>
+        <div class="qty">
+          <button data-m="${p.id}">-</button>
+          <span>${cart.get(p.id)||0}</span>
+          <button data-p="${p.id}">+</button>
+        </div>
+      </div>
+    </article>
+  `).join('');
 
-  products.forEach(product=>{
-    const card = document.createElement("article");
-    card.className = "product-card";
+  $$('[data-p]').forEach(b=>b.onclick=()=>changeQty(+b.dataset.p,1));
+  $$('[data-m]').forEach(b=>b.onclick=()=>changeQty(+b.dataset.m,-1));
+}
 
-    card.innerHTML = `
-      <img src="${product.image}" alt="${product.name}" loading="lazy">
-      <div class="product-info">
-        <h4>${product.name}</h4>
-        <p>${product.description}</p>
-        <div class="product-bottom">
-          <span class="product-price">$${product.price}</span>
-          <button class="add-button" aria-label="Agregar ${product.name}">+</button>
+function changeQty(id,delta){
+  const qty=Math.max(0,(cart.get(id)||0)+delta);
+  qty?cart.set(id,qty):cart.delete(id);
+  renderProducts();
+  updateCartUi();
+}
+
+function totals(){
+  let count=0,total=0;
+  cart.forEach((qty,id)=>{
+    const p=DENEXA_DATA.products.find(x=>x.id===id);
+    count+=qty;
+    total+=qty*p.p;
+  });
+  return [count,total];
+}
+
+function updateCartUi(){
+  const [count,total]=totals();
+  if($('#cartBadge')) $('#cartBadge').textContent=count;
+  if($('#navBadge')) $('#navBadge').textContent=count;
+  if($('#floatingCount')) $('#floatingCount').textContent=count;
+  if($('#floatingTotal')) $('#floatingTotal').textContent=money(total);
+  if($('#floatingCart')) $('#floatingCart').classList.toggle('show',count>0);
+}
+
+function openModal(id){
+  $(id).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModals(){
+  $$('.modal').forEach(m=>m.classList.remove('open'));
+  document.body.style.overflow='';
+}
+
+function renderCart(){
+  let html='';
+  cart.forEach((qty,id)=>{
+    const p=DENEXA_DATA.products.find(x=>x.id===id);
+    html+=`
+      <div class="cart-row">
+        <div>
+          <b>${p.n}</b>
+          <p>${p.d}</p>
+          <strong>${money(p.p*qty)}</strong>
+        </div>
+        <div class="controls">
+          <button data-cm="${id}">-</button>
+          <b>${qty}</b>
+          <button data-cp="${id}">+</button>
         </div>
       </div>
     `;
-
-    card.querySelector(".add-button").addEventListener("click",()=>{
-      addToCart(product);
-    });
-
-    productsGrid.appendChild(card);
   });
 
-  categoryOverlay.classList.add("open");
-}
+  $('#cartItems').innerHTML=html||'<p>Tu pedido esta vacio.</p>';
+  $('#cartTotal').textContent=money(totals()[1]);
 
-function addToCart(product){
-  state.cart.push(product);
-  updateCart();
-  showToast(`${product.name} agregado`);
-}
-
-function updateCart(){
-  cartCount.textContent = state.cart.length;
-  cartItems.innerHTML = "";
-
-  if(state.cart.length === 0){
-    cartItems.innerHTML = `<p style="color:#647c91;font-size:12px">Tu carrito está vacío.</p>`;
-  }
-
-  state.cart.forEach(product=>{
-    const row = document.createElement("div");
-    row.className = "cart-row";
-    row.innerHTML = `<span>${product.name}</span><strong>$${product.price}</strong>`;
-    cartItems.appendChild(row);
-  });
-
-  const total = state.cart.reduce((sum,product)=>sum+product.price,0);
-  cartTotal.textContent = `$${total}`;
-}
-
-function showToast(message){
-  toastEl.textContent = message;
-  toastEl.classList.add("show");
-  clearTimeout(window.denexaToast);
-  window.denexaToast = setTimeout(()=>toastEl.classList.remove("show"),1600);
+  $$('[data-cp]').forEach(b=>b.onclick=()=>{changeQty(+b.dataset.cp,1);renderCart();});
+  $$('[data-cm]').forEach(b=>b.onclick=()=>{changeQty(+b.dataset.cm,-1);renderCart();});
 }
 
 function openCart(){
-  updateCart();
-  cartOverlay.classList.add("open");
+  renderCart();
+  openModal('#cartModal');
 }
 
-function closeCart(){
-  cartOverlay.classList.remove("open");
-}
+if($('#cartTop')) $('#cartTop').onclick=openCart;
+if($('#navCart')) $('#navCart').onclick=openCart;
+if($('#floatingCart')) $('#floatingCart').onclick=openCart;
 
-document.querySelectorAll("[data-mode]").forEach(button=>{
-  button.addEventListener("click",()=>{
-    document.querySelectorAll("[data-mode]").forEach(item=>item.classList.remove("selected"));
-    button.classList.add("selected");
-    state.selectedMode = button.dataset.mode;
-    showToast(`Modalidad: ${state.selectedMode}`);
-  });
+$('#navHome').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+$('#navCategories').onclick=()=>$('#categoriesSection').scrollIntoView({behavior:'smooth'});
+$('#backCategories').onclick=()=>$('#categoriesSection').scrollIntoView({behavior:'smooth'});
+$('#promoJump').onclick=()=>{
+  cat='Promo del dia';
+  renderCats();
+  renderProducts();
+  $('#catalogSection').scrollIntoView({behavior:'smooth'});
+};
+
+$$('.close').forEach(b=>b.onclick=closeModals);
+$$('.modal').forEach(m=>m.onclick=e=>{if(e.target===m)closeModals();});
+
+$$('[data-mode]').forEach(b=>{
+  b.onclick=()=>{
+    mode=b.dataset.mode;
+    $$('[data-mode]').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));
+  };
 });
 
-document.getElementById("openCart").addEventListener("click",openCart);
-document.getElementById("navCart").addEventListener("click",openCart);
-document.getElementById("closeCart").addEventListener("click",closeCart);
-document.getElementById("keepShopping").addEventListener("click",closeCart);
+$('#checkout').onclick=()=>{
+  if(!cart.size)return;
+  closeModals();
+  openModal('#checkoutModal');
+};
 
-document.getElementById("closeCategory").addEventListener("click",()=>{
-  categoryOverlay.classList.remove("open");
+$$('[data-checkout-mode]').forEach(b=>{
+  b.onclick=()=>{
+    mode=b.dataset.checkoutMode;
+    $$('[data-checkout-mode]').forEach(x=>x.classList.toggle('active',x.dataset.checkoutMode===mode));
+    $('#addressField').style.display=mode==='Delivery'?'block':'none';
+  };
 });
 
-categoryOverlay.addEventListener("click",event=>{
-  if(event.target === categoryOverlay){
-    categoryOverlay.classList.remove("open");
-  }
-});
-
-cartOverlay.addEventListener("click",event=>{
-  if(event.target === cartOverlay){
-    closeCart();
-  }
-});
-
-document.getElementById("goHome").addEventListener("click",()=>{
-  window.scrollTo({top:0,behavior:"smooth"});
-});
-
-document.getElementById("goMenu").addEventListener("click",()=>{
-  document.getElementById("menuSection").scrollIntoView({behavior:"smooth"});
-});
-
-document.getElementById("goPromo").addEventListener("click",()=>{
-  openCategory("Promo del día");
-});
-
-document.getElementById("checkoutButton").addEventListener("click",()=>{
-  if(state.cart.length === 0){
-    showToast("Tu carrito está vacío");
+$('#finish').onclick=()=>{
+  if(!$('#name').value.trim()){
+    alert('Escribi un nombre.');
     return;
   }
+  closeModals();
+  openModal('#successModal');
+};
 
-  if(!state.selectedMode){
-    closeCart();
-    showToast("Elegí Delivery o Retiro en local");
-    return;
-  }
+$('#restart').onclick=()=>{
+  cart.clear();
+  cat=null;
+  mode='Delivery';
+  updateCartUi();
+  renderCats();
+  renderProducts();
+  closeModals();
+  window.scrollTo({top:0,behavior:'smooth'});
+};
 
-  closeCart();
-  showToast("Siguiente paso: datos del cliente");
-});
-
-renderCategories();
-updateCart();
+renderCats();
+renderProducts();
+updateCartUi();
