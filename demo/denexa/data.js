@@ -6,99 +6,45 @@ const DENEXA_DATA = {
   },
 
   categories: [
-    {
-      name: "Hamburguesas",
-      image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=88"
-    },
-    {
-      name: "Pizzas",
-      image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=88"
-    },
-    {
-      name: "Empanadas",
-      image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=500&q=88"
-    },
-    {
-      name: "Milanesas",
-      image: "https://images.unsplash.com/photo-1562967916-eb82221dfb36?auto=format&fit=crop&w=500&q=88"
-    },
-    {
-      name: "Chivitos",
-      image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=88"
-    },
-    {
-      name: "Picadas",
-      image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=500&q=88"
-    },
-    {
-      name: "Ensaladas",
-      image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=500&q=88"
-    },
-    {
-      name: "Bebidas",
-      image: "https://images.unsplash.com/photo-1581636625402-29b2a704ef13?auto=format&fit=crop&w=500&q=88"
-    },
-    {
-      name: "Postres",
-      image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=500&q=88"
-    },
-    {
-      name: "Cafetería",
-      image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=500&q=88"
-    },
-    {
-      name: "Extras",
-      image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=500&q=88"
-    },
-    {
-      name: "Promo del día",
-      image: "https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=500&q=88",
-      promo: true
-    }
+    { name:"Hamburguesas", image:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=88" },
+    { name:"Pizzas", image:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=88" },
+    { name:"Empanadas", image:"https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=500&q=88" },
+    { name:"Milanesas", image:"https://images.unsplash.com/photo-1562967916-eb82221dfb36?auto=format&fit=crop&w=500&q=88" },
+    { name:"Chivitos", image:"https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=88" },
+    { name:"Picadas", image:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=500&q=88" },
+    { name:"Ensaladas", image:"https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=500&q=88" },
+    { name:"Bebidas", image:"https://images.unsplash.com/photo-1581636625402-29b2a704ef13?auto=format&fit=crop&w=500&q=88" },
+    { name:"Postres", image:"https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=500&q=88" },
+    { name:"Cafetería", image:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=500&q=88" },
+    { name:"Extras", image:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=500&q=88" },
+    { name:"Promo del día", image:"https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=500&q=88", promo:true }
   ],
 
   products: [
-    {
-      name: "Hamburguesa completa",
-      description: "Carne, cheddar, bacon, lechuga y tomate.",
-      price: 390,
-      category: "Hamburguesas",
-      image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=88"
-    },
-    {
-      name: "Pizza muzzarella",
-      description: "Salsa de tomate, muzzarella y orégano.",
-      price: 420,
-      category: "Pizzas",
-      image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=88"
-    },
-    {
-      name: "Chivito completo",
-      description: "Carne, jamón, queso, huevo y vegetales.",
-      price: 520,
-      category: "Chivitos",
-      image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=88"
-    },
-    {
-      name: "Milanesa con papas",
-      description: "Milanesa crocante acompañada con papas.",
-      price: 470,
-      category: "Milanesas",
-      image: "https://images.unsplash.com/photo-1562967916-eb82221dfb36?auto=format&fit=crop&w=600&q=88"
-    },
-    {
-      name: "Empanadas x6",
-      description: "Seis empanadas surtidas a elección.",
-      price: 360,
-      category: "Empanadas",
-      image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=88"
-    },
-    {
-      name: "Picada para dos",
-      description: "Fiambres, quesos y acompañamientos.",
-      price: 650,
-      category: "Picadas",
-      image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=88"
-    }
+    { name:"Hamburguesa completa", description:"Carne, cheddar, bacon, lechuga y tomate.", price:390, category:"Hamburguesas", image:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=88" },
+    { name:"Hamburguesa doble", description:"Doble carne, doble cheddar y salsa de la casa.", price:460, category:"Hamburguesas", image:"https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=600&q=88" },
+
+    { name:"Pizza muzzarella", description:"Salsa de tomate, muzzarella y orégano.", price:420, category:"Pizzas", image:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=88" },
+    { name:"Pizza especial", description:"Muzzarella, jamón, morrón y aceitunas.", price:520, category:"Pizzas", image:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=88" },
+
+    { name:"Empanadas x6", description:"Seis empanadas surtidas a elección.", price:360, category:"Empanadas", image:"https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=88" },
+
+    { name:"Milanesa con papas", description:"Milanesa crocante acompañada con papas.", price:470, category:"Milanesas", image:"https://images.unsplash.com/photo-1562967916-eb82221dfb36?auto=format&fit=crop&w=600&q=88" },
+
+    { name:"Chivito completo", description:"Carne, jamón, queso, huevo y vegetales.", price:520, category:"Chivitos", image:"https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=88" },
+
+    { name:"Picada para dos", description:"Fiambres, quesos y acompañamientos.", price:650, category:"Picadas", image:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=88" },
+
+    { name:"Ensalada fresca", description:"Verdes, tomate, zanahoria y aderezo.", price:300, category:"Ensaladas", image:"https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=88" },
+
+    { name:"Refresco 600 ml", description:"Bebida fría a elección.", price:120, category:"Bebidas", image:"https://images.unsplash.com/photo-1581636625402-29b2a704ef13?auto=format&fit=crop&w=600&q=88" },
+
+    { name:"Brownie con helado", description:"Brownie tibio con helado y salsa de chocolate.", price:250, category:"Postres", image:"https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=600&q=88" },
+
+    { name:"Café especial", description:"Café cremoso recién preparado.", price:160, category:"Cafetería", image:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=88" },
+
+    { name:"Papas fritas", description:"Porción de papas crocantes.", price:180, category:"Extras", image:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=88" },
+
+    { name:"Promo DENEXA", description:"2 hamburguesas + papas + bebida.", price:790, category:"Promo del día", image:"https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=600&q=88" }
   ]
 };
