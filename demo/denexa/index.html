@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#06274a">
+  <title>DENEXA – Pedidos Online 🇺🇾</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+
+    <header class="hero">
+      <div class="topbar">
+        <button class="circle-btn" aria-label="Menú">☰</button>
+
+        <div class="brand">
+          <img src="assets/denexa-logo.png" alt="DENEXA">
+          <div class="brand-subtitle">Plataforma de pedidos online para comercios</div>
+        </div>
+
+        <button class="circle-btn cart-button" id="openCart" aria-label="Carrito">
+          🛒
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+
+      <div class="hero-main">
+        <div class="hero-copy">
+          <p class="eyebrow">Menú online</p>
+          <h1>Tu comida <span>favorita</span> más cerca</h1>
+          <p class="hero-text">Pedí fácil, rápido y desde tu celular.</p>
+        </div>
+
+        <div class="hero-note">
+          Buenas comidas<br>Grandes momentos
+          <span></span>
+        </div>
+
+        <div class="hero-food"></div>
+
+        <div class="quick-benefits">
+          <div>
+            <b>✓</b>
+            <span>Pedido rápido</span>
+          </div>
+          <div>
+            <b>◇</b>
+            <span>Seguro y simple</span>
+          </div>
+          <div>
+            <b>♡</b>
+            <span>Comer sin límites</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-selector">
+        <button class="service-card delivery" data-mode="Delivery">
+          <span class="service-icon">🛵</span>
+          <span>
+            <strong>Delivery</strong>
+            <small>Te lo llevamos</small>
+          </span>
+          <b>›</b>
+        </button>
+
+        <button class="service-card pickup" data-mode="Retiro en local">
+          <span class="service-icon">🏪</span>
+          <span>
+            <strong>Retiro en local</strong>
+            <small>Pasás y retirás</small>
+          </span>
+          <b>›</b>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="menu-section">
+        <div class="section-heading">
+          <h2>NUESTRO <span>MENÚ</span></h2>
+          <p>Distintos sabores,<br>un mismo lugar ♡</p>
+        </div>
+
+        <div class="category-grid" id="categoryGrid"></div>
+      </section>
+
+      <section class="products-section" id="productsSection">
+        <div class="section-row">
+          <h3>Productos destacados</h3>
+          <button class="link-button" id="showAllProducts">Ver todos</button>
+        </div>
+
+        <div class="products-grid" id="productsGrid"></div>
+      </section>
+
+      <section class="trust-strip">
+        <article>
+          <b>☆</b>
+          <span>Calidad en cada pedido</span>
+        </article>
+        <article>
+          <b>👥</b>
+          <span>Comercios locales</span>
+        </article>
+        <article>
+          <b>♡</b>
+          <span>Clientes más felices</span>
+        </article>
+        <article>
+          <b>▥</b>
+          <span>Tu negocio crece</span>
+        </article>
+      </section>
+
+      <footer class="brand-footer">
+        <div class="footer-branding">
+          <small>Powered by</small>
+          <div class="footer-logo-row">
+            <img src="assets/denexa-logo.png" alt="DENEXA">
+            <span>🇺🇾</span>
+          </div>
+          <p>DENEXA – Pedidos Online · Plataforma para comercios</p>
+        </div>
+        <div class="local-message">Apoyando<br>lo local ♥</div>
+      </footer>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="active"><b>⌂</b><span>Inicio</span></button>
+      <button id="goProducts"><b>⌕</b><span>Buscar</span></button>
+      <button id="navCart"><b>🛒</b><span>Mi pedido</span></button>
+      <button id="goPromo"><b>🏷</b><span>Promos</span></button>
+      <button><b>●</b><span>Mi cuenta</span></button>
+    </nav>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="cart-overlay" id="cartOverlay">
+    <section class="cart-panel">
+      <h3>Tu pedido</h3>
+      <div id="cartItems"></div>
+
+      <div class="cart-total">
+        <span>Total</span>
+        <strong id="cartTotal">$0</strong>
+      </div>
+
+      <button class="primary-button" id="checkoutButton">Continuar pedido</button>
+      <button class="secondary-button" id="closeCart">Seguir comprando</button>
+    </section>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
