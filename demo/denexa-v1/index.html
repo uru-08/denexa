@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>DENEXA · Demo comercial</title>
+<link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body>
+<div class="demo-bar"><b>DENEXA 🇺🇾</b><span>DEMO COMERCIAL · MENÚ ONLINE</span></div>
+
+<main>
+  <section class="hero approved">
+    <img src="assets/hero-approved.jpg" alt="DENEXA">
+  </section>
+
+  <section class="service-row">
+    <button class="service active" data-mode="Delivery"><strong>DELIVERY</strong><span>Te lo llevamos</span><i>›</i></button>
+    <button class="service" data-mode="Retiro"><strong>RETIRO EN LOCAL</strong><span>Vos elegís al finalizar</span><i>›</i></button>
+  </section>
+
+  <section class="section" id="categoriesSection">
+    <div class="section-head"><h2>CATEGORÍAS <span></span></h2><p>Elegí lo que querés comer</p></div>
+    <div id="categories" class="categories"></div>
+  </section>
+
+  <section class="promo-card" id="promoCard">
+    <img src="assets/promo-approved.jpg" alt="Promo del día">
+  </section>
+
+  <section class="section" id="catalogSection">
+    <div class="section-head"><h2 id="catalogTitle">DESTACADOS <span></span></h2><button id="backCategories">Categorías ›</button></div>
+    <div id="products" class="products"></div>
+  </section>
+
+  <footer class="footer">
+    <strong>DENEXA 🇺🇾</strong>
+    <span>PLATAFORMA DE PEDIDOS ONLINE</span>
+  </footer>
+</main>
+
+<nav class="bottom-nav">
+  <button id="navHome" class="active">⌂<span>Inicio</span></button>
+  <button id="navCategories">▦<span>Categorías</span></button>
+  <button id="navCart">🛒<span>Mi pedido</span><em id="navBadge">0</em></button>
+</nav>
+
+<button class="floating-cart" id="floatingCart">
+  <span><b id="floatingCount">0</b> productos</span>
+  <strong id="floatingTotal">$ 0</strong>
+</button>
+
+<div class="modal" id="cartModal">
+  <div class="sheet">
+    <button class="close">×</button>
+    <small>DEMO DENEXA</small>
+    <h3>Mi pedido</h3>
+    <div id="cartItems"></div>
+    <div class="cart-total"><span>Total</span><b id="cartTotal">$ 0</b></div>
+    <button class="primary" id="checkout">Finalizar pedido</button>
+  </div>
+</div>
+
+<div class="modal" id="checkoutModal">
+  <div class="sheet">
+    <button class="close">×</button>
+    <small>PEDIDO DE PRUEBA</small>
+    <h3>¿Cómo querés recibirlo?</h3>
+    <div class="mode-grid">
+      <button class="checkout-mode active" data-checkout-mode="Delivery">Delivery</button>
+      <button class="checkout-mode" data-checkout-mode="Retiro">Retiro</button>
+    </div>
+    <label>Nombre<input id="name" placeholder="Tu nombre"></label>
+    <label id="addressField">Dirección<input placeholder="Calle y número"></label>
+    <label>Forma de pago<select><option>Efectivo</option><option>Transferencia</option></select></label>
+    <div class="warning"><b>Pedido DEMO.</b> No se envía ni se registra.</div>
+    <button class="primary" id="finish">Simular pedido</button>
+  </div>
+</div>
+
+<div class="modal" id="successModal">
+  <div class="sheet success">
+    <div class="ok">✓</div>
+    <h3>¡Pedido demo completado!</h3>
+    <p>Así sería pedir con DENEXA.</p>
+    <button class="primary" id="restart">Volver al inicio</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
