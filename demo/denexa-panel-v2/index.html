@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000">
+<title>DENEXA · Panel Demo V2</title>
+<link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body>
+<header class="topbar">
+  <button id="menuToggle" class="menu-toggle">☰</button>
+  <div class="brand">DENE<span>X</span>A 🇺🇾<small>PANEL DEMO · ACCESO LIBRE</small></div>
+  <a href="../denexa-v1/" target="_blank" class="view-menu">Ver menú</a>
+</header>
+
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <div class="side-brand">DENE<span>X</span>A<small>Comercio Demo</small></div>
+  <nav>
+    <button class="nav active" data-view="inicio">⌂ Inicio</button>
+    <button class="nav" data-view="pedidos">▣ Pedidos <em>3</em></button>
+    <button class="nav" data-view="productos">◆ Productos</button>
+    <button class="nav" data-view="categorias">▦ Categorías</button>
+    <button class="nav" data-view="promos">★ Promos</button>
+    <button class="nav" data-view="config">⚙ Configuración</button>
+  </nav>
+  <a class="side-link" href="../denexa-v1/" target="_blank">↗ Ver mi menú</a>
+</aside>
+
+<main class="content">
+<section class="view active" id="view-inicio">
+  <section class="hero-panel">
+    <div class="hero-copy">
+      <small>PANEL DENEXA</small>
+      <h1>GESTIONÁ TU <span>COMERCIO</span></h1>
+      <p>Productos, categorías, promociones y pedidos desde un solo lugar.</p>
+      <div class="actions">
+        <button data-go="productos">+ Agregar producto</button>
+        <button data-go="promos">★ Crear promo</button>
+        <a href="../denexa-v1/" target="_blank">↗ Ver mi menú</a>
+      </div>
+    </div>
+    <div class="mascot">
+      <img src="assets/mascota-denexa-nueva.jpg" alt="Mascota DENEXA">
+      <div><b>Todo bajo control</b><span>Tu comercio, más simple.</span></div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <article><small>PEDIDOS HOY</small><strong>12</strong><span>3 pendientes</span></article>
+    <article><small>VENTAS DEMO</small><strong>$ 8.460</strong><span>Hoy</span></article>
+    <article><small>PRODUCTOS</small><strong>9</strong><span>Activos</span></article>
+    <article><small>PROMOS</small><strong>1</strong><span>Activa</span></article>
+  </section>
+
+  <section class="grid2">
+    <article class="card">
+      <header><div><small>ACTIVIDAD</small><h2>Pedidos recientes</h2></div><button data-go="pedidos">Ver todos ›</button></header>
+      <div class="order"><b>#1052 · Martina</b><span>$ 790</span><em>Pendiente</em></div>
+      <div class="order"><b>#1051 · Lucas</b><span>$ 520</span><em>Elaboración</em></div>
+      <div class="order"><b>#1050 · Sofía</b><span>$ 450</span><em>En camino</em></div>
+    </article>
+    <article class="card preview">
+      <header><div><small>VISTA RÁPIDA</small><h2>Tu menú</h2></div></header>
+      <img src="assets/hero-approved.jpg" alt="Vista previa">
+      <a href="../denexa-v1/" target="_blank">ABRIR MENÚ ONLINE</a>
+    </article>
+  </section>
+</section>
+
+<section class="view" id="view-pedidos">
+  <div class="page-head"><div><small>GESTIÓN</small><h1>Pedidos</h1></div></div>
+  <div class="filters">
+    <button class="active">Todos</button><button>Pendientes</button><button>En elaboración</button><button>En camino</button><button>Finalizados</button>
+  </div>
+  <div class="orders-list" id="ordersList">
+    <article><div><b>#1052 · Martina</b><span>2 hamburguesas + papas</span></div><strong>$ 790</strong><select><option>Pendiente</option><option>Elaboración</option><option>En camino</option><option>Finalizado</option></select></article>
+    <article><div><b>#1051 · Lucas</b><span>Chivito completo</span></div><strong>$ 520</strong><select><option>Elaboración</option><option>Pendiente</option><option>En camino</option><option>Finalizado</option></select></article>
+    <article><div><b>#1050 · Sofía</b><span>Pizza muzzarella</span></div><strong>$ 450</strong><select><option>En camino</option><option>Pendiente</option><option>Elaboración</option><option>Finalizado</option></select></article>
+  </div>
+</section>
+
+<section class="view" id="view-productos">
+  <div class="page-head"><div><small>CATÁLOGO</small><h1>Productos</h1></div><button class="gold" id="newProduct">+ NUEVO PRODUCTO</button></div>
+  <div class="toolbar"><input id="search" placeholder="Buscar producto..."><select id="catFilter"><option value="">Todas las categorías</option></select></div>
+  <div id="products" class="products"></div>
+</section>
+
+<section class="view" id="view-categorias">
+  <div class="page-head"><div><small>ORGANIZACIÓN</small><h1>Categorías</h1></div><button class="gold">+ NUEVA CATEGORÍA</button></div>
+  <div class="notice"><b>Orden del menú</b><span>Usá ↑ y ↓ para cambiar la posición en este demo.</span></div>
+  <div id="categories" class="categories-admin"></div>
+</section>
+
+<section class="view" id="view-promos">
+  <div class="page-head"><div><small>VENTAS</small><h1>Promociones</h1></div><button class="gold">+ NUEVA PROMO</button></div>
+  <article class="promo-card">
+    <img src="assets/promo-approved.jpg" alt="Promo">
+    <div><small>PROMO ACTIVA</small><h2>Promo del día</h2><p>2 hamburguesas + papas + bebida.</p><button class="gold">Editar promo</button></div>
+  </article>
+</section>
+
+<section class="view" id="view-config">
+  <div class="page-head"><div><small>COMERCIO</small><h1>Configuración</h1></div></div>
+  <div class="settings">
+    <label>Nombre del comercio<input value="Comercio Demo"></label>
+    <label>WhatsApp<input value="099 000 000"></label>
+    <label>Dirección<input value="Dirección de prueba"></label>
+    <label>Modalidad<select><option>Delivery y Retiro</option><option>Solo Delivery</option><option>Solo Retiro</option></select></label>
+    <button class="gold">Guardar cambios DEMO</button>
+  </div>
+</section>
+</main>
+</div>
+
+<div class="toast" id="toast">Cambio guardado en el demo</div>
+<script src="app.js?v=1"></script>
+</body>
+</html>
