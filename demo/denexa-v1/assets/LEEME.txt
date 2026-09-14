@@ -1,0 +1,1 @@
+Imágenes requeridas: hamburguesas.jpg, pizzas.jpg, empanadas.jpg, milanesas.jpg, chivitos.jpg, ensaladas.jpg, bebidas.jpg, postres.jpg. No se modifica ningún demo existente.
