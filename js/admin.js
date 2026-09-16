@@ -2729,4 +2729,12 @@ async function initAdmin() {
   await loadProducts();
 }
 
-initAdmin();
+if (window.denexaAdminAuthReady) {
+  window.denexaAdminAuthReady
+    .then(() => initAdmin())
+    .catch((error) => {
+      console.error("No se pudo iniciar el superpanel:", error);
+    });
+} else {
+  console.warn("La autenticación del superpanel no está disponible.");
+}
