@@ -238,6 +238,10 @@
     document.body.appendChild(button);
   }
 
+  function isSuperAdmin(user) {
+    return user?.app_metadata?.denexa_role === "super_admin";
+  }
+
   function unlock(result) {
     saveSession(result.session);
     removeLogin();
@@ -293,10 +297,18 @@
           body: JSON.stringify({ email, password })
         });
         const user = await getUser(session.access_token);
+
+        if (!isSuperAdmin(user)) {
+          throw new Error("Esta cuenta no tiene acceso al superpanel.");
+        }
+
         unlock({ session, user });
       } catch (error) {
         clearSession();
-        message.textContent = "Correo o contraseña incorrectos.";
+        message.textContent =
+          error.message === "Esta cuenta no tiene acceso al superpanel."
+            ? error.message
+            : "Correo o contraseña incorrectos.";
         console.error("Error de autenticación del superpanel:", error);
       } finally {
         button.disabled = false;
@@ -310,9 +322,13 @@
       addStyles();
       const restored = await restoreSession();
 
-      if (restored) {
+      if (restored && isSuperAdmin(restored.user)) {
         unlock(restored);
         return;
+      }
+
+      if (restored) {
+        clearSession();
       }
 
       showLogin();
