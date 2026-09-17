@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://farpkwpxnnfloesivkxv.supabase.co; style-src 'unsafe-inline'; script-src 'self' 'unsafe-inline'; base-uri 'none'; form-action 'self'">
+<title>DENEXA | Confirmación de acceso</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,sans-serif}*{box-sizing:border-box}
+body{min-height:100vh;margin:0;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at top,rgba(14,165,233,.2),transparent 42%),#05070b;color:#f8fafc}
+main{width:min(440px,100%);padding:30px;border:1px solid rgba(56,189,248,.3);border-radius:22px;background:#0a0f19;box-shadow:0 24px 80px #0008}
+.brand{color:#38bdf8;font-size:13px;font-weight:800;letter-spacing:.14em}h1{margin:10px 0}p{color:#94a3b8;line-height:1.5}
+label{display:grid;gap:8px;margin-top:18px;color:#cbd5e1}input,button,a{width:100%;padding:13px 14px;border-radius:12px;font:inherit}
+input{border:1px solid #334155;background:#0f172a;color:#f8fafc}button,a{display:block;margin-top:18px;border:0;background:#0284c7;color:white;font-weight:800;text-align:center;text-decoration:none;cursor:pointer}
+button:disabled{opacity:.65}.error{color:#fca5a5}.success{color:#86efac}[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main aria-live="polite">
+<p class="brand">DENEXA 🇺🇾</p>
+<h1 id="title">Verificando acceso</h1>
+<p id="message">Estamos validando el enlace de Supabase.</p>
+<form id="passwordForm" hidden>
+<label>Nueva contraseña<input id="newPassword" type="password" autocomplete="new-password" minlength="12" required></label>
+<label>Repetir contraseña<input id="repeatPassword" type="password" autocomplete="new-password" minlength="12" required></label>
+<button id="saveButton" type="submit">Guardar contraseña</button>
+</form>
+<a id="backLink" href="admin.html" hidden>Volver al acceso</a>
+</main>
+<script src="js/config.js?v=28"></script>
+<script>
+(function(){
+"use strict";
+const SESSION_KEY="denexa_superpanel_session_v1";
+const title=document.getElementById("title");
+const message=document.getElementById("message");
+const form=document.getElementById("passwordForm");
+const back=document.getElementById("backLink");
+const saveButton=document.getElementById("saveButton");
+function fail(text){title.textContent="No se pudo validar el acceso";message.textContent=text;message.className="error";form.hidden=true;back.hidden=false}
+function save(session){localStorage.setItem(SESSION_KEY,JSON.stringify(session))}
+async function request(path,options){
+ const response=await fetch(SUPABASE_URL+"/auth/v1"+path,options);
+ const text=await response.text();let data=null;
+ if(text){try{data=JSON.parse(text)}catch(_){}}
+ if(!response.ok)throw new Error(data?.message||data?.msg||"Solicitud rechazada.");
+ return data
+}
+const hash=new URLSearchParams(location.hash.slice(1));
+const query=new URLSearchParams(location.search);
+const accessToken=hash.get("access_token");
+const refreshToken=hash.get("refresh_token");
+const expiresIn=Number(hash.get("expires_in")||0);
+const flowType=hash.get("type")||query.get("type")||"";
+const authError=hash.get("error_description")||query.get("error_description");
+history.replaceState(null,document.title,location.pathname);
+if(authError){fail(authError);return}
+if(!accessToken){fail("El enlace no contiene una sesión válida o ya venció.");return}
+const session={access_token:accessToken,refresh_token:refreshToken,expires_in:expiresIn,expires_at:expiresIn?Math.floor(Date.now()/1000)+expiresIn:null,token_type:hash.get("token_type")||"bearer"};
+request("/user",{headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+accessToken}})
+.then(user=>{
+ if(user?.app_metadata?.denexa_role!=="super_admin")throw new Error("Esta cuenta no está autorizada para el superpanel.");
+ if(flowType==="recovery"){title.textContent="Crear nueva contraseña";message.textContent="Elegí una contraseña exclusiva para el superpanel.";form.hidden=false;return}
+ save(session);title.textContent="Acceso confirmado";message.textContent="La cuenta fue validada correctamente. Redirigiendo...";message.className="success";
+ setTimeout(()=>location.replace("admin.html"),700)
+}).catch(error=>fail(error.message));
+form.addEventListener("submit",async event=>{
+ event.preventDefault();
+ const password=document.getElementById("newPassword").value;
+ const repeated=document.getElementById("repeatPassword").value;
+ if(password!==repeated){message.textContent="Las contraseñas no coinciden.";message.className="error";return}
+ if(password.length<12){message.textContent="Usá al menos 12 caracteres.";message.className="error";return}
+ saveButton.disabled=true;saveButton.textContent="Guardando...";
+ try{
+  await request("/user",{method:"PUT",headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+accessToken,"Content-Type":"application/json"},body:JSON.stringify({password})});
+  save(session);title.textContent="Contraseña actualizada";message.textContent="Redirigiendo al superpanel...";message.className="success";form.hidden=true;
+  setTimeout(()=>location.replace("admin.html"),700)
+ }catch(error){message.textContent=error.message;message.className="error";saveButton.disabled=false;saveButton.textContent="Guardar contraseña"}
+})
+})();
+</script>
+</body>
+</html>
