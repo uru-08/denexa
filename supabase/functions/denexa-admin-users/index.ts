@@ -76,28 +76,40 @@ Deno.serve(async (req: Request) => {
     return json(req, 500, { error: "No se pudieron cargar los usuarios." });
   }
 
-  const [{ data: merchantLinks, error: merchantError }, { data: legacyLinks, error: legacyError }] =
-    await Promise.all([
-      admin
-        .from("merchant_users")
-        .select("user_id, business_id, role, active, businesses(id,name,slug,active)"),
-      admin
-        .from("business_users")
-        .select("user_id, business_id, active, businesses(id,name,slug,active)"),
-    ]);
+  const [
+    { data: merchantLinks, error: merchantError },
+    { data: legacyLinks, error: legacyError },
+    { data: businesses, error: businessesError },
+  ] = await Promise.all([
+    admin
+      .from("merchant_users")
+      .select("user_id, business_id, role, active"),
+    admin
+      .from("business_users")
+      .select("user_id, business_id, active"),
+    admin
+      .from("businesses")
+      .select("id, name, slug, active"),
+  ]);
 
-  if (merchantError || legacyError) {
+  if (merchantError || legacyError || businessesError) {
     console.error(
       "No se pudieron cargar las vinculaciones:",
-      merchantError?.message ?? legacyError?.message,
+      merchantError?.message ?? legacyError?.message ?? businessesError?.message,
     );
     return json(req, 500, { error: "No se pudieron cargar las vinculaciones." });
   }
 
+  const businessesById = new Map(
+    (businesses ?? []).map((business) => [String(business.id), business]),
+  );
   const linksByUser = new Map<string, Array<Record<string, unknown>>>();
   for (const link of [...(merchantLinks ?? []), ...(legacyLinks ?? [])]) {
     const current = linksByUser.get(link.user_id) ?? [];
-    current.push(link);
+    current.push({
+      ...link,
+      businesses: businessesById.get(String(link.business_id)) ?? null,
+    });
     linksByUser.set(link.user_id, current);
   }
 
