@@ -2359,10 +2359,38 @@ async function loadUsers() {
     document.getElementById("usersList");
 
   try {
-    const users = await getTableData(
-      "users",
-      "id,email,full_name,role,active"
+    const accessToken =
+      window.DENEXA_ADMIN_SESSION?.access_token;
+
+    if (!accessToken) {
+      throw new Error(
+        "No hay una sesión administrativa válida."
+      );
+    }
+
+    const response = await fetch(
+      `${SUPABASE_URL}/functions/v1/denexa-admin-users`,
+      {
+        method: "GET",
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
     );
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(
+        result.error ||
+        "No se pudieron cargar los usuarios."
+      );
+    }
+
+    const users = Array.isArray(result.users)
+      ? result.users
+      : [];
 
     if (!users.length) {
       container.className = "panel empty-state";
@@ -2387,6 +2415,14 @@ async function loadUsers() {
 
           <small>
             ${escapeHTML(user.role || "Sin rol")}
+            ${user.businesses?.length
+              ? ` · ${escapeHTML(
+                  user.businesses
+                    .map((business) => business.name)
+                    .filter(Boolean)
+                    .join(", ")
+                )}`
+              : ""}
           </small>
         </div>
 
