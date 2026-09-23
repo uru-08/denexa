@@ -1050,6 +1050,111 @@ h1,h2,h3,
   color:var(--title-gold);
 }
 
+/* =========================================================
+   AJUSTE 07 — TRES CAMBIOS AUTORIZADOS DEL MENÚ DEMO
+   1. Encabezado móvil más legible y compacto.
+   2. Promo actual mejor recortada y llamada a la acción.
+   3. Pie Powered by DENEXA simplificado.
+   ========================================================= */
+
+.promo-card{
+  position:relative;
+  cursor:pointer;
+}
+
+body{
+  padding-bottom:76px;
+}
+
+.promo-card img{
+  margin-top:-3.5%;
+}
+
+.promo-cta{
+  position:absolute;
+  right:12px;
+  bottom:10px;
+  padding:7px 10px;
+  border:1px solid var(--gold);
+  border-radius:9px;
+  background:#000d;
+  color:var(--cyan);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.06em;
+  box-shadow:0 3px 12px #000b;
+  pointer-events:none;
+}
+
+.footer{
+  margin-top:22px;
+  padding:20px 14px 24px;
+  border-top:1px solid #0f405d;
+  background:linear-gradient(180deg,#05131d 0,#000 100%);
+}
+
+.footer-line{
+  color:#8fe4ff;
+  font-size:12px;
+  line-height:1.2;
+  font-style:italic;
+  white-space:nowrap;
+}
+
+.footer-line strong{
+  margin-left:3px;
+  color:#fff;
+  font-size:15px;
+  font-style:normal;
+  letter-spacing:.035em;
+}
+
+.footer-line strong span{
+  color:var(--gold);
+}
+
+@media(max-width:700px){
+  .demo-bar{
+    min-height:44px;
+    padding:4px 9px;
+    gap:7px;
+  }
+
+  .brand-word{
+    font-size:18px;
+  }
+
+  .brand-flag{
+    font-size:15px;
+  }
+
+  .demo-label{
+    min-width:112px;
+    padding:4px 7px 3px;
+  }
+
+  .demo-label strong{
+    font-size:7.5px;
+  }
+
+  .demo-label span{
+    margin-top:1px;
+    font-size:6.5px;
+  }
+
+  .promo-cta{
+    right:7px;
+    bottom:6px;
+    padding:5px 7px;
+    font-size:7px;
+  }
+
+  .footer{
+    margin-top:16px;
+    padding:16px 10px 22px;
+  }
+}
+
 /* Los nombres de categorías pasan a dorado como títulos */
 .category-card strong,
 .category-card .category-name{
