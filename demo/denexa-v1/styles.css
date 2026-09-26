@@ -1256,3 +1256,189 @@ body{
 .product-price{
   color:var(--title-gold);
 }
+
+
+/* =========================================================
+   PRUEBA DENEXA — PRODUCTOS ANIMADOS
+   Aislada en el demo. Reutiliza las fotos existentes.
+   ========================================================= */
+.product--animated{
+  border-color:#21cdef;
+  box-shadow:0 4px 0 #795700,0 10px 25px #000c,0 0 22px #18cfff20;
+}
+.product-media{
+  position:relative;
+  overflow:hidden;
+  aspect-ratio:1.25/1;
+  isolation:isolate;
+  background:radial-gradient(circle at 50% 45%,#12354a 0,#02080d 72%);
+}
+.product-media>img,
+.product-media .motion-stage img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  aspect-ratio:auto;
+  object-fit:cover;
+}
+.motion-base{z-index:1}
+.motion-stage{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+}
+.motion-badge{
+  position:absolute;
+  z-index:4;
+  top:8px;
+  left:8px;
+  padding:5px 7px;
+  border:1px solid #ffc21c99;
+  border-radius:999px;
+  background:#02080dcc;
+  color:var(--gold);
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.08em;
+  box-shadow:0 3px 12px #000a;
+}
+.motion-replay{
+  position:absolute;
+  z-index:5;
+  right:8px;
+  bottom:8px;
+  min-height:30px;
+  padding:5px 9px;
+  border:1px solid #4bdcff;
+  border-radius:999px;
+  background:#042338e8;
+  color:#dff9ff;
+  font-size:9px;
+  font-weight:900;
+  box-shadow:0 4px 14px #000b;
+}
+.motion-replay:active{transform:scale(.96)}
+
+/* Hamburguesa: la foto se arma en tres capas */
+.motion-slice{
+  position:absolute;
+  inset:0;
+  opacity:0;
+}
+.motion-slice:nth-child(1){clip-path:inset(0 0 66% 0)}
+.motion-slice:nth-child(2){clip-path:inset(33% 0 33% 0)}
+.motion-slice:nth-child(3){clip-path:inset(66% 0 0 0)}
+.product-media--burger.is-playing .motion-base{
+  animation:denexa-base 1.05s ease both;
+}
+.product-media--burger.is-playing .motion-slice{
+  animation:denexa-stack .72s cubic-bezier(.2,.85,.22,1.15) calc(var(--i)*.16s) both;
+}
+
+/* Pizza: el plato entra girando y los ingredientes aparecen */
+.motion-disc{
+  position:absolute;
+  inset:5%;
+  overflow:hidden;
+  border-radius:50%;
+  opacity:0;
+  box-shadow:0 0 28px #ffc21c55;
+}
+.motion-disc img{border-radius:50%}
+.motion-topping{
+  position:absolute;
+  width:9px;
+  height:9px;
+  left:calc(21% + var(--i)*13%);
+  top:calc(28% + (var(--i) % 2)*25%);
+  border-radius:50%;
+  background:var(--gold);
+  opacity:0;
+  box-shadow:0 0 0 3px #e6492f99,0 0 12px #ffc21c;
+}
+.product-media--pizza.is-playing .motion-base{animation:denexa-base 1.15s ease both}
+.product-media--pizza.is-playing .motion-disc{animation:denexa-pizza .85s cubic-bezier(.2,.8,.2,1.1) both}
+.product-media--pizza.is-playing .motion-topping{
+  animation:denexa-topping .5s cubic-bezier(.2,.9,.3,1.3) calc(.42s + var(--i)*.1s) both;
+}
+
+/* Empanadas: tres piezas se abren en abanico */
+.motion-card{
+  position:absolute;
+  inset:8% 13%;
+  overflow:hidden;
+  border:1px solid #ffc21caa;
+  border-radius:13px;
+  opacity:0;
+  transform-origin:50% 100%;
+  box-shadow:0 8px 20px #000b;
+}
+.motion-card img{border-radius:12px}
+.product-media--empanadas.is-playing .motion-base{animation:denexa-base 1.1s ease both}
+.product-media--empanadas.is-playing .motion-card{
+  animation:denexa-fan .78s cubic-bezier(.2,.9,.25,1.15) calc(var(--i)*.12s) both;
+}
+
+/* Bebida: burbujas frías sobre la foto */
+.motion-bubble{
+  position:absolute;
+  left:calc(13% + var(--i)*14%);
+  bottom:12%;
+  width:calc(7px + var(--i)*1px);
+  height:calc(7px + var(--i)*1px);
+  border:1px solid #bff5ff;
+  border-radius:50%;
+  background:#18cfff66;
+  opacity:0;
+  box-shadow:0 0 11px #18cfff;
+}
+.product-media--drink.is-playing .motion-base{animation:denexa-cold 1.2s ease both}
+.product-media--drink.is-playing .motion-bubble{
+  animation:denexa-bubble 1.25s ease-out calc(var(--i)*.12s) both;
+}
+
+@keyframes denexa-base{
+  0%{opacity:.22;filter:saturate(.65) brightness(.65)}
+  70%{opacity:.42;filter:saturate(.9) brightness(.82)}
+  100%{opacity:1;filter:none}
+}
+@keyframes denexa-stack{
+  0%{opacity:0;transform:translateY(calc((var(--i) - 1)*-52px)) scale(.9)}
+  75%{opacity:1}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes denexa-pizza{
+  0%{opacity:0;transform:rotate(-35deg) scale(.45)}
+  100%{opacity:1;transform:rotate(0) scale(1)}
+}
+@keyframes denexa-topping{
+  0%{opacity:0;transform:translateY(-55px) scale(.25)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes denexa-fan{
+  0%{opacity:0;transform:translateY(34px) rotate(0) scale(.78)}
+  100%{opacity:.92;transform:translateX(calc((var(--i) - 1)*18%)) rotate(calc((var(--i) - 1)*9deg)) scale(.88)}
+}
+@keyframes denexa-cold{
+  0%{filter:saturate(.7) brightness(.72)}
+  55%{filter:saturate(1.35) brightness(1.08)}
+  100%{filter:none}
+}
+@keyframes denexa-bubble{
+  0%{opacity:0;transform:translateY(0) scale(.4)}
+  35%{opacity:1}
+  100%{opacity:0;transform:translateY(-75px) scale(1.25)}
+}
+
+@media(max-width:700px){
+  .motion-badge{top:6px;left:6px;font-size:7px;padding:4px 6px}
+  .motion-replay{right:6px;bottom:6px;min-height:28px;font-size:8px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .product-media *,
+  .product-media.is-playing *{animation:none!important;transition:none!important}
+  .motion-stage{display:none}
+}
