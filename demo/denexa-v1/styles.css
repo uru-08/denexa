@@ -727,7 +727,6 @@ main{max-width:900px;margin:auto}
   }
 }
 
-
 /* =========================================================
    AJUSTE 05 — CABECERA + BOTONES DELIVERY / RETIRO
    Mantiene intactos portada, categorías, promo, productos,
@@ -1613,4 +1612,77 @@ body{
     inset:0 0 25px;
     clip-path:polygon(0 0,52% 0,52% 100%,0 100%);
   }
+}
+
+/* Ajuste 12 final: debe prevalecer sobre las pruebas anteriores. */
+.motion-zoom img{animation-duration:4.2s}
+.motion-pan img{animation-duration:4.7s}
+.motion-float img{animation-duration:4.35s}
+.motion-tilt img{animation-duration:4.8s}
+.motion-depth img{animation-duration:4.5s}
+.motion-drift img{animation-duration:4.9s}
+.motion-cool img{animation-duration:4.4s}
+.motion-soft img{animation-duration:4.65s}
+.photo-motion::before,
+.photo-motion::after{
+  bottom:-24%;
+  width:62%;
+  height:78%;
+  filter:blur(9px);
+  background:
+    radial-gradient(ellipse at 18% 78%,#ffffffa6 0 8%,transparent 27%),
+    radial-gradient(ellipse at 42% 58%,#eafcff91 0 12%,transparent 34%),
+    radial-gradient(ellipse at 69% 72%,#ffffff82 0 10%,transparent 31%),
+    radial-gradient(ellipse at 86% 43%,#d7f8ff70 0 8%,transparent 29%);
+  animation-duration:3.7s;
+}
+.photo-motion::after{
+  left:34%;
+  animation-duration:4.15s;
+  animation-delay:-1.8s;
+}
+.hero.approved img{z-index:1;animation:none}
+.hero.approved::after{content:none}
+.hero-mascot{
+  position:absolute;
+  z-index:3;
+  top:1.5%;
+  right:7%;
+  height:98%;
+  aspect-ratio:543/724;
+  pointer-events:none;
+  background:url("assets/denexa-mascot-eating-sprite.webp") 0 0/400% 100% no-repeat;
+  filter:drop-shadow(0 8px 12px #0009);
+  transform-origin:50% 82%;
+  animation:denexa-eating 4.8s steps(1,end) infinite,denexa-breathe 2.4s ease-in-out infinite;
+}
+.promo-card{
+  transform-origin:center;
+  animation:promo-card-alive 3.8s ease-in-out infinite;
+}
+.promo-card img{transform:none;filter:none;animation:none}
+.promo-card::before{content:none}
+.promo-card::after{animation-duration:4.2s}
+@keyframes denexa-eating{
+  0%,24%{background-position:0 0}
+  25%,49%{background-position:33.333% 0}
+  50%,74%{background-position:66.666% 0}
+  75%,100%{background-position:100% 0}
+}
+@keyframes denexa-breathe{
+  0%,100%{transform:translate3d(0,.8%,0) rotate(-.35deg) scale(.995)}
+  50%{transform:translate3d(0,-.9%,0) rotate(.25deg) scale(1.012)}
+}
+@keyframes promo-card-alive{
+  0%,100%{transform:translate3d(0,0,0) scale(1);box-shadow:0 5px 0 #7f5900,0 12px 28px #000c,0 0 26px #ffc21c35}
+  50%{transform:translate3d(0,-5px,0) scale(1.012);box-shadow:0 7px 0 #7f5900,0 18px 34px #000d,0 0 42px #ffc21c62}
+}
+@media(max-width:700px){
+  .hero-mascot{right:5.5%;height:99%}
+  .photo-motion::before,
+  .photo-motion::after{filter:blur(6px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-mascot{animation-duration:8s,4s!important}
+  .promo-card{animation-duration:7s!important}
 }
