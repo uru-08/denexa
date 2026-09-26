@@ -88,8 +88,8 @@ function renderProducts(){
       </div>
     </article>`).join('');
 
-  $('[data-animate]').forEach(b=>b.onclick=()=>playAnimation(+b.dataset.animate));
-  $('[data-p]').forEach(b=>b.onclick=()=>chg(+b.dataset.p,1));
+  $$('[data-animate]').forEach(b=>b.onclick=()=>playAnimation(+b.dataset.animate));
+  $$('[data-p]').forEach(b=>b.onclick=()=>chg(+b.dataset.p,1));
   $$('[data-m]').forEach(b=>b.onclick=()=>chg(+b.dataset.m,-1));
 }
 
