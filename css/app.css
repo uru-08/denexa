@@ -5931,7 +5931,6 @@ html[data-store-theme="carro-kechu-carmelo"] .product-image img{
   height:100% !important;
   min-height:128px !important;
   object-fit:cover !important;
-  transform:none !important;
 }
 
 html[data-store-theme="carro-kechu-carmelo"] .featured-badge{
