@@ -139,6 +139,8 @@ html[data-store-theme="carro-kechu-carmelo"] #storeName{
   position:relative !important;
   isolation:isolate !important;
   overflow:visible !important;
+  width:max-content !important;
+  max-width:100% !important;
 }
 
 html[data-store-theme="carro-kechu-carmelo"] #storeName::before,
