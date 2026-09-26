@@ -1447,3 +1447,170 @@ body{
     animation-duration:18s!important;
   }
 }
+
+
+/* =========================================================
+   AJUSTE DE INTENSIDAD — HUMO, PROMO Y PERSONAJE DENEXA
+   Reutiliza exclusivamente los JPG existentes.
+   ========================================================= */
+.photo-motion::before,
+.photo-motion::after{
+  content:"";
+  position:absolute;
+  z-index:3;
+  left:7%;
+  bottom:-18%;
+  width:48%;
+  height:58%;
+  pointer-events:none;
+  opacity:0;
+  filter:blur(11px);
+  background:
+    radial-gradient(ellipse at 28% 70%,#ffffff70 0 9%,transparent 30%),
+    radial-gradient(ellipse at 55% 48%,#dff8ff66 0 11%,transparent 34%),
+    radial-gradient(ellipse at 78% 74%,#ffffff52 0 8%,transparent 29%);
+  mix-blend-mode:screen;
+  animation:food-smoke-a 6.2s ease-out infinite;
+}
+.photo-motion::after{
+  left:43%;
+  width:52%;
+  animation:food-smoke-b 7.1s ease-out -2.7s infinite;
+}
+.photo-motion i{
+  z-index:4;
+}
+
+/* Movimiento más visible, conservando una transición suave */
+@keyframes photo-zoom{
+  0%{transform:scale(1.015) translate3d(0,1.2%,0)}
+  100%{transform:scale(1.19) translate3d(0,-3.2%,0)}
+}
+@keyframes photo-pan{
+  0%{transform:scale(1.18) translate3d(-6%,1%,0)}
+  100%{transform:scale(1.18) translate3d(6%,-2.2%,0)}
+}
+@keyframes photo-float{
+  0%{transform:scale(1.09) translate3d(-1%,4.2%,0) rotate(-.35deg)}
+  52%{transform:scale(1.16) translate3d(1%,-4.2%,0) rotate(.35deg)}
+  100%{transform:scale(1.105) translate3d(-1.2%,1%,0) rotate(-.25deg)}
+}
+@keyframes photo-tilt{
+  0%{transform:scale(1.13) rotate(-1.25deg) translate3d(-2.2%,1.7%,0)}
+  100%{transform:scale(1.2) rotate(1.25deg) translate3d(2.2%,-2.5%,0)}
+}
+@keyframes photo-depth{
+  0%{transform:scale(1.2) translate3d(0,-3%,0);filter:contrast(1.01) saturate(1)}
+  100%{transform:scale(1.035) translate3d(0,2%,0);filter:contrast(1.12) saturate(1.13)}
+}
+@keyframes photo-drift{
+  0%{transform:scale(1.16) translate3d(-5%,2.5%,0)}
+  100%{transform:scale(1.16) translate3d(5%,-2.5%,0)}
+}
+@keyframes photo-cool{
+  0%{transform:scale(1.06) translate3d(0,2.6%,0);filter:brightness(.94) saturate(.98)}
+  100%{transform:scale(1.17) translate3d(0,-2.8%,0);filter:brightness(1.12) saturate(1.22)}
+}
+@keyframes photo-soft{
+  0%{transform:scale(1.055) translate3d(-1%,1%,0);filter:brightness(.97) saturate(1)}
+  100%{transform:scale(1.16) translate3d(1%,-2%,0);filter:brightness(1.1) saturate(1.13)}
+}
+@keyframes food-smoke-a{
+  0%{opacity:0;transform:translate3d(-8%,18%,0) scale(.55)}
+  18%{opacity:.38}
+  58%{opacity:.28}
+  100%{opacity:0;transform:translate3d(16%,-82%,0) scale(1.45)}
+}
+@keyframes food-smoke-b{
+  0%{opacity:0;transform:translate3d(8%,22%,0) scale(.5)}
+  22%{opacity:.32}
+  62%{opacity:.24}
+  100%{opacity:0;transform:translate3d(-14%,-88%,0) scale(1.55)}
+}
+
+/* La misma portada duplicada y recortada mueve al avatar de forma independiente */
+.hero.approved img{
+  position:relative;
+  z-index:1;
+  animation:hero-cinema-strong 10s ease-in-out infinite alternate;
+}
+.hero.approved::after{
+  content:"";
+  position:absolute;
+  z-index:2;
+  inset:0;
+  pointer-events:none;
+  background:url("assets/hero-approved.jpg") center/100% 100% no-repeat;
+  clip-path:polygon(47% 0,100% 0,100% 100%,47% 100%);
+  transform-origin:72% 58%;
+  animation:denexa-avatar 4.8s ease-in-out infinite;
+}
+
+/* Promo con profundidad, brillo y movimiento propio del personaje */
+.promo-card img{
+  position:relative;
+  z-index:1;
+  animation:promo-cinema-strong 7.5s ease-in-out infinite alternate;
+}
+.promo-card::before{
+  content:"";
+  position:absolute;
+  z-index:2;
+  inset:0 0 28px;
+  pointer-events:none;
+  background:url("assets/promo-approved.jpg") center/100% 100% no-repeat;
+  clip-path:polygon(0 0,49% 0,49% 100%,0 100%);
+  transform-origin:25% 62%;
+  animation:promo-character 4.2s ease-in-out infinite;
+}
+.promo-card::after{
+  content:"";
+  position:absolute;
+  z-index:3;
+  inset:-55% -80%;
+  pointer-events:none;
+  opacity:0;
+  background:linear-gradient(112deg,transparent 43%,#ffffff28 49%,#8eeaff30 52%,transparent 59%);
+  animation:promo-light 5.8s ease-in-out infinite;
+}
+.promo-cta{
+  position:relative;
+  z-index:5;
+}
+
+@keyframes hero-cinema-strong{
+  0%{transform:scale(1.005) translate3d(-.6%,.2%,0)}
+  100%{transform:scale(1.065) translate3d(.8%,-1%,0)}
+}
+@keyframes denexa-avatar{
+  0%,100%{transform:translate3d(0,0,0) rotate(-.2deg) scale(1.002)}
+  48%{transform:translate3d(.45%,-1.2%,0) rotate(.35deg) scale(1.018)}
+}
+@keyframes promo-cinema-strong{
+  0%{transform:scale(1.01) translate3d(-.8%,.2%,0);filter:brightness(.97)}
+  100%{transform:scale(1.085) translate3d(1%,-1%,0);filter:brightness(1.09)}
+}
+@keyframes promo-character{
+  0%,100%{transform:translate3d(0,0,0) rotate(-.25deg) scale(1)}
+  50%{transform:translate3d(.6%,-1.8%,0) rotate(.45deg) scale(1.025)}
+}
+@keyframes promo-light{
+  0%,35%{opacity:0;transform:translateX(-30%) rotate(3deg)}
+  48%{opacity:.85}
+  64%,100%{opacity:0;transform:translateX(32%) rotate(3deg)}
+}
+
+@media(max-width:700px){
+  .photo-motion::before,
+  .photo-motion::after{
+    filter:blur(8px);
+    opacity:.9;
+  }
+  .hero.approved::after{
+    clip-path:polygon(43% 0,100% 0,100% 100%,43% 100%);
+  }
+  .promo-card::before{
+    inset:0 0 25px;
+    clip-path:polygon(0 0,52% 0,52% 100%,0 100%);
+  }
+}
