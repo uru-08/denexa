@@ -3,14 +3,14 @@ const categories=[
 {name:'Chivitos',img:'cat-chivitos.jpg'},{name:'Ensaladas',img:'cat-ensaladas.jpg'},{name:'Bebidas',img:'cat-bebidas.jpg'},{name:'Postres',img:'cat-postres.jpg'}];
 
 const products=[
-{id:1,c:'Hamburguesas',n:'Hamburguesa completa',d:'Carne, cheddar, vegetales y salsa.',p:390,img:'cat-hamburguesas.jpg',anim:'burger'},
+{id:1,c:'Hamburguesas',n:'Hamburguesa completa',d:'Carne, cheddar, vegetales y salsa.',p:390,img:'cat-hamburguesas.jpg'},
 {id:2,c:'Hamburguesas',n:'Hamburguesa doble',d:'Doble carne, doble cheddar.',p:460,img:'cat-hamburguesas.jpg'},
-{id:3,c:'Pizzas',n:'Pizza muzzarella',d:'Salsa, muzzarella y orégano.',p:450,img:'cat-pizzas.jpg',anim:'pizza'},
-{id:4,c:'Empanadas',n:'Empanadas x6',d:'Seis empanadas surtidas.',p:360,img:'cat-empanadas.jpg',anim:'empanadas'},
+{id:3,c:'Pizzas',n:'Pizza muzzarella',d:'Salsa, muzzarella y orégano.',p:450,img:'cat-pizzas.jpg'},
+{id:4,c:'Empanadas',n:'Empanadas x6',d:'Seis empanadas surtidas.',p:360,img:'cat-empanadas.jpg'},
 {id:5,c:'Milanesas',n:'Milanesa completa',d:'Milanesa con guarnición.',p:480,img:'cat-milanesas.jpg'},
 {id:6,c:'Chivitos',n:'Chivito completo',d:'Carne, jamón, queso y vegetales.',p:520,img:'cat-chivitos.jpg'},
 {id:7,c:'Ensaladas',n:'Ensalada fresca',d:'Mix de hojas y vegetales.',p:280,img:'cat-ensaladas.jpg'},
-{id:8,c:'Bebidas',n:'Refresco 600 ml',d:'Bebida fría a elección.',p:120,img:'cat-bebidas.jpg',anim:'drink'},
+{id:8,c:'Bebidas',n:'Refresco 600 ml',d:'Bebida fría a elección.',p:120,img:'cat-bebidas.jpg'},
 {id:9,c:'Postres',n:'Postre del día',d:'Una opción dulce para terminar.',p:190,img:'cat-postres.jpg'}
 ];
 
@@ -18,10 +18,28 @@ let cat=null,mode='Delivery';
 const cart=new Map(),$=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const money=n=>'$ '+n.toLocaleString('es-UY');
 
+const motionByCategory={
+  Hamburguesas:'motion-zoom',
+  Pizzas:'motion-pan',
+  Empanadas:'motion-float',
+  Milanesas:'motion-tilt',
+  Chivitos:'motion-depth',
+  Ensaladas:'motion-drift',
+  Bebidas:'motion-cool',
+  Postres:'motion-soft'
+};
+
+function photoMotion(category,index=0){
+  return `${motionByCategory[category]||'motion-zoom'} motion-seed-${index%4}`;
+}
+
 function renderCats(){
-  $('#categories').innerHTML=categories.map(c=>`
+  $('#categories').innerHTML=categories.map((c,i)=>`
     <button class="cat ${cat===c.name?'active':''}" data-cat="${c.name}">
-      <img src="assets/${c.img}" alt="${c.name}">
+      <span class="cat-media photo-motion ${photoMotion(c.name,i)}">
+        <img src="assets/${c.img}" alt="${c.name}">
+        <i aria-hidden="true"></i>
+      </span>
       <span>${c.name.toUpperCase()}</span>
     </button>`).join('');
 
@@ -37,61 +55,16 @@ function visible(){
   return cat?products.filter(p=>p.c===cat):products.slice(0,4);
 }
 
-function animationVisual(p){
-  if(!p.anim)return `<img src="assets/${p.img}" alt="${p.n}">`;
-
-  const scenes={
-    burger:`
-      <div class="food-scene burger-scene" aria-hidden="true">
-        <span class="food-shadow"></span>
-        <span class="burger-piece bun-bottom"></span>
-        <span class="burger-piece lettuce-bottom"></span>
-        <span class="burger-piece patty"></span>
-        <span class="burger-piece cheese"></span>
-        <span class="burger-piece tomato"></span>
-        <span class="burger-piece lettuce-top"></span>
-        <span class="burger-piece bun-top"><i></i><i></i><i></i><i></i></span>
-      </div>`,
-    pizza:`
-      <div class="food-scene pizza-scene" aria-hidden="true">
-        <span class="food-shadow"></span>
-        <span class="pizza-base"></span>
-        <span class="pizza-sauce"></span>
-        <span class="pizza-cheese"></span>
-        <i class="pizza-topping t1"></i><i class="pizza-topping t2"></i>
-        <i class="pizza-topping t3"></i><i class="pizza-topping t4"></i>
-        <i class="pizza-topping t5"></i><i class="pizza-topping t6"></i>
-      </div>`,
-    empanadas:`
-      <div class="food-scene empanada-scene" aria-hidden="true">
-        <span class="food-shadow"></span>
-        <span class="empanada e1"><i></i></span>
-        <span class="empanada e2"><i></i></span>
-        <span class="empanada e3"><i></i></span>
-      </div>`,
-    drink:`
-      <div class="food-scene drink-scene" aria-hidden="true">
-        <span class="food-shadow"></span>
-        <span class="drink-cup"><i class="drink-fill"></i><i class="drink-shine"></i></span>
-        <span class="drink-lid"></span><span class="drink-straw"></span>
-        <i class="drink-bubble b1"></i><i class="drink-bubble b2"></i>
-        <i class="drink-bubble b3"></i><i class="drink-bubble b4"></i>
-      </div>`
-  };
-
-  return `
-    <div class="product-media product-media--${p.anim}" role="img" aria-label="${p.n} animada">
-      ${scenes[p.anim]}
-    </div>`;
-}
-
 function renderProducts(){
   const list=visible();
   $('#catalogTitle').textContent=cat?cat.toUpperCase():'DESTACADOS';
 
-  $('#products').innerHTML=list.map(p=>`
-    <article class="product ${p.anim?'product--animated':''}">
-      ${animationVisual(p)}
+  $('#products').innerHTML=list.map((p,i)=>`
+    <article class="product product--motion">
+      <div class="product-media photo-motion ${photoMotion(p.c,i)}">
+        <img src="assets/${p.img}" alt="${p.n}">
+        <i aria-hidden="true"></i>
+      </div>
       <div class="prod-body">
         <h3>${p.n}</h3>
         <p>${p.d}</p>
