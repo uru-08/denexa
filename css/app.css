@@ -2,6 +2,138 @@
   box-sizing:border-box;
 }
 
+/* =========================================================
+   PRUEBA VISUAL KECHU — FOTOS VIVAS E INGREDIENTES EN FOCO
+   Alcance exclusivo: imágenes de productos del menú Kechu.
+   ========================================================= */
+
+html[data-store-theme="carro-kechu-carmelo"] .product-image{
+  position:relative !important;
+  isolation:isolate !important;
+  overflow:hidden !important;
+  background:#080808 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .product-image img{
+  position:relative !important;
+  z-index:1 !important;
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  transform-origin:center !important;
+  backface-visibility:hidden !important;
+  will-change:transform,filter !important;
+  animation:kechu-ingredient-focus 4.2s cubic-bezier(.45,0,.22,1) infinite alternate !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .products-grid .product-card:nth-child(4n+2) .product-image img{
+  animation-name:kechu-ingredient-pan !important;
+  animation-duration:4.6s !important;
+  animation-delay:-1.4s !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .products-grid .product-card:nth-child(4n+3) .product-image img{
+  animation-name:kechu-ingredient-rise !important;
+  animation-duration:4.4s !important;
+  animation-delay:-2.7s !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .products-grid .product-card:nth-child(4n+4) .product-image img{
+  animation-name:kechu-ingredient-depth !important;
+  animation-duration:4.8s !important;
+  animation-delay:-3.5s !important;
+}
+
+/* Dos capas de vapor recorren cada comida caliente sin tapar el producto. */
+html[data-store-theme="carro-kechu-carmelo"] .product-image:has(img)::before,
+html[data-store-theme="carro-kechu-carmelo"] .product-image:has(img)::after{
+  content:"" !important;
+  position:absolute !important;
+  z-index:2 !important;
+  left:-3% !important;
+  bottom:-28% !important;
+  width:72% !important;
+  height:86% !important;
+  pointer-events:none !important;
+  opacity:0 !important;
+  filter:blur(7px) !important;
+  mix-blend-mode:screen !important;
+  background:
+    radial-gradient(ellipse at 18% 78%,rgba(255,255,255,.72) 0 8%,transparent 29%),
+    radial-gradient(ellipse at 48% 55%,rgba(246,252,255,.58) 0 12%,transparent 35%),
+    radial-gradient(ellipse at 78% 72%,rgba(255,255,255,.52) 0 10%,transparent 31%) !important;
+  animation:kechu-steam-left 3.45s ease-out infinite !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .product-image:has(img)::after{
+  left:36% !important;
+  width:70% !important;
+  animation-name:kechu-steam-right !important;
+  animation-duration:3.9s !important;
+  animation-delay:-1.7s !important;
+}
+
+/* En el detalle, la foto también recorre los ingredientes. */
+html[data-store-theme="carro-kechu-carmelo"] .product-modal-card{
+  overflow:hidden !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] .product-modal-image{
+  transform-origin:center !important;
+  will-change:transform,filter !important;
+  animation:kechu-modal-ingredients 5s cubic-bezier(.45,0,.22,1) infinite alternate !important;
+}
+
+@keyframes kechu-ingredient-focus{
+  0%{transform:scale(1.04) translate3d(-1%,2%,0);filter:saturate(1.02) contrast(1.02)}
+  100%{transform:scale(1.26) translate3d(2%,-4%,0);filter:saturate(1.18) contrast(1.08)}
+}
+
+@keyframes kechu-ingredient-pan{
+  0%{transform:scale(1.24) translate3d(-7%,1%,0);filter:saturate(1.04) contrast(1.02)}
+  100%{transform:scale(1.24) translate3d(7%,-2%,0);filter:saturate(1.17) contrast(1.08)}
+}
+
+@keyframes kechu-ingredient-rise{
+  0%{transform:scale(1.12) translate3d(-2%,5%,0) rotate(-.45deg);filter:saturate(1.02)}
+  100%{transform:scale(1.25) translate3d(2%,-5%,0) rotate(.45deg);filter:saturate(1.18)}
+}
+
+@keyframes kechu-ingredient-depth{
+  0%{transform:scale(1.28) translate3d(0,-4%,0);filter:brightness(.96) saturate(1.02)}
+  100%{transform:scale(1.07) translate3d(0,3%,0);filter:brightness(1.1) saturate(1.2)}
+}
+
+@keyframes kechu-steam-left{
+  0%{opacity:0;transform:translate3d(-8%,22%,0) scale(.55)}
+  18%{opacity:.52}
+  58%{opacity:.32}
+  100%{opacity:0;transform:translate3d(18%,-90%,0) scale(1.5)}
+}
+
+@keyframes kechu-steam-right{
+  0%{opacity:0;transform:translate3d(9%,24%,0) scale(.5)}
+  22%{opacity:.46}
+  62%{opacity:.28}
+  100%{opacity:0;transform:translate3d(-16%,-94%,0) scale(1.58)}
+}
+
+@keyframes kechu-modal-ingredients{
+  0%{transform:scale(1.015) translate3d(-1.5%,1%,0);filter:saturate(1.02)}
+  100%{transform:scale(1.13) translate3d(1.5%,-2.5%,0);filter:saturate(1.16) contrast(1.06)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-store-theme="carro-kechu-carmelo"] .product-image img,
+  html[data-store-theme="carro-kechu-carmelo"] .product-modal-image{
+    animation-duration:9s !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] .product-image::before,
+  html[data-store-theme="carro-kechu-carmelo"] .product-image::after{
+    animation-duration:7s !important;
+  }
+}
+
 :root{
   --primary:#0B43A0;
   --primary-2:#0E5BD8;
