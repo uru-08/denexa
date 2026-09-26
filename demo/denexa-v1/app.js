@@ -39,34 +39,50 @@ function visible(){
 
 function animationVisual(p){
   if(!p.anim)return `<img src="assets/${p.img}" alt="${p.n}">`;
-  const src=`assets/${p.img}`;
-  const labels={burger:'Capas',pizza:'Giro',empanadas:'Abanico',drink:'Burbujas'};
-  let pieces='';
-  if(p.anim==='burger'){
-    pieces=[0,1,2].map(i=>`<span class="motion-slice" style="--i:${i}"><img src="${src}" alt=""></span>`).join('');
-  }else if(p.anim==='pizza'){
-    pieces=`<span class="motion-disc"><img src="${src}" alt=""></span>`+
-      [0,1,2,3,4].map(i=>`<i class="motion-topping" style="--i:${i}"></i>`).join('');
-  }else if(p.anim==='empanadas'){
-    pieces=[0,1,2].map(i=>`<span class="motion-card" style="--i:${i}"><img src="${src}" alt=""></span>`).join('');
-  }else{
-    pieces=[0,1,2,3,4,5].map(i=>`<i class="motion-bubble" style="--i:${i}"></i>`).join('');
-  }
-  return `
-    <div class="product-media product-media--${p.anim} is-playing">
-      <img class="motion-base" src="${src}" alt="${p.n}">
-      <div class="motion-stage" aria-hidden="true">${pieces}</div>
-      <span class="motion-badge">PRUEBA · ${labels[p.anim]}</span>
-      <button class="motion-replay" data-animate="${p.id}" type="button" aria-label="Repetir animación de ${p.n}">▶ Animar</button>
-    </div>`;
-}
 
-function playAnimation(id){
-  const media=document.querySelector(`[data-animate="${id}"]`)?.closest('.product-media');
-  if(!media)return;
-  media.classList.remove('is-playing');
-  void media.offsetWidth;
-  media.classList.add('is-playing');
+  const scenes={
+    burger:`
+      <div class="food-scene burger-scene" aria-hidden="true">
+        <span class="food-shadow"></span>
+        <span class="burger-piece bun-bottom"></span>
+        <span class="burger-piece lettuce-bottom"></span>
+        <span class="burger-piece patty"></span>
+        <span class="burger-piece cheese"></span>
+        <span class="burger-piece tomato"></span>
+        <span class="burger-piece lettuce-top"></span>
+        <span class="burger-piece bun-top"><i></i><i></i><i></i><i></i></span>
+      </div>`,
+    pizza:`
+      <div class="food-scene pizza-scene" aria-hidden="true">
+        <span class="food-shadow"></span>
+        <span class="pizza-base"></span>
+        <span class="pizza-sauce"></span>
+        <span class="pizza-cheese"></span>
+        <i class="pizza-topping t1"></i><i class="pizza-topping t2"></i>
+        <i class="pizza-topping t3"></i><i class="pizza-topping t4"></i>
+        <i class="pizza-topping t5"></i><i class="pizza-topping t6"></i>
+      </div>`,
+    empanadas:`
+      <div class="food-scene empanada-scene" aria-hidden="true">
+        <span class="food-shadow"></span>
+        <span class="empanada e1"><i></i></span>
+        <span class="empanada e2"><i></i></span>
+        <span class="empanada e3"><i></i></span>
+      </div>`,
+    drink:`
+      <div class="food-scene drink-scene" aria-hidden="true">
+        <span class="food-shadow"></span>
+        <span class="drink-cup"><i class="drink-fill"></i><i class="drink-shine"></i></span>
+        <span class="drink-lid"></span><span class="drink-straw"></span>
+        <i class="drink-bubble b1"></i><i class="drink-bubble b2"></i>
+        <i class="drink-bubble b3"></i><i class="drink-bubble b4"></i>
+      </div>`
+  };
+
+  return `
+    <div class="product-media product-media--${p.anim}" role="img" aria-label="${p.n} animada">
+      ${scenes[p.anim]}
+    </div>`;
 }
 
 function renderProducts(){
@@ -88,7 +104,6 @@ function renderProducts(){
       </div>
     </article>`).join('');
 
-  $$('[data-animate]').forEach(b=>b.onclick=()=>playAnimation(+b.dataset.animate));
   $$('[data-p]').forEach(b=>b.onclick=()=>chg(+b.dataset.p,1));
   $$('[data-m]').forEach(b=>b.onclick=()=>chg(+b.dataset.m,-1));
 }
