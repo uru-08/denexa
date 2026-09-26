@@ -55,7 +55,7 @@ html[data-store-theme="carro-kechu-carmelo"] .product-image:has(img)::after{
   width:72% !important;
   height:86% !important;
   pointer-events:none !important;
-  opacity:0 !important;
+  opacity:0;
   filter:blur(7px) !important;
   mix-blend-mode:screen !important;
   background:
@@ -8297,5 +8297,160 @@ html[data-store-theme] .welcome-screen.has-custom-hero{
   #welcomeScreen .welcome-denexa-signature{
     visibility:visible !important;
     opacity:1 !important;
+  }
+}
+
+/* =========================================================
+   PRUEBA VISUAL KECHU 02 — PORTADA Y PROMO CON VIDA
+   ========================================================= */
+
+/* Portada: luces ambientales, destellos y marca con pulso suave. */
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen{
+  isolation:isolate !important;
+  overflow:hidden !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content::before,
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content::after{
+  content:"" !important;
+  position:absolute !important;
+  z-index:-1 !important;
+  width:12px !important;
+  height:12px !important;
+  border-radius:50% !important;
+  pointer-events:none !important;
+  background:#FFD000 !important;
+  box-shadow:
+    52px 38px 0 -3px #fff,
+    -78px 96px 0 -4px #FFD000,
+    106px 154px 0 -3px #fff,
+    -126px 212px 0 -3px #FFD000,
+    82px 272px 0 -4px #fff,
+    -50px 326px 0 -3px #FFD000 !important;
+  filter:drop-shadow(0 0 8px #FFD000) !important;
+  animation:kechu-cover-sparkles 3.2s ease-in-out infinite !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content::before{
+  top:7% !important;
+  left:13% !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content::after{
+  right:15% !important;
+  bottom:18% !important;
+  animation-delay:-1.55s !important;
+  transform:scale(.72) !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu172-denexa-top{
+  animation:kechu-cover-brand 3.4s ease-in-out infinite !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #welcomeBusinessName{
+  text-shadow:0 2px 0 #6b5200,0 0 18px rgba(255,208,0,.44) !important;
+  animation:kechu-cover-title 2.8s ease-in-out infinite !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton{
+  position:relative !important;
+  overflow:hidden !important;
+  animation:kechu-cover-cta 2.4s ease-in-out infinite !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:-80% -35% !important;
+  pointer-events:none !important;
+  background:linear-gradient(110deg,transparent 42%,rgba(255,255,255,.72) 49%,transparent 57%) !important;
+  animation:kechu-cover-sweep 3.1s ease-in-out infinite !important;
+}
+
+/* Promo: el bloque completo resalta sin mover ni romper el texto. */
+html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBanner.menu-promo-banner{
+  transform-origin:center !important;
+  animation:kechu-promo-glow 2.35s ease-in-out infinite !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBanner.menu-promo-banner::before{
+  animation:kechu-promo-flare 3.3s ease-in-out infinite !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBanner.menu-promo-banner::after{
+  animation:kechu-promo-shine 3.8s ease-in-out infinite !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #promoJumpButton{
+  animation:kechu-promo-button 1.7s ease-in-out infinite !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #promoJumpButton::after{
+  animation:kechu-promo-button-sweep 2.55s ease-in-out infinite !important;
+}
+
+@keyframes kechu-cover-sparkles{
+  0%,100%{opacity:.16;filter:drop-shadow(0 0 4px #FFD000);scale:.65}
+  38%{opacity:1;filter:drop-shadow(0 0 13px #FFD000);scale:1.18}
+  62%{opacity:.38;scale:.82}
+}
+
+@keyframes kechu-cover-brand{
+  0%,100%{filter:brightness(1) drop-shadow(0 0 0 rgba(255,208,0,0))}
+  50%{filter:brightness(1.18) drop-shadow(0 0 12px rgba(255,208,0,.55))}
+}
+
+@keyframes kechu-cover-title{
+  0%,100%{filter:brightness(.98);transform:scale(1)}
+  50%{filter:brightness(1.18);transform:scale(1.025)}
+}
+
+@keyframes kechu-cover-cta{
+  0%,100%{box-shadow:0 7px 0 #8a6b00,0 12px 30px rgba(0,0,0,.5),0 0 16px rgba(255,208,0,.22);transform:translateY(0)}
+  50%{box-shadow:0 9px 0 #8a6b00,0 17px 36px rgba(0,0,0,.58),0 0 32px rgba(255,208,0,.58);transform:translateY(-3px)}
+}
+
+@keyframes kechu-cover-sweep{
+  0%,38%{opacity:0;transform:translateX(-48%) rotate(4deg)}
+  51%{opacity:.92}
+  68%,100%{opacity:0;transform:translateX(48%) rotate(4deg)}
+}
+
+@keyframes kechu-promo-glow{
+  0%,100%{box-shadow:0 8px 0 #765a00,0 14px 32px rgba(0,0,0,.62),0 0 18px rgba(255,208,0,.24);filter:brightness(1)}
+  50%{box-shadow:0 10px 0 #9c7700,0 20px 42px rgba(0,0,0,.7),0 0 45px rgba(255,208,0,.72);filter:brightness(1.12)}
+}
+
+@keyframes kechu-promo-flare{
+  0%,100%{opacity:.28;transform:scale(.82) rotate(0deg)}
+  50%{opacity:1;transform:scale(1.22) rotate(8deg)}
+}
+
+@keyframes kechu-promo-shine{
+  0%,34%{opacity:0;transform:translateX(-42%) rotate(7deg)}
+  48%{opacity:.95}
+  64%,100%{opacity:0;transform:translateX(42%) rotate(7deg)}
+}
+
+@keyframes kechu-promo-button{
+  0%,100%{filter:brightness(1);box-shadow:0 0 0 rgba(255,208,0,0)}
+  50%{filter:brightness(1.22);box-shadow:0 0 24px rgba(255,208,0,.78)}
+}
+
+@keyframes kechu-promo-button-sweep{
+  0%,38%{opacity:0;transform:translateX(-90%)}
+  52%{opacity:1}
+  70%,100%{opacity:0;transform:translateX(90%)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content::before,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content::after,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu172-denexa-top,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeBusinessName,
+  html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton,
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBanner.menu-promo-banner,
+  html[data-store-theme="carro-kechu-carmelo"] #promoJumpButton{
+    animation-duration:6s !important;
   }
 }
