@@ -134,6 +134,75 @@ html[data-store-theme="carro-kechu-carmelo"] .product-modal-image{
   }
 }
 
+/* Encabezado superior: CARRO KECHU CARMELO con vida propia. */
+html[data-store-theme="carro-kechu-carmelo"] #storeName{
+  position:relative !important;
+  isolation:isolate !important;
+  overflow:visible !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #storeName::before,
+html[data-store-theme="carro-kechu-carmelo"] #storeName::after{
+  content:"✦" !important;
+  position:absolute !important;
+  z-index:2 !important;
+  pointer-events:none !important;
+  color:#FFD000 !important;
+  font-family:Arial,sans-serif !important;
+  font-size:1.05rem !important;
+  line-height:1 !important;
+  text-shadow:0 0 6px #FFD000,0 0 15px rgba(255,208,0,.9) !important;
+  animation:kechu-header-spark 2.15s ease-in-out infinite !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #storeName::before{
+  top:-4px !important;
+  right:-19px !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #storeName::after{
+  content:"✧" !important;
+  left:-18px !important;
+  bottom:4px !important;
+  animation-delay:-1.05s !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #storeName .kechu-brand-carro,
+html[data-store-theme="carro-kechu-carmelo"] #storeName .kechu-brand-carmelo{
+  animation:kechu-header-white 3s ease-in-out infinite !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #storeName .kechu-brand-kechu{
+  transform-origin:left center !important;
+  animation:kechu-header-gold 2.15s ease-in-out infinite !important;
+}
+
+@keyframes kechu-header-spark{
+  0%,100%{opacity:.12;transform:rotate(0deg) scale(.42)}
+  35%{opacity:1;transform:rotate(18deg) scale(1.35)}
+  62%{opacity:.35;transform:rotate(32deg) scale(.72)}
+}
+
+@keyframes kechu-header-white{
+  0%,100%{opacity:.9;filter:brightness(.95);text-shadow:0 0 0 rgba(255,208,0,0)}
+  50%{opacity:1;filter:brightness(1.25);text-shadow:0 0 10px rgba(255,208,0,.44)}
+}
+
+@keyframes kechu-header-gold{
+  0%,100%{opacity:.92;filter:brightness(.92);transform:scale(1);text-shadow:0 2px 0 #5d4700,0 0 8px rgba(255,208,0,.35)}
+  48%{opacity:1;filter:brightness(1.28);transform:scale(1.035);text-shadow:0 2px 0 #7b5e00,0 0 17px #FFD000,0 0 30px rgba(255,208,0,.72)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-store-theme="carro-kechu-carmelo"] #storeName::before,
+  html[data-store-theme="carro-kechu-carmelo"] #storeName::after,
+  html[data-store-theme="carro-kechu-carmelo"] #storeName .kechu-brand-carro,
+  html[data-store-theme="carro-kechu-carmelo"] #storeName .kechu-brand-kechu,
+  html[data-store-theme="carro-kechu-carmelo"] #storeName .kechu-brand-carmelo{
+    animation-duration:6s !important;
+  }
+}
+
 :root{
   --primary:#0B43A0;
   --primary-2:#0E5BD8;
