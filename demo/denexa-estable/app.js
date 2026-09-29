@@ -62,14 +62,15 @@ function renderProducts(){
   $('#products').innerHTML=list.map((p,i)=>`
     <article class="product product--motion">
       ${p.id===1 ? `
-      <div class="product-media burger-builder" aria-label="Animación de hamburguesa armándose">
-        <div class="burger-aura"></div>
-        <span class="build-layer bun-bottom"></span>
-        <span class="build-layer patty"></span>
-        <span class="build-layer cheese"></span>
-        <span class="build-layer lettuce"></span>
-        <span class="build-layer tomato"></span>
-        <span class="build-layer bun-top"></span>
+      <div class="product-media real-burger-builder" aria-label="Hamburguesa real desarmándose y armándose">
+        <div class="real-burger-bg"></div>
+        <span class="real-piece real-top"></span>
+        <span class="real-piece real-green"></span>
+        <span class="real-piece real-tomato"></span>
+        <span class="real-piece real-onion"></span>
+        <span class="real-piece real-cheese"></span>
+        <span class="real-piece real-patty"></span>
+        <span class="real-piece real-bottom"></span>
         <b class="food-steam steam-a"></b><b class="food-steam steam-b"></b><b class="food-steam steam-c"></b>
         <span class="food-glint glint-a"></span><span class="food-glint glint-b"></span>
       </div>` : `
