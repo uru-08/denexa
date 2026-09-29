@@ -18,10 +18,28 @@ let cat=null,mode='Delivery';
 const cart=new Map(),$=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const money=n=>'$ '+n.toLocaleString('es-UY');
 
+const motionByCategory={
+  Hamburguesas:'motion-zoom',
+  Pizzas:'motion-pan',
+  Empanadas:'motion-float',
+  Milanesas:'motion-tilt',
+  Chivitos:'motion-depth',
+  Ensaladas:'motion-drift',
+  Bebidas:'motion-cool',
+  Postres:'motion-soft'
+};
+
+function photoMotion(category,index=0){
+  return `${motionByCategory[category]||'motion-zoom'} motion-seed-${index%4}`;
+}
+
 function renderCats(){
-  $('#categories').innerHTML=categories.map(c=>`
+  $('#categories').innerHTML=categories.map((c,i)=>`
     <button class="cat ${cat===c.name?'active':''}" data-cat="${c.name}">
-      <img src="assets/${c.img}" alt="${c.name}">
+      <span class="cat-media photo-motion ${photoMotion(c.name,i)}">
+        <img src="assets/${c.img}" alt="${c.name}">
+        <i aria-hidden="true"></i>
+      </span>
       <span>${c.name.toUpperCase()}</span>
     </button>`).join('');
 
@@ -41,8 +59,8 @@ function renderProducts(){
   const list=visible();
   $('#catalogTitle').textContent=cat?cat.toUpperCase():'DESTACADOS';
 
-  $('#products').innerHTML=list.map(p=>`
-    <article class="product ${p.id===1?'animated-demo-product':''}">
+  $('#products').innerHTML=list.map((p,i)=>`
+    <article class="product product--motion ${p.id===1?'animated-demo-product':''}">
       ${p.id===1 ? `
       <button class="burger-stage" type="button" data-burger-demo aria-label="Repetir animación de la hamburguesa">
         <span class="burger-layer layer-1" style="--burger:url('assets/${p.img}')"></span>
@@ -52,7 +70,11 @@ function renderProducts(){
         <span class="burger-layer layer-5" style="--burger:url('assets/${p.img}')"></span>
         <span class="burger-smoke smoke-1"></span><span class="burger-smoke smoke-2"></span><span class="burger-smoke smoke-3"></span>
         <span class="animation-badge">PRUEBA ANIMADA · TOCÁ PARA REPETIR</span>
-      </button>` : `<img src="assets/${p.img}" alt="${p.n}">`}
+      </button>` : `
+      <div class="product-media photo-motion ${photoMotion(p.c,i)}">
+        <img src="assets/${p.img}" alt="${p.n}">
+        <i aria-hidden="true"></i>
+      </div>`}
       <div class="prod-body">
         <h3>${p.n}</h3>
         <p>${p.d}</p>
