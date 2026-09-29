@@ -61,10 +61,20 @@ function renderProducts(){
 
   $('#products').innerHTML=list.map((p,i)=>`
     <article class="product product--motion">
+      ${p.id===1 ? `
+      <div class="product-media burger-photo-layers">
+        <img class="burger-layer-photo bp-base" src="assets/burger-base.svg" alt="">
+        <img class="burger-layer-photo bp-meat" src="assets/burger-cheese-patty.svg" alt="">
+        <img class="burger-layer-photo bp-onion" src="assets/burger-onion.svg" alt="">
+        <img class="burger-layer-photo bp-tomato" src="assets/burger-tomato.svg" alt="">
+        <img class="burger-layer-photo bp-lettuce" src="assets/burger-lettuce.svg" alt="">
+        <img class="burger-layer-photo bp-top" src="assets/burger-top.svg" alt="">
+        <b class="burger-smoke bs1"></b><b class="burger-smoke bs2"></b>
+      </div>` : `
       <div class="product-media photo-motion ${photoMotion(p.c,i)}">
         <img src="../denexa-v1/assets/${p.img}" alt="${p.n}">
         <i aria-hidden="true"></i>
-      </div>
+      </div>`}
       <div class="prod-body">
         <h3>${p.n}</h3>
         <p>${p.d}</p>
