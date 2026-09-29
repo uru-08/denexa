@@ -61,11 +61,22 @@ function renderProducts(){
 
   $('#products').innerHTML=list.map((p,i)=>`
     <article class="product product--motion">
-      <div class="product-media photo-motion ${photoMotion(p.c,i)} ${p.id===1?'burger-cinematic':''}">
+      ${p.id===1 ? `
+      <div class="product-media burger-builder" aria-label="Animación de hamburguesa armándose">
+        <div class="burger-aura"></div>
+        <span class="build-layer bun-bottom"></span>
+        <span class="build-layer patty"></span>
+        <span class="build-layer cheese"></span>
+        <span class="build-layer lettuce"></span>
+        <span class="build-layer tomato"></span>
+        <span class="build-layer bun-top"></span>
+        <b class="food-steam steam-a"></b><b class="food-steam steam-b"></b><b class="food-steam steam-c"></b>
+        <span class="food-glint glint-a"></span><span class="food-glint glint-b"></span>
+      </div>` : `
+      <div class="product-media photo-motion ${photoMotion(p.c,i)}">
         <img src="../denexa-v1/assets/${p.img}" alt="${p.n}">
         <i aria-hidden="true"></i>
-        ${p.id===1?'<b class="food-steam steam-a"></b><b class="food-steam steam-b"></b><b class="food-steam steam-c"></b><span class="food-glint glint-a"></span><span class="food-glint glint-b"></span>':''}
-      </div>
+      </div>`}
       <div class="prod-body">
         <h3>${p.n}</h3>
         <p>${p.d}</p>
