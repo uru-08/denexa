@@ -1706,3 +1706,25 @@ body{
 .burger-smoke{position:absolute;z-index:20;left:42%;bottom:26%;width:25px;height:55px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.6),rgba(220,245,255,.18) 45%,transparent 72%);filter:blur(7px);animation:burgerSmoke 2.6s ease-out infinite}
 .bs2{left:59%;animation-delay:1.2s}
 @keyframes burgerSmoke{0%{opacity:0;transform:translateY(8px) scale(.6)}25%{opacity:.7}100%{opacity:0;transform:translateY(-75px) scale(1.7)}}
+
+/* Burger final: atlas fotográfico real, 7 capas independientes */
+.burger-final{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 55%,#19343d 0,#071116 48%,#020609 100%);isolation:isolate}
+.burger-fallback{position:absolute!important;inset:0;width:100%!important;height:100%!important;object-fit:cover!important;opacity:.16;filter:blur(2px) brightness(.55);animation:none!important}
+.ing{position:absolute;z-index:4;left:8%;top:15%;width:84%;height:70%;background-image:url("assets/burger-atlas.svg");background-repeat:no-repeat;background-size:100% 700%;filter:drop-shadow(0 7px 6px #000b);opacity:0;will-change:transform,opacity;animation:ingredientBuild 7.4s cubic-bezier(.18,.72,.2,1) infinite}
+.ing-top{background-position:center 0%;--x:0px;--y:-115px;animation-delay:1.8s}
+.ing-lettuce{background-position:center 16.666%;--x:-115px;--y:-35px;animation-delay:1.5s}
+.ing-tomato{background-position:center 33.333%;--x:115px;--y:-10px;animation-delay:1.2s}
+.ing-onion{background-position:center 50%;--x:-120px;--y:5px;animation-delay:.9s}
+.ing-cheddar{background-position:center 66.666%;--x:120px;--y:22px;animation-delay:.6s}
+.ing-patty{background-position:center 83.333%;--x:0px;--y:105px;animation-delay:.3s}
+.ing-bottom{background-position:center 100%;--x:0px;--y:125px;animation-delay:0s}
+@keyframes ingredientBuild{
+0%,6%{opacity:0;transform:translate3d(var(--x),var(--y),0) scale(.82) rotate(-2deg)}
+19%,62%{opacity:1;transform:translate3d(0,0,0) scale(1) rotate(0)}
+69%{opacity:1;transform:translate3d(0,0,0) scale(1.035)}
+82%{opacity:1;transform:translate3d(var(--x),var(--y),0) scale(.9)}
+94%,100%{opacity:0;transform:translate3d(var(--x),var(--y),0) scale(.82)}
+}
+.burger-steam{position:absolute;z-index:8;bottom:18%;left:39%;width:28px;height:70px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.65),rgba(215,247,255,.18) 48%,transparent 72%);filter:blur(7px);opacity:0;animation:finalSteam 2.7s ease-out 2.2s infinite}
+.burger-steam.s2{left:58%;animation-delay:3.25s}
+@keyframes finalSteam{0%{opacity:0;transform:translateY(12px) scale(.55)}25%{opacity:.75}100%{opacity:0;transform:translateY(-82px) scale(1.75)}}
