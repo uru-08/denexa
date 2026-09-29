@@ -37,7 +37,7 @@ function renderCats(){
   $('#categories').innerHTML=categories.map((c,i)=>`
     <button class="cat ${cat===c.name?'active':''}" data-cat="${c.name}">
       <span class="cat-media photo-motion ${photoMotion(c.name,i)}">
-        <img src="../denexa-v1/assets/${c.img}" alt="${c.name}">
+        <img src="assets/${c.img}" alt="${c.name}">
         <i aria-hidden="true"></i>
       </span>
       <span>${c.name.toUpperCase()}</span>
@@ -62,22 +62,17 @@ function renderProducts(){
   $('#products').innerHTML=list.map((p,i)=>`
     <article class="product product--motion">
       ${p.id===1 ? `
-      ${p.id===1 ? `
-      <div class="product-media burger-final" aria-label="Hamburguesa animada por ingredientes">
-        <img class="burger-fallback" src="../denexa-v1/assets/${p.img}" alt="${p.n}">
-        <span class="ing ing-bottom"></span>
-        <span class="ing ing-patty"></span>
-        <span class="ing ing-cheddar"></span>
-        <span class="ing ing-onion"></span>
-        <span class="ing ing-tomato"></span>
-        <span class="ing ing-lettuce"></span>
-        <span class="ing ing-top"></span>
-        <b class="burger-steam s1"></b><b class="burger-steam s2"></b>
+      <div class="product-media burger-stack" aria-label="Hamburguesa completa animada">
+        <img class="burger-stack__fallback" src="../denexa-v1/assets/${p.img}" alt="${p.n}">
+        <span class="burger-piece piece-bottom"></span>
+        <span class="burger-piece piece-patty"></span>
+        <span class="burger-piece piece-cheddar"></span>
+        <span class="burger-piece piece-onion"></span>
+        <span class="burger-piece piece-tomato"></span>
+        <span class="burger-piece piece-lettuce"></span>
+        <span class="burger-piece piece-top"></span>
+        <span class="burger-vapor vapor-1"></span><span class="burger-vapor vapor-2"></span>
       </div>` : `
-      <div class="product-media photo-motion ${photoMotion(p.c,i)}">
-        <img src="../denexa-v1/assets/${p.img}" alt="${p.n}">
-        <i aria-hidden="true"></i>
-      </div>`}` : `
       <div class="product-media photo-motion ${photoMotion(p.c,i)}">
         <img src="../denexa-v1/assets/${p.img}" alt="${p.n}">
         <i aria-hidden="true"></i>
