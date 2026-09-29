@@ -1722,3 +1722,24 @@ body{
 @keyframes auraPulse{0%,100%{opacity:.35;transform:scale(.9)}50%{opacity:.9;transform:scale(1.08)}}
 .burger-builder .food-steam{bottom:24%;z-index:6}
 .burger-builder .food-glint{z-index:7}
+
+/* v3 — piezas enmascaradas de la FOTO REAL publicada */
+.real-burger-builder{position:relative;overflow:hidden;background:#05090b;isolation:isolate}
+.real-burger-bg{position:absolute;inset:0;background:radial-gradient(circle at 50% 48%,rgba(244,183,35,.16),transparent 57%);animation:auraPulse 3s ease-in-out infinite}
+.real-piece{position:absolute;inset:0;z-index:3;background:url("../denexa-v1/assets/cat-hamburguesas.jpg") center/cover no-repeat;will-change:transform,opacity;filter:drop-shadow(0 8px 7px rgba(0,0,0,.65));animation:realAssemble 7s cubic-bezier(.2,.72,.18,1) infinite}
+.real-top{clip-path:polygon(20% 4%,80% 4%,91% 18%,87% 34%,76% 42%,25% 42%,13% 33%,12% 20%);--dx:0px;--dy:-105px;animation-delay:1.8s}
+.real-green{clip-path:polygon(9% 34%,91% 34%,96% 49%,83% 54%,65% 49%,49% 54%,29% 48%,11% 54%,4% 46%);--dx:-105px;--dy:-20px;animation-delay:1.5s}
+.real-tomato{clip-path:polygon(10% 45%,91% 44%,88% 57%,14% 59%,5% 53%);--dx:110px;--dy:-5px;animation-delay:1.2s}
+.real-onion{clip-path:polygon(14% 53%,89% 52%,86% 65%,18% 66%,8% 61%);--dx:-120px;--dy:0px;animation-delay:.9s}
+.real-cheese{clip-path:polygon(11% 61%,91% 59%,88% 74%,67% 70%,52% 78%,35% 71%,15% 76%,6% 69%);--dx:115px;--dy:12px;animation-delay:.6s}
+.real-patty{clip-path:polygon(14% 68%,89% 67%,91% 88%,78% 94%,22% 94%,8% 87%);--dx:0px;--dy:100px;animation-delay:.3s}
+.real-bottom{clip-path:polygon(17% 84%,86% 84%,92% 100%,8% 100%);--dx:0px;--dy:120px;animation-delay:0s}
+@keyframes realAssemble{
+0%,7%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) scale(.82)}
+22%,61%{opacity:1;transform:translate3d(0,0,0) scale(1)}
+68%{opacity:1;transform:translate3d(0,0,0) scale(1.035)}
+82%{opacity:1;transform:translate3d(var(--dx),var(--dy),0) scale(.9)}
+94%,100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) scale(.78)}
+}
+.real-burger-builder .food-steam{bottom:25%;z-index:8}
+.real-burger-builder .food-glint{z-index:9}
