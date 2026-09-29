@@ -1686,3 +1686,23 @@ body{
   .hero-mascot{animation-duration:8s,4s!important}
   .promo-card{animation-duration:7s!important}
 }
+
+/* Burger foto real v5: capas SVG transparentes sobre la foto publicada */
+.burger-photo-layers{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 48%,#18313a 0,#061015 55%,#020507 100%);isolation:isolate}
+.burger-layer-photo{position:absolute!important;inset:0;width:100%!important;height:100%!important;object-fit:cover!important;opacity:0;transform-origin:50% 55%;animation:photoLayerCycle 7.2s cubic-bezier(.2,.72,.18,1) infinite!important;filter:drop-shadow(0 6px 5px #0009)}
+.bp-base{--x:0px;--y:105px;animation-delay:0s!important}
+.bp-meat{--x:0px;--y:82px;animation-delay:.32s!important}
+.bp-onion{--x:-92px;--y:10px;animation-delay:.64s!important}
+.bp-tomato{--x:94px;--y:-5px;animation-delay:.96s!important}
+.bp-lettuce{--x:-70px;--y:-45px;animation-delay:1.28s!important}
+.bp-top{--x:0px;--y:-105px;animation-delay:1.6s!important}
+@keyframes photoLayerCycle{
+0%,7%{opacity:0;transform:translate3d(var(--x),var(--y),0) scale(.9)}
+20%,62%{opacity:1;transform:translate3d(0,0,0) scale(1)}
+70%{opacity:1;transform:translate3d(0,0,0) scale(1.025)}
+83%{opacity:1;transform:translate3d(var(--x),var(--y),0) scale(.94)}
+95%,100%{opacity:0;transform:translate3d(var(--x),var(--y),0) scale(.9)}
+}
+.burger-smoke{position:absolute;z-index:20;left:42%;bottom:26%;width:25px;height:55px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.6),rgba(220,245,255,.18) 45%,transparent 72%);filter:blur(7px);animation:burgerSmoke 2.6s ease-out infinite}
+.bs2{left:59%;animation-delay:1.2s}
+@keyframes burgerSmoke{0%{opacity:0;transform:translateY(8px) scale(.6)}25%{opacity:.7}100%{opacity:0;transform:translateY(-75px) scale(1.7)}}
