@@ -60,21 +60,11 @@ function renderProducts(){
   $('#catalogTitle').textContent=cat?cat.toUpperCase():'DESTACADOS';
 
   $('#products').innerHTML=list.map((p,i)=>`
-    <article class="product product--motion ${p.id===1?'animated-demo-product':''}">
-      ${p.id===1 ? `
-      <button class="burger-stage" type="button" data-burger-demo aria-label="Repetir animación de la hamburguesa">
-        <span class="burger-layer layer-1" style="--burger:url('assets/${p.img}')"></span>
-        <span class="burger-layer layer-2" style="--burger:url('assets/${p.img}')"></span>
-        <span class="burger-layer layer-3" style="--burger:url('assets/${p.img}')"></span>
-        <span class="burger-layer layer-4" style="--burger:url('assets/${p.img}')"></span>
-        <span class="burger-layer layer-5" style="--burger:url('assets/${p.img}')"></span>
-        <span class="burger-smoke smoke-1"></span><span class="burger-smoke smoke-2"></span><span class="burger-smoke smoke-3"></span>
-        <span class="animation-badge">PRUEBA ANIMADA · TOCÁ PARA REPETIR</span>
-      </button>` : `
+    <article class="product product--motion">
       <div class="product-media photo-motion ${photoMotion(p.c,i)}">
         <img src="assets/${p.img}" alt="${p.n}">
         <i aria-hidden="true"></i>
-      </div>`}
+      </div>
       <div class="prod-body">
         <h3>${p.n}</h3>
         <p>${p.d}</p>
@@ -87,8 +77,7 @@ function renderProducts(){
       </div>
     </article>`).join('');
 
-  $('[data-burger-demo]').forEach(b=>b.onclick=()=>{b.classList.remove('replay');void b.offsetWidth;b.classList.add('replay');});
-  $('[data-p]').forEach(b=>b.onclick=()=>chg(+b.dataset.p,1));
+  $$('[data-p]').forEach(b=>b.onclick=()=>chg(+b.dataset.p,1));
   $$('[data-m]').forEach(b=>b.onclick=()=>chg(+b.dataset.m,-1));
 }
 
