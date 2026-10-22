@@ -43,56 +43,31 @@ html[data-store-theme="carro-kechu-carmelo"] body .store-header-inner {
 }
 html[data-store-theme="carro-kechu-carmelo"] body .store-header .store-brand { display: none !important; }
 html[data-store-theme="carro-kechu-carmelo"] body .store-header .kechu-final-info-row { margin: 0 12px 12px !important; width: auto !important; }
-/* La misma ilustración y las mismas letras en la bienvenida. */
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen:not([aria-hidden="true"]) {
-  display: flex !important; align-items: center !important; justify-content: center !important;
-  padding: max(12px, env(safe-area-inset-top)) 0 max(18px, env(safe-area-inset-bottom)) !important;
-  overflow-x: hidden !important; overflow-y: auto !important; box-sizing: border-box !important;
-}
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-content {
-  display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important;
-  position: relative !important; inset: auto !important; width: 100% !important; max-width: 1000px !important;
-  height: auto !important; min-height: 0 !important; min-width: 0 !important; max-height: none !important;
-  margin: auto !important; padding: 0 !important; gap: 0 !important; background: #050505 !important;
-  background-image: none !important; overflow: visible !important; transform: none !important;
-}
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-content::before,
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-content::after,
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen::before,
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen::after,
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .kechu172-denexa-top,
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-logo-wrap,
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-copy,
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-mobile-note,
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-note,
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-denexa-signature { display: none !important; content: none !important; }
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-status {
-  display: flex !important; position: relative !important; inset: auto !important; transform: none !important;
-  margin: 18px auto 12px !important; padding: 10px 20px !important; color: #fff !important;
-  background: #101010 !important; border: 1px solid #74611a !important; border-radius: 999px !important;
-  font: 700 15px/1.3 system-ui, sans-serif !important;
-}
-html[data-store-theme="carro-kechu-carmelo"] body #enterStoreButton {
-  display: flex !important; position: relative !important; inset: auto !important; transform: none !important;
-  width: min(88%, 400px) !important; height: auto !important; min-height: 56px !important; margin: 0 auto 16px !important;
-  padding: 14px 24px !important; align-items: center !important; justify-content: center !important; gap: 15px !important;
-  background: #ffd400 !important; color: #050505 !important; border: 1px solid #ffe979 !important; border-radius: 18px !important;
-  box-shadow: 0 0 22px #ffd40033 !important; font: 800 18px/1.2 system-ui, sans-serif !important;
-}
-html[data-store-theme="carro-kechu-carmelo"] body #enterStoreButton span {
-  display: inline !important; color: #050505 !important; font: inherit !important; text-shadow: none !important;
-}
-html[data-store-theme="carro-kechu-carmelo"] body #enterStoreButton:disabled { opacity: .55 !important; cursor: not-allowed !important; }
-html[data-store-theme="carro-kechu-carmelo"] body #orderingStatusNotice:not([hidden]) {
-  position: relative !important; inset: auto !important; transform: none !important; width: min(88%, 500px) !important;
-  margin: 0 auto 16px !important; order: 5 !important;
-}
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen[aria-hidden="true"] { display: none !important; }
-@media (max-height: 560px) and (min-width: 600px) {
-  html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-content { max-width: 620px !important; }
+
+/* V185: bienvenida original v183; únicamente cambia el tratamiento de las letras. */
+@media (max-width: 899px) {
+  html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #welcomeBusinessName {
+    font-family: "Knewave", "Arial Black", sans-serif !important;
+    font-style: italic !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    -webkit-text-stroke: 1.5px #090909 !important;
+    paint-order: stroke fill !important;
+    text-shadow: 1px 2px 0 #c6c6c6, 3px 4px 0 #646464, 5px 6px 0 #050505, 0 0 2px #ffd400 !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #welcomeBusinessName span {
+    -webkit-text-fill-color: #fff !important;
+    color: #fff !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #welcomeBusinessName .welcome-kechu-main {
+    color: #ffd400 !important;
+    -webkit-text-fill-color: #ffd400 !important;
+    -webkit-text-stroke: 1.5px #090909 !important;
+    text-shadow: 1px 2px 0 #ffb900, 3px 4px 0 #ba7300, 5px 6px 0 #050505, 0 0 2px #ffe978 !important;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  html[data-store-theme="carro-kechu-carmelo"] body .kechu184-effects * ,
+  html[data-store-theme="carro-kechu-carmelo"] body .kechu184-effects *,
   html[data-store-theme="carro-kechu-carmelo"] body .kechu184-effects::before,
   html[data-store-theme="carro-kechu-carmelo"] body .kechu184-effects::after { animation: none !important; }
 }
