@@ -171,7 +171,7 @@ html[data-store-theme="carro-kechu-carmelo"] body.kechu-page-hidden *::before,
 html[data-store-theme="carro-kechu-carmelo"] body.kechu-page-hidden *::after {
   animation-play-state: paused !important;
 }
-html[data-store-theme="carro-kechu-carmelo"] body #dailyPromoBanner::before {
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner.menu-promo-banner::before {
   background: url("../assets/kechu/promo-megafono.svg") center / contain no-repeat !important;
   width: 40% !important; inset: 12px 8px 12px auto !important;
   opacity: 1 !important; filter: none !important;
