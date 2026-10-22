@@ -1905,6 +1905,160 @@
   }
 }
 
+/* =========================================================
+ * V183 — símbolo + real, luces visibles y pie sin vacío
+ * ========================================================= */
+@media (max-width: 899px) {
+  /* El + real se genera desde el precio, no desde la tarjeta. */
+  html[data-store-theme="carro-kechu-carmelo"] .product-price::after {
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+    -webkit-text-stroke: 0 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 1.75rem !important;
+    font-weight: 1000 !important;
+    line-height: 1 !important;
+    text-shadow: none !important;
+    border: 2px solid #050505 !important;
+    background: linear-gradient(145deg, #fff47c, #ffd400 48%, #ffb800) !important;
+    animation: kechu-real-plus-pulse 1.05s ease-in-out infinite !important;
+  }
+
+  /* Luces evidentes en las clases reales que construye app.js. */
+  html[data-store-theme="carro-kechu-carmelo"] .category-section {
+    border: 2px solid rgba(255, 212, 0, .42) !important;
+    animation: kechu-real-section-glow 2.2s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card {
+    animation: kechu-real-card-glow 1.8s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card:nth-child(even) {
+    animation-delay: -.9s !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab {
+    animation: kechu-real-tab-glow 1.65s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBanner.menu-promo-banner {
+    animation: kechu-real-promo-glow 1.75s ease-in-out infinite !important;
+  }
+
+  /* Pie de marca grande, compacto y sin cientos de píxeles vacíos. */
+  html[data-store-theme="carro-kechu-carmelo"] .main-content {
+    padding-bottom: 92px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-footer {
+    width: calc(100% - 24px) !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 20px 12px 22px !important;
+    padding: 20px 16px 24px !important;
+    border: 2px solid rgba(255, 212, 0, .62) !important;
+    border-radius: 24px 7px 24px 7px !important;
+    background: linear-gradient(145deg, rgba(255, 212, 0, .12), #090909 38%, rgba(230, 32, 45, .08)) !important;
+    box-shadow: 0 0 0 4px rgba(255, 212, 0, .04), 0 0 27px rgba(255, 212, 0, .24), inset 0 0 22px rgba(255, 212, 0, .05) !important;
+    animation: kechu-footer-glow 2.25s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-inner {
+    width: 100% !important;
+    max-width: 440px !important;
+    gap: 11px !important;
+    opacity: 1 !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-label {
+    color: #ffd400 !important;
+    -webkit-text-fill-color: #ffd400 !important;
+    font-size: .72rem !important;
+    font-weight: 950 !important;
+    letter-spacing: .24em !important;
+    text-shadow: 0 0 12px rgba(255, 212, 0, .55) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-row {
+    width: 100% !important;
+    gap: 15px !important;
+    justify-content: center !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-logo {
+    width: 76px !important;
+    height: 76px !important;
+    border: 2px solid #ffd400 !important;
+    box-shadow: 0 0 20px rgba(255, 212, 0, .48) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-copy {
+    gap: 5px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-copy strong {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    font-size: 1.18rem !important;
+    font-weight: 950 !important;
+    letter-spacing: .14em !important;
+    text-shadow: 2px 2px 0 #000, 0 0 14px rgba(255, 212, 0, .40) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-copy span {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    font-size: .76rem !important;
+    font-weight: 800 !important;
+    line-height: 1.25 !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-meta {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    font-size: 1.02rem !important;
+    font-weight: 950 !important;
+    letter-spacing: .06em !important;
+    text-shadow: 1px 1px 0 #000, 0 0 11px rgba(255, 212, 0, .34) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-country {
+    font-size: 1.45rem !important;
+    line-height: 1 !important;
+  }
+}
+
+@keyframes kechu-real-plus-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 3px rgba(255, 212, 0, .12), 0 0 14px rgba(255, 212, 0, .48); }
+  50% { transform: scale(1.14); box-shadow: 0 0 0 7px rgba(255, 212, 0, .15), 0 0 34px rgba(255, 212, 0, 1); }
+}
+
+@keyframes kechu-real-section-glow {
+  0%, 100% { border-color: rgba(255, 212, 0, .34); box-shadow: 0 0 8px rgba(255, 212, 0, .13), inset 0 0 8px rgba(255, 212, 0, .03); }
+  50% { border-color: #ffe45a; box-shadow: 0 0 25px rgba(255, 212, 0, .62), inset 0 0 19px rgba(255, 212, 0, .08); }
+}
+
+@keyframes kechu-real-card-glow {
+  0%, 100% { border-color: rgba(230, 32, 45, .58); box-shadow: 0 10px 23px rgba(0, 0, 0, .38), -4px 0 11px rgba(230, 32, 45, .34); }
+  50% { border-color: rgba(255, 212, 0, .88); box-shadow: 0 12px 28px rgba(0, 0, 0, .46), -5px 0 24px rgba(255, 212, 0, .78), 0 0 17px rgba(255, 212, 0, .24); }
+}
+
+@keyframes kechu-real-tab-glow {
+  0%, 100% { filter: brightness(.96); box-shadow: 0 7px 16px rgba(0, 0, 0, .38), 0 0 7px rgba(255, 212, 0, .18); }
+  50% { filter: brightness(1.16); box-shadow: 0 8px 20px rgba(0, 0, 0, .44), 0 0 23px rgba(255, 212, 0, .78); }
+}
+
+@keyframes kechu-real-promo-glow {
+  0%, 100% { box-shadow: 0 16px 34px rgba(0, 0, 0, .45), 0 0 14px rgba(255, 212, 0, .18); }
+  50% { box-shadow: 0 18px 38px rgba(0, 0, 0, .52), 0 0 34px rgba(255, 212, 0, .72), 0 0 50px rgba(230, 32, 45, .13); }
+}
+
+@keyframes kechu-footer-glow {
+  0%, 100% { border-color: rgba(255, 212, 0, .48); box-shadow: 0 0 13px rgba(255, 212, 0, .18), inset 0 0 15px rgba(255, 212, 0, .04); }
+  50% { border-color: #fff09a; box-shadow: 0 0 31px rgba(255, 212, 0, .62), inset 0 0 26px rgba(255, 212, 0, .11); }
+}
+
 /* V180 final: debe permanecer como la última capa del archivo. */
 @media (max-width: 899px) {
   html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu172-denexa-top strong,
