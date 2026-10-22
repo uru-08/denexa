@@ -518,6 +518,169 @@
 }
 
 /* =========================================================
+ * V180 — legibilidad total y controles futuristas visibles
+ * Capa final: blanco sólido, contorno negro y neón localizado.
+ * ========================================================= */
+@media (max-width: 899px) {
+  /* Una sola regla de lectura para títulos, textos breves y precios. */
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu172-denexa-top strong,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu172-denexa-top small,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-kicker,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen #welcomeBusinessName,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-service-card strong,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen #welcomeStatusText,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-mobile-note,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content::after,
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading h1,
+  html[data-store-theme="carro-kechu-carmelo"] .store-subtitle,
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-info-row,
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBannerBadge,
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBannerTitle,
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBannerText,
+  html[data-store-theme="carro-kechu-carmelo"] .section-heading h2,
+  html[data-store-theme="carro-kechu-carmelo"] .section-subtitle,
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab-label,
+  html[data-store-theme="carro-kechu-carmelo"] .category-heading h3,
+  html[data-store-theme="carro-kechu-carmelo"] .product-info h4,
+  html[data-store-theme="carro-kechu-carmelo"] .product-description,
+  html[data-store-theme="carro-kechu-carmelo"] .product-price,
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-footer,
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-footer strong,
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-footer .denexa-footer-name {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    -webkit-text-stroke: .7px #000 !important;
+    paint-order: stroke fill !important;
+    opacity: 1 !important;
+    text-shadow:
+      1px 1px 0 #000,
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      0 2px 5px #000 !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen #welcomeBusinessName,
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading h1,
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBannerTitle {
+    -webkit-text-stroke: 1.35px #000 !important;
+    text-shadow:
+      2px 2px 0 #000,
+      -1px -1px 0 #000,
+      4px 4px 0 rgba(230, 32, 45, .92),
+      0 0 18px rgba(255, 212, 0, .42) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBannerText {
+    font-family: "Oswald", Arial, sans-serif !important;
+    font-weight: 900 !important;
+    font-size: clamp(1rem, 4.3vw, 1.16rem) !important;
+    line-height: 1.34 !important;
+    letter-spacing: .025em !important;
+  }
+
+  /* Botones oscuros con texto blanco y pulso amarillo inequívoco. */
+  html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton,
+  html[data-store-theme="carro-kechu-carmelo"] #promoJumpButton,
+  html[data-store-theme="carro-kechu-carmelo"] #cartButton,
+  html[data-store-theme="carro-kechu-carmelo"] #addToCartButton,
+  html[data-store-theme="carro-kechu-carmelo"] .add-to-cart-button,
+  html[data-store-theme="carro-kechu-carmelo"] .primary-button,
+  html[data-store-theme="carro-kechu-carmelo"] .checkout-button {
+    position: relative !important;
+    overflow: hidden !important;
+    border: 2px solid #ffd400 !important;
+    background: linear-gradient(125deg, #050505 0%, #191506 48%, #050505 100%) !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    -webkit-text-stroke: .65px #000 !important;
+    paint-order: stroke fill !important;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 0 0 7px #000 !important;
+    box-shadow:
+      0 0 0 3px rgba(255, 212, 0, .12),
+      0 0 18px rgba(255, 212, 0, .58),
+      inset 0 0 18px rgba(255, 212, 0, .08) !important;
+    animation: kechu-button-beacon 1.45s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton span,
+  html[data-store-theme="carro-kechu-carmelo"] #promoJumpButton span,
+  html[data-store-theme="carro-kechu-carmelo"] #cartButton span,
+  html[data-store-theme="carro-kechu-carmelo"] #cartButton .cart-action-label {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 0 0 7px #000 !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #cartButton .cart-action-label {
+    background: rgba(255, 212, 0, .13) !important;
+    border: 1px solid rgba(255, 232, 107, .65) !important;
+  }
+
+  /* Categorías: borde animado y rótulos siempre blancos. */
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab {
+    border: 2px solid rgba(255, 212, 0, .50) !important;
+    animation: kechu-button-beacon 1.8s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab-label {
+    font-weight: 900 !important;
+    font-size: .69rem !important;
+    letter-spacing: .025em !important;
+    background: rgba(0, 0, 0, .88) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab.active,
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab.is-active,
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab[aria-selected="true"] {
+    border-color: #fff19a !important;
+    animation: kechu-button-active 1.05s ease-in-out infinite !important;
+  }
+
+  /* El menú no recupera el barrido vertical. */
+  html[data-store-theme="carro-kechu-carmelo"] #appShell::after {
+    display: none !important;
+    content: none !important;
+    animation: none !important;
+  }
+}
+
+@keyframes kechu-button-beacon {
+  0%, 100% {
+    filter: brightness(1);
+    box-shadow: 0 0 0 2px rgba(255, 212, 0, .10), 0 0 13px rgba(255, 212, 0, .42), inset 0 0 12px rgba(255, 212, 0, .05);
+  }
+  50% {
+    filter: brightness(1.12);
+    box-shadow: 0 0 0 4px rgba(255, 212, 0, .20), 0 0 29px rgba(255, 212, 0, .90), 0 0 44px rgba(230, 32, 45, .22), inset 0 0 24px rgba(255, 212, 0, .14);
+  }
+}
+
+@keyframes kechu-button-active {
+  0%, 100% {
+    transform: translateY(-2px) scale(1);
+    box-shadow: 0 0 0 2px #ffd400, 0 0 20px rgba(255, 212, 0, .66);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.025);
+    box-shadow: 0 0 0 3px #fff4aa, 0 0 36px rgba(255, 212, 0, 1), 0 0 55px rgba(230, 32, 45, .26);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton,
+  html[data-store-theme="carro-kechu-carmelo"] #promoJumpButton,
+  html[data-store-theme="carro-kechu-carmelo"] #cartButton,
+  html[data-store-theme="carro-kechu-carmelo"] #addToCartButton,
+  html[data-store-theme="carro-kechu-carmelo"] .add-to-cart-button,
+  html[data-store-theme="carro-kechu-carmelo"] .primary-button,
+  html[data-store-theme="carro-kechu-carmelo"] .checkout-button,
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab {
+    animation: none !important;
+  }
+}
+
+/* =========================================================
  * V177 — portada completa y neón cinético
  * ========================================================= */
 @media (max-width: 899px) {
@@ -1462,5 +1625,111 @@
 
   html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top small {
     font-size: .47rem !important;
+  }
+}
+
+/* V180 final: debe permanecer como la última capa del archivo. */
+@media (max-width: 899px) {
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu172-denexa-top strong,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu172-denexa-top small,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-kicker,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen #welcomeBusinessName,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-service-card strong,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen #welcomeStatusText,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-mobile-note,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content::after,
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading h1,
+  html[data-store-theme="carro-kechu-carmelo"] .store-subtitle,
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-info-row,
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBannerBadge,
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBannerTitle,
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBannerText,
+  html[data-store-theme="carro-kechu-carmelo"] .section-heading h2,
+  html[data-store-theme="carro-kechu-carmelo"] .section-subtitle,
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab-label,
+  html[data-store-theme="carro-kechu-carmelo"] .category-heading h3,
+  html[data-store-theme="carro-kechu-carmelo"] .product-info h4,
+  html[data-store-theme="carro-kechu-carmelo"] .product-description,
+  html[data-store-theme="carro-kechu-carmelo"] .product-price,
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-footer,
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-footer strong,
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-footer .denexa-footer-name {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    -webkit-text-stroke: .7px #000 !important;
+    paint-order: stroke fill !important;
+    opacity: 1 !important;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 2px 5px #000 !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen #welcomeBusinessName,
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading h1,
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBannerTitle {
+    -webkit-text-stroke: 1.35px #000 !important;
+    text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 4px 4px 0 rgba(230, 32, 45, .92), 0 0 18px rgba(255, 212, 0, .42) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBannerText {
+    font-family: "Oswald", Arial, sans-serif !important;
+    font-weight: 900 !important;
+    font-size: clamp(1rem, 4.3vw, 1.16rem) !important;
+    line-height: 1.34 !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton,
+  html[data-store-theme="carro-kechu-carmelo"] #promoJumpButton,
+  html[data-store-theme="carro-kechu-carmelo"] #cartButton,
+  html[data-store-theme="carro-kechu-carmelo"] #addToCartButton,
+  html[data-store-theme="carro-kechu-carmelo"] .add-to-cart-button,
+  html[data-store-theme="carro-kechu-carmelo"] .primary-button,
+  html[data-store-theme="carro-kechu-carmelo"] .checkout-button {
+    position: relative !important;
+    overflow: hidden !important;
+    border: 2px solid #ffd400 !important;
+    background: linear-gradient(125deg, #050505, #191506 48%, #050505) !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    -webkit-text-stroke: .65px #000 !important;
+    paint-order: stroke fill !important;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 0 0 7px #000 !important;
+    animation: kechu-button-beacon 1.45s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #enterStoreButton span,
+  html[data-store-theme="carro-kechu-carmelo"] #promoJumpButton span,
+  html[data-store-theme="carro-kechu-carmelo"] #cartButton span,
+  html[data-store-theme="carro-kechu-carmelo"] #cartButton .cart-action-label {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 0 0 7px #000 !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #cartButton .cart-action-label {
+    background: rgba(255, 212, 0, .13) !important;
+    border: 1px solid rgba(255, 232, 107, .65) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab {
+    border: 2px solid rgba(255, 212, 0, .50) !important;
+    animation: kechu-button-beacon 1.8s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab-label {
+    font-weight: 900 !important;
+    font-size: .69rem !important;
+    background: rgba(0, 0, 0, .88) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab.active,
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab.is-active,
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab[aria-selected="true"] {
+    border-color: #fff19a !important;
+    animation: kechu-button-active 1.05s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #appShell::after {
+    display: none !important;
+    content: none !important;
+    animation: none !important;
   }
 }
