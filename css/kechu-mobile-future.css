@@ -735,6 +735,185 @@
   }
 }
 
+/* V182 prioridad final. */
+@media (max-width: 899px) {
+  html[data-store-theme="carro-kechu-carmelo"] .product-card::after {
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+    -webkit-text-stroke: 0 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 1.65rem !important;
+    font-weight: 1000 !important;
+    line-height: 1 !important;
+    text-shadow: none !important;
+    border: 2px solid #050505 !important;
+    background: linear-gradient(145deg, #fff16b, #ffd400 48%, #ffb800) !important;
+    animation: kechu-plus-black-pulse 1.25s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .main-content::before {
+    width: min(100%, 410px) !important;
+    min-height: 44px !important;
+    padding: 9px 14px !important;
+    border-width: 2px !important;
+    border-radius: 15px 5px 15px 5px !important;
+    font-size: clamp(.76rem, 3.45vw, .94rem) !important;
+    font-weight: 950 !important;
+    letter-spacing: .07em !important;
+    animation: kechu-denexa-signature 2.2s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBanner.menu-promo-banner,
+  html[data-store-theme="carro-kechu-carmelo"] .category-block {
+    animation: kechu-panel-light 2.8s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card {
+    animation: kechu-product-light 2.65s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card:nth-child(even) {
+    animation-delay: -1.32s !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-info-row {
+    animation: kechu-info-light 2.8s ease-in-out infinite !important;
+  }
+}
+
+/* =========================================================
+ * V182 — acentos negros, firma DENEXA y bordes con vida
+ * ========================================================= */
+@media (max-width: 899px) {
+  /* El signo + debe dominar con contraste negro sobre amarillo. */
+  html[data-store-theme="carro-kechu-carmelo"] .product-card::after {
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+    -webkit-text-stroke: 0 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 1.65rem !important;
+    font-weight: 1000 !important;
+    line-height: 1 !important;
+    text-shadow: none !important;
+    border: 2px solid #050505 !important;
+    background: linear-gradient(145deg, #fff16b 0%, #ffd400 48%, #ffb800 100%) !important;
+    box-shadow: 0 0 0 3px rgba(255, 212, 0, .15), 0 0 23px rgba(255, 212, 0, .72) !important;
+    animation: kechu-plus-black-pulse 1.25s ease-in-out infinite !important;
+  }
+
+  /* Firma DENEXA más grande, clara y con presencia de marca. */
+  html[data-store-theme="carro-kechu-carmelo"] .main-content::before {
+    width: min(100%, 410px) !important;
+    min-height: 44px !important;
+    margin: 1px auto 15px !important;
+    padding: 9px 14px !important;
+    border: 2px solid rgba(255, 212, 0, .66) !important;
+    border-radius: 15px 5px 15px 5px !important;
+    background: linear-gradient(110deg, rgba(255, 212, 0, .11), rgba(5, 5, 5, .97) 36%, rgba(230, 32, 45, .07)) !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    -webkit-text-stroke: .75px #000 !important;
+    font-size: clamp(.76rem, 3.45vw, .94rem) !important;
+    font-weight: 950 !important;
+    letter-spacing: .07em !important;
+    text-align: center !important;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 0 0 12px rgba(255, 212, 0, .50) !important;
+    box-shadow: 0 0 0 3px rgba(255, 212, 0, .04), 0 0 20px rgba(255, 212, 0, .20), inset 0 0 16px rgba(255, 212, 0, .06) !important;
+    animation: kechu-denexa-signature 2.2s ease-in-out infinite !important;
+  }
+
+  /* Movimiento localizado en bordes; nunca cruza el contenido. */
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBanner.menu-promo-banner {
+    animation: kechu-panel-light 2.5s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-block {
+    border-color: rgba(255, 212, 0, .36) !important;
+    animation: kechu-panel-light 3.2s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card {
+    animation: kechu-product-light 2.65s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card:nth-child(even) {
+    animation-delay: -1.32s !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-info-row {
+    animation: kechu-info-light 2.8s ease-in-out infinite !important;
+  }
+
+  /* Confirma que no vuelve la línea vertical del menú. */
+  html[data-store-theme="carro-kechu-carmelo"] #appShell::after {
+    display: none !important;
+    content: none !important;
+    animation: none !important;
+  }
+}
+
+@keyframes kechu-plus-black-pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+    box-shadow: 0 0 0 3px rgba(255, 212, 0, .13), 0 0 16px rgba(255, 212, 0, .50);
+  }
+  50% {
+    transform: scale(1.13);
+    filter: brightness(1.12);
+    box-shadow: 0 0 0 6px rgba(255, 212, 0, .13), 0 0 31px rgba(255, 212, 0, .96);
+  }
+}
+
+@keyframes kechu-denexa-signature {
+  0%, 100% {
+    border-color: rgba(255, 212, 0, .55);
+    box-shadow: 0 0 0 3px rgba(255, 212, 0, .04), 0 0 15px rgba(255, 212, 0, .18), inset 0 0 12px rgba(255, 212, 0, .04);
+  }
+  50% {
+    border-color: #fff09a;
+    box-shadow: 0 0 0 4px rgba(255, 212, 0, .10), 0 0 29px rgba(255, 212, 0, .58), inset 0 0 23px rgba(255, 212, 0, .11);
+  }
+}
+
+@keyframes kechu-panel-light {
+  0%, 100% {
+    border-color: rgba(255, 212, 0, .42);
+    box-shadow: 0 15px 31px rgba(0, 0, 0, .40), 0 0 13px rgba(255, 212, 0, .15);
+  }
+  50% {
+    border-color: rgba(255, 241, 154, .94);
+    box-shadow: 0 17px 34px rgba(0, 0, 0, .48), 0 0 27px rgba(255, 212, 0, .52), 0 0 42px rgba(230, 32, 45, .10);
+  }
+}
+
+@keyframes kechu-product-light {
+  0%, 100% {
+    border-left-color: #d91f2c;
+    box-shadow: 0 11px 25px rgba(0, 0, 0, .36), -3px 0 8px rgba(230, 32, 45, .30);
+  }
+  50% {
+    border-left-color: #ffd400;
+    box-shadow: 0 13px 29px rgba(0, 0, 0, .44), -5px 0 20px rgba(255, 212, 0, .67);
+  }
+}
+
+@keyframes kechu-info-light {
+  0%, 100% { box-shadow: 0 10px 24px rgba(0, 0, 0, .32), 0 0 10px rgba(255, 212, 0, .10); }
+  50% { box-shadow: 0 11px 27px rgba(0, 0, 0, .40), 0 0 23px rgba(255, 212, 0, .37); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-store-theme="carro-kechu-carmelo"] .main-content::before,
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBanner.menu-promo-banner,
+  html[data-store-theme="carro-kechu-carmelo"] .category-block,
+  html[data-store-theme="carro-kechu-carmelo"] .product-card,
+  html[data-store-theme="carro-kechu-carmelo"] .product-card::after,
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-info-row {
+    animation: none !important;
+  }
+}
+
 @keyframes kechu-button-beacon {
   0%, 100% {
     filter: brightness(1);
@@ -1556,20 +1735,21 @@
     display: flex !important;
     width: fit-content !important;
     max-width: 100% !important;
-    min-height: 30px !important;
+    min-height: 44px !important;
     margin: 0 auto 12px !important;
-    padding: 6px 13px !important;
+    padding: 9px 14px !important;
     align-items: center !important;
     justify-content: center !important;
-    border: 1px solid rgba(255, 212, 0, .32) !important;
-    border-radius: 999px !important;
+    border: 2px solid rgba(255, 212, 0, .66) !important;
+    border-radius: 15px 5px 15px 5px !important;
     background: rgba(9, 9, 9, .82) !important;
     color: #fff !important;
     font-family: "Oswald", Arial, sans-serif !important;
-    font-size: .61rem !important;
-    font-weight: 800 !important;
-    letter-spacing: .095em !important;
-    box-shadow: 0 0 18px rgba(255, 212, 0, .08) !important;
+    font-size: clamp(.76rem, 3.45vw, .94rem) !important;
+    font-weight: 950 !important;
+    letter-spacing: .07em !important;
+    box-shadow: 0 0 18px rgba(255, 212, 0, .24) !important;
+    animation: kechu-denexa-signature 2.2s ease-in-out infinite !important;
   }
 
   /* Promo con corte diagonal y mayor energía visual. */
@@ -1667,10 +1847,17 @@
   }
 
   html[data-store-theme="carro-kechu-carmelo"] .product-card::after {
-    background: linear-gradient(145deg, #ffe85a, #ffbd00) !important;
-    color: #050505 !important;
-    font-size: 1.35rem !important;
-    box-shadow: 0 0 0 4px rgba(255, 212, 0, .055), 0 0 22px rgba(255, 212, 0, .30) !important;
+    background: linear-gradient(145deg, #fff16b, #ffd400 48%, #ffb800) !important;
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+    -webkit-text-stroke: 0 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 1.65rem !important;
+    font-weight: 1000 !important;
+    text-shadow: none !important;
+    border: 2px solid #050505 !important;
+    box-shadow: 0 0 0 4px rgba(255, 212, 0, .10), 0 0 22px rgba(255, 212, 0, .62) !important;
+    animation: kechu-plus-black-pulse 1.25s ease-in-out infinite !important;
   }
 
   /* Carrito: barra protagonista, alineada con el nuevo lenguaje visual. */
