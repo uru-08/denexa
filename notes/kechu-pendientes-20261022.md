@@ -29,3 +29,12 @@ Retomar mañana o más tarde cuando Denis lo pida. No hay recordatorio programad
 - assets/kechu/titulo-relieve-v190.webp: rótulo de bienvenida con transparencia.
 
 Los cambios nuevos de negro/amarillo y llamas quedan solo anotados, no publicados, por pedido de pausa.
+
+## Aclaraciones finales antes de despedirse
+
+- Denis confirma que la portada inicial/bienvenida le gusta y debe conservarse.
+- Achicar el rótulo/botoncito superior DENEXA, manteniendo blanco con X amarilla y línea, para que sea discreto y no invada el logo Kechu. Además de la separación v192, el tamaño también debe reducirse en la próxima tanda.
+- Cambiar el estilo de letra de «De la cocina a tu casa», «Tomando pedidos» y la promo («Caja Kechu» u otro nombre dinámico) por uno más bonito y coherente con la estética del sitio.
+- Aclaración importante: ahora se lee perfectamente. El problema final es coherencia visual, no falta de legibilidad; conservar buena lectura y contraste al cambiar el estilo.
+- Fondo negro/letras amarillas y llamas discretas continúan pendientes como arriba.
+- Usuario cierra explícitamente: «Eso lo hacemos mañana. Listo, chao». No implementar ni publicar esta tanda durante la pausa. No crear automatización ni recordar por iniciativa propia.
