@@ -686,6 +686,234 @@
   }
 }
 
+/* =========================================================
+ * V179 — contraste legible y neón localizado
+ * ========================================================= */
+@media (max-width: 899px) {
+  /* Se conserva únicamente el barrido de la portada. */
+  html[data-store-theme="carro-kechu-carmelo"] #appShell::after {
+    display: none !important;
+    content: none !important;
+    animation: none !important;
+  }
+
+  /* Marca DENEXA: lectura limpia y jerarquía real. */
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu172-denexa-top strong {
+    color: #ffffff !important;
+    -webkit-text-stroke: 0 !important;
+    text-shadow:
+      0 2px 0 #050505,
+      0 0 13px rgba(255, 212, 0, .44) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu172-denexa-top small {
+    color: var(--kechu-yellow) !important;
+    -webkit-text-stroke: 0 !important;
+    text-shadow: 0 1px 0 #000, 0 0 8px rgba(255, 212, 0, .38) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-kicker {
+    color: #fff4c2 !important;
+    -webkit-text-stroke: 0 !important;
+    text-shadow: 0 2px 4px #000, 0 0 10px rgba(255, 212, 0, .45) !important;
+  }
+
+  /* Título principal: amarillo sólido, contorno oscuro y relieve rojo. */
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen #welcomeBusinessName {
+    color: var(--kechu-yellow) !important;
+    -webkit-text-stroke: 1.5px #070707 !important;
+    paint-order: stroke fill !important;
+    text-shadow:
+      2px 2px 0 #070707,
+      4px 4px 0 #070707,
+      6px 6px 0 var(--kechu-red),
+      0 0 17px rgba(255, 212, 0, .42) !important;
+  }
+
+  /* Textos chicos: blanco puro; se elimina el efecto hueco negro. */
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-service-card strong,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen #welcomeStatusText,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-mobile-note,
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content::after {
+    color: #ffffff !important;
+    -webkit-text-stroke: 0 !important;
+    text-shadow: 0 2px 4px #000, 0 0 8px rgba(255, 212, 0, .30) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .welcome-content::after {
+    color: #fff4c2 !important;
+  }
+
+  /* Cabecera interior: igual que la portada, pero más compacta. */
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading h1 {
+    color: var(--kechu-yellow) !important;
+    -webkit-text-stroke: 1px #050505 !important;
+    text-shadow:
+      2px 2px 0 #050505,
+      3px 3px 0 var(--kechu-red),
+      0 0 13px rgba(255, 212, 0, .32) !important;
+  }
+
+  /* Promo: título amarillo, descripción blanca, CTA negro sobre amarillo. */
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBannerTitle {
+    color: var(--kechu-yellow) !important;
+    -webkit-text-stroke: 1.15px #050505 !important;
+    paint-order: stroke fill !important;
+    text-shadow:
+      2px 2px 0 #050505,
+      4px 4px 0 rgba(230, 32, 45, .82),
+      0 0 15px rgba(255, 212, 0, .42) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBannerText {
+    color: #ffffff !important;
+    font-family: "Oswald", Arial, sans-serif !important;
+    font-weight: 800 !important;
+    -webkit-text-stroke: 0 !important;
+    text-shadow: 0 2px 3px #000, 0 0 8px #000 !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #promoJumpButton {
+    color: #050505 !important;
+    font-family: "Oswald", Arial, sans-serif !important;
+    font-size: .88rem !important;
+    font-weight: 900 !important;
+    letter-spacing: .07em !important;
+    -webkit-text-stroke: 0 !important;
+    text-shadow: none !important;
+    animation: kechu-cta-neon 1.65s ease-in-out infinite !important;
+  }
+
+  /*
+   * Neón localizado: ya no cruza la pantalla.
+   * Cada control llama la atención desde su propio borde.
+   */
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab {
+    animation: kechu-tab-neon 2.15s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab:nth-child(2n) {
+    animation-delay: -.72s !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab:nth-child(3n) {
+    animation-delay: -1.42s !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab.active,
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab.is-active,
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab[aria-selected="true"] {
+    animation: kechu-tab-active 1.25s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card {
+    animation: kechu-card-edge 2.8s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card:nth-child(even) {
+    animation-delay: -1.4s !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card::after {
+    animation: kechu-plus-beacon 1.35s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #cartButton {
+    animation: kechu-cart-neon 1.9s ease-in-out infinite !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #addToCartButton,
+  html[data-store-theme="carro-kechu-carmelo"] .add-to-cart-button,
+  html[data-store-theme="carro-kechu-carmelo"] .primary-button,
+  html[data-store-theme="carro-kechu-carmelo"] .checkout-button {
+    border: 2px solid #fff09a !important;
+    background: var(--kechu-yellow) !important;
+    color: #050505 !important;
+    box-shadow: 0 0 0 4px rgba(255, 212, 0, .08), 0 0 20px rgba(255, 212, 0, .34) !important;
+    animation: kechu-cta-neon 1.65s ease-in-out infinite !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-store-theme="carro-kechu-carmelo"] #promoJumpButton,
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab,
+  html[data-store-theme="carro-kechu-carmelo"] .product-card,
+  html[data-store-theme="carro-kechu-carmelo"] .product-card::after,
+  html[data-store-theme="carro-kechu-carmelo"] #cartButton,
+  html[data-store-theme="carro-kechu-carmelo"] #addToCartButton,
+  html[data-store-theme="carro-kechu-carmelo"] .add-to-cart-button,
+  html[data-store-theme="carro-kechu-carmelo"] .primary-button,
+  html[data-store-theme="carro-kechu-carmelo"] .checkout-button {
+    animation: none !important;
+  }
+}
+
+@keyframes kechu-tab-neon {
+  0%, 100% {
+    border-color: rgba(255, 212, 0, .30);
+    box-shadow: 0 7px 17px rgba(0, 0, 0, .34), 0 0 0 rgba(255, 212, 0, 0);
+  }
+  50% {
+    border-color: rgba(255, 232, 91, .92);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .40), 0 0 9px rgba(255, 212, 0, .70), 0 0 23px rgba(255, 212, 0, .30);
+  }
+}
+
+@keyframes kechu-tab-active {
+  0%, 100% {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px #ffd400, 0 0 16px rgba(255, 212, 0, .48);
+  }
+  50% {
+    transform: translateY(-4px);
+    box-shadow: 0 0 0 2px #fff09a, 0 0 30px rgba(255, 212, 0, .85), 0 0 46px rgba(255, 212, 0, .24);
+  }
+}
+
+@keyframes kechu-card-edge {
+  0%, 100% {
+    border-left-color: #d9b600;
+    box-shadow: 0 11px 24px rgba(0, 0, 0, .35), -3px 0 8px rgba(255, 212, 0, .16);
+  }
+  50% {
+    border-left-color: #ffe96b;
+    box-shadow: 0 12px 27px rgba(0, 0, 0, .42), -4px 0 17px rgba(255, 212, 0, .65);
+  }
+}
+
+@keyframes kechu-plus-beacon {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 4px rgba(255, 212, 0, .07), 0 0 13px rgba(255, 212, 0, .30);
+  }
+  50% {
+    transform: scale(1.10);
+    box-shadow: 0 0 0 6px rgba(255, 212, 0, .12), 0 0 27px rgba(255, 212, 0, .82);
+  }
+}
+
+@keyframes kechu-cta-neon {
+  0%, 100% {
+    box-shadow: 0 0 0 3px rgba(255, 212, 0, .07), 0 0 16px rgba(255, 212, 0, .34);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(255, 212, 0, .14), 0 0 30px rgba(255, 212, 0, .82), 0 0 46px rgba(230, 32, 45, .20);
+    filter: brightness(1.10);
+  }
+}
+
+@keyframes kechu-cart-neon {
+  0%, 100% {
+    border-color: rgba(255, 212, 0, .62);
+    box-shadow: 0 13px 32px rgba(0, 0, 0, .58), 0 0 15px rgba(255, 212, 0, .20);
+  }
+  50% {
+    border-color: #fff09a;
+    box-shadow: 0 14px 35px rgba(0, 0, 0, .64), 0 0 29px rgba(255, 212, 0, .68);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen::after,
   html[data-store-theme="carro-kechu-carmelo"] #appShell::after,
