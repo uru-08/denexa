@@ -527,3 +527,317 @@
   0%, 100% { transform: translateY(0); opacity: .18; }
   50% { transform: translateY(68svh); opacity: .74; }
 }
+
+/* =========================================================
+ * V176 — identidad Kechu más visible en móvil
+ * Graffiti, circuitos amarillos y presencia DENEXA reforzada.
+ * ========================================================= */
+@media (max-width: 899px) {
+  /* Branding superior más relevante, sin volver a cargar la portada. */
+  html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top {
+    top: 2px !important;
+    width: min(76vw, 292px) !important;
+    min-height: 48px !important;
+    padding: 7px 14px 8px !important;
+    gap: 3px !important;
+    border-color: rgba(255, 212, 0, .42) !important;
+    border-radius: 14px !important;
+    background:
+      linear-gradient(120deg, rgba(255, 212, 0, .10), transparent 40%),
+      rgba(5, 5, 5, .86) !important;
+    box-shadow: 0 0 24px rgba(255, 212, 0, .11), inset 0 1px 0 rgba(255, 255, 255, .08) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top strong {
+    font-size: 1.05rem !important;
+    letter-spacing: .10em !important;
+    text-shadow: 0 0 13px rgba(255, 212, 0, .26) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top small {
+    display: block !important;
+    padding: 0 !important;
+    color: var(--kechu-yellow-soft) !important;
+    font-size: .54rem !important;
+    letter-spacing: .14em !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top small::before,
+  html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top small::after {
+    display: none !important;
+  }
+
+  /* Título inspirado en el trazo irregular del logo Kechu. */
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen #welcomeBusinessName {
+    max-width: 360px !important;
+    margin-inline: auto !important;
+    font-family: "Knewave", "Arial Black", sans-serif !important;
+    font-size: clamp(2.05rem, 10.5vw, 3rem) !important;
+    font-weight: 400 !important;
+    line-height: .93 !important;
+    letter-spacing: .018em !important;
+    transform: rotate(-1.5deg) !important;
+    text-shadow:
+      3px 3px 0 #0a0a0a,
+      5px 5px 0 rgba(230, 32, 45, .90),
+      -1px -1px 0 var(--kechu-yellow),
+      0 0 25px rgba(255, 212, 0, .16) !important;
+  }
+
+  /* La estética de líneas continúa al entrar al menú. */
+  html[data-store-theme="carro-kechu-carmelo"] #appShell {
+    position: relative !important;
+    isolation: isolate !important;
+    background:
+      radial-gradient(circle at 105% 14%, rgba(255, 212, 0, .10), transparent 18rem),
+      radial-gradient(circle at -8% 52%, rgba(230, 32, 45, .08), transparent 16rem),
+      #050505 !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #appShell::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    background:
+      linear-gradient(90deg, transparent 49.75%, rgba(255, 212, 0, .055) 50%, transparent 50.25%),
+      linear-gradient(rgba(255, 212, 0, .032) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 212, 0, .032) 1px, transparent 1px) !important;
+    background-size: 100% 100%, 34px 34px, 34px 34px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-header,
+  html[data-store-theme="carro-kechu-carmelo"] .main-content,
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-footer {
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-header::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 16px !important;
+    right: 16px !important;
+    bottom: -1px !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, transparent, var(--kechu-yellow) 22%, var(--kechu-yellow) 78%, transparent) !important;
+    box-shadow: 0 0 15px rgba(255, 212, 0, .50) !important;
+  }
+
+  /* Cabecera interior: cambio más fuerte y reconocible. */
+  html[data-store-theme="carro-kechu-carmelo"] .store-logo {
+    border: 2px solid rgba(255, 212, 0, .72) !important;
+    border-radius: 20px 7px 20px 7px !important;
+    box-shadow: 0 0 0 4px rgba(255, 212, 0, .04), 0 0 22px rgba(255, 212, 0, .13) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .store-heading h1 {
+    font-family: "Knewave", "Arial Black", sans-serif !important;
+    font-weight: 400 !important;
+    color: #fff !important;
+    transform: rotate(-1deg) !important;
+    text-shadow: 2px 2px 0 var(--kechu-red), 0 0 16px rgba(255, 212, 0, .12) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-info-row {
+    display: grid !important;
+    grid-template-columns: 1.25fr .95fr !important;
+    min-height: 58px !important;
+    padding: 8px 10px !important;
+    border: 1px solid rgba(255, 212, 0, .34) !important;
+    border-radius: 17px 6px 17px 6px !important;
+    background:
+      linear-gradient(115deg, rgba(255, 212, 0, .09), transparent 42%),
+      #0b0b0b !important;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .30), inset 0 1px 0 rgba(255, 255, 255, .05) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa {
+    padding-right: 9px !important;
+    border-right: 1px solid rgba(255, 212, 0, .30) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa-wordmark {
+    font-size: 1.07rem !important;
+    letter-spacing: .04em !important;
+    text-shadow: 0 0 12px rgba(255, 212, 0, .20) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-denexa small {
+    font-size: .46rem !important;
+    color: var(--kechu-yellow-soft) !important;
+    letter-spacing: .09em !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu-final-fast-safe {
+    display: none !important;
+  }
+
+  /* Firma DENEXA visible antes de la promoción. */
+  html[data-store-theme="carro-kechu-carmelo"] .main-content::before {
+    content: "MENÚ ONLINE IMPULSADO POR  DENEXA 🇺🇾" !important;
+    display: flex !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    min-height: 30px !important;
+    margin: 0 auto 12px !important;
+    padding: 6px 13px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1px solid rgba(255, 212, 0, .32) !important;
+    border-radius: 999px !important;
+    background: rgba(9, 9, 9, .82) !important;
+    color: #fff !important;
+    font-family: "Oswald", Arial, sans-serif !important;
+    font-size: .61rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .095em !important;
+    box-shadow: 0 0 18px rgba(255, 212, 0, .08) !important;
+  }
+
+  /* Promo con corte diagonal y mayor energía visual. */
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBanner.menu-promo-banner {
+    min-height: 228px !important;
+    padding: 18px 16px !important;
+    border-width: 2px !important;
+    border-radius: 24px 7px 24px 7px !important;
+    box-shadow:
+      0 18px 36px rgba(0, 0, 0, .48),
+      0 0 0 5px rgba(255, 212, 0, .025),
+      0 0 30px rgba(255, 212, 0, .13) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #dailyPromoBannerTitle {
+    font-family: "Knewave", "Arial Black", sans-serif !important;
+    font-weight: 400 !important;
+    font-size: clamp(2rem, 9vw, 2.7rem) !important;
+    line-height: .95 !important;
+    text-shadow: 3px 3px 0 rgba(230, 32, 45, .82) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #promoJumpButton {
+    min-height: 46px !important;
+    padding-inline: 20px !important;
+    border-radius: 13px 4px 13px 4px !important;
+    box-shadow: 0 0 20px rgba(255, 212, 0, .22) !important;
+  }
+
+  /* Categorías más compactas, luminosas y claramente seleccionables. */
+  html[data-store-theme="carro-kechu-carmelo"] .category-tabs {
+    border-top: 1px solid rgba(255, 212, 0, .18) !important;
+    border-bottom: 1px solid rgba(255, 212, 0, .18) !important;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, .30) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab {
+    border-radius: 17px 5px 17px 5px !important;
+    transform: translateZ(0) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab.active,
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab.is-active,
+  html[data-store-theme="carro-kechu-carmelo"] .category-tab[aria-selected="true"] {
+    background: linear-gradient(145deg, rgba(255, 212, 0, .18), #0b0b0b 58%) !important;
+    transform: translateY(-3px) !important;
+  }
+
+  /* Secciones y productos: contraste y silueta completamente renovados. */
+  html[data-store-theme="carro-kechu-carmelo"] .category-block {
+    padding: 9px !important;
+    border-color: rgba(255, 212, 0, .18) !important;
+    border-radius: 22px 7px 22px 7px !important;
+    background:
+      linear-gradient(145deg, rgba(255, 212, 0, .035), transparent 28%),
+      rgba(255, 255, 255, .018) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-heading {
+    padding-bottom: 9px !important;
+    border-bottom: 2px solid var(--kechu-yellow) !important;
+    box-shadow: 0 8px 12px -12px rgba(255, 212, 0, .80) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .category-heading h3 {
+    font-family: "Knewave", "Arial Black", sans-serif !important;
+    font-weight: 400 !important;
+    letter-spacing: .035em !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card {
+    min-height: 146px !important;
+    grid-template-columns: 43% minmax(0, 1fr) !important;
+    border-left: 3px solid var(--kechu-yellow) !important;
+    border-radius: 20px 6px 20px 6px !important;
+    background:
+      linear-gradient(115deg, rgba(255, 212, 0, .055), transparent 34%),
+      #0c0c0c !important;
+    box-shadow: 0 12px 27px rgba(0, 0, 0, .36), inset 0 1px 0 rgba(255, 255, 255, .04) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card:nth-child(even) {
+    border-left-color: var(--kechu-red) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-image {
+    min-height: 146px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-info h4 {
+    color: var(--kechu-yellow) !important;
+    font-family: "Oswald", Arial, sans-serif !important;
+    font-size: 1.08rem !important;
+    letter-spacing: .025em !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .product-card::after {
+    background: linear-gradient(145deg, #ffe85a, #ffbd00) !important;
+    color: #050505 !important;
+    font-size: 1.35rem !important;
+    box-shadow: 0 0 0 4px rgba(255, 212, 0, .055), 0 0 22px rgba(255, 212, 0, .30) !important;
+  }
+
+  /* Carrito: barra protagonista, alineada con el nuevo lenguaje visual. */
+  html[data-store-theme="carro-kechu-carmelo"] #cartButton {
+    border-width: 2px !important;
+    border-radius: 20px 6px 20px 6px !important;
+    background:
+      linear-gradient(110deg, rgba(255, 212, 0, .08), transparent 40%),
+      rgba(5, 5, 5, .96) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] #cartButton .cart-action-label {
+    border-radius: 13px 4px 13px 4px !important;
+    font-weight: 950 !important;
+  }
+
+  /* Pie con una firma DENEXA inequívoca. */
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-footer {
+    margin-top: 28px !important;
+    border-top: 2px solid rgba(255, 212, 0, .62) !important;
+    background:
+      linear-gradient(180deg, rgba(255, 212, 0, .055), transparent 40%),
+      #070707 !important;
+    box-shadow: 0 -12px 28px rgba(255, 212, 0, .05) !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-footer strong,
+  html[data-store-theme="carro-kechu-carmelo"] .denexa-powered-footer .denexa-footer-name {
+    text-shadow: 0 0 16px rgba(255, 212, 0, .25) !important;
+  }
+}
+
+@media (max-width: 899px) and (max-height: 700px) {
+  html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top {
+    min-height: 40px !important;
+    padding-block: 5px !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top strong {
+    font-size: .88rem !important;
+  }
+
+  html[data-store-theme="carro-kechu-carmelo"] .kechu172-denexa-top small {
+    font-size: .47rem !important;
+  }
+}
