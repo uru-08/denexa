@@ -71,3 +71,75 @@ html[data-store-theme="carro-kechu-carmelo"] body .store-header .kechu-final-inf
   html[data-store-theme="carro-kechu-carmelo"] body .kechu184-effects::before,
   html[data-store-theme="carro-kechu-carmelo"] body .kechu184-effects::after { animation: none !important; }
 }
+
+/* V186: menos repetición de marca, firma visible y promo con relieve. */
+html[data-store-theme="carro-kechu-carmelo"] body .kechu-final-denexa-wordmark {
+  font: 800 clamp(11px, 2.7vw, 16px)/1.2 "Oswald", sans-serif !important;
+  color: #fff !important; -webkit-text-fill-color: #fff !important;
+  letter-spacing: .035em !important; white-space: normal !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body .kechu-final-denexa small {
+  font: 700 clamp(10px, 2.5vw, 14px)/1.3 "Oswald", sans-serif !important;
+  color: #ffd400 !important; -webkit-text-fill-color: #ffd400 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #dailyPromoBannerTitle {
+  font-family: "Knewave", "Arial Black", sans-serif !important;
+  font-style: italic !important; font-weight: 400 !important;
+  color: #ffd400 !important; -webkit-text-fill-color: #ffd400 !important;
+  -webkit-text-stroke: 1.2px #090909 !important; paint-order: stroke fill !important;
+  text-shadow: 1px 2px 0 #ffb900, 3px 4px 0 #925200, 5px 6px 0 #000 !important;
+  line-height: 1.2 !important; letter-spacing: .01em !important;
+  overflow-wrap: anywhere !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #dailyPromoBannerText {
+  font-family: "Oswald", sans-serif !important; color: #fff !important;
+  -webkit-text-fill-color: #fff !important; line-height: 1.4 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body .kechu184-effects::before,
+html[data-store-theme="carro-kechu-carmelo"] body .kechu184-effects::after {
+  width: 20%; height: 62%; top: 2%; filter: blur(7px);
+  background: radial-gradient(ellipse at 35% 75%, rgba(255,240,215,.34), transparent 54%),
+              radial-gradient(ellipse at 65% 42%, rgba(255,240,215,.28), transparent 52%),
+              radial-gradient(ellipse at 35% 15%, rgba(255,240,215,.20), transparent 48%);
+  animation-duration: 3.2s;
+}
+@media (max-width: 899px) {
+  html[data-store-theme="carro-kechu-carmelo"] body .main-content::before {
+    color: #fff !important; -webkit-text-fill-color: #fff !important;
+    border: 1px solid #ffd400 !important; border-radius: 18px 6px 18px 6px !important;
+    background: linear-gradient(115deg, #090909 20%, #443509 50%, #090909 80%) !important;
+    background-size: 220% 100% !important; padding: 11px 17px !important;
+    font: 700 clamp(11px, 2.85vw, 14px)/1.4 "Oswald", sans-serif !important;
+    letter-spacing: .045em !important; text-align: center !important;
+    text-shadow: 0 1px 2px #000 !important;
+    box-shadow: 0 0 15px #ffd40044, inset 0 1px 0 #ffe69766 !important;
+    animation: kechu186-signature 4s ease-in-out infinite !important;
+  }
+}
+@keyframes kechu186-signature {
+  0%, 100% { background-position: 100% 50%; box-shadow: 0 0 10px #ffd40033, inset 0 1px 0 #ffe69766; }
+  50% { background-position: 0% 50%; box-shadow: 0 0 22px #ffd40066, inset 0 1px 0 #ffe69766; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-store-theme="carro-kechu-carmelo"] body .main-content::before,
+  html[data-store-theme="carro-kechu-carmelo"] body .kechu184-effects::before,
+  html[data-store-theme="carro-kechu-carmelo"] body .kechu184-effects::after { animation: none !important; }
+}
+
+/* Categorías dinámicas: el estilo se conserva al crear o renombrar desde el panel. */
+html[data-store-theme="carro-kechu-carmelo"] body #catalogContent .category-section-title h3,
+html[data-store-theme="carro-kechu-carmelo"] body #categoryTabs .category-tab-label {
+  font-family: "Knewave", "Arial Black", sans-serif !important;
+  font-weight: 400 !important; font-style: italic !important;
+  color: #ffd400 !important; -webkit-text-fill-color: #ffd400 !important;
+  -webkit-text-stroke: 1px #080808 !important; paint-order: stroke fill !important;
+  text-shadow: 1px 2px 0 #c98000, 2px 3px 0 #080808 !important;
+  letter-spacing: .015em !important; line-height: 1.35 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #catalogContent .category-section-title h3 {
+  font-size: clamp(1.25rem, 4.8vw, 1.65rem) !important;
+  overflow-wrap: anywhere !important; padding-block: 3px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #categoryTabs .category-tab-label {
+  font-size: clamp(.65rem, 2.6vw, .8rem) !important;
+}
