@@ -353,6 +353,100 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #p
   html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton { padding: 9px 8px !important; }
 }
 
+/* V193: negro y oro, relieve contenido y tipografía coherente con el menú. */
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .kechu172-denexa-top {
+  min-height: 0 !important; padding: 6px 12px 7px !important;
+  max-width: 76vw !important; gap: 2px !important;
+  backdrop-filter: none !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .kechu172-denexa-top strong {
+  font-size: 19px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .kechu172-denexa-top small {
+  font-size: 8px !important; margin-top: 8px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .kechu172-denexa-top .kechu191-country {
+  font-size: 13px !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-final-denexa,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-final-ordering-status,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner.menu-promo-banner {
+  background: linear-gradient(180deg, #22211d, #090909 72%) !important;
+  color: #ffdb48 !important; border: 1px solid #8b7128 !important;
+  box-shadow: inset 0 1px 0 #fff2b52b, inset 0 -2px 0 #000, 0 3px 0 #352b11, 0 6px 12px #0005 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-final-denexa *,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-final-ordering-status *,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBannerTitle,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBannerBadge {
+  color: #ffdb48 !important; -webkit-text-fill-color: #ffdb48 !important;
+  font-family: "Oswald", "Arial Narrow", sans-serif !important;
+  font-weight: 600 !important; letter-spacing: .025em !important;
+  -webkit-text-stroke: 0 !important; text-shadow: 0 1px 1px #000 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-final-denexa-wordmark,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-final-denexa small {
+  font-size: clamp(15px, 4vw, 20px) !important; line-height: 1.15 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #kechuFinalStatusText {
+  font-size: clamp(17px, 4.5vw, 22px) !important; line-height: 1.15 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #catalogContent .category-section-title h3,
+html[data-store-theme="carro-kechu-carmelo"] body #categoryTabs .category-tab-label {
+  font-family: "Oswald", "Arial Narrow", sans-serif !important;
+  font-weight: 600 !important; letter-spacing: .025em !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner.menu-promo-banner {
+  position: relative !important; isolation: isolate !important; overflow: hidden !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner > * {
+  position: relative !important; z-index: 1 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBannerTitle {
+  font-size: clamp(22px, 5.8vw, 30px) !important; line-height: 1.2 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBannerText {
+  color: #f4ebd2 !important; -webkit-text-fill-color: #f4ebd2 !important;
+  font-family: "Oswald", sans-serif !important; font-weight: 500 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton {
+  background: #13120e !important; color: #ffdb48 !important;
+  -webkit-text-fill-color: #ffdb48 !important; border-color: #b89a39 !important;
+  font-family: "Oswald", "Arial Narrow", sans-serif !important; font-weight: 600 !important;
+  box-shadow: inset 0 1px 0 #fff2b52b, 0 2px 0 #554318 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton * {
+  color: #ffdb48 !important; -webkit-text-fill-color: #ffdb48 !important;
+  font-family: inherit !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner:focus-visible,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #promoJumpButton:focus-visible {
+  outline: 2px solid #ffe580 !important; outline-offset: 3px !important;
+}
+/* Dibujos de llamas pequeños: se anima solo transformación y opacidad. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner.menu-promo-banner::before,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner.menu-promo-banner::after {
+  content: "" !important; display: block !important; position: absolute !important;
+  inset: auto auto -8px -5px !important; width: 100px !important; height: 76px !important;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 80'%3E%3Cpath fill='%23ed8b20' d='M0 80Q-4 60 16 38Q11 58 25 63Q45 44 36 6Q71 29 63 53Q79 49 81 33Q106 61 98 80Z'/%3E%3Cpath fill='%23ffce38' d='M23 80Q18 68 34 53Q32 66 44 68Q57 56 54 36Q79 61 72 80Z'/%3E%3C/svg%3E") center / contain no-repeat !important;
+  pointer-events: none !important; filter: none !important; z-index: 0 !important;
+  transform-origin: center bottom !important; opacity: .18 !important;
+  animation: kechu193-flame 2.4s ease-in-out infinite alternate !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner.menu-promo-banner::after {
+  inset: auto -12px -10px auto !important; animation-delay: -1.2s !important;
+}
+@keyframes kechu193-flame {
+  from { transform: translateY(4px) scale(.94, .86) rotate(-4deg); opacity: .14; }
+  to { transform: translateY(-3px) scale(1.02, 1.08) rotate(3deg); opacity: .28; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner.menu-promo-banner::before,
+  html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner.menu-promo-banner::after {
+    animation: none !important;
+  }
+}
+
 /* V192: DENEXA ocupa su propio espacio, sin superponerse al logo Kechu. */
 @media(max-width:899px) {
   html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-content {
