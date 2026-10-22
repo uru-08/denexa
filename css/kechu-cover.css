@@ -181,3 +181,58 @@ html[data-store-theme="carro-kechu-carmelo"] body .category-tabs,
 html[data-store-theme="carro-kechu-carmelo"] body #cartButton {
   backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
 }
+
+/* V190: firma repetida eliminada y tarjeta de delivery centrada. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .main-content::before {
+  content: none !important; display: none !important;
+  margin: 0 !important; padding: 0 !important; height: 0 !important; min-height: 0 !important;
+  animation: none !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body .kechu-final-denexa {
+  display: flex !important; flex-direction: column !important;
+  align-items: center !important; justify-content: center !important;
+  text-align: center !important; width: 100% !important; min-width: 0 !important; max-width: none !important;
+  margin: 0 !important; padding: 4px 8px !important; box-sizing: border-box !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body .kechu-final-denexa-wordmark,
+html[data-store-theme="carro-kechu-carmelo"] body .kechu-final-denexa small {
+  display: block !important; width: 100% !important; text-align: center !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #dailyPromoBannerTitle,
+html[data-store-theme="carro-kechu-carmelo"] body #catalogContent .category-section-title h3,
+html[data-store-theme="carro-kechu-carmelo"] body #categoryTabs .category-tab-label {
+  font-family: "Lilita One", "Arial Black", sans-serif !important;
+  font-style: normal !important; font-weight: 400 !important;
+  color: #ffd400 !important; -webkit-text-fill-color: #ffd400 !important;
+  -webkit-text-stroke: 1px #080808 !important; paint-order: stroke fill !important;
+  text-shadow: 0 -1px 0 #fff6a0, 1px 2px 0 #ffb700, 2px 3px 0 #bd7100, 4px 5px 0 #080808 !important;
+  letter-spacing: .015em !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #dailyPromoBannerTitle {
+  transform: skewX(-5deg) !important; transform-origin: left center !important; line-height: 1.18 !important;
+}
+/* Negro real: se eliminan tanto el relleno blanco como el contorno heredado. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton * {
+  color: #000 !important; -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke: 0 !important; text-shadow: none !important;
+  font-family: "Lilita One", "Arial Black", sans-serif !important;
+  font-size: clamp(18px, 4.8vw, 21px) !important; font-style: normal !important;
+  font-weight: 400 !important; opacity: 1 !important;
+}
+@media (max-width: 899px) {
+  html[data-store-theme="carro-kechu-carmelo"] body .kechu-final-info-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #welcomeBusinessName {
+    position: relative !important; width: min(80vw, 320px) !important; max-width: 100% !important;
+    min-height: clamp(115px, 24svh, 180px) !important;
+    background: url("../assets/kechu/titulo-relieve-v190.webp") center / contain no-repeat !important;
+    color: transparent !important; -webkit-text-fill-color: transparent !important;
+    -webkit-text-stroke: 0 !important; text-shadow: none !important; transform: none !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #welcomeBusinessName span {
+    color: transparent !important; -webkit-text-fill-color: transparent !important;
+    -webkit-text-stroke: 0 !important; text-shadow: none !important; opacity: 0 !important;
+  }
+}
