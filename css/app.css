@@ -7670,23 +7670,27 @@ html[data-store-theme="carro-kechu-carmelo"] .category-tab-visual svg{
   display:none !important;
 }
 
-html[data-store-theme="carro-kechu-carmelo"] .category-tab:nth-child(1) .category-tab-visual{
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-hamburguesas .category-tab-visual{
   background-image:url("../assets/kechu/categorias/hamburguesas.jpg") !important;
 }
-html[data-store-theme="carro-kechu-carmelo"] .category-tab:nth-child(2) .category-tab-visual{
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-milanesas .category-tab-visual{
   background-image:url("../assets/kechu/categorias/milanesas.jpg") !important;
 }
-html[data-store-theme="carro-kechu-carmelo"] .category-tab:nth-child(3) .category-tab-visual{
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-chivitos .category-tab-visual{
   background-image:url("../assets/kechu/categorias/chivitos.jpg") !important;
 }
-html[data-store-theme="carro-kechu-carmelo"] .category-tab:nth-child(4) .category-tab-visual{
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-papas-fritas .category-tab-visual{
   background-image:url("../assets/kechu/categorias/papas-fritas.jpg") !important;
 }
-html[data-store-theme="carro-kechu-carmelo"] .category-tab:nth-child(5) .category-tab-visual{
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-postres .category-tab-visual{
   background-image:url("../assets/kechu/categorias/postres.jpg") !important;
 }
-html[data-store-theme="carro-kechu-carmelo"] .category-tab:nth-child(6) .category-tab-visual{
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-bebidas .category-tab-visual{
   background-image:url("../assets/kechu/categorias/bebidas.jpg") !important;
+}
+/* Las imágenes se vinculan a la categoría, nunca a su posición. */
+html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-porciones .category-tab-visual{
+  background-image:var(--kechu-category-image,url("../assets/kechu/categorias/papas-fritas.jpg")) !important;
 }
 
 html[data-store-theme="carro-kechu-carmelo"] .category-tab-label{

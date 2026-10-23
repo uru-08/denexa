@@ -1626,6 +1626,7 @@ function kechuCategoryKey(name) {
   if (value.includes("milan")) return "milanesas";
   if (value.includes("chivit")) return "chivitos";
   if (value.includes("papa")) return "papas-fritas";
+  if (value.includes("porcion")) return "porciones";
   if (value.includes("postre") || value.includes("dulce")) return "postres";
   if (value.includes("bebida") || value.includes("refresco")) return "bebidas";
   return "generic";
@@ -1665,6 +1666,14 @@ function renderCatalog() {
   categoryTabs
     .querySelectorAll(".category-tab")
     .forEach((button) => {
+      if (document.documentElement.dataset.storeTheme === "carro-kechu-carmelo" && button.dataset.categoryKey === "porciones") {
+        const photo = products.find((product) =>
+          String(product.category_id) === button.dataset.categoryId && product.image_url
+        );
+        if (photo) {
+          button.style.setProperty("--kechu-category-image", `url(${JSON.stringify(photo.image_url)})`);
+        }
+      }
       button.addEventListener("click", () => {
         categoryTabs
           .querySelectorAll(".category-tab")
