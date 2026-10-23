@@ -1468,17 +1468,7 @@ function normalizedCategoryName(value) {
 
 function kechuCategoryPhoto(categoryName) {
   if (document.documentElement.dataset.storeTheme !== "carro-kechu-carmelo") return "";
-  const key = kechuCategoryKey(categoryName);
-  const category = categories.find(item => kechuCategoryKey(item.name) === key);
-  const candidates = category ? products.filter(item =>
-    String(item.category_id) === String(category.id) &&
-    typeof item.image_url === "string" && /^https?:\/\//i.test(item.image_url)
-  ) : [];
-  const preferred = key === "milanesas"
-    ? candidates.find(item => /napolitana|al pan/i.test(item.name))
-    : candidates[0];
-  const selected = preferred || candidates[0];
-  const fallback = {
+  const photos = {
     "hamburguesas": "assets/kechu/categorias/hamburguesas.jpg",
     "milanesas": "assets/kechu/categorias/milanesas.jpg",
     "chivitos": "assets/kechu/categorias/chivitos.jpg",
@@ -1487,11 +1477,10 @@ function kechuCategoryPhoto(categoryName) {
     "postres": "assets/kechu/categorias/postres.jpg",
     "bebidas": "assets/kechu/categorias/bebidas.jpg"
   };
-  const photo = selected ? selected.image_url : fallback[key];
+  const photo = photos[kechuCategoryKey(categoryName)];
   if (!photo) return "";
-  const sourceClass = selected ? "kechu-product-category-photo" : "kechu-fallback-category-photo";
-  return '<span class="category-tab-visual kechu-real-category-photo ' + sourceClass + '"><img src="' +
-    escapeHTML(photo) + '" alt="" loading="lazy" decoding="async"></span>';
+  return '<span class="category-tab-visual kechu-real-category-photo"><img src="' +
+    photo + '" alt="" loading="lazy" decoding="async"></span>';
 }
 
 function categoryVisualMarkup(categoryName) {
