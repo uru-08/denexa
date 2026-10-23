@@ -1469,9 +1469,9 @@ function normalizedCategoryName(value) {
 function kechuCategoryPhoto(categoryName) {
   if (document.documentElement.dataset.storeTheme !== "carro-kechu-carmelo") return "";
   const photos = {
-    "hamburguesas": "assets/kechu/categorias/hamburguesas.jpg",
-    "milanesas": "assets/kechu/categorias/milanesas.jpg",
-    "chivitos": "assets/kechu/categorias/chivitos.jpg",
+    "hamburguesas": "assets/kechu/categorias/hamburguesas-real-v207.webp",
+    "milanesas": "assets/kechu/categorias/milanesas-real-v207.webp",
+    "chivitos": "assets/kechu/categorias/chivitos-real-v207.webp",
     "papas-fritas": "assets/kechu/categorias/papas-fritas.jpg",
     "porciones": "assets/kechu/categorias/porciones-v199.webp",
     "postres": "assets/kechu/categorias/postres.jpg",
