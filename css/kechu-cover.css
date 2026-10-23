@@ -890,3 +890,19 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #p
  html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton::before,
  html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton::after {animation:none!important}
 }
+
+/* Restauración visible de ilustraciones de categorías Kechu */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .category-tab-visual:not(.kechu-real-category-photo) {
+ display:flex!important; align-items:center!important; justify-content:center!important;
+ width:92px!important; height:92px!important; min-width:0!important;
+ visibility:visible!important; opacity:1!important; background:transparent!important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .category-tab-visual:not(.kechu-real-category-photo) svg {
+ display:block!important; visibility:visible!important; opacity:1!important;
+ width:90px!important; height:90px!important; max-width:100%!important; max-height:100%!important;
+ overflow:visible!important; filter:drop-shadow(0 4px 7px rgba(0,0,0,.55)) drop-shadow(0 0 6px rgba(255,199,0,.23))!important;
+}
+@media(max-width:360px) {
+ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .category-tab-visual:not(.kechu-real-category-photo) {width:76px!important;height:76px!important}
+ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .category-tab-visual:not(.kechu-real-category-photo) svg {width:74px!important;height:74px!important}
+}
