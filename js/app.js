@@ -740,6 +740,11 @@ function goToPromoProducts() {
       );
     });
 
+  if (target.tagName === "DETAILS") {
+    target.open = true;
+    kechuExpandedCategories.add(String(categoryId));
+  }
+
   target.scrollIntoView({
     behavior: "smooth",
     block: "start"
@@ -1632,7 +1637,18 @@ function kechuCategoryKey(name) {
   return "generic";
 }
 
+// Conserva las categorías abiertas cuando se actualiza el inventario.
+const kechuExpandedCategories = new Set();
+
+function kechuCategoryPrompt(name) {
+  const key = kechuCategoryKey(name);
+  if (key === "hamburguesas") return "Elegí la tuya";
+  if (key === "milanesas") return "Elegí la que más te gusta";
+  return "Tocá para ver las opciones";
+}
+
 function renderCatalog() {
+  const stackedCategories = document.documentElement.dataset.storeTheme === "carro-kechu-carmelo";
   const visibleCategories = categories.filter(
     (category) =>
       products.some(
@@ -1691,6 +1707,30 @@ function renderCatalog() {
         String(product.category_id) === String(category.id)
     );
 
+    if (stackedCategories) {
+      return `
+        <details
+          id="category-${escapeHTML(category.id)}"
+          class="category-section kechu-category-stack"
+          data-category-id="${escapeHTML(category.id)}"
+          ${kechuExpandedCategories.has(String(category.id)) ? "open" : ""}
+        >
+          <summary class="kechu-category-summary category-${kechuCategoryKey(category.name)}">
+            ${categoryVisualMarkup(category.name)}
+            <span class="kechu-stack-heading">
+              <strong>${escapeHTML(category.name)}</strong>
+              <span>${escapeHTML(kechuCategoryPrompt(category.name))}</span>
+              <small>${categoryProducts.length} ${categoryProducts.length === 1 ? "producto" : "productos"}</small>
+            </span>
+            <span class="kechu-stack-indicator" aria-hidden="true"></span>
+          </summary>
+          <div class="products-grid kechu-category-products">
+            ${categoryProducts.map(renderProductCard).join("")}
+          </div>
+        </details>
+      `;
+    }
+
     return `
       <section
         id="category-${escapeHTML(category.id)}"
@@ -1711,6 +1751,14 @@ function renderCatalog() {
     `;
   }).join("");
 
+
+  catalogContent.querySelectorAll(".kechu-category-stack").forEach((section) => {
+    section.addEventListener("toggle", () => {
+      const id = String(section.dataset.categoryId);
+      if (section.open) kechuExpandedCategories.add(id);
+      else kechuExpandedCategories.delete(id);
+    });
+  });
 
   catalogContent
     .querySelectorAll(".product-card")
