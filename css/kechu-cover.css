@@ -928,3 +928,16 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summ
  width:76px!important;height:76px!important;min-width:76px!important;
  }
 }
+
+/* Reparación: no mostrar los montajes de categorías como imagen principal.
+   Mostrar producto real con borde difuminado, sin marco cuadrado. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .kechu-product-category-photo {
+ overflow:visible!important;background:none!important;box-shadow:none!important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .kechu-product-category-photo img {
+ width:100%!important;height:100%!important;object-fit:cover!important;
+ border-radius:0!important;
+ -webkit-mask-image:radial-gradient(ellipse 64% 64% at 50% 50%,#000 38%,rgba(0,0,0,.85) 58%,transparent 100%)!important;
+ mask-image:radial-gradient(ellipse 64% 64% at 50% 50%,#000 38%,rgba(0,0,0,.85) 58%,transparent 100%)!important;
+ filter:drop-shadow(0 4px 5px rgba(0,0,0,.4))!important;
+}
