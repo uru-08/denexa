@@ -1466,7 +1466,27 @@ function normalizedCategoryName(value) {
     .toLowerCase();
 }
 
+function kechuCategoryPhoto(categoryName) {
+  if (document.documentElement.dataset.storeTheme !== "carro-kechu-carmelo") return "";
+  const key = kechuCategoryKey(categoryName);
+  if (!["hamburguesas", "milanesas", "chivitos"].includes(key)) return "";
+  const category = categories.find(item => kechuCategoryKey(item.name) === key);
+  if (!category) return "";
+  const candidates = products.filter(item =>
+    String(item.category_id) === String(category.id) &&
+    typeof item.image_url === "string" && /^https?:\/\//i.test(item.image_url)
+  );
+  const preferred = key === "milanesas"
+    ? candidates.find(item => /napolitana|al pan/i.test(item.name))
+    : candidates[0];
+  const photo = preferred || candidates[0];
+  return photo ? '<span class="category-tab-visual kechu-real-category-photo"><img src="' +
+    escapeHTML(photo.image_url) + '" alt="" loading="lazy" decoding="async"></span>' : "";
+}
+
 function categoryVisualMarkup(categoryName) {
+  const realPhoto = kechuCategoryPhoto(categoryName);
+  if (realPhoto) return realPhoto;
   const name =
     normalizedCategoryName(
       categoryName
