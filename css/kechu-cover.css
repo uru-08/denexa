@@ -544,6 +544,46 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #p
   html[data-store-theme="carro-kechu-carmelo"] body #denexaPoweredFooter .denexa-powered-meta { gap: 8px !important; }
 }
 
+/* V195: luces estáticas en listas; movimiento reservado a portada y promo.
+   Animar box-shadow/filter/border en todas las tarjetas repintaba el catálogo. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .product-card,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .category-section,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .category-tab,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .category-tab.active,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .category-tab[aria-selected="true"],
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .product-price::after,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #cartButton,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #cartButton::before,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #denexaPoweredFooter {
+  animation: none !important;
+  filter: none !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .product-card {
+  box-shadow: 0 3px 8px #0006, -2px 0 5px #e6202d30 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .category-section {
+  box-shadow: 0 0 9px #ffd40025 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .product-price::after {
+  box-shadow: 0 0 8px #ffd40060 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .category-tabs,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .product-card,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #cartButton {
+  backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+}
+/* El barrido fijo cruzaba toda la pantalla durante el desplazamiento. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell::after {
+  content: none !important; display: none !important; animation: none !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body.kechu-is-scrolling #appShell *,
+html[data-store-theme="carro-kechu-carmelo"] body.kechu-is-scrolling #appShell *::before,
+html[data-store-theme="carro-kechu-carmelo"] body.kechu-is-scrolling #appShell *::after,
+html[data-store-theme="carro-kechu-carmelo"] body.kechu-is-scrolling #appShell #dailyPromoBanner.menu-promo-banner::before,
+html[data-store-theme="carro-kechu-carmelo"] body.kechu-is-scrolling #appShell #dailyPromoBanner.menu-promo-banner::after {
+  animation-play-state: paused !important;
+}
+
 /* V192: DENEXA ocupa su propio espacio, sin superponerse al logo Kechu. */
 @media(max-width:899px) {
   html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-content {

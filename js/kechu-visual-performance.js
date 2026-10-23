@@ -20,7 +20,8 @@
     });
   }
   watch(document.body);
-  var catalog = document.getElementById("catalogContent");
+  /* Incluye pestañas y pie creados después de la carga inicial. */
+  var catalog = document.getElementById("appShell");
   if (catalog) new MutationObserver(function (records) {
     records.forEach(function (record) {
       record.removedNodes.forEach(function (node) {
@@ -34,4 +35,19 @@
   function visibility() { document.body.classList.toggle("kechu-page-hidden", document.hidden); }
   document.addEventListener("visibilitychange", visibility);
   visibility();
+  /* El scroll usa eventos pasivos; no hay lecturas de layout por fotograma. */
+  var scrollTimer;
+  var scrolling = false;
+  function finishScroll() {
+    scrolling = false;
+    document.body.classList.remove("kechu-is-scrolling");
+  }
+  window.addEventListener("scroll", function () {
+    if (!scrolling) {
+      scrolling = true;
+      document.body.classList.add("kechu-is-scrolling");
+    }
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(finishScroll, 180);
+  }, { passive: true });
 })();
