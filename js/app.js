@@ -1666,14 +1666,6 @@ function renderCatalog() {
   categoryTabs
     .querySelectorAll(".category-tab")
     .forEach((button) => {
-      if (document.documentElement.dataset.storeTheme === "carro-kechu-carmelo" && button.dataset.categoryKey === "porciones") {
-        const photo = products.find((product) =>
-          String(product.category_id) === button.dataset.categoryId && product.image_url
-        );
-        if (photo) {
-          button.style.setProperty("--kechu-category-image", `url(${JSON.stringify(photo.image_url)})`);
-        }
-      }
       button.addEventListener("click", () => {
         categoryTabs
           .querySelectorAll(".category-tab")

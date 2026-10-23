@@ -7690,7 +7690,8 @@ html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-bebidas .cat
 }
 /* Las imágenes se vinculan a la categoría, nunca a su posición. */
 html[data-store-theme="carro-kechu-carmelo"] .category-tab.category-porciones .category-tab-visual{
-  background-image:var(--kechu-category-image,url("../assets/kechu/categorias/papas-fritas.jpg")) !important;
+  background-image:url("../assets/kechu/categorias/porciones-v199.webp") !important;
+  background-size:contain !important;
 }
 
 html[data-store-theme="carro-kechu-carmelo"] .category-tab-label{
