@@ -1469,19 +1469,18 @@ function normalizedCategoryName(value) {
 function kechuCategoryPhoto(categoryName) {
   if (document.documentElement.dataset.storeTheme !== "carro-kechu-carmelo") return "";
   const key = kechuCategoryKey(categoryName);
-  if (!["hamburguesas", "milanesas", "chivitos"].includes(key)) return "";
-  const category = categories.find(item => kechuCategoryKey(item.name) === key);
-  if (!category) return "";
-  const candidates = products.filter(item =>
-    String(item.category_id) === String(category.id) &&
-    typeof item.image_url === "string" && /^https?:\/\//i.test(item.image_url)
-  );
-  const preferred = key === "milanesas"
-    ? candidates.find(item => /napolitana|al pan/i.test(item.name))
-    : candidates[0];
-  const photo = preferred || candidates[0];
+  const photos = {
+    "hamburguesas": "assets/kechu/categorias/hamburguesas.jpg",
+    "milanesas": "assets/kechu/categorias/milanesas.jpg",
+    "chivitos": "assets/kechu/categorias/chivitos.jpg",
+    "papas-fritas": "assets/kechu/categorias/papas-fritas.jpg",
+    "porciones": "assets/kechu/categorias/porciones-v199.webp",
+    "postres": "assets/kechu/categorias/postres.jpg",
+    "bebidas": "assets/kechu/categorias/bebidas.jpg"
+  };
+  const photo = photos[key];
   return photo ? '<span class="category-tab-visual kechu-real-category-photo"><img src="' +
-    escapeHTML(photo.image_url) + '" alt="" loading="lazy" decoding="async"></span>' : "";
+    photo + '" alt="" loading="lazy" decoding="async"></span>' : "";
 }
 
 function categoryVisualMarkup(categoryName) {
