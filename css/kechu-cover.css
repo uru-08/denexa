@@ -849,3 +849,44 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-stac
   html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-stack-heading strong,
   html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-stack + .kechu-category-stack::before {animation:none}
 }
+
+/* Kechu: remate visual de categorías y botón de promo, 2026-10-23 */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-real-category-photo {
+  background:transparent!important; border:0!important; box-shadow:none!important; overflow:visible!important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-real-category-photo img {
+  width:100%!important; height:100%!important; object-fit:contain!important; display:block!important;
+  filter:drop-shadow(0 5px 8px rgba(0,0,0,.5)) drop-shadow(0 0 6px rgba(255,199,0,.18))!important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton {
+  position:relative!important; isolation:isolate!important; overflow:visible!important;
+  color:#fff!important; -webkit-text-fill-color:#fff!important;
+  text-shadow:0 2px 3px #280800,0 0 8px rgba(255,227,94,.9)!important;
+  border:2px solid #ffd04b!important;
+  background:linear-gradient(145deg,#b71a00 0%,#ed4300 32%,#ff9b00 56%,#b91b00 100%)!important;
+  box-shadow:inset 0 1px 3px #ffe7a8,0 5px 0 #701500,0 8px 18px rgba(0,0,0,.55),0 0 16px rgba(255,130,0,.6)!important;
+  animation:kechuPromoGlow 2.4s ease-in-out infinite!important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton::before {
+  content:""!important; display:block!important; position:absolute!important; z-index:-1!important;
+  inset:-9px -5px -3px!important; border-radius:inherit!important; pointer-events:none!important;
+  background:radial-gradient(ellipse at 15% 85%,rgba(255,210,0,.8),transparent 30%),
+             radial-gradient(ellipse at 84% 88%,rgba(255,86,0,.85),transparent 32%),
+             radial-gradient(ellipse at 55% 100%,rgba(255,229,76,.65),transparent 36%)!important;
+  filter:blur(5px)!important; transform-origin:50% 100%;
+  animation:kechuPromoFlames 1.4s ease-in-out infinite alternate!important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton::after {
+  content:"✦"!important; display:block!important; position:absolute!important; top:-13px!important; right:5px!important;
+  z-index:2!important; color:#fff8a0!important; font-size:22px!important; pointer-events:none!important;
+  text-shadow:0 0 8px #ffb800,0 0 15px #ff6c00!important;
+  animation:kechuPromoSpark 1.8s ease-in-out infinite!important;
+}
+@keyframes kechuPromoGlow {0%,100%{filter:brightness(1)}50%{filter:brightness(1.23)}}
+@keyframes kechuPromoFlames {0%{transform:scaleX(.94) scaleY(.78);opacity:.65}100%{transform:scaleX(1.03) scaleY(1.24);opacity:1}}
+@keyframes kechuPromoSpark {0%,100%{transform:scale(.65) rotate(-20deg);opacity:.45}50%{transform:scale(1.18) rotate(25deg);opacity:1}}
+@media (prefers-reduced-motion:reduce) {
+ html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton,
+ html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton::before,
+ html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton::after {animation:none!important}
+}
