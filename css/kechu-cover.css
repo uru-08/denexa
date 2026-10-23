@@ -672,3 +672,25 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #cartButton {
     margin: 0 auto 18px !important; order: 0 !important; flex-shrink: 0 !important;
   }
 }
+
+/* V200: el nombre más largo debe entrar completo incluso en tarjetas móviles. */
+html[data-store-theme="carro-kechu-carmelo"] body #categoryTabs .category-hamburguesas .category-tab-label {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding-inline: 0 !important;
+  font-size: 12px !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+}
+
+/* Categorías rectangulares con cuatro esquinas rectas. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #categoryTabs .category-tab,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #categoryTabs .category-tab-visual {
+  border-radius: 0 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #categoryTabs .category-tab-label {
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  padding-inline: 0 !important;
+}
