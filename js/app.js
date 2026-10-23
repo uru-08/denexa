@@ -725,7 +725,12 @@ function promoDestinationCategoryId() {
 }
 
 function goToPromoProducts() {
-  const categoryId = promoDestinationCategoryId();
+  const promoProduct = business?.promo_target_type === "product"
+    ? products.find((product) => String(product.id) === String(business?.promo_target_id))
+    : null;
+  const categoryId = promoProduct?.category_id != null
+    ? String(promoProduct.category_id)
+    : promoDestinationCategoryId();
   if (!categoryId) return;
 
   const target = document.getElementById(`category-${categoryId}`);
@@ -745,9 +750,17 @@ function goToPromoProducts() {
     kechuExpandedCategories.add(String(categoryId));
   }
 
-  target.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
+  const productCard = promoProduct
+    ? Array.from(target.querySelectorAll(".product-card")).find(
+        (card) => String(card.dataset.productId) === String(promoProduct.id)
+      )
+    : null;
+  const destination = productCard || target;
+
+  // Espera a que el navegador despliegue la categoría antes de ubicar el producto.
+  requestAnimationFrame(() => {
+    destination.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (productCard) productCard.focus({ preventScroll: true });
   });
 }
 
