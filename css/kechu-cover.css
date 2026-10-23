@@ -819,3 +819,33 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-stac
 html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-stack { position:relative; }
 html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-stack + .kechu-category-stack { border-top:2px solid rgba(255,201,0,.55); box-shadow:0 -2px 9px rgba(255,206,0,.25),0 -1px 13px rgba(236,40,28,.18); }
 @media(prefers-reduced-motion:reduce) { html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-stack-heading strong::after { animation:none; opacity:.8; } }
+
+
+/* Kechu: imágenes recortadas sin marco, brillo en títulos y separadores vivos. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .category-tab-visual {
+  background:transparent !important;
+  box-shadow:none !important;
+  overflow:visible !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .category-tab-visual img {
+  display:block; width:100%; height:100%; object-fit:contain !important;
+  filter:drop-shadow(0 5px 6px rgba(0,0,0,.55));
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-stack-heading strong {
+  background-image:linear-gradient(105deg,#ffd400 0%,#ffd400 38%,#fffbd1 48%,#ffd400 58%,#ffd400 100%);
+  background-size:250% 100%; -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:kechuHeadingGleam 7s ease-in-out infinite;
+}
+@keyframes kechuHeadingGleam {0%,55%,100%{background-position:100% 50%}75%{background-position:0% 50%}}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-stack + .kechu-category-stack::before {
+  content:""; position:absolute; z-index:2; pointer-events:none; top:-2px; left:0; width:38%; height:2px;
+  background:linear-gradient(90deg,transparent,#fff8aa,#ffcc00,#ff493b,transparent);
+  filter:drop-shadow(0 0 5px #ffbd24);
+  animation:kechuSeparatorLight 5.5s ease-in-out infinite alternate;
+}
+@keyframes kechuSeparatorLight {from{left:0;opacity:.35}to{left:62%;opacity:1}}
+@media(prefers-reduced-motion:reduce) {
+  html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-stack-heading strong,
+  html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-stack + .kechu-category-stack::before {animation:none}
+}
