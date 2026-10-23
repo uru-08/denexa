@@ -941,3 +941,34 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summ
  mask-image:radial-gradient(ellipse 64% 64% at 50% 50%,#000 38%,rgba(0,0,0,.85) 58%,transparent 100%)!important;
  filter:drop-shadow(0 4px 5px rgba(0,0,0,.4))!important;
 }
+
+/* Reparación visual: un solo archivo por categoría, sin SVG ni máscaras sobre la foto. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .kechu-real-category-photo {
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:92px!important;height:92px!important;min-width:92px!important;
+ overflow:visible!important;background:none!important;background-image:none!important;
+ box-shadow:none!important;border:0!important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .kechu-real-category-photo img {
+ display:block!important;visibility:visible!important;opacity:1!important;
+ width:100%!important;height:100%!important;object-fit:contain!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ -webkit-mask-image:none!important;mask-image:none!important;
+ filter:none!important;mix-blend-mode:normal!important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .kechu-real-category-photo svg {
+ display:none!important;
+}
+@media(max-width:360px) {
+ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .kechu-real-category-photo {width:76px!important;height:76px!important;min-width:76px!important}
+}
+
+/* Fotografía original fija por categoría: ocultar el rectángulo oscuro de los JPG,
+   conservar el PNG/WebP de porciones con su transparencia real. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary:not(.category-porciones) .kechu-real-category-photo img {
+ -webkit-mask-image:radial-gradient(ellipse 62% 62% at 50% 50%,#000 43%,rgba(0,0,0,.94) 58%,rgba(0,0,0,.42) 78%,transparent 100%)!important;
+ mask-image:radial-gradient(ellipse 62% 62% at 50% 50%,#000 43%,rgba(0,0,0,.94) 58%,rgba(0,0,0,.42) 78%,transparent 100%)!important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary.category-porciones .kechu-real-category-photo img {
+ -webkit-mask-image:none!important;mask-image:none!important;
+}
