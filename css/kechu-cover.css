@@ -1040,7 +1040,7 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summ
   html[data-store-theme="carro-kechu-carmelo"] body .kechu-edit-cancel { grid-column: 1 / -1; width: 100%; }
 }
 
-/* V210: firma DENEXA en metal pulido, relieve y X dorada. */
+/* V212: firma DENEXA de alto contraste, relieve y X amarilla. */
 html[data-store-theme="carro-kechu-carmelo"] body #appShell #denexaPoweredFooter .denexa-powered-copy .denexa-brand-3d {
   display: flex !important; align-items: baseline !important; width: max-content !important;
   max-width: 100% !important; gap: 0 !important; white-space: nowrap !important;
@@ -1051,18 +1051,18 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #denexaPoweredFooter
   text-shadow: none !important; -webkit-text-stroke: 0 !important;
 }
 html[data-store-theme="carro-kechu-carmelo"] body #appShell #denexaPoweredFooter .denexa-brand-3d > span {
-  display: inline-block !important; font: inherit !important; letter-spacing: inherit !important; color: #e7f5ff !important;
-  background: linear-gradient(180deg, #fff 8%, #d7f3ff 34%, #8094a7 48%, #fff 53%, #c6d9e6 78%, #8ca6bd 100%) !important;
+  display: inline-block !important; font: inherit !important; letter-spacing: inherit !important; color: #fff !important;
+  background: none !important;
   background-clip: text !important; -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important; -webkit-text-stroke: .4px #e0f4ff !important;
-  text-shadow: 1px 1px 0 #50657a, 2px 2px 0 #324458, 3px 3px 0 #1a2c40,
-    4px 4px 0 #0a1726, 5px 7px 5px #000, 0 0 15px #4ba8e044 !important;
+  -webkit-text-fill-color: #fff !important; -webkit-text-stroke: .3px #fff !important;
+  text-shadow: 0 1px 0 #c4c4c4, 0 2px 0 #909090, 0 3px 0 #555,
+    0 4px 0 #252525, 2px 6px 4px #000, 0 0 12px #ffffff33 !important;
 }
 html[data-store-theme="carro-kechu-carmelo"] body #appShell #denexaPoweredFooter .denexa-brand-3d > .denexa-brand-x {
   font-size: 1.13em !important; margin: 0 .025em !important;
-  background: linear-gradient(180deg, #fff8c0 5%, #fff16c 27%, #ffca05 44%, #a35b00 49%, #ffe978 55%, #ffc400 75%, #d18a00 100%) !important;
+  color: #ffe600 !important; background: none !important;
   background-clip: text !important; -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important; -webkit-text-stroke: .5px #ffe16a !important;
+  -webkit-text-fill-color: #ffe600 !important; -webkit-text-stroke: .3px #fff070 !important;
   text-shadow: 1px 1px 0 #a66b00, 2px 2px 0 #805000, 3px 3px 0 #593600,
     4px 4px 0 #301c00, 5px 7px 5px #000, 0 0 18px #ffd00077 !important;
 }
