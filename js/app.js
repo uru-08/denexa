@@ -477,7 +477,9 @@ function ensureDenexaPoweredFooter() {
       <div class="denexa-powered-row">
         <img class="denexa-powered-logo" src="assets/denexa-logo.png" alt="DENEXA Pedidos Online">
         <div class="denexa-powered-copy">
-          <strong>DENEXA</strong>
+          ${document.documentElement.dataset.storeTheme === "carro-kechu-carmelo"
+            ? '<strong class="denexa-brand-3d"><span>DENE</span><span class="denexa-brand-x">X</span><span>A</span></strong>'
+            : '<strong>DENEXA</strong>'}
           <span>Plataforma de pedidos para comercios <span class="denexa-country-flag" aria-label="Uruguay">&#127482;&#127486;</span></span>
         </div>
       </div>
