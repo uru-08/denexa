@@ -1837,6 +1837,12 @@ function renderCatalog() {
 }
 
 function renderProductCard(product) {
+  const kechuMobile = document.documentElement.dataset.storeTheme === "carro-kechu-carmelo" &&
+    window.matchMedia("(max-width: 899px)").matches;
+  const originalDescription = String(product.description || "");
+  const readableDescription = kechuMobile && originalDescription === originalDescription.toLocaleUpperCase("es-UY")
+    ? originalDescription.charAt(0).toLocaleUpperCase("es-UY") + originalDescription.slice(1).toLocaleLowerCase("es-UY")
+    : originalDescription;
   const productGroups = getProductGroups(product.id);
   const hasOptions = productGroups.length > 0;
 
@@ -1889,13 +1895,14 @@ function renderProductCard(product) {
                 src="${escapeHTML(product.image_url)}"
                 alt="${escapeHTML(product.name)}"
                 loading="lazy"
+                decoding="async"
               >
             `
             : `
               <div class="product-image-placeholder">
                 <span class="product-placeholder-mark">
                   ${escapeHTML(
-                    String(product.name || "MM")
+                    kechuMobile ? "Foto pendiente" : String(product.name || "MM")
                       .trim()
                       .split(/\s+/)
                       .slice(0,2)
@@ -1924,7 +1931,7 @@ function renderProductCard(product) {
           product.description
             ? `
               <p class="product-description">
-                ${escapeHTML(product.description)}
+                ${escapeHTML(readableDescription)}
               </p>
             `
             : ""
@@ -2935,6 +2942,7 @@ async function addCurrentProductToCart() {
   if (!(await requireOrderingOpen())) {
     return;
   }
+  if (!currentProduct) return;
 
   const error =
     validateProductSelection();
@@ -3025,6 +3033,7 @@ async function addCurrentProductToCart() {
 
   const unitPrice =
     currentUnitPrice();
+  const addedProductName = currentProduct.name;
 
   cart.push({
     key:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`,
@@ -3042,7 +3051,7 @@ async function addCurrentProductToCart() {
   closeProductModal();
 
   showToast(
-    `${currentProduct.name} agregado al pedido.`
+    `${addedProductName} agregado al pedido.`
   );
 }
 

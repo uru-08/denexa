@@ -14,6 +14,9 @@
     para mantener compatibilidad con validaciones y dependencias de app.js.
   */
   let denexaExtraCounts = new Map();
+  let editingCartKey = null;
+  let restoringCartEdit = false;
+  let savingCartEdit = false;
 
   const originalOpenProduct = openProduct;
   const originalCloseProductModal = closeProductModal;
@@ -635,7 +638,7 @@
     return denexaInventoryState.items.get(String(itemId)) || null;
   }
 
-  function denexaInventoryCartConsumption() {
+  function denexaInventoryCartConsumption(excludeKey = null, items = cart) {
     const needed = new Map();
 
     function add(itemId, units) {
@@ -646,11 +649,12 @@
       needed.set(key, Number(needed.get(key) || 0) + Number(units));
     }
 
-    if (!Array.isArray(cart)) {
+    if (!Array.isArray(items)) {
       return needed;
     }
 
-    cart.forEach((item) => {
+    items.forEach((item) => {
+      if (excludeKey !== null && item.key === excludeKey) return;
       const qty=Math.max(0, Number(item?.quantity || 0));
       if (qty <= 0) return;
 
@@ -729,7 +733,7 @@
       return { max:Infinity, limiter:null };
     }
 
-    const cartNeed=denexaInventoryCartConsumption();
+    const cartNeed=denexaInventoryCartConsumption(editingCartKey);
     const perUnit=denexaInventoryCurrentPerUnit(overrideOptionId,overrideCount);
 
     if (!perUnit.size) {
@@ -920,7 +924,11 @@
 
   const denexaInventoryAddToCart=addCurrentProductToCart;
   addCurrentProductToCart=async function() {
-    await denexaRefreshInventory(true,true);
+    const refreshed = await denexaRefreshInventory(true,true);
+    if (editingCartKey && !refreshed) {
+      showToast("No se pudo comprobar el stock. Probá de nuevo.");
+      return;
+    }
 
     const limit=denexaInventoryLimitForCurrent();
     const qty=Math.max(1,Number(currentQuantity || 1));
@@ -933,12 +941,12 @@
     await denexaInventoryAddToCart();
   };
 
-  function denexaInventoryValidateCart() {
-    if (!denexaInventoryState.ready || !Array.isArray(cart)) {
+  function denexaInventoryValidateCart(items = cart) {
+    if (!denexaInventoryState.ready || !Array.isArray(items)) {
       return { ok:true };
     }
 
-    const need=denexaInventoryCartConsumption();
+    const need=denexaInventoryCartConsumption(null, items);
 
     for (const [itemId,required] of need.entries()) {
       const item=denexaInventoryItem(itemId);
@@ -1022,6 +1030,139 @@
       }
     });
   }
+
+  /* Kechu móvil: editar una línea sin perderla al cancelar ni duplicar su stock. */
+  function kechuMobileCart() {
+    return document.documentElement.dataset.storeTheme === "carro-kechu-carmelo" &&
+      window.matchMedia("(max-width: 899px)").matches;
+  }
+
+  async function changeCartQuantity(key, delta) {
+    if (savingCartEdit) return;
+    const item = cart.find(row => row.key === key);
+    if (!item) return;
+    const next = Number(item.quantity) + delta;
+    if (next < 1 || !Number.isSafeInteger(next)) return;
+    savingCartEdit = true;
+    try {
+      if (delta > 0) {
+        if (!(await requireOrderingOpen())) return;
+        if (!(await denexaRefreshInventory(true, true))) {
+          showToast("No se pudo comprobar el stock. Probá de nuevo.");
+          return;
+        }
+        const product = products.find(p => String(p.id) === String(item.productId));
+        if (!product || product.available === false) {
+          showToast("Este producto ya no está disponible.");
+          return;
+        }
+        const check = denexaInventoryValidateCart(cart.map(row => row.key === key ? {...row, quantity: next} : row));
+        if (!check.ok) { showToast(check.message); return; }
+      }
+      item.quantity = next;
+      item.total = Number(item.unitPrice) * next;
+      saveCart(); updateCartBar(); renderCart();
+    } finally { savingCartEdit = false; }
+  }
+
+  function editCartItem(key) {
+    if (savingCartEdit) return;
+    const item = cart.find(row => row.key === key);
+    const product = products.find(p => String(p.id) === String(item?.productId));
+    if (!item || !product || product.available === false) {
+      showToast("Este producto ya no está disponible. Podés quitarlo del carrito."); return;
+    }
+    const allowed = new Set(getProductGroups(product.id).flatMap(g => getGroupOptions(g.id).map(o => String(o.id))));
+    if ((item.options || []).some(o => !allowed.has(String(o.optionId)))) {
+      showToast("Las opciones de este producto cambiaron. Agregalo nuevamente para elegir las actuales."); return;
+    }
+    closeCartModal();
+    editingCartKey = key;
+    restoringCartEdit = true;
+    try { openProduct(product); } finally { restoringCartEdit = false; }
+    if (!productModal.classList.contains("open")) { editingCartKey = null; openCartModal(); return; }
+    currentQuantity = Math.max(1, Number(item.quantity));
+    document.getElementById("quantityValue").textContent = String(currentQuantity);
+    selectedOptions = new Map();
+    denexaExtraCounts = new Map();
+    (item.options || []).forEach(stored => {
+      const id = String(stored.optionId), groupId = String(stored.groupId);
+      selectedOptions.set(groupId, [...(selectedOptions.get(groupId) || []), id]);
+      const count = Number(stored.quantity || String(stored.optionName || "").match(/^(\d+) x /)?.[1] || 1);
+      denexaExtraCounts.set(id, Math.max(1, count));
+    });
+    productModalContent.querySelectorAll(".option-row input").forEach(input => {
+      input.checked = getSelectedOptionIds().has(String(input.value));
+    });
+    productModalContent.querySelectorAll(".denexa-extra-quantity-control").forEach(control => {
+      refreshExtraControl(control, control.dataset.optionId);
+    });
+    refreshDependentOptions(); clearInvalidSelections(); refreshPrice();
+    const cancel = document.createElement("button");
+    cancel.type = "button"; cancel.className = "kechu-edit-cancel";
+    cancel.textContent = "Cancelar edición";
+    cancel.addEventListener("click", () => { if (!savingCartEdit) closeProductModal(); });
+    productModalContent.querySelector(".product-actions").appendChild(cancel);
+  }
+
+  const cartEditOpenProduct = openProduct;
+  openProduct = function(product) {
+    if (!restoringCartEdit) editingCartKey = null;
+    cartEditOpenProduct(product);
+  };
+  const cartEditRefreshPrice = refreshPrice;
+  refreshPrice = function() {
+    cartEditRefreshPrice();
+    const button = document.getElementById("addToCartButton");
+    if (editingCartKey && button) button.textContent = `Guardar cambios - ${money(currentUnitPrice() * currentQuantity)}`;
+  };
+  const cartEditCloseProduct = closeProductModal;
+  closeProductModal = function() {
+    const returnToCart = editingCartKey !== null && !savingCartEdit;
+    editingCartKey = null;
+    cartEditCloseProduct();
+    if (returnToCart) openCartModal();
+  };
+  const cartEditAddProduct = addCurrentProductToCart;
+  addCurrentProductToCart = async function() {
+    if (savingCartEdit) return;
+    const key = editingCartKey;
+    if (!key) return cartEditAddProduct();
+    const beforeKeys = new Set(cart.map(row => row.key));
+    savingCartEdit = true;
+    closeProductButton.disabled = true;
+    try {
+      await cartEditAddProduct();
+      const added = cart.find(row => !beforeKeys.has(row.key));
+      if (added) {
+        const index = cart.findIndex(row => row.key === key);
+        cart = cart.filter(row => row.key !== added.key);
+        if (index >= 0) cart[index] = {...cart[index], ...added, key};
+        else cart.push(added);
+        saveCart(); updateCartBar(); openCartModal();
+        showToast("Cambios guardados en tu pedido.");
+      }
+    } finally {
+      savingCartEdit = false; closeProductButton.disabled = false;
+    }
+  };
+  const cartEditRender = renderCart;
+  renderCart = function() {
+    cartEditRender();
+    if (!kechuMobileCart()) return;
+    cartItems.querySelectorAll(".cart-item:not(.promo-gift-cart-item)").forEach((article, index) => {
+      const item = cart[index];
+      if (!item || item.type === "empanadas") return;
+      const controls = document.createElement("div");
+      controls.className = "kechu-cart-controls";
+      controls.innerHTML = `<div class="kechu-cart-quantity"><button type="button" aria-label="Quitar una unidad de ${escapeHTML(item.productName)}" ${item.quantity <= 1 ? "disabled" : ""}>−</button><strong aria-live="polite">${Number(item.quantity)}</strong><button type="button" aria-label="Agregar una unidad de ${escapeHTML(item.productName)}">+</button></div><button type="button" class="kechu-cart-edit">Editar ${item.options?.length ? "extras" : "producto"}</button>`;
+      const buttons = controls.querySelectorAll("button");
+      buttons[0].addEventListener("click", () => changeCartQuantity(item.key, -1));
+      buttons[1].addEventListener("click", () => changeCartQuantity(item.key, 1));
+      buttons[2].addEventListener("click", () => editCartItem(item.key));
+      article.appendChild(controls);
+    });
+  };
 
   /* =========================================================
      DENEXA - WHATSAPP DINAMICO POR COMERCIO

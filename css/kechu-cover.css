@@ -981,3 +981,64 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summ
   mask-image: none !important;
   filter: none !important;
 }
+
+/* V208: lectura, encuadre y controles de carrito exclusivamente en móvil. */
+@media (max-width: 899px) {
+  html[data-store-theme="carro-kechu-carmelo"] body #appShell .product-info {
+    padding: 14px 12px !important; gap: 10px !important; min-width: 0 !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body #appShell .product-info h4 {
+    font-size: clamp(18px, 4.8vw, 22px) !important; line-height: 1.2 !important;
+    overflow-wrap: normal !important; word-break: normal !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body #appShell .product-description {
+    font: 500 14px/1.5 Arial, sans-serif !important;
+    color: #f1eee5 !important; opacity: 1 !important; letter-spacing: 0 !important;
+    overflow-wrap: normal !important; word-break: normal !important;
+    text-shadow: none !important; -webkit-text-stroke: 0 !important;
+    margin: 0 !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body #appShell .product-image {
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    min-height: 160px !important; height: auto !important; background: #090909 !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body #appShell .product-image img {
+    width: 100% !important; height: 100% !important; max-height: 240px !important;
+    object-fit: contain !important; object-position: center !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body #productModal .product-modal-image {
+    object-fit: contain !important; object-position: center !important;
+    max-height: 32svh !important; background: #090909 !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body .product-placeholder-mark {
+    font: 500 13px/1.4 "Oswald", sans-serif !important; text-align: center !important;
+    padding: 10px !important; color: #c9c4b8 !important; background: transparent !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body #cartModal .cart-item {
+    padding: 16px !important; margin-bottom: 14px !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body #cartModal .cart-item-top {
+    gap: 14px !important; align-items: flex-start !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body #cartModal .cart-item-top > div { min-width: 0; }
+  html[data-store-theme="carro-kechu-carmelo"] body #cartModal .cart-item-top > strong { white-space: nowrap; }
+  html[data-store-theme="carro-kechu-carmelo"] body #cartModal .cart-item-options {
+    line-height: 1.5 !important; font-size: 14px !important; margin-top: 10px !important;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body .kechu-cart-controls {
+    display: flex; gap: 12px; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; padding-top: 14px; margin-top: 12px; border-top: 1px solid #ffd40030;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body .kechu-cart-quantity {
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body .kechu-cart-quantity strong { min-width: 24px; text-align: center; }
+  html[data-store-theme="carro-kechu-carmelo"] body .kechu-cart-controls button,
+  html[data-store-theme="carro-kechu-carmelo"] body .kechu-edit-cancel {
+    min-height: 44px; min-width: 44px; padding: 10px 14px;
+    border: 1px solid #b59536; border-radius: 10px; background: #18160e;
+    color: #ffe16a; font: 600 15px/1.3 "Oswald", sans-serif; cursor: pointer;
+  }
+  html[data-store-theme="carro-kechu-carmelo"] body .kechu-cart-controls button:disabled { opacity: .35; cursor: default; }
+  html[data-store-theme="carro-kechu-carmelo"] body .kechu-edit-cancel { grid-column: 1 / -1; width: 100%; }
+}
