@@ -1472,10 +1472,10 @@ function kechuCategoryPhoto(categoryName) {
     "hamburguesas": "assets/kechu/categorias/hamburguesas-real-v207.webp",
     "milanesas": "assets/kechu/categorias/milanesas-real-v207.webp",
     "chivitos": "assets/kechu/categorias/chivitos-real-v207.webp",
-    "papas-fritas": "assets/kechu/categorias/papas-fritas.jpg",
+    "papas-fritas": "assets/kechu/categorias/papas-fritas-sin-fondo-v209.webp",
     "porciones": "assets/kechu/categorias/porciones-v199.webp",
-    "postres": "assets/kechu/categorias/postres.jpg",
-    "bebidas": "assets/kechu/categorias/bebidas.jpg"
+    "postres": "assets/kechu/categorias/postres-sin-fondo-v209.webp",
+    "bebidas": "assets/kechu/categorias/bebidas-sin-fondo-v209.webp"
   };
   const photo = photos[kechuCategoryKey(categoryName)];
   if (!photo) return "";

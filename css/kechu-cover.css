@@ -908,9 +908,9 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summ
 }
 
 /* Restaurar fotografías originales de categorías que ya funcionaban. */
-html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary.category-papas-fritas .category-tab-visual {background-image:url("../assets/kechu/categorias/papas-fritas.jpg")!important;background-size:contain!important}
-html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary.category-postres .category-tab-visual {background-image:url("../assets/kechu/categorias/postres.jpg")!important;background-size:contain!important}
-html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary.category-bebidas .category-tab-visual {background-image:url("../assets/kechu/categorias/bebidas.jpg")!important;background-size:contain!important}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary.category-papas-fritas .category-tab-visual {background-image:url("../assets/kechu/categorias/papas-fritas-sin-fondo-v209.webp")!important;background-size:contain!important}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary.category-postres .category-tab-visual {background-image:url("../assets/kechu/categorias/postres-sin-fondo-v209.webp")!important;background-size:contain!important}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary.category-bebidas .category-tab-visual {background-image:url("../assets/kechu/categorias/bebidas-sin-fondo-v209.webp")!important;background-size:contain!important}
 html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary.category-porciones .category-tab-visual {background-image:url("../assets/kechu/categorias/porciones-v199.webp")!important;background-size:contain!important}
 
 /* Las siete categorías muestran el archivo de imagen real en un elemento img. */
