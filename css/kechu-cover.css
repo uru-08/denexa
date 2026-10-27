@@ -1051,7 +1051,7 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #denexaPoweredFooter
   text-shadow: none !important; -webkit-text-stroke: 0 !important;
 }
 html[data-store-theme="carro-kechu-carmelo"] body #appShell #denexaPoweredFooter .denexa-brand-3d > span {
-  display: inline-block !important; color: #e7f5ff !important;
+  display: inline-block !important; font: inherit !important; letter-spacing: inherit !important; color: #e7f5ff !important;
   background: linear-gradient(180deg, #fff 8%, #d7f3ff 34%, #8094a7 48%, #fff 53%, #c6d9e6 78%, #8ca6bd 100%) !important;
   background-clip: text !important; -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important; -webkit-text-stroke: .4px #e0f4ff !important;
