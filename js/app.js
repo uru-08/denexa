@@ -84,6 +84,7 @@ const addressField = document.getElementById("addressField");
 const referenceField = document.getElementById("referenceField");
 const deliveryExtraFields = document.getElementById("deliveryExtraFields");
 const paymentMethod = document.getElementById("paymentMethod");
+const paymentFields = document.getElementById("paymentFields");
 const cashAmount = document.getElementById("cashAmount");
 const cashAmountField = document.getElementById("cashAmountField");
 const transferInfoCard = document.getElementById("transferInfoCard");
@@ -3492,6 +3493,14 @@ function syncFulfillmentButtons() {
   }
 }
 
+function isKechuPaymentMenu() {
+  return String(business?.slug || "").toLowerCase() === "carro-kechu-carmelo";
+}
+
+function paymentAppliesToOrder() {
+  return deliveryType.value === "delivery" || isKechuPaymentMenu();
+}
+
 function syncDeliveryFields() {
   const isDelivery =
     deliveryType.value === "delivery";
@@ -3522,13 +3531,13 @@ function syncDeliveryFields() {
     isDelivery ? "grid" : "none";
 
   customerAddress.required = isDelivery;
-  paymentMethod.required = isDelivery;
+  paymentMethod.required = paymentAppliesToOrder();
+  if (paymentFields) paymentFields.hidden = !paymentAppliesToOrder();
 
   if (!isDelivery) {
     customerAddress.value = "";
     customerReference.value = "";
-    cashAmount.value = "";
-    paymentMethod.required = false;
+    if (!paymentAppliesToOrder()) cashAmount.value = "";
   }
 
   syncPaymentFields();
@@ -3536,9 +3545,9 @@ function syncDeliveryFields() {
 
 function paymentDisplayDefaults() {
   return {
-    bank:"Banco / Institución",
-    holder:"Nombre del titular",
-    account:"0000000000",
+    bank:"A confirmar con el comercio",
+    holder:"A confirmar con el comercio",
+    account:"Solicitá los datos al comercio",
     currency:"Pesos uruguayos",
     instructions:
       "Realizá la transferencia por el total del pedido. Conservá el comprobante."
@@ -3569,38 +3578,33 @@ function renderTransferInfo() {
     business?.payment_currency ||
     defaults.currency;
 
-  transferInstructions.textContent =
-    business?.payment_instructions ||
-    defaults.instructions;
+  const hasAccount = Boolean(
+    business?.payment_bank_name?.trim() &&
+    business?.payment_account_holder?.trim() &&
+    business?.payment_account_number?.trim() &&
+    !/^0+$/.test(business.payment_account_number.trim())
+  );
+  const transferGrid = transferInfoCard.querySelector(".transfer-info-grid");
+  if (transferGrid) transferGrid.hidden = !hasAccount;
+  transferInstructions.textContent = hasAccount
+    ? business?.payment_instructions || defaults.instructions
+    : "Elegiste transferencia. Solicitá al comercio los datos de la cuenta antes de pagar.";
 }
 
 function syncPaymentFields() {
-  const isDelivery =
-    deliveryType.value === "delivery";
-
-  const isCash =
-    paymentMethod.value === "cash";
-
-  const isTransfer =
-    paymentMethod.value === "transfer";
-
-  cashAmountField.style.display =
-    isDelivery && isCash
-      ? "grid"
-      : "none";
-
-  if (transferInfoCard) {
-    transferInfoCard.hidden =
-      !(isDelivery && isTransfer);
-  }
-
-  if (!isDelivery || !isCash) {
-    cashAmount.value = "";
-  }
-
-  if (isDelivery && isTransfer) {
-    renderTransferInfo();
-  }
+  const applies = paymentAppliesToOrder();
+  const isCash = paymentMethod.value === "cash";
+  const isTransfer = paymentMethod.value === "transfer";
+  paymentMethod.required = applies;
+  if (paymentFields) paymentFields.hidden = !applies;
+  const transferOption = paymentMethod.querySelector('option[value="transfer"]');
+  if (transferOption) transferOption.textContent = isKechuPaymentMenu() ? "Transferencia" : "Transferencia / Débito";
+  cashAmountField.style.display = applies && isCash ? "grid" : "none";
+  cashAmount.required = applies && isCash && isKechuPaymentMenu();
+  cashAmount.min = applies && isCash ? String(cartGrandTotal()) : "0";
+  if (transferInfoCard) transferInfoCard.hidden = !(applies && isTransfer);
+  if (!applies || !isCash) cashAmount.value = "";
+  if (applies && isTransfer) renderTransferInfo();
 }
 
 function showCheckoutError(message) {
@@ -3630,12 +3634,9 @@ async function saveOrderToSupabase() {
         deliveryType.value === "delivery"
           ? customerReference.value.trim() || null
           : null,
-      payment_method:
-        deliveryType.value === "delivery"
-          ? paymentMethod.value
-          : null,
+      payment_method: paymentAppliesToOrder() ? paymentMethod.value : null,
       cash_amount:
-        deliveryType.value === "delivery" &&
+        paymentAppliesToOrder() &&
         paymentMethod.value === "cash" &&
         cashAmount.value
           ? Number(cashAmount.value)
@@ -3922,19 +3923,16 @@ function whatsappOrderMessage() {
       lines.push(`Referencia: ${reference}`);
     }
 
+  }
+
+  if (paymentAppliesToOrder()) {
     lines.push("");
     lines.push("\ud83d\udcb3 *PAGO*");
-
     if (paymentMethod.value === "cash") {
       lines.push("Efectivo");
-
-      if (cashAmount.value) {
-        lines.push(
-          `Paga con: ${money(Number(cashAmount.value))}`
-        );
-      }
+      if (cashAmount.value) lines.push(`Paga con: ${money(Number(cashAmount.value))}`);
     } else {
-      lines.push("Transferencia / Débito");
+      lines.push(isKechuPaymentMenu() ? "Transferencia" : "Transferencia / Débito");
     }
   }
 
@@ -4015,7 +4013,7 @@ checkoutForm.addEventListener(
     }
 
     if (
-      deliveryType.value === "delivery" &&
+      paymentAppliesToOrder() &&
       paymentMethod.value === "cash" &&
       cashAmount.value &&
       Number(cashAmount.value) < cartGrandTotal()
@@ -4023,6 +4021,15 @@ checkoutForm.addEventListener(
       showCheckoutError(
         "El monto en efectivo no puede ser menor al total."
       );
+      return;
+    }
+
+    if (paymentAppliesToOrder() && !["cash", "transfer"].includes(paymentMethod.value)) {
+      showCheckoutError("Elegí la forma de pago.");
+      return;
+    }
+    if (isKechuPaymentMenu() && paymentMethod.value === "cash" && !cashAmount.value) {
+      showCheckoutError("Indicá con cuánto pagás en efectivo.");
       return;
     }
 

@@ -4611,7 +4611,7 @@ function renderOrderCard(order) {
       `;
 
   const paymentBlock =
-    order.delivery_type === "pickup"
+    order.delivery_type === "pickup" && !order.payment_method
       ? ""
       : `
         <div class="order-payment">
