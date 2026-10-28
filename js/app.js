@@ -3585,7 +3585,14 @@ function renderTransferInfo() {
     !/^0+$/.test(business.payment_account_number.trim())
   );
   const transferGrid = transferInfoCard.querySelector(".transfer-info-grid");
-  if (transferGrid) transferGrid.hidden = !hasAccount;
+  if (transferGrid) {
+    transferGrid.hidden = !hasAccount;
+    transferGrid.style.display = hasAccount ? "" : "none";
+  }
+  const transferHelp = transferInfoCard.querySelector(".transfer-info-head small");
+  if (transferHelp) transferHelp.textContent = hasAccount
+    ? "Usá estos datos para realizar el pago."
+    : "El comercio te confirmará los datos de la cuenta.";
   transferInstructions.textContent = hasAccount
     ? business?.payment_instructions || defaults.instructions
     : "Elegiste transferencia. Solicitá al comercio los datos de la cuenta antes de pagar.";
