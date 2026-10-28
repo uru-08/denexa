@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es-UY">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080807"><meta name="description" content="Locos por la Comida, Carmelo. Vista previa de menú DENEXA."><title>Locos por la Comida · Menú</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Bangers&family=Kaushan+Script&display=swap" rel="stylesheet"><link href="fire.css?v=9" rel="stylesheet"><link href="welcome.css?v=7" rel="stylesheet"><link href="readability.css?v=10" rel="stylesheet"><link href="effects.css?v=11" rel="stylesheet"><link href="welcome-fit.css?v=13" rel="stylesheet">
+</head>
+<body>
+<section id="welcome-screen" class="welcome-screen" aria-labelledby="welcome-title" hidden>
+  <div class="welcome-background" aria-hidden="true"></div>
+  <p class="welcome-location"><span aria-hidden="true">⌖</span> CARMELO, URUGUAY</p>
+  <div class="welcome-main">
+    <div class="logo welcome-logo" role="img" aria-label="Logo de Locos por la Comida"></div>
+    <p class="welcome-eyebrow">BIENVENIDOS A</p>
+    <h1 id="welcome-title">LOCOS POR<br><span>LA COMIDA</span></h1>
+    <p class="welcome-slogan">Tu antojo. <strong>Nuestra locura.</strong></p>
+  </div>
+  <div class="welcome-foods" aria-hidden="true"><img src="assets/hamburguesa-3d-v3.webp" width="400" height="400" alt=""><img src="assets/papas-fritas-3d-v3.webp" width="280" height="280" alt=""></div>
+  <div class="welcome-entry"><button id="enter-menu" class="welcome-enter" type="button">ENTRAR AL MENÚ <span aria-hidden="true">›</span></button><p>Milanesas · Hamburguesas · Y mucho más</p></div>
+  <footer class="welcome-footer"><span>Powered by</span><b class="bolt" aria-hidden="true">ϟ</b><strong class="denexa-wordmark" aria-label="DENEXA">DENE<span aria-hidden="true">X</span>A</strong><span aria-label="Uruguay">🇺🇾</span></footer>
+  <small class="welcome-demo">VISTA PREVIA · MENÚ DE DEMOSTRACIÓN</small>
+</section>
+<div class="app-shell" id="menu-app">
+<div class="preview-strip"><span>DEMO <strong class="denexa-wordmark" aria-label="DENEXA">DENE<span aria-hidden="true">X</span>A</strong></span><span>Precios y disponibilidad por confirmar</span></div>
+<main id="home-view">
+<section class="home-hero" id="inicio" aria-label="Locos por la Comida, Carmelo">
+<div class="hero-scene" aria-hidden="true"></div>
+<button class="icon-button hamburger" id="open-menu" aria-label="Abrir menú de navegación"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 8h22M5 16h22M5 24h22"/></svg></button>
+<span class="location"><svg viewBox="0 0 24 32" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12c0 8 12 20 12 20s12-12 12-20C24 5.4 18.6 0 12 0zm0 16a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/></svg><span>Carmelo,<br>Uruguay</span></span>
+<div class="hero-brand"><div class="logo hero-logo" role="img" aria-label="Logo de Locos por la Comida, delivery 091 328 673"></div><h1 class="hero-name">LOCOS POR<span>LA COMIDA</span></h1></div>
+<div class="slogan brush"><span>Tu antojo.</span><strong>Nuestra locura.</strong></div>
+</section>
+<div class="hero-actions page-pad"><button id="hero-order" class="orders-button" aria-label="Abrir pedido de prueba"><span aria-hidden="true">🛵</span><strong>TOMANDO<br>PEDIDOS</strong></button><a href="#carta" class="explore-button"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M27 15.6a11 11 0 0 1-16.2 9.7L4 27l1.8-6.5A11 11 0 1 1 27 15.6Z"/><path d="M11 10c-2 4 3 9 7 10l3-3-3-2-2 1-3-3 1-2z"/></svg><strong>EXPLORAR<br>EL MENÚ</strong><span aria-hidden="true">›</span></a></div>
+<section class="daily-banner page-margin" id="menu-del-dia" aria-labelledby="daily-title"><div class="daily-copy"><h2 id="daily-title"><span aria-hidden="true">♛</span> MENÚ DEL DÍA</h2><p>Platos especiales<br>a un precio increíble.</p><a class="daily-cta" href="https://wa.me/59891328673?text=Hola%2C%20quisiera%20consultar%20el%20men%C3%BA%20del%20d%C3%ADa%20y%20los%20precios%20vigentes." target="_blank" rel="noopener">VER MENÚ DEL DÍA <span aria-hidden="true">›</span></a></div><img src="assets/menu-del-dia-v6.webp" width="480" height="480" alt="Plato del día, imagen ilustrativa" class="daily-food"></section>
+<section id="carta" class="category-grid page-margin" aria-label="Categorías del menú"></section>
+<footer class="brand-footer"><span aria-hidden="true">━━</span><span>Powered by <b class="bolt">ϟ</b> <strong class="denexa-wordmark" aria-label="DENEXA">DENE<span aria-hidden="true">X</span>A</strong></span><span aria-hidden="true">━━</span></footer>
+<p class="home-reference page-margin">Vista previa · Imágenes ilustrativas. Carta y precios pendientes de confirmar.</p>
+</main>
+<section id="category-view" hidden aria-labelledby="category-title">
+<header class="category-hero"><div class="hero-scene" aria-hidden="true"></div><img id="category-hero-food" src="assets/hamburguesa-3d-v3.webp" alt="" width="320" height="320"><button class="icon-button back-button" id="back-home" aria-label="Volver a las categorías"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="m20 5-11 11 11 11"/></svg></button><div class="logo category-logo" role="img" aria-label="Locos por la Comida"></div><div class="category-tools"><button class="icon-button round" id="toggle-search" aria-label="Buscar en esta sección" aria-expanded="false"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="13" cy="13" r="8"/><path d="m19 19 9 9"/></svg></button><button class="icon-button round" id="category-cart" aria-label="Abrir pedido de prueba"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 5h4l4 16h14l4-12H8"/><circle cx="13" cy="27" r="1.5"/><circle cx="24" cy="27" r="1.5"/></svg><b id="header-count" hidden>0</b></button></div><h2 class="brush category-title" id="category-title">HAMBURGUESAS</h2></header>
+<div class="category-content page-pad"><label class="search" id="search-box" hidden><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="13" cy="13" r="8"/><path d="m19 19 9 9"/></svg><input id="search" type="search" placeholder="Buscá tu favorita" aria-label="Buscar productos"></label><p id="category-note" class="category-note">Precios de referencia · UYU</p><div id="product-list" class="product-list"></div><button id="more-products" class="more-button" hidden>Ver más opciones ↓</button><p class="reference-note">Imágenes 3D ilustrativas. Precios de la carta publicada el 25 de julio, pendientes de confirmar. No se envían pedidos reales desde esta demo.</p><button class="return-button" id="bottom-back">‹ VOLVER A LAS CATEGORÍAS</button></div>
+</section>
+<button id="cart-button" class="floating-cart" hidden><span><small>PEDIDO DE PRUEBA · <b id="cart-count">0</b></small><strong id="cart-total">$0</strong></span><span>VER PEDIDO ›</span></button>
+<dialog id="cart-dialog"><div class="dialog-heading"><div><small>DEMO <strong class="denexa-wordmark" aria-label="DENEXA">DENE<span aria-hidden="true">X</span>A</strong></small><h2>MI PEDIDO</h2></div><button id="close-cart" class="close-button" aria-label="Cerrar pedido">×</button></div><div id="cart-lines"></div><div class="cart-summary"><span>Total de referencia</span><strong id="dialog-total">$0</strong></div><p class="cart-warning">Pedido de prueba. Precios y disponibilidad a confirmar. No se envía al comercio.</p><button id="copy-order" class="gold-button">COPIAR PEDIDO DE PRUEBA</button></dialog>
+<dialog id="nav-dialog"><div class="dialog-heading"><h2>EL MENÚ</h2><button id="close-menu" class="close-button" aria-label="Cerrar navegación">×</button></div><div id="drawer-categories"></div><a href="#menu-del-dia" class="drawer-link">MENÚ DEL DÍA ›</a><button id="drawer-cart" class="drawer-link">MI PEDIDO ›</button><button id="show-welcome" class="drawer-link">VER BIENVENIDA ›</button><a class="drawer-link" href="https://www.instagram.com/locosporlacomida321/" target="_blank" rel="noopener">INSTAGRAM ↗</a></dialog>
+<div id="toast" role="status" class="toast"></div>
+</div>
+<script src="fire.js?v=10"></script><script src="effects.js?v=11"></script></body></html>
