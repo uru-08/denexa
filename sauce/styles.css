@@ -29,3 +29,4 @@ body{overflow-x:clip}.ticker{margin:0;transform:none}.category-label strong,.pro
 .special.lights-visible .special-art-label{animation:none;color:#292511}
 .special-product{bottom:55px}.special-art-label{bottom:7px}
 @media(max-width:700px){.special-product{bottom:57px}.special-art-label{bottom:3px}}
+.special-product img{height:auto}
