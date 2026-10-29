@@ -30,3 +30,20 @@ body{overflow-x:clip}.ticker{margin:0;transform:none}.category-label strong,.pro
 .special-product{bottom:55px}.special-art-label{bottom:7px}
 @media(max-width:700px){.special-product{bottom:57px}.special-art-label{bottom:3px}}
 .special-product img{height:auto}
+
+/* Categorías más vivas: amarillo eléctrico y acabado de cartel iluminado. */
+.category{border:2px solid #ffdf00;box-shadow:0 4px 0 #7f4b08,0 0 18px #ffcb0038;background:#20211d}
+.category-toggle{background:linear-gradient(125deg,#fff250 0%,#ffe500 42%,#ffbf00 100%);box-shadow:inset 0 2px 0 #fff9ad,inset 0 -5px 0 #d28b00;isolation:isolate;overflow:hidden}
+.category-toggle:hover{background:linear-gradient(125deg,#fff88a,#ffea00 45%,#ffce00)}
+.category-label strong{color:#16140b;text-shadow:0 1px 0 #fff782;font-weight:400}
+.category-label small{color:#382508;font-weight:700}
+.category-toggle .category-plus{background:linear-gradient(155deg,#ff7950,#f13915 55%,#cd180b);border:1px solid #fff28a;box-shadow:0 4px 0 #9b220d,0 0 18px #ff72166b,inset 0 2px 0 #ffb58a;color:#fff}
+.category-open .category-toggle{background:linear-gradient(125deg,#fff683,#ffdf00 55%,#ffad00)}
+.category-open{border-color:#fff376;box-shadow:0 4px 0 #a36500,0 0 24px #ffe00065}
+.category-open .category-plus{background:linear-gradient(#393116,#17140b);box-shadow:0 4px 0 #8d5b00}
+.category-toggle::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(110deg,transparent 32%,#fff7 48%,transparent 64%);transform:translateX(-160%);animation:sauce-category-shine 7s ease-in-out infinite;animation-play-state:paused}
+.category.lights-visible .category-toggle::after{animation-play-state:running}
+.category:nth-child(2n) .category-toggle::after{animation-delay:1.4s}
+.category:nth-child(3n) .category-toggle::after{animation-delay:2.8s}
+@keyframes sauce-category-shine{0%,68%{transform:translateX(-160%)}95%,100%{transform:translateX(160%)}}
+@media(prefers-reduced-motion:reduce){.category-toggle::after{animation:none!important}}
