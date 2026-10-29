@@ -6,9 +6,17 @@
   <title>Carrito Sauce · Menú</title>
   <link rel="icon" href="assets/logo.jpg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Barlow:wght@400;500;600;700;800&family=Anton&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=1">
+  <link rel="stylesheet" href="styles.css?v=2">
 </head>
-<body>
+<body class="welcome-active">
+  <section class="welcome" id="bienvenida" aria-labelledby="welcome-title">
+    <span class="welcome-location">NUEVA PALMIRA · PLAZA ARTIGAS</span>
+    <div class="welcome-emblem"><img src="assets/logo.jpg" alt="Logo original de Carrito Sauce" width="150" height="150"></div>
+    <h1 id="welcome-title">CARRITO <strong>SAUCE<span>.</span></strong></h1>
+    <div class="welcome-message"><h2>¡Bienvenidos al menú!</h2><p>Tu próximo antojo empieza acá.</p></div>
+    <a class="primary-button welcome-enter" href="#inicio">ENTRAR AL MENÚ <span aria-hidden="true">↗</span></a>
+    <span class="welcome-powered">DEMO POR <b class="denexa">DENE<i>X</i>A</b></span>
+  </section>
   <div class="demo-strip">BOCETO DE MENÚ <span>POR <b class="denexa">DENE<i>X</i>A</b></span></div>
   <div class="page">
     <header class="topbar"><a class="mini-brand" href="#inicio" aria-label="Carrito Sauce, inicio"><img src="assets/logo.jpg" alt="Logo original de Carrito Sauce" width="56" height="56"><span>CARRITO<br><b>SAUCE</b></span></a><span class="place"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-7 7-12a7 7 0 1 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="9" r="2"/></svg>Nueva Palmira<br><small>Plaza Artigas</small></span><a class="social" href="https://www.instagram.com/carritosauce_/" target="_blank" rel="noopener" aria-label="Instagram de Carrito Sauce">↗</a></header>
@@ -22,7 +30,7 @@
         <div class="categories" id="categories"></div>
         <p class="menu-note">Boceto basado en publicaciones del negocio. Precios, ingredientes y disponibilidad a confirmar.</p>
       </section>
-      <section class="special" aria-labelledby="special-title"><div class="special-copy"><span class="small-badge">VISTO EN SU INSTAGRAM</span><h2 id="special-title">BAURÚ<br><span>+ PAPAS.</span></h2><p>Una combinación que merece<br>su propio lugar en el menú.</p><button class="dark-button" id="open-bauru" type="button">VER BAURÚ <span aria-hidden="true">↗</span></button><small>Promoción y precio a confirmar.</small></div><div class="special-photo"><img src="assets/promo-bauru.jpg" alt="Baurú con papas publicado por Carrito Sauce" width="512" height="640"></div></section>
+      <section class="special" aria-labelledby="special-title"><div class="special-copy"><span class="small-badge">VISTO EN SU INSTAGRAM</span><h2 id="special-title">BAURÚ<br><span>+ PAPAS.</span></h2><p>Una combinación que merece su propio lugar en el menú.</p><button class="dark-button" id="open-bauru" type="button">VER BAURÚ <span aria-hidden="true">↗</span></button><small>Disponibilidad y precio a confirmar.</small></div><div class="special-art"><img class="sauce-mascot" src="assets/mascota-sauce.webp" alt="Mascota de milanesa de Carrito Sauce señalando el Baurú" width="500" height="500" loading="lazy"><div class="special-product"><img src="assets/carta-original.jpg" alt="Baurú de Carrito Sauce" width="512" height="640" loading="lazy"></div><span class="special-art-label">¡MIRÁ ESTE CLÁSICO!</span></div></section>
       <section class="find-us" id="contacto"><div><p class="eyebrow">NOS ENCONTRAMOS ACÁ</p><h2>UN CLÁSICO<br>DE <span>LA PLAZA.</span></h2><p>Lucas Roselli entre Jacinto Laguna<br>y Murguía. Plaza Artigas, Nueva Palmira.</p></div><div class="contact-card"><span class="contact-icon" aria-hidden="true">⌖</span><strong>¿Te tentaste?</strong><p>Consultá directamente con el negocio.</p><a class="primary-button" href="https://wa.me/59891681443?text=Hola%2C%20quisiera%20consultar%20el%20men%C3%BA%20y%20los%20precios%20vigentes%20de%20Carrito%20Sauce." target="_blank" rel="noopener">091 681 443 <span aria-hidden="true">↗</span></a><a class="instagram-link" href="https://www.instagram.com/carritosauce_/" target="_blank" rel="noopener">@carritosauce_ ↗</a></div></section>
     </main>
     <footer class="footer"><img src="assets/logo.jpg" alt="" width="60" height="60"><span>HECHO PARA TENTAR.<br><small>CARRITO SAUCE · NUEVA PALMIRA</small></span><div class="powered">Menú por <b class="denexa">DENE<i>X</i>A</b><small>Demo visual · No confirma pedidos</small></div></footer>
@@ -30,5 +38,5 @@
   <nav class="bottom-nav" aria-label="Navegación principal"><a href="#inicio"><span aria-hidden="true">⌂</span>Inicio</a><a href="#menu"><span aria-hidden="true">☷</span>Menú</a><button id="open-selection" type="button"><span class="nav-count" id="nav-count">0</span>Mi selección</button></nav>
   <dialog id="selection-dialog" aria-labelledby="selection-title"><div class="dialog-top"><div><p class="eyebrow">ARMÁ TU CONSULTA</p><h2 id="selection-title">MI <span>SELECCIÓN.</span></h2></div><button class="close-button" type="button" id="close-selection" aria-label="Cerrar selección">×</button></div><div id="selection-lines"></div><p class="selection-note">Esta es una selección de consulta. El negocio confirma los precios, ingredientes y disponibilidad antes de tomar el pedido.</p><a class="primary-button" id="consult-selection" href="https://wa.me/59891681443" target="_blank" rel="noopener">CONSULTAR POR WHATSAPP <span aria-hidden="true">↗</span></a><button id="keep-browsing" class="text-button" type="button">Seguir mirando el menú</button></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="app.js?v=1"></script>
+  <script src="app.js?v=2"></script>
 </body></html>
