@@ -1651,7 +1651,7 @@ body{
   height:98%;
   aspect-ratio:543/724;
   pointer-events:none;
-  background:url("assets/denexa-mascot-eating-sprite.webp") 0 0/400% 100% no-repeat;
+  background:url("assets/denexa-mascot-fixed.webp") 0 0/400% 100% no-repeat;
   filter:drop-shadow(0 8px 12px #0009);
   transform-origin:50% 82%;
   animation:denexa-eating 4.8s steps(1,end) infinite,denexa-breathe 2.4s ease-in-out infinite;
