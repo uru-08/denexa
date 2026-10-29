@@ -87,6 +87,7 @@ function renderCart(){
  if(!t.count){const empty=document.createElement('p');empty.className='empty';empty.textContent='Tu pedido de prueba está vacío.';list.append(empty)}
  for(const [id,qty] of cart){const p=products[id],row=document.createElement('article');row.className='cart-line';const copy=document.createElement('div'),name=document.createElement('h3'),price=document.createElement('p');name.textContent=(p.category==='milanesas'?'Milanesa · ':'Hamburguesa · ')+p.name;price.textContent=money(p.price)+' por unidad · '+money(p.price*qty);copy.append(name,price);const controls=document.createElement('div');controls.className='quantity-controls';const minus=document.createElement('button'),number=document.createElement('strong'),plus=document.createElement('button');minus.type=plus.type='button';minus.textContent='−';plus.textContent='+';number.textContent=qty;minus.setAttribute('aria-label','Quitar una unidad de '+p.name);plus.setAttribute('aria-label','Agregar una unidad de '+p.name);minus.addEventListener('click',()=>{qty===1?cart.delete(id):cart.set(id,qty-1);renderCart()});plus.addEventListener('click',()=>{cart.set(id,qty+1);renderCart()});controls.append(minus,number,plus);row.append(copy,controls);list.append(row)}
  $('copy-order').disabled=t.count===0;
+ syncPayment();
 }
 for(const id of ['cart-button','hero-order','category-cart','drawer-cart'])$(id).addEventListener('click',()=>{$('nav-dialog').close();$('cart-dialog').showModal()});
 $('nav-dialog').querySelector('a[href="#menu-del-dia"]').addEventListener('click',()=>$('nav-dialog').close());
@@ -94,7 +95,35 @@ $('close-cart').addEventListener('click',()=>$('cart-dialog').close());$('open-m
 for(const id of ['back-home','bottom-back'])$(id).addEventListener('click',()=>{location.hash='carta'});
 $('toggle-search').addEventListener('click',()=>{const open=$('search-box').hidden;$('search-box').hidden=!open;$('toggle-search').setAttribute('aria-expanded',String(open));if(open)$('search').focus()});
 $('search').addEventListener('input',renderProducts);$('more-products').addEventListener('click',()=>{visibleLimit+=6;renderProducts()});
-$('copy-order').addEventListener('click',async()=>{const text='PEDIDO DE PRUEBA — LOCOS POR LA COMIDA\nPRECIOS E INGREDIENTES A CONFIRMAR\n\n'+[...cart].map(([id,qty])=>qty+' × '+(products[id].category==='milanesas'?'Milanesa ':'Hamburguesa ')+products[id].name+' — '+money(products[id].price*qty)).join('\n')+'\n\nTotal de referencia: '+money(totals().total)+' UYU\nEsta es una prueba; no es un pedido confirmado.';try{await navigator.clipboard.writeText(text);toast('Pedido de prueba copiado')}catch{toast('No se pudo copiar. Probá desde el navegador.')}});
+$('copy-order').addEventListener('click',async()=>{const text='PEDIDO DE PRUEBA — LOCOS POR LA COMIDA\nPRECIOS E INGREDIENTES A CONFIRMAR\n\n'+[...cart].map(([id,qty])=>qty+' × '+(products[id].category==='milanesas'?'Milanesa ':'Hamburguesa ')+products[id].name+' — '+money(products[id].price*qty)).join('\n')+'\n\nTotal de referencia: '+money(totals().total)+' UYU'+paymentSummary()+'\nEsta es una prueba; no es un pedido confirmado ni un pago real.';try{await navigator.clipboard.writeText(text);toast('Pedido de prueba copiado')}catch{toast('No se pudo copiar. Probá desde el navegador.')}});
+
+function selectedPayment(){return document.querySelector('input[name="payment-method"]:checked')?.value||'';}
+function syncPayment(){
+ const t=totals(),method=selectedPayment(),cash=Number($('cash-amount').value);
+ $('payment-options').disabled=t.count===0;$('simulate-payment').disabled=t.count===0;
+ $('cash-fields').hidden=method!=='cash';$('transfer-demo-note').hidden=method!=='transfer';
+ $('cash-amount').required=method==='cash'&&t.count>0;$('cash-amount').disabled=method!=='cash';$('cash-amount').min=String(t.total);
+ $('cash-change').textContent=$('cash-amount').value!==''&&Number.isFinite(cash)&&cash>=t.total?'Tu vuelto de prueba: '+money(Math.round((cash-t.total)*100)/100):'Ingresá un importe igual o mayor al total ('+money(t.total)+').';
+ $('payment-result').hidden=true;$('payment-error').hidden=true;$('simulate-payment').textContent='SIMULAR PAGO';
+}
+function paymentSummary(){
+ const method=selectedPayment();
+ if(!method)return '';
+ if(method==='transfer')return '\nForma de pago de prueba: transferencia (sin envío de dinero).';
+ const cash=Number($('cash-amount').value),total=totals().total;
+ return '\nForma de pago de prueba: efectivo'+($('cash-amount').value!==''&&Number.isFinite(cash)&&cash>=total?' · Paga con '+money(cash)+' · Vuelto '+money(Math.round((cash-total)*100)/100):' · Importe pendiente de completar')+'.';
+}
+$('payment-demo').addEventListener('input',syncPayment);
+$('payment-demo').addEventListener('change',syncPayment);
+$('payment-demo').addEventListener('submit',event=>{
+ event.preventDefault();const t=totals(),method=selectedPayment(),cash=Number($('cash-amount').value);
+ if(!t.count||!method||(method==='cash'&&($('cash-amount').value===''||!Number.isFinite(cash)||cash<t.total))){$('payment-error').textContent='Revisá la forma de pago y el importe antes de simular.';$('payment-error').hidden=false;return;}
+ $('payment-error').hidden=true;
+ $('payment-result-detail').textContent='Total de referencia: '+money(t.total)+' UYU. '+(method==='cash'?'Efectivo: pagás con '+money(cash)+'. Vuelto: '+money(Math.round((cash-t.total)*100)/100)+'.':'Transferencia simulada por '+money(t.total)+'.');
+ $('payment-result').hidden=false;$('simulate-payment').textContent='VOLVER A SIMULAR';
+ $('payment-result').scrollIntoView({block:'nearest',behavior:'smooth'});
+});
+
 window.addEventListener('hashchange',route);renderCategories();renderCart();route();
 
 // La bienvenida aparece al entrar al sitio, sin interrumpir enlaces a categorías.
