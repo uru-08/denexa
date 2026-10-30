@@ -1779,3 +1779,7 @@ body:has(.welcome-screen:not([hidden])){height:100svh;overflow:hidden;padding:0}
  .welcome-note,.welcome-steps,.welcome-footer{display:none}
  .welcome-shell{grid-template-rows:minmax(0,1fr)}
 }
+
+/* Transparent brand artwork blends directly into the welcome background. */
+.welcome-logo-image{background:transparent;aspect-ratio:2.15}
+.welcome-logo-image img{background:transparent}
