@@ -1,3 +1,17 @@
+// Keep the menu available if scripting fails; enhance the welcome entry on load.
+const welcomeScreen=document.getElementById('welcome');
+const demoMenu=document.getElementById('demoMenu');
+const enterDemo=document.getElementById('enterDemo');
+if(welcomeScreen&&demoMenu&&enterDemo){
+  demoMenu.hidden=true;
+  enterDemo.addEventListener('click',event=>{
+    event.preventDefault();
+    welcomeScreen.hidden=true;
+    demoMenu.hidden=false;
+    window.scrollTo({top:0,behavior:'instant'});
+    demoMenu.focus({preventScroll:true});
+  });
+}
 const categories=[
 {name:'Hamburguesas',img:'cat-hamburguesas.jpg'},{name:'Pizzas',img:'cat-pizzas.jpg'},{name:'Empanadas',img:'cat-empanadas.jpg'},{name:'Milanesas',img:'cat-milanesas.jpg'},
 {name:'Chivitos',img:'cat-chivitos.jpg'},{name:'Ensaladas',img:'cat-ensaladas.jpg'},{name:'Bebidas',img:'cat-bebidas.jpg'},{name:'Postres',img:'cat-postres.jpg'}];

@@ -5,9 +5,35 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>DENEXA · Demo comercial</title>
-<link rel="stylesheet" href="styles.css?v=20261029-hero">
+<link rel="stylesheet" href="styles.css?v=20261030-welcome">
 </head>
 <body>
+
+<section class="welcome-screen" id="welcome" aria-labelledby="welcomeTitle">
+  <div class="welcome-shell">
+    <div class="welcome-copy">
+      <p class="welcome-eyebrow">MENÚ INTERACTIVO · DEMO 🇺🇾</p>
+      <div class="welcome-logo" aria-label="DENEXA">DENE<span>X</span>A</div>
+      <h1 id="welcomeTitle">Bienvenido a tu<br><span>próximo menú online.</span></h1>
+      <p class="welcome-description">Descubrí cómo tus clientes pueden elegir sus favoritos y armar un pedido desde el celular.</p>
+      <a class="welcome-enter" id="enterDemo" href="#demoMenu">Ver menú demo <span aria-hidden="true">→</span></a>
+      <p class="welcome-note">Explorá y simulá un pedido.<br>No se envía ni se cobra nada.</p>
+    </div>
+    <div class="welcome-art" aria-label="Personaje DENEXA con una hamburguesa">
+      <div class="welcome-orbit" aria-hidden="true"></div>
+      <div class="welcome-character" aria-hidden="true"></div>
+      <span class="welcome-art-label">TU MENÚ. TU ESTILO.</span>
+    </div>
+    <div class="welcome-steps" aria-label="Cómo probar el menú">
+      <div><b>01</b><span>Elegí tus productos</span></div>
+      <div><b>02</b><span>Armá tu pedido</span></div>
+      <div><b>03</b><span>Probá la experiencia</span></div>
+    </div>
+    <p class="welcome-footer">Una experiencia creada por <strong>DENEXA</strong></p>
+  </div>
+</section>
+<div id="demoMenu" tabindex="-1">
+
 
 <div class="demo-bar">
   <div class="demo-brand" aria-label="DENEXA Uruguay">
@@ -136,6 +162,7 @@
   </div>
 </div>
 
-<script src="app.js?v=20260929-5"></script>
+</div>
+<script src="app.js?v=20261030-welcome"></script>
 </body>
 </html>
