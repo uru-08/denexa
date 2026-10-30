@@ -1734,3 +1734,48 @@ body:has(.welcome-screen:not([hidden])){padding-bottom:0}
  .welcome-footer{font-size:10px}
 }
 @media(prefers-reduced-motion:reduce){.welcome-character{animation:none}.welcome-enter{transition:none}}
+
+/* Fit the welcome to the visible viewport, including mobile browser chrome. */
+body:has(.welcome-screen:not([hidden])){height:100svh;overflow:hidden;padding:0}
+.welcome-screen{height:100svh;min-height:0;padding:clamp(12px,3svh,28px) 24px}
+.welcome-shell{height:100%;max-height:900px;min-height:0;grid-template-rows:minmax(0,1fr) auto auto;gap:16px 38px}
+.welcome-copy{min-width:0}
+.welcome-logo-image{position:relative;width:min(100%,360px);aspect-ratio:2.35;overflow:hidden}
+.welcome-logo-image img{position:absolute;display:block;width:100%;height:auto;left:0;top:50%;transform:translateY(-50%)}
+.welcome-art{height:100%;max-height:520px;width:100%;aspect-ratio:auto;min-height:0}
+.welcome-steps{margin-top:0}
+@media(max-width:650px){
+ .welcome-screen{padding:14px 18px max(12px,env(safe-area-inset-bottom))}
+ .welcome-shell{max-height:950px;grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr) auto auto;gap:10px}
+ .welcome-logo-image{width:min(60vw,240px);margin:0 auto}
+ .welcome-eyebrow{font-size:9px;margin:0 0 4px}
+ .welcome-copy h1{font-size:clamp(21px,3.5svh,28px);line-height:1.12;margin:8px 0}
+ .welcome-description{font-size:12px;line-height:1.4;max-width:330px;margin:0 auto 12px}
+ .welcome-enter{padding:13px 20px;font-size:18px}
+ .welcome-enter span{font-size:22px}
+ .welcome-note{font-size:10px;line-height:1.35;margin-top:10px}
+ .welcome-art{width:min(65vw,230px);height:100%;max-height:270px;margin:auto;aspect-ratio:auto}
+ .welcome-character{width:auto;max-width:100%;aspect-ratio:543/724;height:100%;inset:auto;bottom:0;left:50%;translate:-50% 0}
+ .welcome-orbit{inset:8% 0 3%}
+ .welcome-art-label{font-size:8px;padding:7px 12px}
+ .welcome-steps div{padding:10px 4px;gap:4px}
+ .welcome-steps b{font-size:16px}
+ .welcome-steps span{font-size:9px}
+ .welcome-footer{font-size:9px}
+}
+@media(max-height:650px){
+ .welcome-eyebrow{margin-bottom:0}
+ .welcome-logo-image{width:min(45vw,190px)}
+ .welcome-copy h1{font-size:22px;margin:6px 0}
+ .welcome-description{display:none}
+ .welcome-note{font-size:9px;margin-top:8px}
+ .welcome-steps div{padding:8px 4px}
+ .welcome-shell{gap:8px 24px}
+}
+@media(max-height:430px){
+ .welcome-logo-image{width:150px}
+ .welcome-copy h1{font-size:19px}
+ .welcome-enter{padding:10px 16px;font-size:16px}
+ .welcome-note,.welcome-steps,.welcome-footer{display:none}
+ .welcome-shell{grid-template-rows:minmax(0,1fr)}
+}
