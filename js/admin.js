@@ -304,7 +304,7 @@ async function uploadProductImage(blob) {
       method: "POST",
       headers: {
         apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
+        Authorization: supabaseHeaders().Authorization,
         "Content-Type": "image/jpeg",
         "x-upsert": "false"
       },
@@ -2471,6 +2471,7 @@ businessForm.addEventListener(
       ]);
 
       openSection("businesses");
+      window.denexaSubscriptions?.refresh();
     } catch (error) {
       console.error("Error guardando comercio:", error);
 

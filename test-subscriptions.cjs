@@ -1,0 +1,22 @@
+const fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');
+const element=()=>({value:'',innerHTML:'',textContent:'',classList:{add(){},remove(){}},addEventListener(){},showModal(){},close(){}});
+const elements=new Map(),get=s=>{if(!elements.has(s))elements.set(s,element());return elements.get(s);};
+const OriginalDate=Date;
+class FixedDate extends OriginalDate{constructor(...args){super(...(args.length?args:['2026-10-30T02:30:00Z']));}static now(){return new OriginalDate('2026-10-30T02:30:00Z').getTime();}}
+const context={Date:FixedDate,Intl,console,document:{querySelector:get,addEventListener(){},activeElement:null},escapeHTML:x=>String(x??''),window:{},SUPABASE_REST:'https://example.invalid',showToast(){}};
+vm.createContext(context);
+let source=fs.readFileSync('denexa-central/js/admin-subscriptions.js','utf8');
+source=source.replace(/ load\(\);\n\}\)\(\);\s*$/, ' window.test={today,daysLeft,status,addDays,money};\n})();');
+vm.runInContext(source,context);
+const t=context.window.test;assert.ok(t,'Test seam');
+assert.equal(t.today(),'2026-10-29','Use Uruguay calendar date near UTC midnight');
+assert.equal(t.daysLeft('2026-10-29'),1,'Last valid day remains active');
+assert.equal(t.daysLeft('2026-10-28'),0,'Yesterday is expired');
+assert.equal(t.addDays('2026-12-31',1),'2027-01-01');
+assert.equal(t.addDays('2028-02-28',1),'2028-02-29');
+assert.equal(t.status({active:true},{mode:'trial',trial_ends_on:'2026-10-29'}).key,'trial');
+assert.equal(t.status({active:true},{mode:'paid',paid_through:'2026-10-28',trial_ends_on:'2027-01-01'}).key,'expired','Paid stage never falls back to old trial');
+assert.equal(t.status({active:false},{mode:'paid',paid_through:'2027-01-01'}).key,'suspended');
+assert.equal(t.status({active:true},{mode:'unconfigured'}).key,'unconfigured');
+assert.equal(t.money(null,'UYU'),'Sin definir');
+console.log('PASS: Uruguay date boundary, inclusive expiry, leap year, trial/paid/suspended precedence, unknown values.');

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="admin-locked">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +7,17 @@
   <title>DENEXA | Super Panel</title>
 
   <link rel="stylesheet" href="css/admin.css?v=78">
+  <link rel="stylesheet" href="css/admin-subscriptions.css?v=1">
 </head>
 
 <body>
+<section id="adminAccess" aria-labelledby="adminLoginTitle"><div class="admin-login-card">
+<img src="demo/denexa-v1/assets/denexa-logo-transparent.png" alt="DENEXA">
+<h1 id="adminLoginTitle">Panel central</h1><p>Ingresá con tu cuenta de superadministrador.</p>
+<form id="adminLoginForm"><label for="adminEmail">Correo</label><input id="adminEmail" name="email" type="email" autocomplete="username" required>
+<label for="adminPassword">Contraseña</label><input id="adminPassword" name="password" type="password" autocomplete="current-password" required><button type="submit">Ingresar al panel</button></form>
+<p id="adminAccessMessage" role="status"></p></div></section>
+
 
   <aside class="sidebar">
 
@@ -56,7 +64,7 @@
 
       <button class="nav-item" data-section="plans" type="button">
         <span class="nav-icon">PL</span>
-        <span>Planes</span>
+        <span>Suscripciones</span>
       </button>
 
       <button class="nav-item" data-section="settings" type="button">
@@ -69,6 +77,7 @@
   </aside>
 
   <main class="main">
+<div class="admin-session"><span id="adminSessionEmail"></span><button id="adminLogout" type="button">Cerrar sesión</button></div>
 
     <section id="dashboard" class="page-section active">
 
@@ -132,6 +141,7 @@
         </div>
       </div>
 
+      <div class="sub-overview"><h2>Pruebas y vencimientos</h2><div class="sub-stats" id="subscriptionDashboardStats"></div><p class="sub-note">El servicio se activa y suspende manualmente. Los vencimientos no cortan el menú automáticamente.</p><div class="sub-alerts" id="subscriptionAlerts">Cargando suscripciones…</div></div>
     </section>
 
     <section id="businesses" class="page-section">
@@ -253,21 +263,12 @@
     </section>
 
     <section id="plans" class="page-section">
-      <header class="page-header">
-        <div>
-          <p class="eyebrow">NEGOCIO</p>
-          <h1>Planes</h1>
-          <p class="subtitle">
-            Planes y suscripciones de los comercios.
-          </p>
-        </div>
-      </header>
-
-      <div class="panel empty-state">
-        M&oacute;dulo de planes pendiente.
-      </div>
-    </section>
-
+<header class="page-header"><div><p class="eyebrow">CONTROL COMERCIAL</p><h1>Suscripciones</h1><p class="subtitle">Altas, pruebas, planes y pagos de cada comercio.</p></div></header>
+<div class="sub-stats" id="subscriptionStats"></div>
+<p class="sub-note">Fechas en horario de Uruguay. Los vencimientos incluyen el día indicado. Los comercios existentes mantienen su estado; completá las fechas históricas cuando las conozcas.</p>
+<div class="sub-toolbar"><input id="subscriptionSearch" type="search" placeholder="Buscar comercio…" aria-label="Buscar comercio"><select id="subscriptionFilter" aria-label="Filtrar estado"><option value="">Todos los estados</option><option value="unconfigured">Sin configurar</option><option value="trial">En prueba</option><option value="paid">Al día</option><option value="expired">Vencidos</option><option value="suspended">Suspendidos</option></select><button id="subscriptionRefresh" class="secondary-button" type="button">Actualizar</button></div>
+<p id="subscriptionsMessage" class="sub-message" role="status"></p><div class="sub-grid" id="subscriptionsList"></div>
+</section>
     <section id="settings" class="page-section">
       <header class="page-header">
         <div>
@@ -403,6 +404,7 @@
           Productos
         </button>
 
+        <button type="button" class="secondary-button" id="businessSubscriptionButton">Suscripción y pagos</button>
         <button type="button" class="secondary-button" id="editBusinessButton">
           Editar comercio
         </button>
@@ -861,7 +863,8 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=28"></script>
-  <script src="js/admin.js?v=78"></script>
+  <dialog id="subscriptionDialog" class="sub-dialog" aria-labelledby="subscriptionDialogTitle"><header><h2 id="subscriptionDialogTitle"></h2><button id="subscriptionDialogClose" type="button" aria-label="Cerrar">×</button></header><div id="subscriptionDialogBody"></div></dialog>
+  <script src="js/admin-access.js?v=1"></script>
 
 </body>
 </html>
