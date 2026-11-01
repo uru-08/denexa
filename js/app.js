@@ -3633,11 +3633,14 @@ function syncPaymentFields() {
   if (paymentFields) paymentFields.hidden = !applies;
   const transferOption = paymentMethod.querySelector('option[value="transfer"]');
   if (transferOption) transferOption.textContent = isKechuPaymentMenu() ? "Transferencia" : "Transferencia / Débito";
-  cashAmountField.style.display = applies && isCash ? "grid" : "none";
-  cashAmount.required = applies && isCash && isKechuPaymentMenu();
-  cashAmount.min = applies && isCash ? String(cartGrandTotal()) : "0";
+  const askCashAmount = applies && isCash && !isKechuPaymentMenu();
+  cashAmountField.hidden = !askCashAmount;
+  cashAmountField.style.display = askCashAmount ? "grid" : "none";
+  cashAmount.disabled = !askCashAmount;
+  cashAmount.required = false;
+  cashAmount.min = askCashAmount ? String(cartGrandTotal()) : "0";
   if (transferInfoCard) transferInfoCard.hidden = !(applies && isTransfer);
-  if (!applies || !isCash) cashAmount.value = "";
+  if (!askCashAmount) cashAmount.value = "";
   if (applies && isTransfer) renderTransferInfo();
 }
 
@@ -3694,6 +3697,7 @@ async function saveOrderToSupabase() {
           : null,
       payment_method: paymentAppliesToOrder() ? paymentMethod.value : null,
       cash_amount:
+        !isKechuPaymentMenu() &&
         paymentAppliesToOrder() &&
         paymentMethod.value === "cash" &&
         cashAmount.value
@@ -3988,7 +3992,7 @@ function whatsappOrderMessage() {
     lines.push("\ud83d\udcb3 *PAGO*");
     if (paymentMethod.value === "cash") {
       lines.push("Efectivo");
-      if (cashAmount.value) lines.push(`Paga con: ${money(Number(cashAmount.value))}`);
+      if (!isKechuPaymentMenu() && cashAmount.value) lines.push(`Paga con: ${money(Number(cashAmount.value))}`);
     } else {
       lines.push(isKechuPaymentMenu() ? "Transferencia" : "Transferencia / Débito");
     }
@@ -4071,6 +4075,7 @@ checkoutForm.addEventListener(
     }
 
     if (
+      !isKechuPaymentMenu() &&
       paymentAppliesToOrder() &&
       paymentMethod.value === "cash" &&
       cashAmount.value &&
@@ -4084,10 +4089,6 @@ checkoutForm.addEventListener(
 
     if (paymentAppliesToOrder() && !["cash", "transfer"].includes(paymentMethod.value)) {
       showCheckoutError("Elegí la forma de pago.");
-      return;
-    }
-    if (isKechuPaymentMenu() && paymentMethod.value === "cash" && !cashAmount.value) {
-      showCheckoutError("Indicá con cuánto pagás en efectivo.");
       return;
     }
 

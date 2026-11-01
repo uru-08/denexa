@@ -1166,3 +1166,8 @@ html[data-store-theme="carro-kechu-carmelo"] body #checkoutFormError.show {
   color: #ffb9ac !important;
   font: 700 16px/1.5 Arial, sans-serif !important;
 }
+
+/* Kechu does not collect cash tender or change information. */
+html[data-store-theme="carro-kechu-carmelo"] body #cashAmountField {
+  display: none !important;
+}
