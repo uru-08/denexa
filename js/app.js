@@ -152,11 +152,15 @@ function showToast(message) {
 }
 
 async function requestJSON(path) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 12000);
+  try {
   const response = await fetch(
     `${SUPABASE_REST}/${path}`,
     {
       method: "GET",
-      headers: supabaseHeaders()
+      headers: supabaseHeaders(),
+      signal: controller.signal
     }
   );
 
@@ -173,6 +177,7 @@ async function requestJSON(path) {
   }
 
   return JSON.parse(text);
+  } finally { clearTimeout(timer); }
 }
 
 
@@ -301,6 +306,7 @@ function applyOrderingStatus() {
 function orderingIsOpen() {
   return (
     business &&
+    business.active !== false &&
     (business.ordering_status || "open") === "open"
   );
 }
@@ -330,7 +336,17 @@ function showOrderingClosedMessage() {
   );
 }
 
-async function refreshOrderingStatusFromSupabase() {
+let statusRefreshPending = null;
+let statusCheckedAt = 0;
+let statusRefreshFailed = false;
+function refreshOrderingStatusFromSupabase() {
+  if (statusRefreshPending) return statusRefreshPending;
+  statusRefreshPending = readOrderingStatusFromSupabase().finally(() => {
+    statusRefreshPending = null;
+  });
+  return statusRefreshPending;
+}
+async function readOrderingStatusFromSupabase() {
   if (!business?.id) {
     return false;
   }
@@ -350,6 +366,8 @@ async function refreshOrderingStatusFromSupabase() {
       return orderingIsOpen();
     }
 
+    statusCheckedAt = Date.now();
+    statusRefreshFailed = false;
     const previousStatus =
       business.ordering_status || "open";
 
@@ -442,6 +460,7 @@ async function refreshOrderingStatusFromSupabase() {
 
     return orderingIsOpen();
   } catch (error) {
+    statusRefreshFailed = true;
     console.error(
       "Error verificando estado de pedidos:",
       error
@@ -451,15 +470,22 @@ async function refreshOrderingStatusFromSupabase() {
   }
 }
 
-async function requireOrderingOpen() {
-  const isOpen =
-    await refreshOrderingStatusFromSupabase();
-
+async function requireOrderingOpen({ fresh = false } = {}) {
+  const kechu = business?.slug === "carro-kechu-carmelo";
+  // Browsing and adding to the local cart never wait for the mobile network.
+  // Confirmation always checks the live state before saving an order.
+  let isOpen;
+  if (kechu && !fresh) {
+    isOpen = orderingIsOpen();
+    if (Date.now() - statusCheckedAt > 5000) refreshOrderingStatusFromSupabase();
+  } else {
+    isOpen = await refreshOrderingStatusFromSupabase();
+    if (fresh && statusRefreshFailed) throw new Error("ORDER_STATUS_NETWORK");
+  }
   if (!isOpen) {
     showOrderingClosedMessage();
     return false;
   }
-
   return true;
 }
 
@@ -552,10 +578,10 @@ async function loadStore() {
       allOptions
     ] = await Promise.all([
       requestJSON(
-        "categories?select=id,business_id,name,active,sort_order"
+        `categories?business_id=eq.${encodeURIComponent(business.id)}&select=id,business_id,name,active,sort_order`
       ),
       requestJSON(
-        "products?select=id,business_id,category_id,name,description,price,image_url,featured,active,available,sort_order,old_price"
+        `products?business_id=eq.${encodeURIComponent(business.id)}&select=id,business_id,category_id,name,description,price,image_url,featured,active,available,sort_order,old_price`
       ),
       requestJSON(
         "product_option_groups?select=id,product_id,name,selection_type,required,max_select,sort_order,active"
@@ -3358,7 +3384,8 @@ function openCheckoutModal() {
   checkoutModal.setAttribute("aria-hidden","false");
   document.body.classList.add("modal-open");
 
-  setTimeout(() => customerName.focus(),50);
+  // Do not open the keyboard or jump halfway down the form in Instagram.
+  checkoutModal.querySelector(".modal-card").scrollTop = 0;
 }
 
 function closeCheckoutModal() {
@@ -3617,7 +3644,31 @@ function syncPaymentFields() {
 function showCheckoutError(message) {
   checkoutFormError.textContent = message;
   checkoutFormError.classList.add("show");
+  checkoutFormError.scrollIntoView({ block: "nearest", behavior: "auto" });
 }
+
+// Android WebViews can hide native validation bubbles. Show the reason in-page.
+checkoutForm.addEventListener("invalid", (event) => {
+  event.preventDefault();
+  const field = event.target;
+  const first = checkoutForm.querySelector(":invalid");
+  if (field !== first) return;
+  const messages = {
+    customerName: "Escribí tu nombre.",
+    customerPhone: "Escribí tu celular.",
+    customerAddress: "Escribí la dirección de entrega.",
+    cashAmount: field.validity.valueMissing
+      ? "Indicá con cuánto pagás. Si pagás justo, tocá «Pago justo»."
+      : "El monto en efectivo debe ser igual o mayor al total."
+  };
+  showCheckoutError(messages[field.id] || "Revisá los datos del pedido.");
+  field.focus({ preventScroll: true });
+}, true);
+
+document.getElementById("cashExactButton")?.addEventListener("click", () => {
+  cashAmount.value = String(cartGrandTotal());
+  hideCheckoutError();
+});
 
 function hideCheckoutError() {
   checkoutFormError.classList.remove("show");
@@ -4045,7 +4096,7 @@ checkoutForm.addEventListener(
       "Verificando disponibilidad...";
 
     try {
-      if (!(await requireOrderingOpen())) {
+      if (!(await requireOrderingOpen({ fresh: true }))) {
         confirmOrderButton.disabled = false;
         confirmOrderButton.textContent =
           "Confirmar pedido";
@@ -4062,6 +4113,13 @@ checkoutForm.addEventListener(
         whatsappOrderUrl();
 
       closeCheckoutModal();
+      // Keep a visible, real link in case Instagram blocks the automatic handoff.
+      const whatsappLink = document.getElementById("orderWhatsappLink");
+      whatsappLink.href = whatsappUrl;
+      document.getElementById("orderSuccessReference").textContent = `Pedido #${order.id}`;
+      orderSuccessModal.classList.add("open");
+      orderSuccessModal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open");
 
       cart = [];
       saveCart();
@@ -4083,7 +4141,9 @@ checkoutForm.addEventListener(
       );
 
       showCheckoutError(
-        "No se pudo enviar el pedido. Revis\u00e1 la configuraci\u00f3n de Supabase."
+        error.message === "ORDER_STATUS_NETWORK"
+          ? "No pudimos verificar la conexión con el comercio. Tus productos siguen en el carrito; esperá unos segundos y volvé a intentar."
+          : "No se pudo completar el pedido. Tus productos siguen en el carrito. Revisá tu conexión y volvé a intentar."
       );
     } finally {
       confirmOrderButton.disabled = false;
@@ -4368,7 +4428,7 @@ loadStore();
 
 window.setInterval(
   () => {
-    if (business?.id) {
+    if (business?.id && !document.hidden) {
       refreshOrderingStatusFromSupabase();
     }
   },

@@ -1,0 +1,7 @@
+<!doctype html>
+<html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Revisión móvil de Kechu</title>
+<style>body{margin:0;background:#151515;color:#fff;font:16px system-ui}header{padding:12px;display:flex;align-items:center;gap:16px}select{font:inherit;padding:8px}iframe{display:block;border:1px solid #555;margin:0 auto;background:#000;height:800px}p{font-size:13px;margin:0}</style>
+<header><label>Ancho de pantalla <select id="width"><option>320</option><option selected>390</option><option>430</option></select></label><p>Menú real. No confirmar pedidos de prueba.</p></header>
+<iframe name="mobileMenu" title="Menú de Kechu en pantalla móvil" width="390" src="../?business=carro-kechu-carmelo"></iframe>
+<script>document.getElementById('width').addEventListener('change',e=>document.querySelector('iframe').width=e.target.value);</script>
+</html>
