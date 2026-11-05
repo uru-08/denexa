@@ -1,0 +1,12 @@
+/* Pie reutilizable para menús públicos y demos de DENEXA. */
+.denexa-social{display:flex;align-items:center;justify-content:center;gap:14px;width:min(100%,370px);margin:20px auto 0;padding:15px 17px;min-height:68px;border:1px solid currentColor;border-radius:17px;color:var(--lime,#aaff00);background:linear-gradient(135deg,#213019,#101a0e);box-shadow:0 4px 0 #070b05;text-align:left;text-decoration:none;font-family:inherit;transition:transform .15s,box-shadow .15s;box-sizing:border-box}
+.denexa-social:hover{transform:translateY(-2px);box-shadow:0 6px 0 #070b05,0 8px 24px #aaff0015}
+.denexa-social:active{transform:translateY(2px);box-shadow:0 2px 0 #070b05}
+.denexa-social:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.denexa-social>svg{width:28px;height:28px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.denexa-social .denexa-social-dot{fill:currentColor;stroke:none}
+.denexa-social>span:not(.denexa-social-arrow){font-size:15px;font-weight:700;line-height:1.45;min-width:0}
+.denexa-social small{display:block;font-size:14px;font-weight:500;color:#d3e2c6;line-height:1.5;margin-top:3px}
+.denexa-social .denexa-social-arrow{font-size:25px;font-weight:700;line-height:1;flex-shrink:0;margin-left:auto}
+@media(max-width:350px){.denexa-social{gap:10px;padding:14px}.denexa-social>span:not(.denexa-social-arrow){font-size:14px}.denexa-social>svg{width:25px;height:25px}}
+@media(prefers-reduced-motion:reduce){.denexa-social{transition:none}}

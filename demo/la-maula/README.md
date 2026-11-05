@@ -36,3 +36,7 @@ Verificados en navegador con vista móvil de 390×844: bienvenida, categorías y
 - Lectura ampliada en descripciones, categorías, avisos, navegación, formularios y comprobante. Revisión adicional a 320×640 sin desborde horizontal.
 - Pago «Solicitar POS a domicilio»: activa delivery y dirección obligatoria; cambiar a retiro desmarca POS. El resumen indica pagar con tarjeta y solicitar el terminal. Reinicio limpia la opción.
 - Prueba en navegador: elegir POS, comprobar delivery automático, cambiar a retiro y verificar efectivo, volver a POS, validar dirección vacía y completar simulación; comprobante incluye la solicitud explícita de POS.
+
+## Revisión 3 · Instagram de DENEXA
+
+Enlace visible a https://www.instagram.com/denexa.uy/ en el pie del menú. Abre otra pestaña sin cerrar el pedido. Estilo compartido en `css/denexa-social.css`; pauta para próximos menús en `docs/menu-branding.md`.
