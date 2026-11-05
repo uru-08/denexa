@@ -145,3 +145,42 @@ footer{font-size:13px}footer>b{font-size:14px}
 .cover-bottom p small{display:block;font-size:13px;color:#c8d8b9;line-height:1.4}.cover-bottom p span{white-space:nowrap}@media(max-width:450px){.brand small{font-size:12px;letter-spacing:0}.cover-bottom p{font-size:14px}.cover-bottom p small{font-size:13px}}
 
 .bottom-nav b{font-size:12px}
+
+
+/* La Maula · refinamiento visual v4: verde ligeramente suavizado, relieve y lectura móvil */
+:root{--lime:#a0ed19;--green:#55dd2e;--line:#34442c}
+.primary,.floating-cart,.add-product,.round-arrow,.category-toggle,.cat-tile b{
+  background:linear-gradient(160deg,#c1f66b 0%,#a0ed19 48%,#78c91a 100%);
+  border-color:#c8f77e;color:#142209;
+  box-shadow:0 4px 0 #3a6514,0 12px 25px #70bc2426,inset 0 2px 2px #f1ffd180;
+  text-shadow:0 1px 0 #e5ffb055;
+}
+.primary:active,.add-product:active,.round-arrow:active{transform:translateY(3px);box-shadow:0 1px 0 #3a6514,inset 0 2px 3px #244b1528}
+.category>summary,.product,.cat-tile,.mode-grid span{transition:border-color .2s,background .2s,box-shadow .2s,transform .2s}
+.category[open]{border-color:#759e4c;box-shadow:0 8px 24px #0005}
+.category>summary{background:linear-gradient(115deg,#2b3d22,#182317 70%,#22331a)}
+.category>summary:active,.cat-tile:active{transform:scale(.99)}
+.product{background:linear-gradient(145deg,#202d1b,#131b11);box-shadow:inset 0 1px #d4ff8110,0 6px 18px #0004}
+.product h3,.category-title strong,.section-head h2,.promo h2{letter-spacing:.15px;text-shadow:0 2px 2px #0008}
+.product-body p,.category-title small{color:#d0dec4}
+.chip{border-color:#506840;background:linear-gradient(180deg,#25321e,#171f14);box-shadow:inset 0 1px #ffffff0d}
+.chip.active{background:linear-gradient(150deg,#b5f455,#91dd18);box-shadow:0 3px 0 #4a741b;color:#142407}
+.mode-grid input:checked+span{background:linear-gradient(145deg,#314d20,#253b1b);box-shadow:inset 0 1px #b6ed5a44,0 0 0 1px var(--lime)}
+.mode-grid span{box-shadow:inset 0 1px #ffffff0c,0 3px 0 #10190d}
+.field input:focus,.field textarea:focus{border-color:var(--lime);box-shadow:0 0 0 2px #a0ed1930;outline:0}
+.bottom-nav>button:active,.bottom-nav>a:active{color:var(--lime);transform:translateY(1px)}
+@media(max-width:450px){
+ .welcome-logo{width:clamp(180px,31svh,260px)}
+ .welcome h1{font-size:clamp(38px,6.2svh,52px)}
+ .cover-brand img{width:min(91vw,350px)}
+ .business-cover{padding-top:8px}
+ .category-grid{gap:10px}
+ .cat-tile{border-radius:17px 17px 17px 5px}
+ .cat-tile span{font-size:clamp(22px,6vw,29px);left:11px;bottom:12px}
+ .category-title strong{font-size:clamp(27px,7vw,32px)}
+ .product h3{font-size:clamp(25px,7vw,30px)}
+ .product-body p{font-size:14px}
+ .payment-options .pos-choice span{min-height:98px}
+ .bottom-nav{padding-left:8px;padding-right:8px}
+}
+@media(prefers-reduced-motion:reduce){.primary,.cat-tile,.product,.chip,.category>summary{transition:none!important}}
