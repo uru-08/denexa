@@ -38,7 +38,7 @@ $('#enter').addEventListener('click',enterStore);
 $('#brand-home').addEventListener('click',()=>{$('#store').hidden=true;$('#welcome').hidden=false;document.body.classList.add('welcoming');$('#enter').focus({preventScroll:true});});
 $('#nav-home').addEventListener('click',()=>{filter='Todas';onlyFavorites=false;$('#search').value='';renderCatalog();window.scrollTo({top:0,behavior:'smooth'});});
 function renderCategoryTiles(){
- $('#category-grid').innerHTML=CATEGORIES.map(c=>`<button type="button" class="cat-tile ${filter===c.name?'active':''}" data-category="${safe(c.name)}"><img src="assets/${c.image}" alt="" loading="lazy"><span>${safe(c.name)}</span><b aria-hidden="true">↗</b></button>`).join('');
+ $('#category-grid').innerHTML=CATEGORIES.map(c=>`<button type="button" class="cat-tile ${filter===c.name?'active':''}" data-category="${safe(c.name)}"><img src="assets/${c.image}" alt="" loading="lazy"><span>${safe(c.name)}</span></button>`).join('');
 }
 function renderCatalog(){
  const query=$('#search').value.trim().toLocaleLowerCase('es');
