@@ -44,6 +44,14 @@ body{background:#090605 radial-gradient(ellipse at top,#321407 0%,#080505 65%);b
 @keyframes smokeRise{0%{transform:translateY(60px) translateX(0) scale(.5);opacity:0}20%{opacity:.6}80%{opacity:.35}100%{transform:translateY(-260px) translateX(75px) scale(2);opacity:0}}
 @keyframes fireGlow{from{opacity:.7;transform:scaleX(.95)}to{opacity:1;transform:scaleX(1.05)}}
 @media(prefers-reduced-motion:reduce){.flame,.smoke,.welcome:after,.heroimg,.welcome .wphoto{animation:none!important}}
+/* V3 hotfix: efectos fuera del flujo de la portada */
+.welcome{display:flex;align-items:center;justify-content:center;isolation:isolate}
+.welcome>.flame,.welcome>.smoke{position:absolute!important;z-index:1!important}
+.welcome>.spark{z-index:2}
+.welcome>div:not(.flame):not(.smoke){position:relative;z-index:5;width:100%;max-width:620px}
+.welcome:after{z-index:0}
+.welcome .wphoto{max-width:100%;height:min(30vh,250px)}
+@media(max-height:730px){.welcome h1{font-size:clamp(65px,16vw,110px)}.welcome .wphoto{height:170px}.welcome p{margin:12px 0;font-size:22px}.welcome .cta{font-size:22px;padding:12px 20px}}
 </style></head><body>
 <div class="welcome" id="welcome"><div class="flame" style="left:0;--speed:1.3s"></div><div class="flame" style="left:15%;--speed:1.8s"></div><div class="flame" style="left:32%;--speed:1.1s"></div><div class="flame" style="left:50%;--speed:1.6s"></div><div class="flame" style="left:68%;--speed:1.4s"></div><div class="flame" style="left:85%;--speed:1.9s"></div><div class="smoke" style="left:8%;--speed:5s"></div><div class="smoke" style="left:35%;--speed:7s"></div><div class="smoke" style="left:67%;--speed:6s"></div><div class="smoke" style="left:85%;--speed:8s"></div><span class="spark" style="top:12%;left:16%">✦</span><span class="spark" style="top:25%;right:12%">✧</span><div><div class="eyebrow">UNA EXPERIENCIA PREMIUM</div><h1>CRAFT<br><span>BURGER</span></h1><img class="wphoto" src="https://pedir.uy/fotos/craftburger/bwf7gcekxqq5frkikoep.webp?w=700" alt="Hamburguesa de Craft"><p>BIENVENIDOS A NUESTRO<br>MENÚ ONLINE</p><button class="cta" id="enter">EXPLORÁ EL MENÚ ➜</button><p style="font-size:11px">DEMOSTRACIÓN INTERACTIVA · DENEXA</p></div></div>
 <div class="app"><header class="top"><button class="iconbtn" id="topmenu" aria-label="Ver categorías">☰</button><div class="brand">CRAFT <b>BURGER</b></div><button class="iconbtn" id="topcart" aria-label="Ver carrito">🛒 <span class="counter" id="count">0</span></button></header>
