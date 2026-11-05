@@ -184,3 +184,14 @@ footer{font-size:13px}footer>b{font-size:14px}
  .bottom-nav{padding-left:8px;padding-right:8px}
 }
 @media(prefers-reduced-motion:reduce){.primary,.cat-tile,.product,.chip,.category>summary{transition:none!important}}
+
+/* v5 · Categorías fotográficas clicables sin botones superpuestos */
+.cat-tile{border:1px solid #64874b;border-radius:20px;box-shadow:0 5px 0 #263b1b,0 10px 24px #0006,inset 0 1px #d8ffad33;transform:translateY(0);background:#172313}
+.cat-tile:after{background:linear-gradient(180deg,#08120808 10%,#0b16093b 45%,#061004f2 100%)}
+.cat-tile img{filter:saturate(1.08) contrast(1.04)}
+.cat-tile span{left:16px;right:10px;bottom:16px;font-size:clamp(23px,3vw,31px);line-height:1.03;text-shadow:0 2px 8px #000,0 1px 2px #000;overflow-wrap:anywhere}
+.cat-tile:hover,.cat-tile:focus-visible{border-color:#b1ef58;transform:translateY(-3px);box-shadow:0 8px 0 #3c6122,0 14px 28px #0008,0 0 0 1px #b1ef5866}
+.cat-tile:active{transform:translateY(3px);box-shadow:0 2px 0 #263b1b}
+.cat-tile.active{border-color:#b0e96c;box-shadow:0 5px 0 #52782e,0 0 0 1px #b0e96c55}
+.cat-tile b{display:none!important}
+@media(max-width:450px){.cat-tile{border-radius:17px}.cat-tile span{font-size:clamp(21px,5.9vw,27px);left:11px;bottom:12px;right:8px}}
