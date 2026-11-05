@@ -786,9 +786,30 @@ function goToPromoProducts() {
     : null;
   const destination = productCard || target;
 
+  if (business?.slug === "carro-kechu-carmelo") {
+    document.querySelectorAll(".promo-jump-highlight").forEach((card) => {
+      card.classList.remove("promo-jump-highlight");
+      card.querySelector(".promo-jump-label")?.remove();
+      card.removeAttribute("aria-describedby");
+    });
+    if (productCard) {
+      const label = document.createElement("span");
+      label.className = "promo-jump-label";
+      label.id = "kechuPromoSelectedLabel";
+      label.textContent = "★ ESTA ES LA PROMO DEL DÍA";
+      label.setAttribute("role", "status");
+      productCard.querySelector(".product-info")?.prepend(label);
+      productCard.setAttribute("aria-describedby", label.id);
+      // Dos cuadros permiten reiniciar el efecto al volver a tocar Ver promo.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (productCard.isConnected) productCard.classList.add("promo-jump-highlight");
+      }));
+    }
+  }
+
   // Espera a que el navegador despliegue la categoría antes de ubicar el producto.
   requestAnimationFrame(() => {
-    destination.scrollIntoView({ behavior: "smooth", block: "start" });
+    destination.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
     if (productCard) productCard.focus({ preventScroll: true });
   });
 }
