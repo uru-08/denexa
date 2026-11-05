@@ -1236,7 +1236,7 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #p
   white-space: normal !important;
 }
 
-/* Promo: rótulo rojo discreto, una sola frase y precio en el botón. */
+/* Promo: rótulo rojo discreto y frase en una sola línea. */
 html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner > #dailyPromoBannerBadge {
   font-size: 18px !important;
   line-height: 1.3 !important;
@@ -1261,4 +1261,41 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-promo-line-co
   transform-origin: left center;
   font: inherit;
   color: inherit;
+}
+
+/* Precio independiente y borde rojo con volumen, sin animaciones de brillo. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner.menu-promo-banner {
+  border: 2px solid #ff3838 !important;
+  box-shadow: inset 0 2px 0 #ffb59a80, inset 0 -2px 0 #380707,
+    0 5px 0 #770c15, 0 8px 0 #260509, 0 0 14px #ff243b88,
+    0 0 28px #ff163c38 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner > #dailyPromoBannerText {
+  font-size: clamp(36px, 9vw, 46px) !important;
+  line-height: 1.15 !important;
+  color: #fff5d7 !important;
+  -webkit-text-fill-color: #fff5d7 !important;
+  text-shadow: 0 2px 0 #5c2809, 0 3px 5px #000 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton {
+  border: 3px solid #ff303f !important;
+  background: linear-gradient(180deg, #ffe36c, #ffbd24 55%, #ef8f06) !important;
+  color: #180900 !important;
+  -webkit-text-fill-color: #180900 !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 0 #fff5bd !important;
+  box-shadow: inset 0 2px 0 #fff3b4, inset 0 -2px 0 #a94c06,
+    0 5px 0 #8a0b19, 0 7px 0 #35050c, 0 0 12px #ff203d99 !important;
+  animation: none !important;
+  filter: none !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton * {
+  color: #180900 !important;
+  -webkit-text-fill-color: #180900 !important;
+  text-shadow: 0 1px 0 #fff5bd !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton:active {
+  transform: translateY(3px) !important;
+  box-shadow: inset 0 2px 0 #fff3b4, 0 2px 0 #8a0b19, 0 0 10px #ff203d88 !important;
 }

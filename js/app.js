@@ -860,11 +860,9 @@ function applyDailyPromo() {
       document.fonts?.ready.then(fitKechuPromoLine);
     }
     requestAnimationFrame(fitKechuPromoLine);
-    dailyPromoBannerText.textContent = "";
+    dailyPromoBannerText.textContent = amount ? amount[0].trim() : "";
     const button = document.getElementById("promoJumpButton");
-    if (button) button.textContent = amount
-      ? `${amount[0].trim()} · VER PROMO →`
-      : "VER PROMO →";
+    if (button) button.textContent = "VER PROMO →";
   }
 
   dailyPromoBanner.hidden = false;
