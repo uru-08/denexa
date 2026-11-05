@@ -101,7 +101,15 @@ $('#confirm-dialog').querySelector('[data-close]').addEventListener('click',open
 $('#confirm-empty').addEventListener('click',()=>{cart=[];save();updateCart();openCart();toast('Pedido vaciado');});
 function checkout(){if(!cart.length)return;const t=totals();$('#checkout-summary').innerHTML=`${t.count} ${t.count===1?'producto':'productos'} <strong>${t.total?money(t.total):'A confirmar'}${t.pending&&t.total?' + a confirmar':''}</strong>${t.pending?'<p style="margin-top:10px">Hay productos cuyo precio queda pendiente de confirmar.</p>':''}`;openDialog('#checkout-dialog');}
 $('#checkout').addEventListener('click',checkout);$('#back-cart').addEventListener('click',openCart);
-$('#checkout-form').addEventListener('change',()=>{const delivery=$('input[name="mode"]:checked').value==='Delivery';$('#delivery-fields').hidden=!delivery;$('#customer-address').required=delivery;$('#transfer-info').hidden=$('input[name="payment"]:checked').value!=='Transferencia';});
+function syncCheckoutOptions(changed){
+ if(changed?.name==='payment'&&changed.value==='POS a domicilio')$('#mode-delivery').checked=true;
+ if(changed?.name==='mode'&&changed.value==='Retiro'&&$('#payment-pos').checked){$('#payment-cash').checked=true;toast('POS a domicilio requiere delivery. Elegí el pago para retirar.');}
+ const delivery=$('input[name="mode"]:checked').value==='Delivery';
+ $('#delivery-fields').hidden=!delivery;$('#customer-address').required=delivery;
+ $('#transfer-info').hidden=$('input[name="payment"]:checked').value!=='Transferencia';
+ $('#pos-info').hidden=!$('#payment-pos').checked;
+}
+$('#checkout-form').addEventListener('change',event=>syncCheckoutOptions(event.target));
 $('#checkout-form').addEventListener('submit',event=>{
  event.preventDefault();if(!cart.length)return openCart();const form=event.currentTarget;if(!form.reportValidity())return;
  const data=new FormData(form);const t=totals();
@@ -109,10 +117,10 @@ $('#checkout-form').addEventListener('submit',event=>{
  if(t.pending)lines.push('Hay productos con precio pendiente. El subtotal no los incluye.');
  lines.push('',`Nombre: ${String(data.get('customerName')).trim()}`,`Teléfono: ${String(data.get('phone')).trim()}`,`Modalidad: ${data.get('mode')}`);
  if(data.get('mode')==='Delivery'){lines.push(`Dirección: ${String(data.get('address')).trim()}`);if(data.get('directions'))lines.push(`Indicaciones: ${String(data.get('directions')).trim()}`);lines.push('Zona y costo de entrega a confirmar.');}else lines.push('Retiro: Defensa 219, entre Varela y Carmen, Carmelo.');
- lines.push(`Pago: ${data.get('payment')} (simulado)`);if($('#order-notes').value.trim())lines.push('Observaciones: '+$('#order-notes').value.trim());
+ lines.push(`Pago: ${data.get('payment')==='POS a domicilio'?'Tarjeta con POS a domicilio':data.get('payment')} (simulado)`);if(data.get('payment')==='POS a domicilio')lines.push('Solicitar POS a domicilio: SÍ. Llevar el terminal para cobrar al recibir.');if($('#order-notes').value.trim())lines.push('Observaciones: '+$('#order-notes').value.trim());
  lines.push('','Precios y disponibilidad sujetos a confirmación.','Esta demo no realiza cobros ni envía pedidos.');receipt=lines.join('\n');$('#receipt').textContent=receipt;$('#copy-order').textContent='Copiar resumen';openDialog('#success-dialog');
 });
 $('#copy-order').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(receipt);$('#copy-order').textContent='¡Resumen copiado!';toast('Resumen de prueba copiado');}catch{const range=document.createRange();range.selectNodeContents($('#receipt'));const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);toast('Seleccioná y copiá el resumen.');}});
 $('#print-order').addEventListener('click',()=>window.print());
-$('#new-order').addEventListener('click',()=>{cart=[];save();updateCart();$('#checkout-form').reset();$('#delivery-fields').hidden=true;$('#customer-address').required=false;$('#transfer-info').hidden=true;$('#order-notes').value='';receipt='';$('#receipt').textContent='';closeDialog($('#success-dialog'));filter='Todas';onlyFavorites=false;$('#search').value='';renderCatalog();$('#categorias').scrollIntoView({behavior:'smooth'});});
+$('#new-order').addEventListener('click',()=>{cart=[];save();updateCart();$('#checkout-form').reset();$('#delivery-fields').hidden=true;$('#customer-address').required=false;$('#transfer-info').hidden=true;$('#pos-info').hidden=true;$('#order-notes').value='';receipt='';$('#receipt').textContent='';closeDialog($('#success-dialog'));filter='Todas';onlyFavorites=false;$('#search').value='';renderCatalog();$('#categorias').scrollIntoView({behavior:'smooth'});});
 renderCategoryTiles();renderCatalog();updateCart();

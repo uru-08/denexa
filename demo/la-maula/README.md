@@ -28,3 +28,11 @@ Validar en móvil: bienvenida → categoría → producto → cantidad/aclaraci�
 ### Resultado de revisión · 05/11/2026
 
 Verificados en navegador con vista móvil de 390×844: bienvenida, categorías y filtro, producto con cantidad y nota, 2 combos = $800, reducción a 1 = $400, validación de nombre/teléfono/dirección, delivery + transferencia, resumen completo, reinicio, búsqueda por chivito, favoritos y persistencia después de recargar, producto con precio pendiente, carrito mixto ($400 más importe pendiente), conservar y vaciar carrito. Bienvenida adicional revisada a 320×640. Sin fotos rotas ni desborde horizontal en la revisión móvil. JS validado con `node --check`. `preview-mobile.jpg` muestra la revisión del menú.
+
+## Revisión 2 · 05/11/2026
+
+- Bienvenida con logo mucho más grande y mensajes simplificados.
+- Portada interna de la marca con logo de 325 px en móvil y fotos reales de fondo. Sustituye el bloque «Hoy pinta» y elimina la franja intermedia.
+- Lectura ampliada en descripciones, categorías, avisos, navegación, formularios y comprobante. Revisión adicional a 320×640 sin desborde horizontal.
+- Pago «Solicitar POS a domicilio»: activa delivery y dirección obligatoria; cambiar a retiro desmarca POS. El resumen indica pagar con tarjeta y solicitar el terminal. Reinicio limpia la opción.
+- Prueba en navegador: elegir POS, comprobar delivery automático, cambiar a retiro y verificar efectivo, volver a POS, validar dirección vacía y completar simulación; comprobante incluye la solicitud explícita de POS.
