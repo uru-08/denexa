@@ -1,0 +1,202 @@
+[
+  {
+    "id": "american",
+    "category": "Hamburguesas",
+    "name": "American Burger",
+    "price": 420,
+    "description": "Pan de papa, doble carne smash 200 g, salsa barbacoa, muzzarella, huevo frito, cebolla caramelizada, cheddar y panceta crunch. Incluye fritas.",
+    "addon": true
+  },
+  {
+    "id": "classic",
+    "category": "Hamburguesas",
+    "name": "Big Clássic",
+    "price": 320,
+    "description": "Pan de papa y queso, carne smash 200 g, mayonesa, lechuga, tomate, jamón, muzzarella, huevo frito y cheddar. Incluye fritas.",
+    "addon": true
+  },
+  {
+    "id": "doble",
+    "category": "Hamburguesas",
+    "name": "Doble Baajonera",
+    "price": 420,
+    "description": "Pan de papa, doble carne smash 200 g, mayonesa, lechuga, tomate, jamón, muzzarella, huevo frito, cebolla caramelizada y cheddar. Incluye fritas.",
+    "addon": true,
+    "image": "assets/doble.jpg"
+  },
+  {
+    "id": "burger420",
+    "category": "Hamburguesas",
+    "name": "Burger 420",
+    "price": 480,
+    "description": "Pan de papa y queso, 3 carnes smash 200 g, mayonesa casera, jamón, muzzarella, panceta ahumada, cebolla caramelizada, cheddar y papas dentro. Incluye fritas.",
+    "addon": true
+  },
+  {
+    "id": "veggie",
+    "category": "Hamburguesas",
+    "name": "Veggie Burger",
+    "price": 320,
+    "description": "Pan de queso, medallón de lentejas, calabaza y zanahoria 150 g, mayonesa, lechuga, tomate, muzzarella, huevo frito y cheddar.",
+    "addon": true
+  },
+  {
+    "id": "triple",
+    "category": "Hamburguesas",
+    "name": "Triple Baajonera",
+    "price": 490,
+    "description": "Pan de papa y queso, 3 carnes smash 200 g, mayonesa, lechuga, tomate, cebolla caramelizada, jamón, muzzarella, panceta crunch, huevo frito y cheddar. Incluye fritas.",
+    "addon": true
+  },
+  {
+    "id": "bizzarra",
+    "category": "Hamburguesas",
+    "name": "Bizzarra",
+    "price": 450,
+    "description": "Pan de papa y queso, 2 carnes, muzzarella, panceta ahumada, pepinillos, queso dambo, barbacoa, huevo frito y salsa secreta. Incluye fritas.",
+    "addon": true,
+    "image": "assets/bizzarra.jpg"
+  },
+  {
+    "id": "chilly",
+    "category": "Hamburguesas",
+    "name": "Chilly Burger",
+    "price": 450,
+    "description": "Pan de papa y queso, 2 medallones de carne, muzzarella, panceta crispy, aros de cebolla y salsa picante. Incluye fritas.",
+    "addon": true,
+    "image": "assets/chilly.jpg"
+  },
+  {
+    "id": "supermila",
+    "category": "Milanesas",
+    "name": "Super Mila",
+    "price": 320,
+    "description": "Pan de queso, milanesa de carne o pollo, mayonesa, lechuga, tomate, muzzarella, jamón y huevo frito. Incluye fritas.",
+    "variants": [
+      "Carne",
+      "Pollo"
+    ]
+  },
+  {
+    "id": "bigmila",
+    "category": "Milanesas",
+    "name": "Big Mila",
+    "price": 600,
+    "description": "Milanesa de carne o pollo en 2 panes, súper completa. Incluye fritas.",
+    "variants": [
+      "Carne",
+      "Pollo"
+    ],
+    "image": "assets/bigmila.jpg"
+  },
+  {
+    "id": "napolitana",
+    "category": "Milanesas",
+    "name": "Napolitana",
+    "price": 350,
+    "description": "Milanesa de carne o pollo, salsa casera, muzzarella y orégano. Incluye fritas.",
+    "variants": [
+      "Carne",
+      "Pollo"
+    ],
+    "image": "assets/napolitana.jpg"
+  },
+  {
+    "id": "americana",
+    "category": "Milanesas",
+    "name": "Americana",
+    "price": 420,
+    "description": "Milanesa de carne o pollo, cheddar, panceta crispy y 2 huevos fritos. Incluye fritas.",
+    "variants": [
+      "Carne",
+      "Pollo"
+    ]
+  },
+  {
+    "id": "chivito",
+    "category": "Extras",
+    "name": "Chivito",
+    "price": 340,
+    "description": "Pan de queso, lomo, mayonesa, lechuga, tomate, jamón, muzzarella, panceta ahumada, 2 huevos fritos y cheddar. Incluye guarnición a elección."
+  },
+  {
+    "id": "nuggets",
+    "category": "Extras",
+    "name": "Nuggets",
+    "price": 280,
+    "description": "12 nuggets, dip de salsa a elección."
+  },
+  {
+    "id": "bastones",
+    "category": "Extras",
+    "name": "Bastones Muzza",
+    "price": 300,
+    "description": "6 unidades. Incluye fritas."
+  },
+  {
+    "id": "caja",
+    "category": "Extras",
+    "name": "Caja Baajonera",
+    "price": 400,
+    "description": "10 nuggets de pollo, 300 g de papas fritas, 300 g de noisette, huevo frito y salsa a elección.",
+    "image": "assets/caja.jpg"
+  },
+  {
+    "id": "planb",
+    "category": "Extras",
+    "name": "Plan B",
+    "price": 700,
+    "description": "15 nuggets de pollo, 300 g de papas fritas, 300 g de noisette, 10 bastones de muzzarella, 2 milanesas picadas y 3 dips de salsa.",
+    "image": "assets/planb.jpg"
+  },
+  {
+    "id": "kids",
+    "category": "Extras",
+    "name": "Burger Kids",
+    "price": 280,
+    "description": "Pan clásico, carne 200 g, jamón y muzzarella. Incluye fritas."
+  },
+  {
+    "id": "feliz",
+    "category": "Extras",
+    "name": "Caja Feliz",
+    "price": 280,
+    "description": "6 nuggets de pollo, 120 g de papas fritas, 120 g de noisette y salsa a elección."
+  },
+  {
+    "id": "papastnt",
+    "category": "Papas",
+    "name": "Papas TNT",
+    "price": 400,
+    "description": "450 g de papas fritas, cheddar, carne sazonada, panceta crispy y 2 huevos fritos.",
+    "image": "assets/papas.jpg"
+  },
+  {
+    "id": "fritas",
+    "category": "Papas",
+    "name": "Fritas clásicas",
+    "price": 250,
+    "description": ""
+  },
+  {
+    "id": "noisette",
+    "category": "Papas",
+    "name": "Noisette",
+    "price": 280,
+    "description": ""
+  },
+  {
+    "id": "rusticas",
+    "category": "Papas",
+    "name": "Rústicas caseras",
+    "price": 300,
+    "description": ""
+  },
+  {
+    "id": "necias",
+    "category": "Papas",
+    "name": "Papas necias",
+    "price": 320,
+    "description": ""
+  }
+]

@@ -1,0 +1,88 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, sans-serif;
+  color: #fff4de;
+  background: #101012;
+}
+* { box-sizing: border-box; }
+body.welcome-active {
+  margin: 0;
+  background: radial-gradient(ellipse at 50% 46%, #3c3c42, #242428 53%, #101012 79%);
+}
+.welcome {
+  width: min(100%, 850px);
+  min-height: 100svh;
+  margin: auto;
+  padding: 22px clamp(14px, 4vw, 43px);
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+}
+.eyebrow {
+  color: #ffcf75;
+  font-size: .72rem;
+  letter-spacing: .33em;
+  font-weight: 850;
+}
+h1 { width: 100%; margin: 0; line-height: 0; z-index: 1; }
+h1 img { display: block; width: 100%; height: auto; }
+.food {
+  position: relative;
+  width: min(100%, 605px);
+  margin: -8px 0 0;
+  overflow: hidden;
+  border: 2px solid #f38c26;
+  border-radius: 18px 5px;
+  box-shadow: 0 0 32px #ff6a272f, 0 6px 0 #242428;
+}
+.food img {
+  display: block;
+  width: 100%;
+  height: clamp(175px, 35svh, 365px);
+  object-fit: cover;
+  object-position: center 60%;
+}
+figcaption {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background: #121214ed;
+  color: #ffdc86;
+  border-radius: 4px;
+  padding: 5px 9px;
+  font-size: .65rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+.slogan { margin: 19px 0 13px; font-size: clamp(1rem, 4vw, 1.22rem); font-weight: 850; }
+.enter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  width: min(100%, 320px);
+  min-height: 53px;
+  padding: 10px 17px;
+  text-decoration: none;
+  color: #231207;
+  background: linear-gradient(#ffdf59, #ffb922);
+  border-radius: 10px;
+  box-shadow: 0 4px #a44910;
+  font-weight: 900;
+}
+.enter:hover { background: #ffe580; }
+.enter:focus-visible { outline: 3px solid #ffe999; outline-offset: 5px; }
+.note { margin: 17px 0 0; color: #dfc5a7; font-size: .73rem; }
+.note strong { letter-spacing: .06em; }
+.note strong span { color: #ffcc42; }
+
+#welcomeView[hidden], #menuView[hidden] { display: none !important; }
+
+body.welcome-active {
+  background: radial-gradient(ellipse at 50% 43%, #f0510b 0%, #ad2307 35%, #630e05 65%, #2b0704 100%);
+}
+.eyebrow { color: #ffe79a; }
+.food { border-color: #ffda61; box-shadow: 0 0 32px #ff9b1640, 0 6px #8d2908; }
+.slogan { color: #fff5dc; text-shadow: 0 2px #8f2309; }
+.note { color: #ffdfb2; }

@@ -1,0 +1,9 @@
+<!doctype html><html lang="es-UY"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Propuesta DENEXA para Baajoneras</title><link rel="stylesheet" href="style.css?v=9"></head><body><header class="top"><a href="./">← Volver a la demo</a></header><main><section id="propuesta" class="section proposal"><p class="label">02 / Propuesta para Baajoneras</p><div class="letter"><div class="denexa">DENE<span>X</span>A</div><h2>Su menú, listo para pedir.</h2>
+<div id="carta"><p>Hola, equipo de Baajoneras:</p>
+<p>Soy Denis, de DENEXA. Vi que en Instagram muestran sus productos y que sus clientes ya pueden escribirles por WhatsApp. Armé una demo para mostrarles cómo sumar un menú online con la identidad de Baajoneras a ese recorrido.</p>
+<p>La idea es que el cliente abra el menú desde la bio o una historia, elija qué quiere y revise su pedido antes de enviárselo a ustedes por WhatsApp. Así les llega un mensaje con los productos y cantidades ya ordenados.</p>
+<p>Desde su panel pueden actualizar productos y precios, destacar una promo y decidir cuándo tomar pedidos. En la demo cargué los productos y precios de su carta para que puedan probar cómo se organiza un pedido con sus hamburguesas, milanesas, extras y papas.</p>
+<p>Si les interesa, podemos recorrerlo juntos y confirmar los precios, horarios y las opciones de retiro que usan hoy.</p>
+<p>Denis<br>DENEXA · Menús online para comercios</p></div>
+<button class="action" id="copy" type="button">Copiar carta</button> <span id="copy-status" role="status"></span></div></section>
+</main><script>document.querySelector("#copy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(document.querySelector("#carta").innerText);document.querySelector("#copy-status").textContent="Carta copiada."}catch{document.querySelector("#copy-status").textContent="Seleccioná la carta para copiarla."}});</script></body></html>

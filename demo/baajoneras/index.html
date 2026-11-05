@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es-UY">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Demo del menú digital de Baajoneras Carmelo, presentada por DENEXA.">
+<title>Baajoneras Carmelo · Demo DENEXA</title>
+<link rel="stylesheet" href="style.css?v=9">
+<link rel="stylesheet" href="welcome.css?v=9">
+<script defer src="menu.js?v=8"></script>
+</head>
+<body class="welcome-active"><main id="welcomeView" class="welcome">
+  <div class="eyebrow">BIENVENIDOS A</div>
+  <h1><img src="assets/baajoneras-wordmark.svg?v=4" alt="Baajoneras Carmelo" width="740" height="233"></h1>
+  <figure class="food">
+    <img src="assets/box.jpg" alt="Baajoneras Box, fotografía original de Baajoneras" width="896" height="1194" fetchpriority="high">
+    <figcaption>EL BAAJONERAS BOX</figcaption>
+  </figure>
+  <p class="slogan">Tu próximo bajón empieza acá.</p>
+  <a class="enter" id="enterMenu" href="#menu">Entrar al menú <span aria-hidden="true">↗</span></a>
+  <p class="note">Menú de prueba · Presentado por <strong>DENE<span>X</span>A</strong></p>
+</main>
+<div id="menuView" hidden>
+<header class="top"><a class="brand" href="./" aria-label="Volver a la bienvenida de Baajoneras"><img src="assets/baajoneras-wordmark.svg?v=4" width="184" height="58" alt="Baajoneras Carmelo"></a><nav aria-label="Secciones"><a href="#menu">Menú</a><a href="propuesta.html">Propuesta</a></nav></header>
+<main id="inicio">
+<div class="info menu-info"><div><small>Horario según la carta · a confirmar</small><strong>Jueves a lunes · 20:00 a 00:00</strong></div><div><small>Take away</small><strong>Cagancha 04, esquina Paseo</strong></div><div><small>Recorrido</small><strong>Simulación de pedido</strong></div></div>
+<section id="menu" class="section">
+<div class="menu-banner"><div><p class="label">El bajón empieza acá</p><h2 class="menu-title">¿Qué vas a pedir?</h2></div><img src="assets/box.jpg" width="140" height="120" alt="Baajoneras Box"></div>
+<p class="sub catalog-note">Demo con la carta recibida · Precios en UYU, a confirmar.</p>
+<div id="categories" class="categories" aria-live="polite"><p>Cargando la carta…</p></div>
+<noscript>Activá JavaScript para ver la carta y simular un pedido.</noscript>
+</section>
+</main>
+<footer><span>Baajoneras Carmelo · Propuesta de DENEXA</span><a href="https://www.instagram.com/baajoneras/" target="_blank" rel="noopener">Perfil original ↗</a></footer>
+<div class="dock"><button id="open-cart" type="button"><span>Ver pedido <small id="dock-total">$0</small></span><strong id="count">0</strong></button></div>
+<dialog id="cart" aria-labelledby="cart-title"><div class="dialog-head"><div><p class="label">Simulación</p><h2 id="cart-title">Tu pedido</h2></div><form method="dialog"><button class="close" aria-label="Cerrar">×</button></form></div><div id="items"></div><div class="cart-total"><span>Total de referencia</span><strong id="total">$0</strong></div><label class="order-notes">Aclaraciones<textarea id="notes" rows="2" maxlength="500" placeholder="Ej.: sin cebolla. Consultá las salsas y guarniciones disponibles."></textarea></label><p class="sub">Vista de prueba. El pedido se prepara en pantalla y no se envía al comercio.</p><button class="action" id="simulate" type="button">Ver mensaje de ejemplo</button><pre id="sample" hidden></pre></dialog>
+<p id="notice" role="status" class="sr"></p>
+</div></body></html>
