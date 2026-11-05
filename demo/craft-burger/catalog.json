@@ -1,0 +1,218 @@
+[
+  [
+    "p2",
+    "PROMOS",
+    "2 COMBOS CHEESEBURGER",
+    "Dos Cheeseburgers + fritas.",
+    670,
+    "cheese-cutout.webp"
+  ],
+  [
+    "p4",
+    "PROMOS",
+    "4 COMBOS CHEESEBURGER",
+    "Cuatro Cheeseburgers + fritas.",
+    1300,
+    "cheese-cutout.webp"
+  ],
+  [
+    "pcombo",
+    "PROMOS",
+    "2 COMBOS A ELECCIÓN",
+    "Dos burgers + fritas. Variedades a confirmar.",
+    720,
+    "yankee-cutout.webp"
+  ],
+  [
+    "pfam",
+    "PROMOS",
+    "4 COMBOS FAMILIARES",
+    "Cuatro burgers + fritas. Variedades a confirmar.",
+    1400,
+    "big-cutout.webp"
+  ],
+  [
+    "ppollo",
+    "PROMOS",
+    "2 CHIVITOS POLLO",
+    "Dos chivitos de pollo + fritas.",
+    720,
+    "chivito-cutout.webp"
+  ],
+  [
+    "plomo",
+    "PROMOS",
+    "2 CHIVITOS LOMO",
+    "Dos chivitos de lomo + fritas.",
+    870,
+    "chivito-cutout.webp"
+  ],
+  [
+    "cheese",
+    "BURGERS",
+    "CHEESEBURGER",
+    "Pan de papa, Angus 150 g, doble cheddar, mayonesa + fritas.",
+    350,
+    "cheese-cutout.webp"
+  ],
+  [
+    "420",
+    "BURGERS",
+    "420",
+    "Angus, cheddar, panceta, barbacoa, fritas adentro + fritas.",
+    380,
+    "420-cutout.webp"
+  ],
+  [
+    "americana",
+    "BURGERS",
+    "AMERICANA",
+    "Angus, cheddar, panceta, salsa barbacoa + fritas.",
+    380,
+    "americana-cutout.webp"
+  ],
+  [
+    "big",
+    "BURGERS",
+    "BIG CRAFT",
+    "Angus, cheddar, pepinillos, lechuga y salsa casera + fritas.",
+    390,
+    "big-cutout.webp"
+  ],
+  [
+    "war",
+    "BURGERS",
+    "CHEESE WAR",
+    "Angus, cheddar, muzarella, cebolla, mayonesa y ketchup + fritas.",
+    380,
+    "cheese-war-cutout.webp"
+  ],
+  [
+    "craft",
+    "BURGERS",
+    "CRAFTNÍFICA",
+    "Angus, cheddar, cebolla, lechuga, tomate y salsas + fritas.",
+    380,
+    "craftnifica-cutout.webp"
+  ],
+  [
+    "doble",
+    "BURGERS",
+    "DOBLE CUARTO",
+    "Angus, cheddar, cebolla, ketchup y mostaza + fritas.",
+    380,
+    "doble-cuarto-cutout.webp"
+  ],
+  [
+    "italiana",
+    "BURGERS",
+    "ITALIANA",
+    "Angus, muzarella, huevo, lechuga, tomate y mayonesa + fritas.",
+    380,
+    "italiana-cutout.webp"
+  ],
+  [
+    "mexicana",
+    "BURGERS",
+    "MEXICANA",
+    "Angus, cheddar, pepinillos, salsa picante opcional + fritas.",
+    390,
+    "mexicana-cutout.webp"
+  ],
+  [
+    "oklahoma",
+    "BURGERS",
+    "OKLAHOMA",
+    "Angus, cheddar, cebolla a la plancha y barbacoa.",
+    380,
+    "oklahoma-cutout.webp"
+  ],
+  [
+    "uruguaya",
+    "BURGERS",
+    "URUGUAYA",
+    "Angus, cheddar, cebolla, lechuga, tomate y salsas + fritas.",
+    380,
+    "uruguaya-cutout.webp"
+  ],
+  [
+    "yankee",
+    "BURGERS",
+    "YANKEE",
+    "Angus, cheddar, muzarella, panceta, huevo, barbacoa + fritas.",
+    420,
+    "yankee-cutout.webp"
+  ],
+  [
+    "lentejas",
+    "VEGETARIANAS",
+    "LENTEJAS",
+    "Hamburguesa de lentejas, cheddar, vegetales y fritas.",
+    380,
+    "veggie-cutout.webp"
+  ],
+  [
+    "espinaca",
+    "VEGETARIANAS",
+    "ESPINACA Y ZANAHORIA",
+    "Hamburguesa vegetal, cheddar, vegetales y fritas.",
+    380,
+    "espinaca-y-zanahoria-cutout.webp"
+  ],
+  [
+    "remolacha",
+    "VEGETARIANAS",
+    "REMOLACHA",
+    "Hamburguesa de remolacha, cheddar, vegetales y fritas.",
+    380,
+    "remolacha-cutout.webp"
+  ],
+  [
+    "pollo",
+    "CHIVITOS",
+    "POLLO",
+    "Pollo, cheddar, muzarella, panceta, huevo, vegetales + fritas.",
+    380,
+    "chivito-cutout.webp"
+  ],
+  [
+    "lomo",
+    "CHIVITOS",
+    "LOMO",
+    "Lomo, muzarella, jamón, panceta, huevo, vegetales + fritas.",
+    460,
+    "chivito-cutout.webp"
+  ],
+  [
+    "fritas",
+    "FRITAS",
+    "PORCIÓN FRITAS",
+    "Papas fritas clásicas.",
+    220,
+    "fries-cutout.webp"
+  ],
+  [
+    "cheddarf",
+    "FRITAS",
+    "FRITAS CON CHEDDAR",
+    "Papas fritas con cheddar.",
+    260,
+    "fries-cutout.webp"
+  ],
+  [
+    "killer",
+    "FRITAS",
+    "PAPAS KILLER",
+    "Cheddar y panceta.",
+    300,
+    "fries-cutout.webp"
+  ],
+  [
+    "craftf",
+    "FRITAS",
+    "PAPAS CRAFT",
+    "Carne, cheddar, panceta y cebolla.",
+    360,
+    "fries-cutout.webp"
+  ]
+]
