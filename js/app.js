@@ -794,6 +794,14 @@ function goToPromoProducts() {
 }
 
 
+let kechuPromoLineObserver;
+function fitKechuPromoLine() {
+  const line = dailyPromoBannerTitle?.querySelector(".kechu-promo-line-copy");
+  if (!line || !dailyPromoBannerTitle.clientWidth) return;
+  const scale = Math.min(1, dailyPromoBannerTitle.clientWidth / Math.max(1, line.offsetWidth));
+  line.style.transform = `scaleX(${scale})`;
+}
+
 function applyDailyPromo() {
   if (!dailyPromoBanner) {
     return;
@@ -835,6 +843,29 @@ function applyDailyPromo() {
 
   dailyPromoBannerText.textContent =
     text;
+
+  if (business?.slug === "carro-kechu-carmelo") {
+    const copy = `${title} ${text}`.replace(/\s+/g, " ").trim();
+    const amounts = [...copy.matchAll(/(?:UYU\s*|U\$S\s*|US\s*)?\$\s*\d[\d.,]*(?:\s*UYU)?/gi)];
+    const amount = amounts.at(-1);
+    const line = document.createElement("span");
+    line.className = "kechu-promo-line-copy";
+    line.textContent = amount
+      ? `${copy.slice(0, amount.index)} ${copy.slice(amount.index + amount[0].length)}`.replace(/\s+/g, " ").trim()
+      : copy;
+    dailyPromoBannerTitle.replaceChildren(line);
+    if (!kechuPromoLineObserver && typeof ResizeObserver !== "undefined") {
+      kechuPromoLineObserver = new ResizeObserver(fitKechuPromoLine);
+      kechuPromoLineObserver.observe(dailyPromoBannerTitle);
+      document.fonts?.ready.then(fitKechuPromoLine);
+    }
+    requestAnimationFrame(fitKechuPromoLine);
+    dailyPromoBannerText.textContent = "";
+    const button = document.getElementById("promoJumpButton");
+    if (button) button.textContent = amount
+      ? `${amount[0].trim()} · VER PROMO →`
+      : "VER PROMO →";
+  }
 
   dailyPromoBanner.hidden = false;
 
