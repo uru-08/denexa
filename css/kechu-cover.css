@@ -1299,3 +1299,23 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #p
   transform: translateY(3px) !important;
   box-shadow: inset 0 2px 0 #fff3b4, 0 2px 0 #8a0b19, 0 0 10px #ff203d88 !important;
 }
+
+/* Rótulo y precio centrados con la frase de la promo. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner > #dailyPromoBannerBadge {
+  text-align: center !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #080808 !important;
+  -webkit-text-fill-color: #080808 !important;
+  -webkit-text-stroke: 1.3px #ffe14b !important;
+  paint-order: stroke fill !important;
+  text-shadow: 1px 0 #ffe14b, -1px 0 #ffe14b, 0 1px #ffe14b, 0 -1px #ffe14b, 0 2px 3px #000 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner > #dailyPromoBannerTitle,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner > #dailyPromoBannerText {
+  text-align: center !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-promo-line-copy {
+  display: block;
+  margin-inline: auto;
+}
