@@ -1,0 +1,116 @@
+{
+  "business": "Carrito Sauce",
+  "items": [
+    [
+      "mila-sauce",
+      "MILANESAS",
+      "MILA SAUCE",
+      "La especialidad de Carrito Sauce. Ingredientes y disponibilidad a confirmar.",
+      null,
+      "mila-sauce-cutout.webp"
+    ],
+    [
+      "mila-en-dos",
+      "MILANESAS",
+      "MILA EN 2",
+      "Milanesa en dos panes para compartir. Opciones a confirmar.",
+      null,
+      "mila-en-dos-cutout.webp"
+    ],
+    [
+      "chivito",
+      "CHIVITOS",
+      "CHIVITO AL PAN",
+      "El clásico chivito al pan de Carrito Sauce. Opciones a confirmar.",
+      null,
+      "chivito-cutout.webp"
+    ],
+    [
+      "chivito-plato",
+      "CHIVITOS",
+      "CHIVITO AL PLATO PARA 2",
+      "Chivito al plato para compartir entre dos. Opciones a confirmar.",
+      null,
+      "chivito-plato-cutout.webp"
+    ],
+    [
+      "bauru",
+      "BAURÚ",
+      "BAURÚ",
+      "Un clásico de la carta de Carrito Sauce. Opciones a confirmar.",
+      null,
+      "bauru-cutout.webp"
+    ],
+    [
+      "pizza-bauru",
+      "PIZZA BAURÚ",
+      "PIZZA BAURÚ",
+      "Una de las especialidades de su carta. Opciones a confirmar.",
+      null,
+      "pizza-bauru-cutout.webp"
+    ],
+    [
+      "hamburguesa",
+      "HAMBURGUESAS",
+      "HAMBURGUESA",
+      "La hamburguesa del carrito. Opciones a confirmar.",
+      null,
+      "hamburguesa-cutout.webp"
+    ],
+    [
+      "papas",
+      "PAPAS Y PANCHOS",
+      "PAPAS CON CHEDDAR Y PANCETA",
+      "Papas con cheddar y panceta de su carta.",
+      null,
+      "papas-cutout.webp"
+    ],
+    [
+      "panchos",
+      "PAPAS Y PANCHOS",
+      "PANCHOS",
+      "Los panchos de Carrito Sauce. Presentación y opciones a confirmar.",
+      null,
+      "panchos-cutout.webp"
+    ]
+  ],
+  "categories": [
+    {
+      "name": "MILANESAS",
+      "copy": "Mila Sauce y Mila en 2",
+      "image": "mila-en-dos-cutout.webp",
+      "icon": "sandwich"
+    },
+    {
+      "name": "CHIVITOS",
+      "copy": "Al pan o al plato",
+      "image": "chivito-cutout.webp",
+      "icon": "sandwich"
+    },
+    {
+      "name": "BAURÚ",
+      "copy": "Un clásico con nombre propio",
+      "image": "bauru-cutout.webp",
+      "icon": "crown"
+    },
+    {
+      "name": "PIZZA BAURÚ",
+      "copy": "Una especialidad del carrito",
+      "image": "pizza-bauru-cutout.webp",
+      "icon": "offer"
+    },
+    {
+      "name": "HAMBURGUESAS",
+      "copy": "Siempre es una buena idea",
+      "image": "hamburguesa-cutout.webp",
+      "icon": "burger"
+    },
+    {
+      "name": "PAPAS Y PANCHOS",
+      "copy": "Los infaltables del antojo",
+      "image": "panchos-cutout.webp",
+      "icon": "fries"
+    }
+  ],
+  "prices_confirmed": false
+}

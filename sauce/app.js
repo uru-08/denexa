@@ -1,27 +1,184 @@
 'use strict';
-const groups=[
- {id:'milanesas',name:'MILANESAS',hint:'La Mila Sauce y la Mila en 2',crop:[1,2],items:[{name:'Mila Sauce',photo:'mila-sauce.jpg',description:'La milanesa protagonista de sus publicaciones.'},{name:'Mila en 2',photo:'mila-en-dos.jpg',description:'Milanesa en dos panes.'}]},
- {id:'chivitos',name:'CHIVITOS',hint:'Al pan o al plato para dos',crop:[0,2],items:[{name:'Chivito al pan',photo:'chivito.jpg',description:'Uno de los clásicos del carrito.'},{name:'Chivito al plato para 2',crop:[0,2],description:'La opción al plato para compartir.'}]},
- {id:'bauru',name:'BAURÚ',hint:'Un clásico con nombre propio',crop:[0,1],items:[{name:'Baurú',crop:[0,1],description:'El Baurú que aparece en su carta y sus promociones.'}]},
- {id:'pizza-bauru',name:'PIZZA BAURÚ',hint:'Para salir de lo de siempre',crop:[0,0],items:[{name:'Pizza Baurú',crop:[0,0],description:'La especialidad que figura en su menú.'}]},
- {id:'hamburguesas',name:'HAMBURGUESAS',hint:'Siempre es una buena idea',crop:[1,1],items:[{name:'Hamburguesa',crop:[1,1],description:'El clásico de la carta de Carrito Sauce.'}]},
- {id:'papas-panchos',name:'PAPAS Y PANCHOS',hint:'Los infaltables del antojo',crop:[1,0],items:[{name:'Papas con cheddar y panceta',crop:[1,0],description:'Las papas que muestran en su carta.'},{name:'Panchos',photo:'panchos.jpg',description:'Los panchos de sus publicaciones.'}]}
+/* Carta conservada de Carrito Sauce. Precios sin confirmar; simulación sin cobros. */
+const ITEMS = [
+  [
+    "mila-sauce",
+    "MILANESAS",
+    "MILA SAUCE",
+    "La especialidad de Carrito Sauce. Ingredientes y disponibilidad a confirmar.",
+    null,
+    "mila-sauce-cutout.webp"
+  ],
+  [
+    "mila-en-dos",
+    "MILANESAS",
+    "MILA EN 2",
+    "Milanesa en dos panes para compartir. Opciones a confirmar.",
+    null,
+    "mila-en-dos-cutout.webp"
+  ],
+  [
+    "chivito",
+    "CHIVITOS",
+    "CHIVITO AL PAN",
+    "El clásico chivito al pan de Carrito Sauce. Opciones a confirmar.",
+    null,
+    "chivito-cutout.webp"
+  ],
+  [
+    "chivito-plato",
+    "CHIVITOS",
+    "CHIVITO AL PLATO PARA 2",
+    "Chivito al plato para compartir entre dos. Opciones a confirmar.",
+    null,
+    "chivito-plato-cutout.webp"
+  ],
+  [
+    "bauru",
+    "BAURÚ",
+    "BAURÚ",
+    "Un clásico de la carta de Carrito Sauce. Opciones a confirmar.",
+    null,
+    "bauru-cutout.webp"
+  ],
+  [
+    "pizza-bauru",
+    "PIZZA BAURÚ",
+    "PIZZA BAURÚ",
+    "Una de las especialidades de su carta. Opciones a confirmar.",
+    null,
+    "pizza-bauru-cutout.webp"
+  ],
+  [
+    "hamburguesa",
+    "HAMBURGUESAS",
+    "HAMBURGUESA",
+    "La hamburguesa del carrito. Opciones a confirmar.",
+    null,
+    "hamburguesa-cutout.webp"
+  ],
+  [
+    "papas",
+    "PAPAS Y PANCHOS",
+    "PAPAS CON CHEDDAR Y PANCETA",
+    "Papas con cheddar y panceta de su carta.",
+    null,
+    "papas-cutout.webp"
+  ],
+  [
+    "panchos",
+    "PAPAS Y PANCHOS",
+    "PANCHOS",
+    "Los panchos de Carrito Sauce. Presentación y opciones a confirmar.",
+    null,
+    "panchos-cutout.webp"
+  ]
 ];
-const $=id=>document.getElementById(id),selection=new Map();let toastTimer;
-function photo(item,kind='category-photo'){
- if(item.crop){const frame=document.createElement('span');frame.className='category-photo';frame.style.setProperty('--crop-x',item.crop[0]?'-149.18%':'-32.97%');frame.style.setProperty('--crop-y',['-101.52%','-220.45%','-338.64%'][item.crop[1]]);const img=document.createElement('img');img.src='assets/carta-original.jpg';img.alt='';img.className='collage';img.width=480;img.height=640;img.loading='lazy';frame.append(img);return frame;}
- const img=document.createElement('img');img.className=kind==='category-photo'?'product-image':kind;img.src='assets/'+item.photo;img.alt='';img.width=110;img.height=110;img.loading='lazy';img.decoding='async';return img;
+const CATEGORIES = [
+  {
+    "name": "MILANESAS",
+    "copy": "Mila Sauce y Mila en 2",
+    "image": "mila-en-dos-cutout.webp",
+    "icon": "sandwich"
+  },
+  {
+    "name": "CHIVITOS",
+    "copy": "Al pan o al plato",
+    "image": "chivito-cutout.webp",
+    "icon": "sandwich"
+  },
+  {
+    "name": "BAURÚ",
+    "copy": "Un clásico con nombre propio",
+    "image": "bauru-cutout.webp",
+    "icon": "crown"
+  },
+  {
+    "name": "PIZZA BAURÚ",
+    "copy": "Una especialidad del carrito",
+    "image": "pizza-bauru-cutout.webp",
+    "icon": "offer"
+  },
+  {
+    "name": "HAMBURGUESAS",
+    "copy": "Siempre es una buena idea",
+    "image": "hamburguesa-cutout.webp",
+    "icon": "burger"
+  },
+  {
+    "name": "PAPAS Y PANCHOS",
+    "copy": "Los infaltables del antojo",
+    "image": "panchos-cutout.webp",
+    "icon": "fries"
+  }
+];
+const $ = s => document.querySelector(s);
+const icon = name => `<svg aria-hidden="true"><use href="#i-${name}"/></svg>`;
+const esc = v => String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => Number.isFinite(n)?'$'+n.toLocaleString('es-UY'):'A confirmar';
+const orderTotal=rows=>rows.some(x=>!Number.isFinite(x[4]))?null:rows.reduce((n,x)=>n+x[4]*cart[x[0]],0);
+const lineTotal=x=>Number.isFinite(x[4])?x[4]*cart[x[0]]:null;
+const clean = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const STORE = 'denexa-sauce-demo-v1';
+let saved={};try{saved=JSON.parse(localStorage.getItem(STORE)||'{}')}catch{}
+let cart={};for(const [id,n] of Object.entries(saved.cart||{})){if(ITEMS.some(x=>x[0]===id)&&Number.isInteger(n)&&n>0)cart[id]=Math.min(n,99)}
+let favorites=new Set((Array.isArray(saved.favorites)?saved.favorites:[]).filter(id=>ITEMS.some(x=>x[0]===id)));
+let openCategory='',favoritesOnly=false,query='',toastTimer,previousFocus;
+const persist=()=>{try{localStorage.setItem(STORE,JSON.stringify({cart,favorites:[...favorites]}))}catch{}};
+const motion=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth';
+function toast(text){$('#toast').textContent=text;$('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),2300)}
+function productMarkup(x){const favorite=favorites.has(x[0]);return `<article class="product" data-product="${esc(x[0])}"><button class="favorite" data-fav="${esc(x[0])}" aria-label="${favorite?'Quitar de':'Guardar en'} favoritos: ${esc(x[2])}" aria-pressed="${favorite}">${icon('heart')}</button><div class="product-photo ${x[5].includes('cutout')?'cutout':''}"><img src="assets/${esc(x[5])}" alt="${esc(x[2])}" width="300" height="300" loading="lazy" decoding="async"></div><div class="product-info"><h3>${esc(x[2])}</h3><p>${esc(x[3])}</p><div class="bottom"><strong class="price">${money(x[4])}</strong><button class="add" data-add="${esc(x[0])}" aria-label="Agregar ${esc(x[2])}">${icon('plus')} AGREGAR</button></div></div></article>`}
+function render(){
+ const q=clean(query.trim());let count=0;
+ $('#cats').classList.toggle('is-filtered',Boolean(q||favoritesOnly));
+ $('#cats').innerHTML=CATEGORIES.map((c,i)=>{
+  const arr=ITEMS.filter(x=>x[1]===c.name&&(!favoritesOnly||favorites.has(x[0]))&&(!q||clean(x[2]+' '+x[3]).includes(q)));
+  if(!arr.length)return '';count+=arr.length;
+  const open=!!q||favoritesOnly||openCategory===c.name;
+  return `<section class="category-panel" data-category="${c.name}"><button class="category-trigger" id="category-${i}" data-toggle="${c.name}" aria-expanded="${open}" aria-controls="products-${i}"><svg class="cat-icon" aria-hidden="true"><use href="#i-${c.icon}"/></svg><span class="category-name"><strong>${c.name}</strong><small>${c.copy}</small></span><img class="cat-photo" src="assets/${c.image}" alt="" width="250" height="200" loading="lazy"><svg class="category-arrow" aria-hidden="true"><use href="#i-down"/></svg></button><div class="category-products" id="products-${i}" ${open?'':'hidden'}>${open?`<header class="category-open-title"><div><h3>${c.name}</h3><small>${arr.length} ${arr.length===1?'producto':'productos'}</small></div><button data-toggle="${c.name}" aria-label="Cerrar ${c.name}">${icon('close')}</button></header>`+arr.map(productMarkup).join(''):''}</div></section>`;
+ }).join('')||`<p class="empty-result">${favoritesOnly?'Todavía no guardaste favoritos.<br>Tocá el corazón de un producto para encontrarlo acá.':'No encontramos esa búsqueda.<br>Probá con otra palabra.'}</p>`;
+ $('#filter-notice').hidden=!(favoritesOnly||q);
+ $('#filter-notice').textContent=favoritesOnly?`${count} favorito${count===1?'':'s'} guardado${count===1?'':'s'}`:`${count} resultado${count===1?'':'s'} para “${query.trim()}”`;
+ $('#filterfavs').setAttribute('aria-pressed',String(favoritesOnly));
 }
-function makeMenus(){groups.forEach((g,index)=>{g.items.forEach((item,i)=>item.id=g.id+'-'+i);const section=document.createElement('section');section.className='category';section.id='categoria-'+g.id;const toggle=document.createElement('button');toggle.type='button';toggle.className='category-toggle';toggle.id='toggle-'+g.id;toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-controls','items-'+g.id);const label=document.createElement('span');label.className='category-label';const title=document.createElement('strong');title.textContent=g.name;const hint=document.createElement('small');hint.textContent=g.hint;label.append(title,hint);const plus=document.createElement('span');plus.className='category-plus';plus.textContent='+';plus.setAttribute('aria-hidden','true');toggle.append(photo(g),label,plus);const content=document.createElement('div');content.id='items-'+g.id;content.className='category-products';content.hidden=true;g.items.forEach(item=>{const row=document.createElement('article');row.className='product';const copy=document.createElement('div');const name=document.createElement('h3');name.textContent=item.name;const description=document.createElement('p');description.textContent=item.description;const price=document.createElement('span');price.className='product-price';price.textContent='Precio a confirmar';copy.append(name,description,price);const add=document.createElement('button');add.type='button';add.className='add-button';add.textContent='+';add.setAttribute('aria-label','Sumar '+item.name+' a mi selección');add.addEventListener('click',()=>addItem(item));row.append(photo(item,'product-image'),copy,add);content.append(row)});toggle.addEventListener('click',()=>openGroup(g.id));section.append(toggle,content);$('categories').append(section)})}
-function openGroup(id,force=false){const target=$('categoria-'+id),open=force||!target.classList.contains('category-open');for(const g of groups){const active=open&&g.id===id;$('categoria-'+g.id).classList.toggle('category-open',active);$('toggle-'+g.id).setAttribute('aria-expanded',String(active));$('toggle-'+g.id).querySelector('.category-plus').textContent=active?'−':'+';$('items-'+g.id).hidden=!active}if(force)target.scrollIntoView({block:'start',behavior:'smooth'})}
-function toast(text){$('toast').textContent=text;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2300)}
-function addItem(item){const found=selection.get(item.id);selection.set(item.id,{item,quantity:(found?.quantity||0)+1});renderSelection();toast(item.name+' sumado a tu selección')}
-function renderSelection(){const lines=$('selection-lines');lines.replaceChildren();let count=0;for(const [id,{item,quantity}] of selection){count+=quantity;const row=document.createElement('article');row.className='selection-line';const copy=document.createElement('div'),name=document.createElement('h3'),note=document.createElement('p');name.textContent=item.name;note.textContent='Precio y opciones a confirmar';copy.append(name,note);const controls=document.createElement('div');controls.className='selection-controls';const minus=document.createElement('button'),number=document.createElement('strong'),plus=document.createElement('button');minus.type=plus.type='button';minus.textContent='−';plus.textContent='+';number.textContent=quantity;minus.setAttribute('aria-label','Quitar una unidad de '+item.name);plus.setAttribute('aria-label','Sumar una unidad de '+item.name);minus.addEventListener('click',()=>{quantity===1?selection.delete(id):selection.set(id,{item,quantity:quantity-1});renderSelection()});plus.addEventListener('click',()=>addItem(item));controls.append(minus,number,plus);row.append(copy,controls);lines.append(row)}if(!count){const empty=document.createElement('p');empty.className='empty-selection';empty.textContent='Abrí una categoría y sumá tus favoritos para armar una consulta.';lines.append(empty)}$('nav-count').textContent=count;const message=count?'Hola, vi el boceto del menú de Carrito Sauce y quisiera consultar precios y disponibilidad de:\n\n'+[...selection.values()].map(({item,quantity})=>quantity+' × '+item.name).join('\n')+'\n\nEsta es una consulta, todavía no es un pedido confirmado.':'Hola, quisiera consultar el menú y los precios vigentes de Carrito Sauce.';$('consult-selection').href='https://wa.me/59891681443?text='+encodeURIComponent(message)}
-$('open-selection').addEventListener('click',()=>$('selection-dialog').showModal());for(const id of ['close-selection','keep-browsing'])$(id).addEventListener('click',()=>$('selection-dialog').close());$('open-bauru').addEventListener('click',()=>openGroup('bauru',true));makeMenus();renderSelection();
-
-// La portada vuelve a mostrarse al abrir el enlace sin una sección específica.
-function syncWelcome(){const welcome=!location.hash||location.hash==='#bienvenida';document.body.classList.toggle('welcome-active',welcome);$('bienvenida').hidden=!welcome;if(!welcome&&location.hash==='#inicio')window.scrollTo({top:0,behavior:'instant'});}
-window.addEventListener('hashchange',syncWelcome);syncWelcome();
-const lightObserver=new IntersectionObserver(entries=>entries.forEach(entry=>entry.target.classList.toggle('lights-visible',entry.isIntersecting)),{threshold:0.05});
-document.querySelectorAll('.welcome,.special,.hero,.category').forEach(el=>lightObserver.observe(el));
-document.addEventListener('visibilitychange',()=>document.body.classList.toggle('effects-paused',document.hidden));
+function navState(id){document.querySelectorAll('.bottom-nav button').forEach(b=>{b.classList.toggle('active',b.id===id);if(b.id===id)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')})}
+function goMenu(category=''){favoritesOnly=false;query='';$('#search').value='';openCategory=category;render();navState(category==='BAURÚ'?'navpromo':'navmenu');requestAnimationFrame(()=>{const el=category?document.querySelector(`[data-category="${category}"] .category-products`):$('#categorias');el?.scrollIntoView({behavior:motion(),block:'start'})})}
+function showFavorites(){favoritesOnly=true;query='';$('#search').value='';render();navState('navfavs');$('#categorias').scrollIntoView({behavior:motion(),block:'start'})}
+function drawCart(){
+ const rows=ITEMS.filter(x=>cart[x[0]]),total=orderTotal(rows),count=Object.values(cart).reduce((a,b)=>a+b,0);
+ document.querySelectorAll('[data-count]').forEach(e=>e.textContent=count);
+ $('#topcart').setAttribute('aria-label',`Abrir mi pedido, ${count} producto${count===1?'':'s'}`);
+ $('#cartrows').innerHTML=rows.length?rows.map(x=>`<div class="cartrow"><img src="assets/${esc(x[5])}" alt="" width="55" height="55"><div><b>${esc(x[2])}</b><small>${money(lineTotal(x))}</small></div><div class="qty"><button data-qty="${x[0]}" data-step="-1" aria-label="Quitar una unidad de ${esc(x[2])}">${icon('minus')}</button><span>${cart[x[0]]}</span><button data-qty="${x[0]}" data-step="1" aria-label="Agregar una unidad de ${esc(x[2])}">${icon('plus')}</button></div></div>`).join(''):'<div class="empty-result">Tu pedido está vacío.<br>Elegí algo rico del menú.</div>';
+ $('#total').textContent=money(total);$('#checkout').hidden=!rows.length;$('#receipt').hidden=true;
+}
+function showCart(){previousFocus=document.activeElement;drawCart();$('#overlay').hidden=false;$('#drawer').hidden=false;$('#site').inert=true;document.body.style.overflow='hidden';$('#close').focus()}
+function hideCart(){if($('#drawer').hidden)return;$('#drawer').hidden=true;$('#overlay').hidden=true;$('#site').inert=false;document.body.style.overflow='';if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true})}
+function showWelcome(){hideCart();$('#welcome').hidden=false;$('#site').inert=true;$('#site').setAttribute('aria-hidden','true');document.body.style.overflow='hidden';$('#enter').focus({preventScroll:true})}
+function enterMenu(){$('#welcome').hidden=true;$('#site').inert=false;$('#site').removeAttribute('aria-hidden');document.body.style.overflow='';window.scrollTo({top:0,behavior:'instant'});$('#topmenu').focus({preventScroll:true});navState('navhome')}
+function syncCheckoutChoices(){document.querySelectorAll('[data-choice]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.value===$('#'+button.dataset.choice).value)))}
+function deliveryChanged(){const delivery=$('#delivery').value==='envio';$('#addresswrap').hidden=!delivery;$('#address').required=delivery;if(!delivery&&$('#payment').value==='POS a domicilio'){$('#payment').value='Efectivo';paymentChanged()}syncCheckoutChoices()}
+function paymentChanged(){const value=$('#payment').value;if(value==='POS a domicilio'){$('#delivery').value='envio';deliveryChanged();$('#payment-note').textContent='Se solicita llevar el POS para pagar al recibir. Disponibilidad a confirmar por el comercio.'}else if(value==='Transferencia'){$('#payment-note').textContent='La transferencia se coordina con el comercio. Esta demostración no realiza cobros.'}$('#payment-note').hidden=value==='Efectivo';syncCheckoutChoices()}
+function simulate(event){event.preventDefault();const rows=ITEMS.filter(x=>cart[x[0]]);if(!rows.length)return;const total=orderTotal(rows);const data={name:$('#customer').value.trim(),delivery:$('#delivery').value,address:$('#address').value.trim(),payment:$('#payment').value,notes:$('#notes').value.trim()};if(!data.name){$('#customer').setCustomValidity('Ingresá tu nombre.');$('#customer').reportValidity();return}$('#receipt').hidden=false;$('#receipt').innerHTML=`<h3>✓ Simulación completada</h3><p>Así quedaría tu pedido. No se envió al comercio.</p><ul>${rows.map(x=>`<li>${cart[x[0]]} × ${esc(x[2])} · ${money(lineTotal(x))}</li>`).join('')}</ul><strong>Total: ${money(total)}</strong><p>${esc(data.name)}<br>${data.delivery==='envio'?'Envío: '+esc(data.address):'Retiro en local'}<br>Pago: ${esc(data.payment)}${data.payment==='POS a domicilio'?'<br>Solicitar POS al entregar: SÍ':''}${data.notes?'<br>Notas: '+esc(data.notes):''}</p><button type="button" id="keep-editing">SEGUIR EDITANDO</button>`;$('#receipt').scrollIntoView({behavior:motion(),block:'start'});$('#keep-editing').onclick=()=>{$('#receipt').hidden=true;$('#customer').focus()}}
+$('#cats').addEventListener('click',e=>{
+ const trigger=e.target.closest('[data-toggle]');if(trigger){
+  const name=trigger.dataset.toggle,closing=Boolean(trigger.closest('.category-open-title'))||(openCategory===name&&!favoritesOnly&&!query);
+  openCategory=closing?'':name;favoritesOnly=false;query='';$('#search').value='';render();
+  const tile=document.querySelector(`.category-trigger[data-toggle="${name}"]`);
+  tile?.focus({preventScroll:true});
+  requestAnimationFrame(()=>{
+   const destination=closing?tile:document.querySelector(`[data-category="${name}"] .category-products`);
+   destination?.scrollIntoView({behavior:motion(),block:closing?'center':'start'});
+  });navState('navmenu');return;
+ }
+ const add=e.target.closest('[data-add]');if(add){const id=add.dataset.add,item=ITEMS.find(x=>x[0]===id);if(!item)return;if((cart[id]||0)>=99){toast('Ya agregaste 99 unidades.');return}cart[id]=(cart[id]||0)+1;persist();drawCart();add.classList.add('added');add.innerHTML='✓ AGREGADO';toast(`${item[2]} agregada al pedido`);setTimeout(()=>{if(add.isConnected){add.classList.remove('added');add.innerHTML=icon('plus')+' AGREGAR'}},950);return}
+ const fav=e.target.closest('[data-fav]');if(fav){const id=fav.dataset.fav;favorites.has(id)?favorites.delete(id):favorites.add(id);persist();if(favoritesOnly)render();else{fav.setAttribute('aria-pressed',String(favorites.has(id)));const item=ITEMS.find(x=>x[0]===id);fav.setAttribute('aria-label',`${favorites.has(id)?'Quitar de':'Guardar en'} favoritos: ${item[2]}`)}toast(favorites.has(id)?'Guardado en favoritos':'Quitado de favoritos')}
+});
+$('#cartrows').addEventListener('click',e=>{const b=e.target.closest('[data-qty]');if(!b)return;const id=b.dataset.qty;cart[id]=Math.max(0,Math.min(99,(cart[id]||0)+Number(b.dataset.step)));if(!cart[id])delete cart[id];persist();drawCart()});
+$('#search').addEventListener('input',e=>{query=e.target.value;favoritesOnly=false;render();navState('navmenu')});$('#filterfavs').onclick=()=>{favoritesOnly?goMenu():showFavorites()};
+$('#enter').onclick=enterMenu;$('#welcome-again').onclick=showWelcome;$('#topmenu').onclick=$('#navmenu').onclick=()=>goMenu();$('#navhome').onclick=()=>{favoritesOnly=false;query='';$('#search').value='';render();navState('navhome');$('#inicio').scrollIntoView({behavior:motion(),block:'start'})};$('#promoBtn').onclick=$('#navpromo').onclick=()=>goMenu('BAURÚ');$('#navfavs').onclick=showFavorites;$('#topcart').onclick=$('#navcart').onclick=showCart;$('#close').onclick=$('#overlay').onclick=hideCart;
+$('#checkout').addEventListener('click',event=>{const button=event.target.closest('[data-choice]');if(!button)return;$('#'+button.dataset.choice).value=button.dataset.value;button.dataset.choice==='delivery'?deliveryChanged():paymentChanged();$('#receipt').hidden=true});$('#checkout').onsubmit=simulate;$('#customer').oninput=()=>$('#customer').setCustomValidity('');
+document.addEventListener('keydown',e=>{if($('#drawer').hidden)return;if(e.key==='Escape'){hideCart();return}if(e.key==='Tab'){const all=[...$('#drawer').querySelectorAll('button,input,select,textarea,a')].filter(el=>!el.disabled&&el.getClientRects().length);const first=all[0],last=all.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
+function effects(){document.querySelectorAll('[data-effects]').forEach(container=>{
+ container.innerHTML=[0,1,2,3].map((n)=>`<span class="smoke-wisp ${n%2?'right':'left'}" style="--time:${6+n}s;--delay:-${n*2}s;bottom:${8+n*4}%"><svg viewBox="0 0 130 400"><path d="M40 400C-15 330 120 310 55 230S120 130 40 10M80 410C140 315 0 300 65 210S0 90 85-10"/></svg></span>`).join('')+Array.from({length:10},(_,n)=>`<i class="flame-tongue" style="--x:${n*11-4}%;--w:${45+n%3*14}px;--h:${35+n%4*16}px;--time:${1.1+n%4*.3}s;--delay:-${n*.27}s"></i>`).join('')+Array.from({length:15},(_,n)=>`<i class="ember" style="--x:${n*7}%;--time:${3+n%5*.7}s;--delay:-${n*.8}s"></i>`).join('');
+ });const observer=new IntersectionObserver(entries=>entries.forEach(e=>e.target.classList.toggle('is-lit',e.isIntersecting)),{threshold:.05});document.querySelectorAll('.scene').forEach(e=>observer.observe(e));document.addEventListener('visibilitychange',()=>document.documentElement.classList.toggle('page-idle',document.hidden))}
+render();drawCart();effects();document.body.style.overflow='hidden';
