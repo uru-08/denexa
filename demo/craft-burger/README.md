@@ -21,3 +21,6 @@ Se utilizó generación/edición integrada para recortar las fotografías, con l
 - Bienvenida visible al abrir y recuperable desde el pie.
 - Se pausaron efectos fuera de pantalla y con la pestaña oculta; se respeta movimiento reducido.
 - Revisado a 390×844 y 320×640, con los recortes sobre fondo negro, navegación sin salto al pie y simulación de pedido por $770.
+
+## Ajuste 31
+Categorías en la disposición del segundo boceto: tres tarjetas arriba y dos abajo, con fotos grandes y rótulos sobre base negra. Los productos se despliegan a todo el ancho bajo las tarjetas, con encabezado y control para cerrar; búsqueda y favoritos mantienen sus resultados agrupados.
