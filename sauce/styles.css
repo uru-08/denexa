@@ -236,3 +236,11 @@ body{background:#bfc8b9}
 .hero-brand{width:98%;max-width:640px;grid-template-columns:minmax(0,43fr) minmax(0,57fr);gap:0;align-items:end}
 .hero-mascot{width:100%;height:auto;aspect-ratio:1;object-fit:contain;object-position:center bottom}
 .hero .location{margin-top:16px}
+
+/* Bienvenida protagonista, con dos líneas grandes junto a la mascota. */
+.welcome-copy{width:54%;padding-left:18px;transform:rotate(-5deg)}
+.welcome-copy h1{font-size:clamp(43px,11.5vw,80px);line-height:1.05;color:#17432b;text-shadow:0 2px #e4edd8,0 4px 5px #24482a24}
+.welcome-copy>span{font-size:clamp(19px,5vw,32px);font-weight:900;letter-spacing:1px;margin:14px 0 7px 8px;color:#244a2e}
+.welcome-copy>strong{font-size:clamp(43px,11.8vw,82px);line-height:.97;letter-spacing:-.6px;color:#20692e;text-shadow:0 1px #e5efd5,1px 3px 0 #a3bf8c,0 5px 6px #24482a26}
+.welcome-copy i{width:84%;height:8px;margin:12px 0 0 5px}
+@media(max-width:350px){.welcome-copy{padding-left:12px}.welcome-copy h1{font-size:39px}.welcome-copy>span{font-size:17px;margin-left:6px}.welcome-copy>strong{font-size:39px}}
