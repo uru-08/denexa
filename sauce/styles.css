@@ -231,3 +231,8 @@ body{background:#bfc8b9}
 .option-buttons button[aria-pressed=true]{background:linear-gradient(#70aa43,#3c7c34);color:#f6faee;border-color:#4d7c38;box-shadow:inset 0 1px #b3d58c,0 3px 0 #2c5d2d}
 .payment-note,.receipt{background:#cddfba;border-color:#8aaa6b}
 .toast{background:#dcebd0;border-color:#7fa45d;color:#24542b}
+
+/* Más presencia para la mascota, aprovechando el ancho libre de la portada. */
+.hero-brand{width:98%;max-width:640px;grid-template-columns:minmax(0,43fr) minmax(0,57fr);gap:0;align-items:end}
+.hero-mascot{width:100%;height:auto;aspect-ratio:1;object-fit:contain;object-position:center bottom}
+.hero .location{margin-top:16px}
