@@ -66,3 +66,11 @@
 @media(min-width:600px){.categories .category-panel:nth-child(n) .category-name strong{font-size:32px}.categories .category-panel:nth-child(5) .category-name strong{font-size:27px}.categories .category-panel:nth-child(6) .category-name strong{font-size:24px}}
 @media(max-width:350px){.categories .category-panel:nth-child(n) .category-name strong{font-size:19px}.categories .category-panel:nth-child(4) .category-name strong{font-size:17px}.categories .category-panel:nth-child(5) .category-name strong{font-size:14px}.categories .category-panel:nth-child(6) .category-name strong{font-size:13px}}
 
+
+/* Sello modernizado y ubicación con más presencia y separación. */
+.welcome-logo img,.hero-logo img{filter:none}
+.hero-logo{margin:0 auto}
+.location{margin:26px 12px 20px;font-size:clamp(19px,5vw,28px);font-weight:800;line-height:1.25;letter-spacing:.7px;gap:9px;text-shadow:0 2px 3px #000}
+.location svg{width:19px;height:22px}
+.location::before,.location::after{width:clamp(12px,4vw,32px);flex-shrink:1}
+@media(max-width:350px){.location{font-size:17px;gap:6px;letter-spacing:.3px;margin-top:24px}.location::before,.location::after{width:10px}.location svg{width:16px}}
