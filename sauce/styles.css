@@ -89,3 +89,7 @@
 @media(max-width:350px){.welcome-logo{width:210px;margin-top:34px}.welcome-copy{padding-left:12px}.welcome-copy h1{font-size:31px}.welcome-copy>strong{font-size:22px}.welcome-copy>span{font-size:13px;margin-left:12px}.welcome-stage{min-height:270px}}
 @media(min-width:600px){.welcome-logo{width:300px;margin-top:38px}.welcome-stage{min-height:405px}.welcome-copy{padding-left:30px}}
 @media(max-height:650px){.welcome-logo{width:210px;margin-top:36px}.welcome-stage{min-height:280px}}
+
+/* Portada compacta: el lema reemplaza el bloque grande de producto. */
+.hero .location{margin-bottom:9px}
+.hero-tagline{margin:0 16px 20px;text-align:center;font:800 italic clamp(23px,6vw,33px)/1.15 var(--display);letter-spacing:1.1px;color:#b9ed99;text-shadow:0 2px 3px #000}
