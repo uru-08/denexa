@@ -368,6 +368,7 @@ async function readOrderingStatusFromSupabase() {
 
     statusCheckedAt = Date.now();
     statusRefreshFailed = false;
+    const previousPromoPricing = promoPricingSignature();
     const previousStatus =
       business.ordering_status || "open";
 
@@ -404,11 +405,13 @@ async function readOrderingStatusFromSupabase() {
     business.promo_reward_product_id = fresh.promo_reward_product_id ?? business.promo_reward_product_id;
     business.promo_reward_qty = fresh.promo_reward_qty ?? business.promo_reward_qty;
     business.promo_repeat = fresh.promo_repeat ?? business.promo_repeat;
-    repriceGiftPromoCart();
-    renderCatalog();
-    if (currentProduct) refreshPrice();
-    updateCartBar();
-    if (cartModal.classList.contains("open")) renderCart();
+    if (previousPromoPricing !== promoPricingSignature()) {
+      repriceGiftPromoCart();
+      renderCatalog();
+      if (currentProduct) refreshPrice();
+      updateCartBar();
+      if (cartModal.classList.contains("open")) renderCart();
+    }
     business.payment_bank_name =
       fresh.payment_bank_name ??
       business.payment_bank_name;
@@ -1194,6 +1197,16 @@ function productById(id){
   return products.find(x=>String(x.id)===String(id))||null;
 }
 
+
+function promoPricingSignature() {
+  return JSON.stringify([
+    business?.promo_active, business?.promo_rule_type,
+    business?.promo_target_type, business?.promo_target_id,
+    business?.promo_fixed_price, business?.promo_discount_percent,
+    business?.promo_trigger_qty, business?.promo_reward_product_id,
+    business?.promo_reward_qty, business?.promo_repeat
+  ]);
+}
 
 function giftPromoFixedPrice(product) {
   if (activePromoRuleType() !== "gift" || !productMatchesPromo(product)) return null;
