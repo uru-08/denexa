@@ -63,6 +63,7 @@ const promoTargetType = document.getElementById("promoTargetType");
 const promoTargetId = document.getElementById("promoTargetId");
 const promoPercentFields = document.getElementById("promoPercentFields");
 const promoDiscountPercent = document.getElementById("promoDiscountPercent");
+const promoGiftFixedPrice = document.getElementById("promoGiftFixedPrice");
 const promoGiftFields = document.getElementById("promoGiftFields");
 const promoTriggerQty = document.getElementById("promoTriggerQty");
 const promoRewardProductId = document.getElementById("promoRewardProductId");
@@ -2421,6 +2422,7 @@ function updateDailyPromoUI() {
     text += ` · ${Number(promoDiscountPercent.value||0)}% automático`;
   }
   if (dailyPromoRuleType.value === "gift") {
+    if (promoGiftFixedPrice.value.trim() !== "") text += ` · ${Number(promoGiftFixedPrice.value)} por unidad`;
     const gift=promoRewardProductId.selectedOptions?.[0]?.textContent?.trim() || "regalo";
     text += ` · Cada ${Number(promoTriggerQty.value||1)} = ${Number(promoRewardQty.value||1)} ${gift} GRATIS`;
   }
@@ -2439,6 +2441,7 @@ async function fillDailyPromoForm() {
   dailyPromoRuleType.value=selectedBusiness.promo_rule_type || "announcement";
   promoTargetType.value=selectedBusiness.promo_target_type || "category";
   promoDiscountPercent.value=Number(selectedBusiness.promo_discount_percent || 15);
+  promoGiftFixedPrice.value=selectedBusiness.promo_fixed_price ?? "";
   promoTriggerQty.value=Number(selectedBusiness.promo_trigger_qty || 2);
   promoRewardQty.value=Number(selectedBusiness.promo_reward_qty || 1);
   promoRepeat.checked=selectedBusiness.promo_repeat !== false;
@@ -2459,7 +2462,7 @@ async function fillDailyPromoForm() {
 
 async function saveDailyPromoRPC(payload) {
   const responseText=await requestText(
-    `${SUPABASE_REST}/rpc/set_business_daily_promo`,
+    `${SUPABASE_REST}/rpc/set_business_daily_promo_with_price`,
     {
       method:"POST",
       headers:merchantHeaders({Prefer:"return=representation"}),
@@ -2476,7 +2479,8 @@ async function saveDailyPromoRPC(payload) {
         p_trigger_qty:payload.triggerQty,
         p_reward_product_id:payload.rewardProductId,
         p_reward_qty:payload.rewardQty,
-        p_repeat:payload.repeat
+        p_repeat:payload.repeat,
+        p_fixed_price:payload.fixedPrice
       })
     }
   );
@@ -2501,6 +2505,7 @@ async function saveDailyPromo() {
     triggerQty:ruleType==="gift"?Math.max(1,Number(promoTriggerQty.value||1)):null,
     rewardProductId:ruleType==="gift"&&promoRewardProductId.value?Number(promoRewardProductId.value):null,
     rewardQty:ruleType==="gift"?Math.max(1,Number(promoRewardQty.value||1)):null,
+    fixedPrice:ruleType==="gift" && promoGiftFixedPrice.value.trim()!=="" ? Number(promoGiftFixedPrice.value) : null,
     repeat:Boolean(promoRepeat.checked)
   };
 
@@ -2514,6 +2519,10 @@ async function saveDailyPromo() {
   }
   if (payload.active && ruleType==="percent" && (payload.discountPercent<1 || payload.discountPercent>100)) {
     dailyPromoMessage.textContent="El descuento debe estar entre 1% y 100%.";
+    return;
+  }
+  if (payload.fixedPrice !== null && (!Number.isFinite(payload.fixedPrice) || payload.fixedPrice < 0)) {
+    dailyPromoMessage.textContent="Ingresá un precio válido, igual o mayor que cero.";
     return;
   }
   if (payload.active && ruleType==="gift" && !payload.rewardProductId) {
@@ -2548,7 +2557,7 @@ async function saveDailyPromo() {
 
 [
   dailyPromoBadge,dailyPromoTitle,dailyPromoText,dailyPromoRuleType,
-  promoDiscountPercent,promoTriggerQty,promoRewardQty,promoRewardProductId
+  promoGiftFixedPrice,promoDiscountPercent,promoTriggerQty,promoRewardQty,promoRewardProductId
 ].filter(Boolean).forEach(field=>{
   field.addEventListener("input",updateDailyPromoUI);
   field.addEventListener("change",updateDailyPromoUI);

@@ -354,7 +354,7 @@ async function readOrderingStatusFromSupabase() {
   try {
     const rows =
       await requestJSON(
-        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,active`
+        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_fixed_price,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,active`
       );
 
     const fresh =
@@ -399,10 +399,16 @@ async function readOrderingStatusFromSupabase() {
     business.promo_target_type = fresh.promo_target_type ?? business.promo_target_type;
     business.promo_target_id = fresh.promo_target_id ?? business.promo_target_id;
     business.promo_discount_percent = fresh.promo_discount_percent ?? business.promo_discount_percent;
+    business.promo_fixed_price = fresh.promo_fixed_price ?? null;
     business.promo_trigger_qty = fresh.promo_trigger_qty ?? business.promo_trigger_qty;
     business.promo_reward_product_id = fresh.promo_reward_product_id ?? business.promo_reward_product_id;
     business.promo_reward_qty = fresh.promo_reward_qty ?? business.promo_reward_qty;
     business.promo_repeat = fresh.promo_repeat ?? business.promo_repeat;
+    repriceGiftPromoCart();
+    renderCatalog();
+    if (currentProduct) refreshPrice();
+    updateCartBar();
+    if (cartModal.classList.contains("open")) renderCart();
     business.payment_bank_name =
       fresh.payment_bank_name ??
       business.payment_bank_name;
@@ -531,7 +537,7 @@ async function loadStore() {
 
   try {
     const businesses = await requestJSON(
-      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,delivery_enabled,pickup_enabled,pickup_address,active,ordering_status,sold_out_message"
+      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_fixed_price,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,delivery_enabled,pickup_enabled,pickup_address,active,ordering_status,sold_out_message"
     );
 
     business =
@@ -1186,6 +1192,39 @@ function applyPercentDiscount(amount,product){
 
 function productById(id){
   return products.find(x=>String(x.id)===String(id))||null;
+}
+
+
+function giftPromoFixedPrice(product) {
+  if (activePromoRuleType() !== "gift" || !productMatchesPromo(product)) return null;
+  const raw = business?.promo_fixed_price;
+  if (raw === null || raw === undefined || raw === "") return null;
+  const price = Number(raw);
+  return Number.isFinite(price) && price >= 0 ? price : null;
+}
+
+function promoBasePrice(amount, product) {
+  return giftPromoFixedPrice(product) ?? applyPercentDiscount(amount, product);
+}
+
+// Recompute from the base and stored extras, so repeated refreshes never add the
+// price difference twice. Also restores the normal base after the promo ends.
+function repriceGiftPromoCart() {
+  let changed = false;
+  cart.forEach(item => {
+    if (item.type === "empanadas") return;
+    const product = productById(item.productId);
+    if (!product) return;
+    const fixed = giftPromoFixedPrice(product);
+    if (fixed === null && item.giftFixedPrice == null) return;
+    const extras = (item.options || []).reduce((sum, option) => sum + Number(option.price || 0), 0);
+    const base = fixed ?? applyPercentDiscount(product.price, product);
+    item.unitPrice = base + extras;
+    item.total = item.unitPrice * Number(item.quantity || 0);
+    item.giftFixedPrice = fixed;
+    changed = true;
+  });
+  if (changed) saveCart();
 }
 
 function cartGiftItems(){
@@ -1941,7 +1980,7 @@ function renderProductCard(product) {
     percentPromoForProduct(product);
 
   const discountedFixedPrice =
-    applyPercentDiscount(product.price,product);
+    promoBasePrice(product.price,product);
 
   const priceText =
     pizzaProduct && hasOptions
@@ -1951,7 +1990,7 @@ function renderProductCard(product) {
       : Number(product.price || 0) > 0
         ? promoPercent > 0
           ? `<span class="promo-old-price">${money(product.price)}</span> <strong class="promo-new-price">${money(discountedFixedPrice)}</strong> <span class="promo-price-chip">-${promoPercent}%</span>`
-          : money(product.price)
+          : money(discountedFixedPrice)
         : hasOptions
           ? promoPercent > 0
             ? `<span class="promo-price-chip">-${promoPercent}% HOY</span> Elegí opciones`
@@ -2852,7 +2891,7 @@ function currentUnitPrice() {
     });
   });
 
-  return applyPercentDiscount(basePrice,currentProduct)+extrasTotal;
+  return promoBasePrice(basePrice,currentProduct)+extrasTotal;
 }
 
 function refreshPrice() {
@@ -3122,6 +3161,7 @@ async function addCurrentProductToCart() {
     unitPrice,
     total:unitPrice * currentQuantity,
     promoPercent:percentPromoForProduct(currentProduct),
+    giftFixedPrice:giftPromoFixedPrice(currentProduct),
     options:selected
   });
 
@@ -3409,6 +3449,7 @@ function restoreCart() {
     cart = [];
   }
 
+  repriceGiftPromoCart();
   updateCartBar();
 }
 

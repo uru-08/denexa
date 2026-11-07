@@ -931,6 +931,11 @@
 
               <div id="promoGiftFields" class="promo-rule-grid" hidden>
                 <label>
+                  Precio por unidad durante la promo (opcional)
+                  <input id="promoGiftFixedPrice" type="number" min="0" step="0.01" placeholder="Ej.: 350">
+                  <small>Se aplica a cada producto de la categoría elegida. Vacío conserva su precio habitual. Los extras se suman aparte.</small>
+                </label>
+                <label>
                   Cantidad necesaria
                   <input id="promoTriggerQty" type="number" min="1" step="1" value="2">
                 </label>
@@ -2022,7 +2027,7 @@
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="js/config.js?v=30"></script>
-  <script src="js/comercio.js?v=134"></script>
+  <script src="js/comercio.js?v=135"></script>
 
 </body>
 </html>
