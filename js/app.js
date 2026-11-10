@@ -2019,7 +2019,7 @@ function renderProductCard(product) {
 
   const priceText =
     optionalFriesPromo(product)
-      ? `Sin fritas ${money(product.price)} · Con fritas ${money(giftPromoFixedPrice(product))}`
+      ? `<span class="kechu-price-choice">Sin fritas ${money(product.price)}</span><span class="kechu-price-choice">Con fritas ${money(giftPromoFixedPrice(product))}</span>`
       : pizzaProduct && hasOptions
       ? promoPercent > 0
         ? `<span class="promo-price-chip">-${promoPercent}% HOY</span> Elegí tamaño`
@@ -2092,7 +2092,7 @@ function renderProductCard(product) {
             : ""
         }
 
-        <div class="product-price">
+        <div class="product-price ${optionalFriesPromo(product) ? "kechu-fries-price" : ""}">
           ${priceText}
           ${
             Number(product.old_price || 0) > Number(product.price || 0)
