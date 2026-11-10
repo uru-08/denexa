@@ -1073,7 +1073,7 @@
       showToast("Este producto ya no está disponible. Podés quitarlo del carrito."); return;
     }
     const allowed = new Set(getProductGroups(product.id).flatMap(g => getGroupOptions(g.id).map(o => String(o.id))));
-    if ((item.options || []).some(o => !allowed.has(String(o.optionId)))) {
+    if ((item.options || []).some(o => o.optionId !== "__gift_choice" && !allowed.has(String(o.optionId)))) {
       showToast("Las opciones de este producto cambiaron. Agregalo nuevamente para elegir las actuales."); return;
     }
     closeCartModal();
@@ -1081,11 +1081,18 @@
     restoringCartEdit = true;
     try { openProduct(product); } finally { restoringCartEdit = false; }
     if (!productModal.classList.contains("open")) { editingCartKey = null; openCartModal(); return; }
+    if (optionalFriesPromo(product)) {
+      currentGiftChoice = item.giftChoice || "with";
+      productModalContent.querySelectorAll('input[name="giftChoice"]').forEach(input => {
+        input.checked = input.value === currentGiftChoice;
+      });
+    }
     currentQuantity = Math.max(1, Number(item.quantity));
     document.getElementById("quantityValue").textContent = String(currentQuantity);
     selectedOptions = new Map();
     denexaExtraCounts = new Map();
     (item.options || []).forEach(stored => {
+      if (stored.optionId === "__gift_choice") return;
       const id = String(stored.optionId), groupId = String(stored.groupId);
       selectedOptions.set(groupId, [...(selectedOptions.get(groupId) || []), id]);
       const count = Number(stored.quantity || String(stored.optionName || "").match(/^(\d+) x /)?.[1] || 1);
