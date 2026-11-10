@@ -1355,3 +1355,20 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #catalogContent .pro
     animation: none !important;
   }
 }
+
+/* Keep both offer prices readable beside the card's add control. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .product-price.kechu-fries-price {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 0 52px 0 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  line-height: 1.4 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-fries-price .kechu-price-choice {
+  display: block !important;
+  white-space: normal !important;
+  overflow-wrap: normal !important;
+}
