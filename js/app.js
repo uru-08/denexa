@@ -1290,7 +1290,9 @@ function cartGiftItems(){
 
   let times=Math.floor(matched/trigger);
   if(business?.promo_repeat===false) times=Math.min(1,times);
-  const qty=times*rewardQty;
+  const optionalKechuOffer = business?.slug === "carro-kechu-carmelo" &&
+    business?.promo_fixed_price != null && /frita/.test(normalizeText(reward.name));
+  const qty=optionalKechuOffer ? matched : times*rewardQty;
   return qty>0 ? [{
     type:"promo_gift",productId:reward.id,productName:reward.name,
     quantity:qty,unitPrice:0,total:0,options:[],promoLabel:"REGALO PROMO"
