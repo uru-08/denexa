@@ -2410,7 +2410,8 @@ function getGroupOptions(groupId) {
   return options
     .filter(
       (option) =>
-        String(option.group_id) === String(groupId)
+        String(option.group_id) === String(groupId) &&
+        !(optionalFriesPromo(currentProduct) && /^(con |papas )?fritas$/.test(normalizeText(option.name).trim()))
     )
     .sort(sortByOrderThenId);
 }
