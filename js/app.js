@@ -1216,8 +1216,28 @@ function giftPromoFixedPrice(product) {
   return Number.isFinite(price) && price >= 0 ? price : null;
 }
 
+// Kechu's burger-and-fries offer is optional for each cart line.
+let currentGiftChoice = null;
+function optionalFriesPromo(product) {
+  if (business?.slug !== "carro-kechu-carmelo" || giftPromoFixedPrice(product) === null) return false;
+  const reward = productById(business?.promo_reward_product_id);
+  return /frita/.test(normalizeText(reward?.name || ""));
+}
+function itemWantsGift(item) {
+  return item.giftChoice !== "without";
+}
 function promoBasePrice(amount, product) {
+  if (optionalFriesPromo(product)) {
+    return currentGiftChoice === "with" ? giftPromoFixedPrice(product) : Number(amount || 0);
+  }
   return giftPromoFixedPrice(product) ?? applyPercentDiscount(amount, product);
+}
+function renderGiftChoice(product) {
+  if (!optionalFriesPromo(product)) return "";
+  return `<fieldset class="option-group"><legend>¿La querés con fritas?</legend>
+    <label class="option-row"><input type="radio" name="giftChoice" value="without"> Sin fritas — ${money(product.price)}</label>
+    <label class="option-row"><input type="radio" name="giftChoice" value="with"> Con fritas — ${money(giftPromoFixedPrice(product))}</label>
+    <small>Precio por hamburguesa. Los extras se cobran aparte.</small></fieldset>`;
 }
 
 // Recompute from the base and stored extras, so repeated refreshes never add the
@@ -1228,7 +1248,7 @@ function repriceGiftPromoCart() {
     if (item.type === "empanadas") return;
     const product = productById(item.productId);
     if (!product) return;
-    const fixed = giftPromoFixedPrice(product);
+    const fixed = optionalFriesPromo(product) && !itemWantsGift(item) ? null : giftPromoFixedPrice(product);
     if (fixed === null && item.giftFixedPrice == null) return;
     const extras = (item.options || []).reduce((sum, option) => sum + Number(option.price || 0), 0);
     const base = fixed ?? applyPercentDiscount(product.price, product);
@@ -1265,7 +1285,7 @@ function cartGiftItems(){
     const ok=business?.promo_target_type==="product"
       ? String(p.id)===target
       : String(p.category_id)===target;
-    if(ok) matched+=Number(item.quantity||0);
+    if(ok && (!optionalFriesPromo(p) || itemWantsGift(item))) matched+=Number(item.quantity||0);
   });
 
   let times=Math.floor(matched/trigger);
@@ -1996,7 +2016,9 @@ function renderProductCard(product) {
     promoBasePrice(product.price,product);
 
   const priceText =
-    pizzaProduct && hasOptions
+    optionalFriesPromo(product)
+      ? `Sin fritas ${money(product.price)} · Con fritas ${money(giftPromoFixedPrice(product))}`
+      : pizzaProduct && hasOptions
       ? promoPercent > 0
         ? `<span class="promo-price-chip">-${promoPercent}% HOY</span> Elegí tamaño`
         : "Elegí tamaño"
@@ -2395,6 +2417,7 @@ function getGroupOptions(groupId) {
 
 function openProduct(product) {
   currentProduct = product;
+  currentGiftChoice = null;
   currentQuantity = 1;
   selectedOptions = new Map();
   empanadaFlavorCounts = new Map();
@@ -2437,6 +2460,7 @@ function openProduct(product) {
           <div id="productFormError" class="form-error"></div>
 
           <div id="optionGroups" class="option-groups">
+            ${renderGiftChoice(product)}
             ${renderOptionGroups(product)}
           </div>
 
@@ -2465,6 +2489,13 @@ function openProduct(product) {
     </div>
   `;
 
+  productModalContent.querySelectorAll('input[name="giftChoice"]').forEach(input => {
+    input.addEventListener("change", () => {
+      currentGiftChoice = input.value;
+      hideProductError();
+      refreshPrice();
+    });
+  });
   bindProductFormEvents();
 
   productModal.classList.add("open");
@@ -2988,6 +3019,9 @@ function visibleOptionsForGroup(group) {
 }
 
 function validateProductSelection() {
+  if (optionalFriesPromo(currentProduct) && !["with", "without"].includes(currentGiftChoice)) {
+    return "Elegí si querés la hamburguesa con fritas o sin fritas.";
+  }
   if (currentProductIsEmpanadas()) {
     return (
       empanadaTotalQuantity() > 0
@@ -3162,6 +3196,12 @@ async function addCurrentProductToCart() {
       });
     });
 
+  const giftChoice = optionalFriesPromo(currentProduct) ? currentGiftChoice : null;
+  if (giftChoice) selected.push({
+    groupId:"__gift_choice", optionId:"__gift_choice", groupName:"Acompañamiento",
+    optionName:giftChoice === "with" ? "Con fritas (promo)" : "Sin fritas",
+    price:0
+  });
   const unitPrice =
     currentUnitPrice();
   const addedProductName = currentProduct.name;
@@ -3174,7 +3214,8 @@ async function addCurrentProductToCart() {
     unitPrice,
     total:unitPrice * currentQuantity,
     promoPercent:percentPromoForProduct(currentProduct),
-    giftFixedPrice:giftPromoFixedPrice(currentProduct),
+    giftChoice,
+    giftFixedPrice:giftChoice === "without" ? null : giftPromoFixedPrice(currentProduct),
     options:selected
   });
 
