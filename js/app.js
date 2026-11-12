@@ -640,6 +640,7 @@ async function loadStore() {
       )
       .sort(sortByOrderThenId);
 
+    applyDailyPromo();
     renderCatalog();
     restoreCart();
 
@@ -825,6 +826,43 @@ function goToPromoProducts() {
 
 
 let kechuPromoLineObserver;
+function updateDailyPromoImage() {
+  let image = document.getElementById("dailyPromoBannerImage");
+  if (business?.slug !== "carro-kechu-carmelo" || !business?.promo_active) {
+    image?.remove();
+    return;
+  }
+
+  const targetId = String(business.promo_target_id ?? "");
+  const candidates = products.filter((product) => {
+    if (product.active === false || !String(product.image_url || "").trim()) return false;
+    if (business.promo_target_type === "product") return String(product.id) === targetId;
+    if (business.promo_target_type === "category") return String(product.category_id) === targetId;
+    return false;
+  });
+  const product = candidates.find((item) => item.available !== false) || candidates[0];
+  if (!product) {
+    image?.remove();
+    return;
+  }
+
+  if (!image) {
+    image = document.createElement("img");
+    image.id = "dailyPromoBannerImage";
+    image.hidden = true;
+    image.decoding = "async";
+    dailyPromoBannerTitle.after(image);
+    image.onload = () => { image.hidden = false; };
+    image.onerror = () => { image.hidden = true; };
+  }
+  image.alt = product.name || "Producto en promoción";
+  const source = String(product.image_url).trim();
+  if (image.getAttribute("src") !== source) {
+    image.hidden = true;
+    image.src = source;
+  }
+}
+
 function fitKechuPromoLine() {
   const line = dailyPromoBannerTitle?.querySelector(".kechu-promo-line-copy");
   if (!line || !dailyPromoBannerTitle.clientWidth) return;
@@ -836,6 +874,8 @@ function applyDailyPromo() {
   if (!dailyPromoBanner) {
     return;
   }
+
+  updateDailyPromoImage();
 
   const active =
     business?.promo_active === true;
@@ -4583,3 +4623,4 @@ window.setInterval(
   },
   10000
 );
+

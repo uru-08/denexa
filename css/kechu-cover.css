@@ -1372,3 +1372,24 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-fries-price .
   white-space: normal !important;
   overflow-wrap: normal !important;
 }
+
+
+/* Foto automática del producto seleccionado en la promo del panel. */
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner > #dailyPromoBannerImage {
+  display: block !important;
+  grid-column: 1 / -1 !important;
+  grid-row: auto !important;
+  justify-self: center !important;
+  width: 100% !important;
+  max-width: 360px !important;
+  height: clamp(150px, 42vw, 210px) !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 8px 10px #0008);
+  pointer-events: none;
+}
+html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner > #dailyPromoBannerImage[hidden] {
+  display: none !important;
+}
