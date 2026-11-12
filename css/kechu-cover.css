@@ -1387,6 +1387,10 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner > 
   margin: 0 !important;
   padding: 0 !important;
   object-fit: contain !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
   filter: drop-shadow(0 8px 10px #0008);
   pointer-events: none;
 }

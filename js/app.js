@@ -826,6 +826,40 @@ function goToPromoProducts() {
 
 
 let kechuPromoLineObserver;
+// Recortes de las fotos reales actuales: una foto nueva no hereda un recorte viejo.
+function kechuPromoProductPhoto(product) {
+  const photos = {
+    "1793098169667-b2saanhd.jpg": "assets/kechu/promos/product-11.webp",
+    "1787549442730-tp2r5dqn.jpg": "assets/kechu/promos/product-12.webp",
+    "1787549762890-q33ysu8a.jpg": "assets/kechu/promos/product-14.webp",
+    "1787555012550-g3nii1xk.jpg": "assets/kechu/promos/product-16.webp",
+    "1793230595814-htq7eck9.jpg": "assets/kechu/promos/product-17.webp",
+    "1793332351054-u6j3b3j2.jpg": "assets/kechu/promos/product-18.webp",
+    "1793321100070-b4f2dli0.jpg": "assets/kechu/promos/product-19.webp",
+    "1793098253191-9vgjzber.jpg": "assets/kechu/promos/product-20.webp",
+    "1793236030705-08ulkgym.jpg": "assets/kechu/promos/product-21.webp",
+    "1788822842209-ymy4iayd.jpg": "assets/kechu/promos/product-23.webp",
+    "1788822966583-bryzxp9w.jpg": "assets/kechu/promos/product-24.webp",
+    "1792729782210-po5xt9ys.jpg": "assets/kechu/promos/product-25.webp",
+    "1792729816885-0urpdfis.jpg": "assets/kechu/promos/product-26.webp",
+    "1792729865053-ht7g14rq.jpg": "assets/kechu/promos/product-26.webp",
+    "1792729903113-gbe6tl0u.jpg": "assets/kechu/promos/product-28.webp",
+    "1793236054470-oyen2dv9.jpg": "assets/kechu/promos/product-29.webp",
+    "1788825116915-l3ts8g82.jpg": "assets/kechu/promos/product-30.webp",
+    "1792730209046-ryy4g54i.jpg": "assets/kechu/promos/product-32.webp",
+    "1792730194418-vuf6m51f.jpg": "assets/kechu/promos/product-33.webp",
+    "1792730180235-5d5e9vum.jpg": "assets/kechu/promos/product-34.webp",
+    "1793230653682-n2y9bx5k.jpg": "assets/kechu/promos/product-35.webp",
+    "1787554933935-pkszrt1y.jpg": "assets/kechu/promos/product-36.webp",
+    "1793315726218-qf06loqd.jpg": "assets/kechu/promos/product-37.webp",
+    "1787549674626-as4lht2t.jpg": "assets/kechu/promos/product-38.webp",
+    "1793098507184-jm4kd1rn.jpg": "assets/kechu/promos/product-41.webp",
+    "1793098470668-nm6ztpzc.jpg": "assets/kechu/promos/product-41.webp"
+};
+  const source = String(product?.image_url || "").trim().split(/[?#]/)[0];
+  return photos[source.slice(source.lastIndexOf("/") + 1)] || "";
+}
+
 function updateDailyPromoImage() {
   let image = document.getElementById("dailyPromoBannerImage");
   if (business?.slug !== "carro-kechu-carmelo" || !business?.promo_active) {
@@ -835,7 +869,7 @@ function updateDailyPromoImage() {
 
   const targetId = String(business.promo_target_id ?? "");
   const candidates = products.filter((product) => {
-    if (product.active === false || !String(product.image_url || "").trim()) return false;
+    if (product.active === false || !kechuPromoProductPhoto(product)) return false;
     if (business.promo_target_type === "product") return String(product.id) === targetId;
     if (business.promo_target_type === "category") return String(product.category_id) === targetId;
     return false;
@@ -856,7 +890,7 @@ function updateDailyPromoImage() {
     image.onerror = () => { image.hidden = true; };
   }
   image.alt = product.name || "Producto en promoción";
-  const source = String(product.image_url).trim();
+  const source = kechuPromoProductPhoto(product);
   if (image.getAttribute("src") !== source) {
     image.hidden = true;
     image.src = source;
