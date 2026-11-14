@@ -1366,7 +1366,10 @@ function cartGiftItems(){
   if(business?.promo_repeat===false) times=Math.min(1,times);
   const optionalKechuOffer = business?.slug === "carro-kechu-carmelo" &&
     business?.promo_fixed_price != null && /frita/.test(normalizeText(reward.name));
-  const qty=optionalKechuOffer ? matched : times*rewardQty;
+  // En Kechu las fritas ya están incluidas en la opción "Con fritas (promo)".
+  // No generar otro artículo gratuito en carrito, pedido ni WhatsApp.
+  if (optionalKechuOffer) return [];
+  const qty=times*rewardQty;
   return qty>0 ? [{
     type:"promo_gift",productId:reward.id,productName:reward.name,
     quantity:qty,unitPrice:0,total:0,options:[],promoLabel:"REGALO PROMO"
