@@ -857,7 +857,7 @@ function kechuPromoProductPhoto(product) {
     "1793098470668-nm6ztpzc.jpg": "assets/kechu/promos/product-41.webp"
 };
   const source = String(product?.image_url || "").trim().split(/[?#]/)[0];
-  return photos[source.slice(source.lastIndexOf("/") + 1)] || "";
+  return photos[source.slice(source.lastIndexOf("/") + 1)] || String(product?.image_url || "").trim();
 }
 
 function updateDailyPromoImage() {
@@ -874,27 +874,41 @@ function updateDailyPromoImage() {
     if (business.promo_target_type === "category") return String(product.category_id) === targetId;
     return false;
   });
-  const product = candidates.find((item) => item.available !== false) || candidates[0];
-  if (!product) {
+  // Try available products first, then other photos from this same offer.
+  const ordered = [...candidates.filter(item => item.available !== false),
+    ...candidates.filter(item => item.available === false)];
+  const choices = ordered.flatMap(item => {
+    const cutout = kechuPromoProductPhoto(item);
+    const original = String(item.image_url || "").trim();
+    return [...new Set([cutout, original])].filter(Boolean)
+      .map(src => ({ src, name: item.name }));
+  });
+  if (!choices.length) {
     image?.remove();
     return;
   }
-
-  if (!image) {
-    image = document.createElement("img");
-    image.id = "dailyPromoBannerImage";
-    image.hidden = true;
-    image.decoding = "async";
-    dailyPromoBannerTitle.after(image);
-    image.onload = () => { image.hidden = false; };
-    image.onerror = () => { image.hidden = true; };
+  const selection = JSON.stringify(choices);
+  if (image?.dataset.selection === selection) return;
+  image?.remove();
+  image = document.createElement("img");
+  image.id = "dailyPromoBannerImage";
+  image.dataset.selection = selection;
+  image.hidden = true;
+  image.decoding = "async";
+  dailyPromoBannerTitle.after(image);
+  let index = 0;
+  function showNextPhoto() {
+    const choice = choices[index++];
+    if (!choice) {
+      image.remove();
+      return;
+    }
+    image.alt = choice.name || "Producto en promoción";
+    image.src = choice.src;
   }
-  image.alt = product.name || "Producto en promoción";
-  const source = kechuPromoProductPhoto(product);
-  if (image.getAttribute("src") !== source) {
-    image.hidden = true;
-    image.src = source;
-  }
+  image.onload = () => { image.hidden = false; };
+  image.onerror = showNextPhoto;
+  showNextPhoto();
 }
 
 function fitKechuPromoLine() {
