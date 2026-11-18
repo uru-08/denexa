@@ -410,11 +410,12 @@ async function readOrderingStatusFromSupabase() {
     business.promo_reward_qty = fresh.promo_reward_qty ?? business.promo_reward_qty;
     business.promo_repeat = fresh.promo_repeat ?? business.promo_repeat;
     if (previousPromoPricing !== promoPricingSignature()) {
-      repriceGiftPromoCart();
+      repriceFixedPromoCart();
       renderCatalog();
       if (currentProduct) refreshPrice();
       updateCartBar();
       if (cartModal.classList.contains("open")) renderCart();
+      if (checkoutModal.classList.contains("open")) checkoutTotal.textContent = money(cartGrandTotal());
     }
     business.payment_bank_name =
       fresh.payment_bank_name ??
@@ -1310,8 +1311,17 @@ function promoPricingSignature() {
   ]);
 }
 
+function specialPromoPrice(product) {
+  if (activePromoRuleType() !== "fixed_price" || business.promo_target_type !== "product" || !productMatchesPromo(product)) return null;
+  return configuredPromoPrice();
+}
+
 function giftPromoFixedPrice(product) {
   if (activePromoRuleType() !== "gift" || !productMatchesPromo(product)) return null;
+  return configuredPromoPrice();
+}
+
+function configuredPromoPrice() {
   const raw = business?.promo_fixed_price;
   if (raw === null || raw === undefined || raw === "") return null;
   const price = Number(raw);
@@ -1332,7 +1342,7 @@ function promoBasePrice(amount, product) {
   if (optionalFriesPromo(product)) {
     return currentGiftChoice === "with" ? giftPromoFixedPrice(product) : Number(amount || 0);
   }
-  return giftPromoFixedPrice(product) ?? applyPercentDiscount(amount, product);
+  return specialPromoPrice(product) ?? giftPromoFixedPrice(product) ?? applyPercentDiscount(amount, product);
 }
 function renderGiftChoice(product) {
   if (!optionalFriesPromo(product)) return "";
@@ -1342,21 +1352,42 @@ function renderGiftChoice(product) {
     <small>Precio por hamburguesa. Los extras se cobran aparte.</small></fieldset>`;
 }
 
-// Recompute from the base and stored extras, so repeated refreshes never add the
-// price difference twice. Also restores the normal base after the promo ends.
-function repriceGiftPromoCart() {
+// Recompute from the original prices so reopening the cart never applies an offer twice.
+function repriceFixedPromoCart() {
   let changed = false;
   cart.forEach(item => {
-    if (item.type === "empanadas") return;
     const product = productById(item.productId);
     if (!product) return;
-    const fixed = optionalFriesPromo(product) && !itemWantsGift(item) ? null : giftPromoFixedPrice(product);
-    if (fixed === null && item.giftFixedPrice == null) return;
-    const extras = (item.options || []).reduce((sum, option) => sum + Number(option.price || 0), 0);
-    const base = fixed ?? applyPercentDiscount(product.price, product);
-    item.unitPrice = base + extras;
-    item.total = item.unitPrice * Number(item.quantity || 0);
-    item.giftFixedPrice = fixed;
+
+    const special = specialPromoPrice(product);
+    const quantity = Number(item.quantity || 0);
+    if (item.type === "empanadas") {
+      if (special === null && item.specialPromoPrice == null) return;
+      item.total = special !== null
+        ? special * quantity
+        : (item.flavors || []).reduce((sum, flavor) =>
+          sum + Number(flavor.quantity || 0) * applyPercentDiscount(flavor.unitPrice, product), 0);
+      item.unitPrice = quantity > 0 ? item.total / quantity : 0;
+    } else {
+      const gift = optionalFriesPromo(product) && !itemWantsGift(item) ? null : giftPromoFixedPrice(product);
+      if (special === null && gift === null && item.specialPromoPrice == null && item.giftFixedPrice == null) return;
+
+      let base = Number(product.price || 0);
+      let extras = 0;
+      const sizeGroups = (special !== null || item.specialPromoPrice != null) && currentProductIsPizza(product)
+        ? getProductGroups(product.id).filter(isSizeGroup)
+        : [];
+      for (const option of item.options || []) {
+        const price = Number(option.price || 0);
+        if (sizeGroups.some(group => String(group.id) === String(option.groupId))) base = price;
+        else extras += price;
+      }
+      item.unitPrice = (special ?? gift ?? applyPercentDiscount(base, product)) + extras;
+      item.total = item.unitPrice * quantity;
+      item.giftFixedPrice = gift;
+    }
+    item.specialPromoPrice = special;
+    item.promoPercent = percentPromoForProduct(product);
     changed = true;
   });
   if (changed) saveCart();
@@ -2125,6 +2156,8 @@ function renderProductCard(product) {
   const priceText =
     optionalFriesPromo(product)
       ? `<span class="kechu-price-choice">Sin fritas ${money(product.price)}</span><span class="kechu-price-choice">Con fritas ${money(giftPromoFixedPrice(product))}</span>`
+      : specialPromoPrice(product) !== null
+        ? money(discountedFixedPrice)
       : pizzaProduct && hasOptions
       ? promoPercent > 0
         ? `<span class="promo-price-chip">-${promoPercent}% HOY</span> Elegí tamaño`
@@ -2220,12 +2253,12 @@ function getProductGroups(productId) {
 }
 
 
-function currentProductIsPizza() {
+function currentProductIsPizza(product = currentProduct) {
   const category =
     categories.find(
       (item) =>
         String(item.id) ===
-        String(currentProduct?.category_id)
+        String(product?.category_id)
     );
 
   return normalizeText(
@@ -2439,6 +2472,9 @@ function empanadaTotalQuantity() {
 }
 
 function empanadaTotalPrice() {
+  const special = specialPromoPrice(currentProduct);
+  if (special !== null) return special * empanadaTotalQuantity();
+
   let total = 0;
 
   empanadaFlavorCounts.forEach(
@@ -3247,6 +3283,7 @@ async function addCurrentProductToCart() {
           : 0,
       total,
       promoPercent:percentPromoForProduct(currentProduct),
+      specialPromoPrice:specialPromoPrice(currentProduct),
       flavors,
       options:flavors.map(
         (flavor) => ({
@@ -3323,6 +3360,7 @@ async function addCurrentProductToCart() {
     total:unitPrice * currentQuantity,
     promoPercent:percentPromoForProduct(currentProduct),
     giftChoice,
+    specialPromoPrice:specialPromoPrice(currentProduct),
     giftFixedPrice:giftChoice === "without" ? null : giftPromoFixedPrice(currentProduct),
     options:selected
   });
@@ -3611,7 +3649,7 @@ function restoreCart() {
     cart = [];
   }
 
-  repriceGiftPromoCart();
+  repriceFixedPromoCart();
   updateCartBar();
 }
 
