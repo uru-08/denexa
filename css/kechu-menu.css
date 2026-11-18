@@ -25,16 +25,20 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-stac
 html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary {
   --kechu-category-photo: clamp(62px, 20vw, 92px);
   --kechu-category-gap: clamp(10px, 3vw, 18px);
-  --kechu-category-split: calc(12px + var(--kechu-category-photo) + var(--kechu-category-gap) / 2);
   grid-template-columns: var(--kechu-category-photo) minmax(0, 1fr) 34px !important;
   gap: var(--kechu-category-gap) !important;
   padding: 12px !important;
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  background: linear-gradient(#24221a, #080808 76%) right center /
-    calc(100% - var(--kechu-category-split)) 100% no-repeat !important;
+  background: #161616 !important;
   box-shadow: inset 0 1px 0 #ffd85e55 !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .category-tab-visual,
+html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary .category-tab-visual img {
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary:focus-visible {
