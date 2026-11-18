@@ -2,8 +2,8 @@
 html[data-store-theme="carro-kechu-carmelo"] body #appShell {
   --kechu-menu-card: #191919;
   --kechu-menu-line: #484023;
-  --kechu-menu-paper: #fff7e7;
   --kechu-menu-action: #ffda13;
+  --kechu-menu-button: linear-gradient(#fff57b, var(--kechu-menu-action) 60%, #ffc61b);
   background: #111111 !important;
 }
 
@@ -12,10 +12,10 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-final-info-ro
 }
 
 html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-stack {
-  border: 1px solid #e5ad36 !important;
-  border-radius: 16px !important;
+  border: 2px solid #111111 !important;
+  border-radius: 11px !important;
   background: #151515 !important;
-  box-shadow: 0 3px 0 #785606, 0 6px 16px #ffcf252e !important;
+  box-shadow: 0 2px 0 #886000, 0 4px 10px #ffcf252e !important;
 }
 
 html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary {
@@ -24,12 +24,12 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summ
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  background: radial-gradient(ellipse at 3% 18%, #ffd42047, transparent 63%),
-    linear-gradient(120deg, #27220f, #111111 56%, #241f0e) !important;
+  background: var(--kechu-menu-button) !important;
+  box-shadow: inset 0 1px 0 #fff8b9 !important;
 }
 
 html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-stack-heading strong {
-  color: #ffe26c !important;
+  color: #111111 !important;
   -webkit-text-fill-color: currentColor !important;
   -webkit-text-stroke: 0 !important;
   font-family: "Oswald", "Arial Narrow", Arial, sans-serif !important;
@@ -38,15 +38,16 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-stack-heading
   line-height: 1.14 !important;
   letter-spacing: .012em !important;
   overflow-wrap: anywhere !important;
-  text-shadow: 0 2px 2px #000 !important;
+  text-shadow: none !important;
 }
 
 html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-stack-heading > span {
-  color: #fff8df !important;
+  color: #181307 !important;
   font: 600 clamp(16px, 4.55vw, 20px)/1.26 "Oswald", Arial, sans-serif !important;
 }
 
 html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-stack-heading small {
+  color: #382702 !important;
   font-size: clamp(14px, 3.85vw, 16px) !important;
 }
 
@@ -91,10 +92,18 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner.me
 }
 
 html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner > #dailyPromoBannerBadge {
-  color: var(--kechu-menu-paper) !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+  padding: 4px 8px !important;
+  border: 1px solid #ff6f4e !important;
+  border-radius: 7px !important;
+  background: linear-gradient(#b82723, #891818) !important;
+  color: #fff !important;
   -webkit-text-fill-color: currentColor !important;
-  font-size: 14px !important;
-  text-shadow: none !important;
+  font-size: clamp(16px, 4.4vw, 24px) !important;
+  line-height: 1.15 !important;
+  text-shadow: 0 1px 1px #4e0e0e !important;
   -webkit-text-stroke: 0 !important;
 }
 
@@ -122,7 +131,7 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner > 
 html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton,
 html[data-store-theme="carro-kechu-carmelo"] body #appShell #cartButton .cart-action-label,
 html[data-store-theme="carro-kechu-carmelo"] body :is(#productModal, #cartModal, #checkoutModal, #orderSuccessModal) .primary-action {
-  background: linear-gradient(#fff57b, var(--kechu-menu-action) 60%, #ffc61b) !important;
+  background: var(--kechu-menu-button) !important;
   color: #111111 !important;
   -webkit-text-fill-color: currentColor !important;
   -webkit-text-stroke: 0 !important;
@@ -183,7 +192,20 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-stac
 }
 
 html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner.menu-promo-banner::before {
-  display: none !important;
+  display: block !important;
+  inset: auto 0 -5px !important;
+  width: 100% !important;
+  height: clamp(44px, 13vw, 69px) !important;
+  background-position: center bottom !important;
+  background-size: auto 100% !important;
+  background-repeat: repeat-x !important;
+  opacity: .65 !important;
+  animation: kechu-promo-flames 1.9s ease-in-out infinite alternate !important;
+}
+
+@keyframes kechu-promo-flames {
+  from { transform: translateY(4px) scaleY(.88); }
+  to { transform: translateY(-2px) scaleY(1.06); }
 }
 
 @keyframes kechu-menu-reflection {
@@ -198,6 +220,10 @@ html[data-store-theme="carro-kechu-carmelo"] body:is(.kechu-is-scrolling, .kechu
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner.menu-promo-banner::before {
+    animation: none !important;
+  }
+
   html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summary::after,
   html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner.menu-promo-banner::after {
     animation: none !important;
