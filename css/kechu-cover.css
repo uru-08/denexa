@@ -1515,13 +1515,13 @@ html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu-bridge-headin
 
 .kechu-bridge-heading img {
   display: block;
-  width: min(61vw, 300px, 29svh);
+  width: min(78vw, 355px, 34svh);
   height: auto;
 }
 
 html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu-bridge-scene {
   position: absolute;
-  inset: 29% 0 14%;
+  inset: 30% 0 14%;
   display: block;
   pointer-events: none;
   background: url("../assets/kechu/puente-carmelo.webp") center / cover no-repeat;

@@ -246,7 +246,7 @@ function applyOrderingStatus() {
           ? "Pedidos cerrados por hoy"
           : status === "closed"
             ? "Pedidos cerrados"
-            : usesKechuTheme() ? "Ver menú" : "Hacer mi pedido";
+            : usesKechuTheme() ? "Ver menú virtual" : "Hacer mi pedido";
     }
   }
 
@@ -1159,7 +1159,7 @@ function applyBusinessBranding() {
   if (welcomeButtonText) {
     welcomeButtonText.textContent =
       usesKechuTheme()
-        ? "Ver menú"
+        ? "Ver menú virtual"
         : business.welcome_button_text || "Hacer mi pedido";
   }
 
