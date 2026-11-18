@@ -518,8 +518,8 @@ function ensureDenexaPoweredFooter() {
       <p>Menú elaborado por</p>
       <img src="sauce/assets/denexa-logo.webp" alt="DENEXA" width="134" height="56" loading="lazy">
       <p>Plataforma de pedidos para comercios</p>
-      <a href="https://www.instagram.com/dnexa.uy/" target="_blank" rel="noopener"
-         aria-label="Conocenos en Instagram">Conocenos</a>
+      <p>Conocenos</p>
+      <a href="https://www.instagram.com/dnexa.uy/" target="_blank" rel="noopener">Instagram · @dnexa.uy</a>
     `;
   } else {
     footer.innerHTML = `
