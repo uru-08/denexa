@@ -1451,3 +1451,117 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #p
 html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #promoJumpButton::after {
   content: none !important;
 }
+
+/* Bienvenida de Carro Kechu con el puente de Carmelo. */
+.kechu-bridge-heading,
+.kechu-bridge-scene {
+  display: none;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-content {
+  background: #08070a !important;
+  overflow: hidden !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .kechu172-denexa-top,
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .kechu172-denexa-bottom {
+  display: none !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu-bridge-heading {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: clamp(3px, 1svh, 10px);
+  padding-top: max(14px, env(safe-area-inset-top));
+  color: #fff7e8;
+  text-align: center;
+}
+
+.kechu-bridge-heading p {
+  margin: 0;
+  font: 600 clamp(14px, 3.9vw, 20px)/1.2 system-ui, sans-serif;
+}
+
+.kechu-bridge-heading h1 {
+  margin: 0;
+  line-height: 0;
+}
+
+.kechu-bridge-heading img {
+  display: block;
+  width: min(60vw, 300px, 33svh);
+  height: auto;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu-bridge-scene {
+  position: absolute;
+  inset: 29% 0 14%;
+  display: block;
+  pointer-events: none;
+  background: url("../assets/kechu/puente-carmelo.webp") center / cover no-repeat;
+  mask-image: linear-gradient(transparent, #000 10%, #000 89%, transparent);
+}
+
+.kechu-bridge-scene video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+}
+
+.kechu-bridge-scene video.is-playing {
+  opacity: 1;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #enterStoreButton {
+  left: 50% !important;
+  top: auto !important;
+  bottom: max(52px, calc(env(safe-area-inset-bottom) + 42px)) !important;
+  width: min(82vw, 376px) !important;
+  height: clamp(44px, 8svh, 64px) !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 14px !important;
+  border-radius: 16px !important;
+  background: #ffda13 !important;
+  color: #171109 !important;
+  font: 800 clamp(17px, 4.6vw, 24px)/1.1 system-ui, sans-serif !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #enterStoreButton span {
+  display: inline !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #enterStoreButton:disabled {
+  opacity: .68 !important;
+  cursor: default !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #enterStoreButton:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-note {
+  position: absolute !important;
+  inset: auto 0 max(17px, calc(env(safe-area-inset-bottom) + 8px)) !important;
+  z-index: 5;
+  display: block !important;
+  margin: 0 !important;
+  color: #fff7e8 !important;
+  font: 550 14px/1.2 system-ui, sans-serif !important;
+  text-align: center;
+}
+
+@media (min-width: 650px) {
+  html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu-bridge-scene {
+    inset-inline: max(0px, calc((100vw - 680px) / 2));
+  }
+}

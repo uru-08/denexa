@@ -215,6 +215,10 @@ async function insertRow(tableName, payload, returnRepresentation = true) {
 }
 
 
+function isKechuBridgeWelcome() {
+  return document.documentElement.dataset.storeTheme === "carro-kechu-carmelo";
+}
+
 function applyOrderingStatus() {
   if (!business) {
     return;
@@ -242,7 +246,7 @@ function applyOrderingStatus() {
           ? "Pedidos cerrados por hoy"
           : status === "closed"
             ? "Pedidos cerrados"
-            : "Hacer mi pedido";
+            : isKechuBridgeWelcome() ? "Ver menú" : "Hacer mi pedido";
     }
   }
 
@@ -1145,8 +1149,9 @@ function applyBusinessBranding() {
 
   if (welcomeButtonText) {
     welcomeButtonText.textContent =
-      business.welcome_button_text ||
-      "Hacer mi pedido";
+      isKechuBridgeWelcome()
+        ? "Ver menú"
+        : business.welcome_button_text || "Hacer mi pedido";
   }
 
   if (welcomeScreen) {
