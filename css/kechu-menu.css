@@ -36,6 +36,7 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell .kechu-category-summ
   position: absolute;
   inset: 0 auto 0 0;
   width: calc(12px + var(--kechu-category-photo) + var(--kechu-category-gap) / 2);
+  border-radius: 0 22px 22px 0;
   background: #080808;
   z-index: 1;
   pointer-events: none;
