@@ -1458,13 +1458,31 @@ html[data-store-theme="carro-kechu-carmelo"] body #appShell #dailyPromoBanner #p
   display: none;
 }
 
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen {
+  padding: 0 !important;
+}
+
 html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-content {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
   background: #08070a !important;
   overflow: hidden !important;
 }
 
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .kechu172-denexa-top,
-html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .kechu172-denexa-bottom {
+/* The entrance button and availability notice still use the shared menu logic. */
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen > :not(.welcome-content),
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-content >
+  :not(.kechu-bridge-heading, .kechu-bridge-scene, #enterStoreButton, #orderingStatusNotice, .welcome-note),
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen::before,
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen::after,
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-content::before,
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen .welcome-content::after {
   display: none !important;
 }
 
@@ -1482,7 +1500,12 @@ html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu-bridge-headin
 
 .kechu-bridge-heading p {
   margin: 0;
-  font: 600 clamp(14px, 3.9vw, 20px)/1.2 system-ui, sans-serif;
+  font: 650 clamp(16px, 4.3vw, 21px)/1.15 system-ui, sans-serif;
+}
+
+.kechu-bridge-heading p:first-child {
+  font: 400 clamp(25px, 7.5vw, 39px)/1.02 "Lilita One", "Arial Black", sans-serif;
+  letter-spacing: .01em;
 }
 
 .kechu-bridge-heading h1 {
@@ -1492,7 +1515,7 @@ html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu-bridge-headin
 
 .kechu-bridge-heading img {
   display: block;
-  width: min(60vw, 300px, 33svh);
+  width: min(61vw, 300px, 29svh);
   height: auto;
 }
 
@@ -1518,12 +1541,15 @@ html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu-bridge-scene 
 }
 
 html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #enterStoreButton {
+  position: absolute !important;
   left: 50% !important;
   top: auto !important;
+  right: auto !important;
   bottom: max(52px, calc(env(safe-area-inset-bottom) + 42px)) !important;
   width: min(82vw, 376px) !important;
   height: clamp(44px, 8svh, 64px) !important;
   transform: translateX(-50%) !important;
+  margin: 0 !important;
   display: flex !important;
   align-items: center;
   justify-content: center;
@@ -1532,11 +1558,23 @@ html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #enterStoreButt
   border-radius: 16px !important;
   background: #ffda13 !important;
   color: #171109 !important;
+  animation: none !important;
+  box-shadow: 0 3px 12px #0007 !important;
   font: 800 clamp(17px, 4.6vw, 24px)/1.1 system-ui, sans-serif !important;
 }
 
 html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #enterStoreButton span {
   display: inline !important;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #enterStoreButton::before,
+html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #enterStoreButton::after {
+  display: none !important;
+  content: none !important;
 }
 
 html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #enterStoreButton:disabled {
