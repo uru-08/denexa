@@ -215,7 +215,7 @@ async function insertRow(tableName, payload, returnRepresentation = true) {
 }
 
 
-function isKechuBridgeWelcome() {
+function usesKechuTheme() {
   return document.documentElement.dataset.storeTheme === "carro-kechu-carmelo";
 }
 
@@ -246,7 +246,7 @@ function applyOrderingStatus() {
           ? "Pedidos cerrados por hoy"
           : status === "closed"
             ? "Pedidos cerrados"
-            : isKechuBridgeWelcome() ? "Ver menú" : "Hacer mi pedido";
+            : usesKechuTheme() ? "Ver menú" : "Hacer mi pedido";
     }
   }
 
@@ -511,24 +511,33 @@ function ensureDenexaPoweredFooter() {
   const footer = document.createElement("footer");
   footer.id = "denexaPoweredFooter";
   footer.className = "denexa-powered-footer";
-  footer.innerHTML = `
-    <div class="denexa-powered-inner">
-      <span class="denexa-powered-label">POWERED BY</span>
-      <div class="denexa-powered-row">
-        <img class="denexa-powered-logo" src="assets/denexa-logo.png" alt="DENEXA Pedidos Online">
-        <div class="denexa-powered-copy">
-          ${document.documentElement.dataset.storeTheme === "carro-kechu-carmelo"
-            ? '<strong class="denexa-brand-3d"><span>DENE</span><span class="denexa-brand-x">X</span><span>A</span></strong>'
-            : '<strong>DENEXA</strong>'}
-          <span>Plataforma de pedidos para comercios <span class="denexa-country-flag" aria-label="Uruguay">&#127482;&#127486;</span></span>
+  if (usesKechuTheme()) {
+    footer.classList.add("kechu-denexa-credit");
+    footer.innerHTML = `
+      <p>Menú elaborado por</p>
+      <img src="sauce/assets/denexa-logo.webp" alt="DENEXA" width="134" height="56" loading="lazy">
+      <p>Plataforma de pedidos para comercios</p>
+      <a href="https://www.instagram.com/dnexa.uy/" target="_blank" rel="noopener"
+         aria-label="Conocenos en Instagram">Conocenos</a>
+    `;
+  } else {
+    footer.innerHTML = `
+      <div class="denexa-powered-inner">
+        <span class="denexa-powered-label">POWERED BY</span>
+        <div class="denexa-powered-row">
+          <img class="denexa-powered-logo" src="assets/denexa-logo.png" alt="DENEXA Pedidos Online">
+          <div class="denexa-powered-copy">
+            <strong>DENEXA</strong>
+            <span>Plataforma de pedidos para comercios <span class="denexa-country-flag" aria-label="Uruguay">&#127482;&#127486;</span></span>
+          </div>
         </div>
+        <div class="denexa-powered-meta">
+          <span>SIMPLE</span><i>|</i><span>RÁPIDO</span><i>|</i><span>SEGURO</span>
+        </div>
+        <div class="denexa-powered-country" aria-label="Uruguay">&#127482;&#127486;</div>
       </div>
-      <div class="denexa-powered-meta">
-        <span>SIMPLE</span><i>|</i><span>RÁPIDO</span><i>|</i><span>SEGURO</span>
-      </div>
-      <div class="denexa-powered-country" aria-label="Uruguay">&#127482;&#127486;</div>
-    </div>
-  `;
+    `;
+  }
 
   const shell =
     document.getElementById("appShell") ||
@@ -1149,7 +1158,7 @@ function applyBusinessBranding() {
 
   if (welcomeButtonText) {
     welcomeButtonText.textContent =
-      isKechuBridgeWelcome()
+      usesKechuTheme()
         ? "Ver menú"
         : business.welcome_button_text || "Hacer mi pedido";
   }
