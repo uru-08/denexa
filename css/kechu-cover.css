@@ -1508,6 +1508,17 @@ html[data-store-theme="carro-kechu-carmelo"] #welcomeScreen .kechu-bridge-headin
   letter-spacing: .01em;
 }
 
+.kechu-bridge-greeting {
+  display: inline-block;
+  font-style: italic;
+  font-size: clamp(27px, 8.4vw, 45px);
+  color: #fff;
+  text-transform: uppercase;
+  -webkit-text-stroke: 1px #15110a;
+  paint-order: stroke fill;
+  text-shadow: 0 2px 0 #928d82, 0 4px 0 #16120b, 0 5px 0 #ffda13, 0 7px 10px #000;
+}
+
 .kechu-bridge-heading h1 {
   margin: 0;
   line-height: 0;
@@ -1560,7 +1571,7 @@ html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #enterStoreButt
   color: #171109 !important;
   animation: none !important;
   box-shadow: 0 3px 12px #0007 !important;
-  font: 800 clamp(17px, 4.6vw, 24px)/1.1 system-ui, sans-serif !important;
+  font: 800 clamp(20px, 5.5vw, 28px)/1.1 system-ui, sans-serif !important;
 }
 
 html[data-store-theme="carro-kechu-carmelo"] body #welcomeScreen #enterStoreButton span {
