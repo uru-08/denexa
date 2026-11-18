@@ -1,0 +1,194 @@
+/* Vista previa optativa basada en el diseño del demo de Craft. */
+html[data-kechu-preview="craft"] body #welcomeScreen .welcome-content {
+  background: #090807 url("../demo/craft-burger/assets/brick-backdrop.webp") center / cover no-repeat !important;
+}
+
+html[data-kechu-preview="craft"] body #welcomeScreen .kechu-bridge-heading {
+  inset: max(16px, env(safe-area-inset-top)) 0 auto;
+  gap: clamp(6px, 1.3svh, 12px);
+  color: #fff6df;
+  text-shadow: 0 3px 10px #000, 0 1px 2px #000;
+}
+
+html[data-kechu-preview="craft"] body #welcomeScreen .kechu-bridge-heading h1 {
+  grid-row: 1;
+}
+
+html[data-kechu-preview="craft"] body #welcomeScreen .kechu-bridge-heading img {
+  width: min(65vw, 340px, 28svh);
+  filter: drop-shadow(0 0 14px #ffa12669);
+}
+
+html[data-kechu-preview="craft"] body #welcomeScreen .kechu-bridge-heading p:first-child {
+  font-size: clamp(27px, 8vw, 45px);
+}
+
+html[data-kechu-preview="craft"] body #welcomeScreen .kechu-bridge-heading p:last-child {
+  color: #ffe16a;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+}
+
+html[data-kechu-preview="craft"] body #welcomeScreen .kechu-bridge-scene {
+  inset: 37% max(0px, calc((100vw - 580px) / 2)) 14%;
+  mask-image: none;
+  background: radial-gradient(ellipse at 50% 86%, #bf3d035e, transparent 70%);
+  isolation: isolate;
+}
+
+html[data-kechu-preview="craft"] body #welcomeScreen .kechu-bridge-scene::before,
+html[data-kechu-preview="craft"] body #welcomeScreen .kechu-bridge-scene::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+html[data-kechu-preview="craft"] body #welcomeScreen .kechu-bridge-scene::before {
+  inset: 0 8% 5%;
+  background: url("../assets/kechu/categorias/hamburguesas-real-v207.webp") center bottom / contain no-repeat;
+  filter: drop-shadow(0 8px 12px #000) drop-shadow(0 0 13px #ff9b2866);
+}
+
+html[data-kechu-preview="craft"] body #welcomeScreen .kechu-bridge-scene::after {
+  inset: auto 0 0;
+  height: clamp(46px, 14svh, 118px);
+  background: url("../assets/kechu/promo-fuego.webp") center bottom / 100% 100% no-repeat;
+  transform-origin: center bottom;
+  opacity: .86;
+  animation: kechu-promo-flames 1.65s ease-in-out infinite alternate;
+}
+
+html[data-kechu-preview="craft"] body #welcomeScreen #enterStoreButton {
+  border: 1px solid #fff2a4 !important;
+  background: linear-gradient(#fff28b, #ffd729 62%, #f6a821) !important;
+  box-shadow: inset 0 1px #fff9c4, 0 4px 0 #825010, 0 0 17px #ff9f2566 !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell {
+  background: radial-gradient(ellipse at 50% 20%, #2b1508, transparent 52%), #0a0908 !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell .store-header {
+  background: #090807 !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell .store-header-inner {
+  max-width: 760px !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell .main-content {
+  max-width: 730px !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell .catalog-section .section-heading {
+  display: flex !important;
+  justify-content: center;
+  margin: 18px 0 15px !important;
+  text-align: center;
+}
+
+html[data-kechu-preview="craft"] body #appShell .catalog-section .section-heading h2 {
+  color: #fff0c6 !important;
+  font: 400 clamp(23px, 6vw, 38px)/1.1 "Knewave", "Lilita One", sans-serif !important;
+  text-shadow: 0 2px 3px #000 !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell .catalog-section .section-heading :is(.eyebrow, .section-subtitle) {
+  display: none !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell #catalogContent {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell .kechu-category-stack {
+  grid-column: span 2;
+  min-width: 0;
+  margin: 0 !important;
+  border: 1px solid #c7863c !important;
+  border-radius: 18px !important;
+  background: #150e08 !important;
+  box-shadow: 0 2px 0 #6b4418, 0 0 10px #ff9c2d3b !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell .kechu-category-stack:nth-child(n+4) {
+  grid-column: span 3;
+}
+
+html[data-kechu-preview="craft"] body #appShell .kechu-category-stack[open],
+html[data-kechu-preview="craft"] body #appShell #catalogContent > :not(.kechu-category-stack) {
+  grid-column: 1 / -1;
+}
+
+html[data-kechu-preview="craft"] body #appShell .kechu-category-summary {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: minmax(0, 1fr) auto;
+  justify-items: center;
+  min-height: clamp(132px, 39vw, 192px);
+  gap: 0 !important;
+  padding: 6px 3px 9px !important;
+  background: radial-gradient(ellipse at 48% 88%, #784821, transparent 76%), #130e09 !important;
+  box-shadow: inset 0 0 0 3px #faad4d30 !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell .kechu-category-stack[open] > .kechu-category-summary {
+  min-height: 118px;
+  background: radial-gradient(ellipse at 50% 100%, #975829, transparent 71%), #211309 !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell .kechu-category-summary .category-tab-visual {
+  width: min(92%, 150px) !important;
+  height: clamp(76px, 24vw, 119px) !important;
+  background-color: transparent !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell .kechu-category-summary .kechu-stack-heading {
+  display: block !important;
+  padding: 6px 1px 1px;
+  text-align: center;
+}
+
+html[data-kechu-preview="craft"] body #appShell .kechu-stack-heading strong {
+  color: #fff3cf !important;
+  font: italic 700 clamp(15px, 4.6vw, 27px)/1.06 "Oswald", Arial, sans-serif !important;
+  letter-spacing: 0 !important;
+  text-shadow: 0 2px 3px #000 !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell .kechu-stack-heading > :is(span, small) {
+  display: none !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell .kechu-category-summary .kechu-stack-indicator {
+  position: absolute !important;
+  top: 6px;
+  right: 6px;
+  width: 23px !important;
+  height: 23px !important;
+  border-width: 1px !important;
+  border-radius: 8px !important;
+  font-size: 18px !important;
+  background: #120f0b !important;
+  box-shadow: 0 1px 4px #000 !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell .kechu-category-products {
+  background: #0d0b08;
+  border-top-color: #c7863c !important;
+}
+
+html[data-kechu-preview="craft"] body #appShell #cartButton {
+  border-radius: 21px !important;
+  border-color: #e7ae50 !important;
+  background: linear-gradient(#241609, #090807) !important;
+  box-shadow: 0 0 12px #ff9c3d59, inset 0 1px #ffe19d4a !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-kechu-preview="craft"] body #welcomeScreen .kechu-bridge-scene::after {
+    animation: none;
+  }
+}
