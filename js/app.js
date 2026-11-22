@@ -555,7 +555,7 @@ async function loadStore() {
 
   try {
     const businesses = await requestJSON(
-      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_fixed_price,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,delivery_enabled,pickup_enabled,pickup_address,active,ordering_status,sold_out_message"
+      "businesses?select=id,name,slug,phone,address,logo_url,primary_color,secondary_color,accent_color,hero_title,hero_description,hero_image_url,welcome_button_text,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_target_product_ids,promo_discount_percent,promo_fixed_price,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,delivery_enabled,pickup_enabled,pickup_address,active,ordering_status,sold_out_message"
     );
 
     business =
