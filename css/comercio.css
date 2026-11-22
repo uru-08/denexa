@@ -4327,3 +4327,26 @@ body.merchant-kechu .fulfillment-address-fields input::placeholder{
 body.merchant-kechu .merchant-session-float{
   display:none !important;
 }
+
+
+/* Selección de varios productos para promociones */
+#promoTargetId[multiple]{
+  min-height:118px;
+  padding:8px;
+  border-radius:10px;
+  background:#fff;
+}
+#promoTargetId[multiple] option{
+  padding:8px 10px;
+  border-radius:6px;
+}
+#promoTargetId[multiple] option:checked{
+  background:#dbeafe linear-gradient(0deg,#dbeafe,#dbeafe);
+  color:#123b78;
+}
+html[data-merchant-theme="carro-kechu-carmelo"] #promoTargetId[multiple]{
+  background:#111;color:#fff;border-color:#665400;
+}
+html[data-merchant-theme="carro-kechu-carmelo"] #promoTargetId[multiple] option:checked{
+  background:#514300 linear-gradient(0deg,#514300,#514300);color:#ffe56a;
+}
