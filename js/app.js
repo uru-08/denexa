@@ -1288,10 +1288,10 @@ function activePromoRuleType(){
 function productMatchesPromo(product){
   if(!product || business?.promo_active!==true) return false;
   const target=String(business?.promo_target_id??"");
-  if(!target) return false;
   if (business?.promo_target_type==="products") {
     return (business.promo_target_product_ids || []).map(String).includes(String(product.id));
   }
+  if(!target) return false;
   return business?.promo_target_type==="product"
     ? String(product.id)===target
     : String(product.category_id)===target;
@@ -1498,12 +1498,12 @@ function productMatchesGiftTarget(product) {
       business?.promo_target_id ?? ""
     );
 
-  if (!target) {
-    return false;
-  }
-
   if (business?.promo_target_type === "products") {
     return (business.promo_target_product_ids || []).map(String).includes(String(product.id));
+  }
+
+  if (!target) {
+    return false;
   }
   return (
     business?.promo_target_type ===
