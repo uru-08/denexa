@@ -358,7 +358,7 @@ async function readOrderingStatusFromSupabase() {
   try {
     const rows =
       await requestJSON(
-        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_discount_percent,promo_fixed_price,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,active`
+        `businesses?id=eq.${encodeURIComponent(business.id)}&select=id,ordering_status,sold_out_message,promo_active,promo_badge,promo_title,promo_text,promo_rule_type,promo_target_type,promo_target_id,promo_target_product_ids,promo_discount_percent,promo_fixed_price,promo_trigger_qty,promo_reward_product_id,promo_reward_qty,promo_repeat,payment_bank_name,payment_account_holder,payment_account_number,payment_currency,payment_instructions,active`
       );
 
     const fresh =
@@ -403,6 +403,7 @@ async function readOrderingStatusFromSupabase() {
     business.promo_rule_type = fresh.promo_rule_type ?? business.promo_rule_type;
     business.promo_target_type = fresh.promo_target_type ?? business.promo_target_type;
     business.promo_target_id = fresh.promo_target_id ?? business.promo_target_id;
+    business.promo_target_product_ids = fresh.promo_target_product_ids ?? business.promo_target_product_ids;
     business.promo_discount_percent = fresh.promo_discount_percent ?? business.promo_discount_percent;
     business.promo_fixed_price = fresh.promo_fixed_price ?? null;
     business.promo_trigger_qty = fresh.promo_trigger_qty ?? business.promo_trigger_qty;
@@ -763,6 +764,11 @@ function promoDestinationCategoryId() {
     if (category) return String(category.id);
   }
 
+  if (business?.promo_target_type === "products" && Array.isArray(business.promo_target_product_ids)) {
+    const product = products.find(item => business.promo_target_product_ids.map(String).includes(String(item.id)));
+    if (product?.category_id != null) return String(product.category_id);
+  }
+
   if (business?.promo_target_type === "product" && targetId) {
     const product = products.find(
       (item) => String(item.id) === targetId
@@ -780,7 +786,9 @@ function promoDestinationCategoryId() {
 function goToPromoProducts() {
   const promoProduct = business?.promo_target_type === "product"
     ? products.find((product) => String(product.id) === String(business?.promo_target_id))
-    : null;
+    : business?.promo_target_type === "products"
+      ? products.find(product => (business?.promo_target_product_ids || []).map(String).includes(String(product.id)))
+      : null;
   const categoryId = promoProduct?.category_id != null
     ? String(promoProduct.category_id)
     : promoDestinationCategoryId();
@@ -884,6 +892,7 @@ function updateDailyPromoImage() {
   const targetId = String(business.promo_target_id ?? "");
   const candidates = products.filter((product) => {
     if (product.active === false || !kechuPromoProductPhoto(product)) return false;
+    if (business.promo_target_type === "products") return (business.promo_target_product_ids || []).map(String).includes(String(product.id));
     if (business.promo_target_type === "product") return String(product.id) === targetId;
     if (business.promo_target_type === "category") return String(product.category_id) === targetId;
     return false;
@@ -1280,6 +1289,9 @@ function productMatchesPromo(product){
   if(!product || business?.promo_active!==true) return false;
   const target=String(business?.promo_target_id??"");
   if(!target) return false;
+  if (business?.promo_target_type==="products") {
+    return (business.promo_target_product_ids || []).map(String).includes(String(product.id));
+  }
   return business?.promo_target_type==="product"
     ? String(product.id)===target
     : String(product.category_id)===target;
@@ -1305,14 +1317,14 @@ function promoPricingSignature() {
   return JSON.stringify([
     business?.promo_active, business?.promo_rule_type,
     business?.promo_target_type, business?.promo_target_id,
-    business?.promo_fixed_price, business?.promo_discount_percent,
+    business?.promo_target_product_ids, business?.promo_fixed_price, business?.promo_discount_percent,
     business?.promo_trigger_qty, business?.promo_reward_product_id,
     business?.promo_reward_qty, business?.promo_repeat
   ]);
 }
 
 function specialPromoPrice(product) {
-  if (activePromoRuleType() !== "fixed_price" || business.promo_target_type !== "product" || !productMatchesPromo(product)) return null;
+  if (activePromoRuleType() !== "fixed_price" || !productMatchesPromo(product)) return null;
   return configuredPromoPrice();
 }
 
@@ -1415,9 +1427,7 @@ function cartGiftItems(){
   cart.forEach(item=>{
     const p=productById(item.productId);
     if(!p) return;
-    const ok=business?.promo_target_type==="product"
-      ? String(p.id)===target
-      : String(p.category_id)===target;
+    const ok=productMatchesPromo(p);
     if(ok && (!optionalFriesPromo(p) || itemWantsGift(item))) matched+=Number(item.quantity||0);
   });
 
@@ -1492,6 +1502,9 @@ function productMatchesGiftTarget(product) {
     return false;
   }
 
+  if (business?.promo_target_type === "products") {
+    return (business.promo_target_product_ids || []).map(String).includes(String(product.id));
+  }
   return (
     business?.promo_target_type ===
     "product"
