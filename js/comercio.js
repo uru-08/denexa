@@ -2375,18 +2375,38 @@ async function loadPromoBuilderOptions() {
 
 function refreshPromoTargetOptions() {
   let items=[];
+  const previous = promoTargetId.multiple
+    ? Array.from(promoTargetId.selectedOptions).map(option=>String(option.value))
+    : (promoTargetId.value ? [String(promoTargetId.value)] : []);
   try {
     items=JSON.parse(
-      promoTargetType.value === "product"
-        ? promoTargetId.dataset.products || "[]"
-        : promoTargetId.dataset.categories || "[]"
+      promoTargetType.value === "category"
+        ? promoTargetId.dataset.categories || "[]"
+        : promoTargetId.dataset.products || "[]"
     );
   } catch(e) {}
 
+  const isMulti = promoTargetType.value === "products";
+  promoTargetId.multiple = isMulti;
+  promoTargetId.size = isMulti ? Math.min(7, Math.max(3, items.length)) : 1;
+  promoTargetId.setAttribute("aria-label", isMulti ? "Elegir varios productos para la promoción" : "Elegir categoría o producto");
   promoTargetId.innerHTML =
     items.length
       ? items.map(x=>`<option value="${escapeHTML(x.id)}">${escapeHTML(x.name)}</option>`).join("")
       : '<option value="">Sin opciones</option>';
+
+  const savedIds = isMulti
+    ? (selectedBusiness?.promo_target_product_ids || []).map(String)
+    : previous;
+  if (savedIds.length) {
+    Array.from(promoTargetId.options).forEach(option=>{
+      option.selected = savedIds.includes(String(option.value));
+    });
+  }
+  const help=document.getElementById("promoTargetHelp");
+  if(help) help.textContent=isMulti
+    ? "Mantené presionado para seleccionar varios productos. Solo los marcados reciben esta promoción."
+    : "Elegí una categoría completa o un producto individual.";
 }
 
 function updatePromoRuleFields() {
@@ -2450,7 +2470,10 @@ async function fillDailyPromoForm() {
   await loadPromoBuilderOptions();
   refreshPromoTargetOptions();
 
-  if (selectedBusiness.promo_target_id) {
+  if (selectedBusiness.promo_target_type === "products" && Array.isArray(selectedBusiness.promo_target_product_ids)) {
+    const ids=selectedBusiness.promo_target_product_ids.map(String);
+    Array.from(promoTargetId.options).forEach(option=>option.selected=ids.includes(String(option.value)));
+  } else if (selectedBusiness.promo_target_id) {
     promoTargetId.value=String(selectedBusiness.promo_target_id);
   }
   if (selectedBusiness.promo_reward_product_id) {
@@ -2462,7 +2485,7 @@ async function fillDailyPromoForm() {
 
 async function saveDailyPromoRPC(payload) {
   const responseText=await requestText(
-    `${SUPABASE_REST}/rpc/set_business_daily_promo_with_price`,
+    `${SUPABASE_REST}/rpc/set_business_daily_promo_with_products`,
     {
       method:"POST",
       headers:merchantHeaders({Prefer:"return=representation"}),
@@ -2480,7 +2503,8 @@ async function saveDailyPromoRPC(payload) {
         p_reward_product_id:payload.rewardProductId,
         p_reward_qty:payload.rewardQty,
         p_repeat:payload.repeat,
-        p_fixed_price:payload.fixedPrice
+        p_fixed_price:payload.fixedPrice,
+        p_target_product_ids:payload.targetProductIds
       })
     }
   );
@@ -2500,7 +2524,12 @@ async function saveDailyPromo() {
     text:dailyPromoText.value.trim(),
     ruleType,
     targetType:promoTargetType.value,
-    targetId:promoTargetId.value?Number(promoTargetId.value):null,
+    targetId:promoTargetType.value==="products"
+      ? null
+      : (promoTargetId.value?Number(promoTargetId.value):null),
+    targetProductIds:promoTargetType.value==="products"
+      ? Array.from(promoTargetId.selectedOptions).map(option=>Number(option.value)).filter(Number.isFinite)
+      : null,
     discountPercent:ruleType==="percent"?Number(promoDiscountPercent.value):null,
     triggerQty:ruleType==="gift"?Math.max(1,Number(promoTriggerQty.value||1)):null,
     rewardProductId:ruleType==="gift"&&promoRewardProductId.value?Number(promoRewardProductId.value):null,
@@ -2513,8 +2542,9 @@ async function saveDailyPromo() {
     dailyPromoMessage.textContent="Para activar la promo, completá el título y la promoción.";
     return;
   }
-  if (payload.active && ruleType!=="announcement" && !payload.targetId) {
-    dailyPromoMessage.textContent="Elegí la categoría o producto que activa la promoción.";
+  if (payload.active && ruleType!=="announcement" &&
+      (payload.targetType==="products" ? !payload.targetProductIds.length : !payload.targetId)) {
+    dailyPromoMessage.textContent="Elegí al menos una categoría o producto que active la promoción.";
     return;
   }
   if (payload.active && ruleType==="percent" && (payload.discountPercent<1 || payload.discountPercent>100)) {
