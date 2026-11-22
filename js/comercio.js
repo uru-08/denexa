@@ -2405,7 +2405,7 @@ function refreshPromoTargetOptions() {
   }
   const help=document.getElementById("promoTargetHelp");
   if(help) help.textContent=isMulti
-    ? "Mantené presionado para seleccionar varios productos. Solo los marcados reciben esta promoción."
+    ? "Marcá todos los productos que querés incluir. Solo esos productos reciben esta promoción."
     : "Elegí una categoría completa o un producto individual.";
 }
 
@@ -2597,6 +2597,7 @@ promoTargetType?.addEventListener("change",()=>{
   refreshPromoTargetOptions();
   updateDailyPromoUI();
 });
+promoTargetId?.addEventListener("change",updateDailyPromoUI);
 
 dailyPromoActive?.addEventListener("change",updateDailyPromoUI);
 
