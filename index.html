@@ -3915,6 +3915,38 @@ html[data-store-theme="carro-kechu-carmelo"] .main-content{
 }
 </style>
 
+
+<style id="kechu-price-contrast-fix">
+/* Corrección de contraste de precios: amarillo con tipografía negra legible. */
+html[data-store-theme="carro-kechu-carmelo"] .product-card .product-price,
+html[data-store-theme="carro-kechu-carmelo"] .product-card .product-price *,
+html[data-store-theme="carro-kechu-carmelo"] .product-card .product-price strong,
+html[data-store-theme="carro-kechu-carmelo"] .product-card .product-price span,
+html[data-store-theme="carro-kechu-carmelo"] .product-card .product-price small,
+html[data-store-theme="carro-kechu-carmelo"] .product-card [class*="price"],
+html[data-store-theme="carro-kechu-carmelo"] .product-card [class*="price"] *,
+html[data-store-theme="carro-kechu-carmelo"] .promo-new-price{
+  color:#111111 !important;
+  -webkit-text-fill-color:#111111 !important;
+  text-shadow:none !important;
+  opacity:1 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-card .product-price{
+  background:#FFD400 !important;
+  border:2px solid #111111 !important;
+  font-weight:950 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-card .product-price::before,
+html[data-store-theme="carro-kechu-carmelo"] .product-card .product-price::after{
+  color:#111111 !important;
+  -webkit-text-fill-color:#111111 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-card .promo-old-price{
+  color:#555555 !important;
+  -webkit-text-fill-color:#555555 !important;
+}
+</style>
+
 </head>
 
 <body>
