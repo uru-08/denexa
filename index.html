@@ -3947,6 +3947,42 @@ html[data-store-theme="carro-kechu-carmelo"] .product-card .promo-old-price{
 }
 </style>
 
+
+<style id="kechu-price-yellow-text-only">
+/* CARRO KECHU: precio amarillo sin pastilla/fondo amarillo; contorno oscuro para legibilidad. */
+html[data-store-theme="carro-kechu-carmelo"] .product-card .product-price,
+html[data-store-theme="carro-kechu-carmelo"] .product-card .product-price *,
+html[data-store-theme="carro-kechu-carmelo"] .product-card [class*="price"],
+html[data-store-theme="carro-kechu-carmelo"] .product-card [class*="price"] *,
+html[data-store-theme="carro-kechu-carmelo"] .promo-new-price,
+html[data-store-theme="carro-kechu-carmelo"] .cart-price,
+html[data-store-theme="carro-kechu-carmelo"] .live-price {
+  color:#FFD400 !important;
+  -webkit-text-fill-color:#FFD400 !important;
+  text-shadow: 1px 0 #111, -1px 0 #111, 0 1px #111, 0 -1px #111,
+               1px 1px #111, -1px -1px #111, 1px -1px #111, -1px 1px #111 !important;
+  opacity:1 !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-card .product-price {
+  background:transparent !important;
+  background-color:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-card .product-price::before,
+html[data-store-theme="carro-kechu-carmelo"] .product-card .product-price::after {
+  background:transparent !important;
+  color:#FFD400 !important;
+  -webkit-text-fill-color:#FFD400 !important;
+  box-shadow:none !important;
+}
+html[data-store-theme="carro-kechu-carmelo"] .product-card .promo-old-price {
+  color:#666666 !important;
+  -webkit-text-fill-color:#666666 !important;
+  text-shadow:none !important;
+}
+</style>
+
 </head>
 
 <body>
